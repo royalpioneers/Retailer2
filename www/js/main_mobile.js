@@ -4,9 +4,15 @@ $(window).load(function() {
     });
 });
 
-var DOMAIN = "http://127.0.0.1:8000";
+var DOMAIN = "http://roypi.com";
 
 function init() {
+
+    var token = window.localStorage.getItem("rp-token");
+
+    if(token != null) {
+        authToken();
+    }
 
     $("#log_in").on("click", loginAuth);
 
@@ -35,9 +41,28 @@ function init() {
             dataType: 'json',
             success: function (data) {
                 if (data.status === 'OK') {
-                    getInventoryItems();
-                    getAnalyzerInformation();
-                    $.mobile.navigate("#pagina2");
+                    window.localStorage.setItem("rp-token", data.token);
+                    eventsAfterLogin();
+                }
+                else {
+                    $('.overlay').fadeIn().children().addClass('effect_in_out');
+                }
+            }
+        });
+    }
+    function authToken() {
+        event.preventDefault();
+        var url = DOMAIN+'/mobile/login_buyer_token/';
+        $.ajax({
+            url: url,
+            data: {
+                token: token
+            },
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                if (data.status === 'OK') {
+                    eventsAfterLogin();
                 }
                 else {
                     $('.overlay').fadeIn().children().addClass('effect_in_out');
@@ -46,7 +71,13 @@ function init() {
         });
     }
 
-    function changeTab(){
+    function eventsAfterLogin(){
+        getInventoryItems();
+        getAnalyzerInformation();
+        $.mobile.navigate("#pagina2");
+    }
+
+    function changeTab() {
         var prevSelection = "tab1";
         var newSelection = $(this).children("a").attr("data-tab-class");
         $("."+prevSelection).addClass("ui-screen-hidden");
@@ -54,7 +85,7 @@ function init() {
         prevSelection = newSelection;
     }
 
-    function createProduct(){
+    function createProduct() {
             var newIcon = 'check';
             $(this).sibling().removeClass('ui-icon-'.newIcon);
             $(this).attr('data-icon', newIcon)
@@ -72,9 +103,9 @@ function init() {
     var day = date.getDate();
     var month = date.getMonth() + 1;
     var year = date.getFullYear();
-     if (month < 10) month = "0" + month;
+    if (month < 10) month = "0" + month;
     if (day < 10) day = "0" + day;
-     var today = year + "-" + month + "-" + day;
+    var today = year + "-" + month + "-" + day;
     document.getElementById("theDate").value = today;
      $('.close_modal').on('click',function(){
         $('.overlay').trigger('click');
@@ -96,9 +127,6 @@ function init() {
     $('#graphic_day').on('click',function(){
     	processAnalyzerInformation(3);
     });
-
-
-}
 
     function setCategory(event) {
         $('#category-id').text($(this).data('id'));
@@ -368,92 +396,93 @@ function init() {
         return true;
     }
 
-function total_models(initial_date, finish_date, data) {
-	result = {};
-	for (var i in data) {
-		item = data[i];
-		date = get_date_from_string(item['date']);
-		if (date >= initial_date && date <= finish_date) {
-			if (typeof(result[item['product_model_id']]) == 'undefined') {
-				result[item['product_model_id']] = item;
-			} else {
-				result[item['product_model_id']]['quantity'] += item['quantity'];
-			}
-		}
-	}
-	return result;
-}
+    function total_models(initial_date, finish_date, data) {
+        result = {};
+        for (var i in data) {
+            item = data[i];
+            date = get_date_from_string(item['date']);
+            if (date >= initial_date && date <= finish_date) {
+                if (typeof(result[item['product_model_id']]) == 'undefined') {
+                    result[item['product_model_id']] = item;
+                } else {
+                    result[item['product_model_id']]['quantity'] += item['quantity'];
+                }
+            }
+        }
+        return result;
+    }
 
-function get_date_from_string(string_date) {
-	parts = string_date.split('-');
-	var year = parts[0], month = parts[1], day = parts[2];
-	if (month.substring(0, 1) == '0') {
-		month = month.substring(1);
-	}
-	if (day.substring(0, 1) == '0') {
-		day = day.substring(1);
-	}
-	month = parseInt(month) - 1;
-	return new Date(parseInt(year), parseInt(month), parseInt(day));
-}
+    function get_date_from_string(string_date) {
+        parts = string_date.split('-');
+        var year = parts[0], month = parts[1], day = parts[2];
+        if (month.substring(0, 1) == '0') {
+            month = month.substring(1);
+        }
+        if (day.substring(0, 1) == '0') {
+            day = day.substring(1);
+        }
+        month = parseInt(month) - 1;
+        return new Date(parseInt(year), parseInt(month), parseInt(day));
+    }
 
-function start_graphic(data_graphic) {
-	var margin = {top: 20, right: 20, bottom: 30, left: 40}, width = 960 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
-	var x0 = d3.scale.ordinal().rangeRoundBands([0, width], .1);
-	var x1 = d3.scale.ordinal();
-	var y = d3.scale.linear().range([height, 0]);
-	var color = d3.scale.ordinal().range(["#98abc5", "#8a89a6"]);
-	var xAxis = d3.svg.axis().scale(x0).orient("bottom");
-	var yAxis = d3.svg.axis().scale(y).orient("left").tickFormat(d3.format(".2s"));
-	var svg = d3.select("#graphic").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    function start_graphic(data_graphic) {
+        var margin = {top: 20, right: 20, bottom: 30, left: 40}, width = 960 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
+        var x0 = d3.scale.ordinal().rangeRoundBands([0, width], .1);
+        var x1 = d3.scale.ordinal();
+        var y = d3.scale.linear().range([height, 0]);
+        var color = d3.scale.ordinal().range(["#98abc5", "#8a89a6"]);
+        var xAxis = d3.svg.axis().scale(x0).orient("bottom");
+        var yAxis = d3.svg.axis().scale(y).orient("left").tickFormat(d3.format(".2s"));
+        var svg = d3.select("#graphic").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-	function create_graphic(data) {
-	  /* EXAMPL DATA :
-		data =[{Name: "Fisrt", Sale: "12354", Profit: "1054"}, 
-		       {Name: "Second", Sale: "3354", Profit: "1454"},
-		       {Name: "Third", Sale: "1454", Profit: "854"}];
-		       
-		call: create_graphic(data);
-	  */
-	  var typeNames = d3.keys(data[0]).filter(function(key) { return key !== "Name"; });
+        function create_graphic(data) {
+          /* EXAMPL DATA :
+            data =[{Name: "Fisrt", Sale: "12354", Profit: "1054"},
+                   {Name: "Second", Sale: "3354", Profit: "1454"},
+                   {Name: "Third", Sale: "1454", Profit: "854"}];
 
-	  data.forEach(function(d) {
-	    d.ages = typeNames.map(function(name) { return {name: name, value: +d[name]}; });
-	  });
+            call: create_graphic(data);
+          */
+          var typeNames = d3.keys(data[0]).filter(function(key) { return key !== "Name"; });
 
-	  x0.domain(data.map(function(d) { return d.Name; }));
-	  x1.domain(typeNames).rangeRoundBands([0, x0.rangeBand()]);
-	  y.domain([0, d3.max(data, function(d) { return d3.max(d.ages, function(d) { return d.value; }); })]);
+          data.forEach(function(d) {
+            d.ages = typeNames.map(function(name) { return {name: name, value: +d[name]}; });
+          });
 
-	  svg.append("g")
-	      .attr("class", "x axis")
-	      .attr("transform", "translate(0," + height + ")")
-	      .call(xAxis);
+          x0.domain(data.map(function(d) { return d.Name; }));
+          x1.domain(typeNames).rangeRoundBands([0, x0.rangeBand()]);
+          y.domain([0, d3.max(data, function(d) { return d3.max(d.ages, function(d) { return d.value; }); })]);
 
-	  svg.append("g").attr("class", "y axis").call(yAxis).append("text")
-	      .attr("transform", "rotate(-90)")
-	      .attr("y", 6)
-	      .attr("dy", ".71em")
-	      .style("text-anchor", "end")
-	      .text("$ (Dollars)");
+          svg.append("g")
+              .attr("class", "x axis")
+              .attr("transform", "translate(0," + height + ")")
+              .call(xAxis);
 
-	  var state = svg.selectAll(".state")
-	      .data(data)
-	      .enter().append("g")
-	      .attr("class", "g")
-	      .attr("transform", function(d) { return "translate(" + x0(d.Name) + ",0)"; });
+          svg.append("g").attr("class", "y axis").call(yAxis).append("text")
+              .attr("transform", "rotate(-90)")
+              .attr("y", 6)
+              .attr("dy", ".71em")
+              .style("text-anchor", "end")
+              .text("$ (Dollars)");
 
-	  state.selectAll("rect").data(function(d) { return d.ages; }).enter().append("rect")
-	      .attr("width", x1.rangeBand())
-	      .attr("x", function(d) { return x1(d.name); })
-	      .attr("y", function(d) { return y(d.value); })
-	      .attr("height", function(d) { return height - y(d.value); })
-	      .style("fill", function(d) { return color(d.name); });
+          var state = svg.selectAll(".state")
+              .data(data)
+              .enter().append("g")
+              .attr("class", "g")
+              .attr("transform", function(d) { return "translate(" + x0(d.Name) + ",0)"; });
 
-	  var legend = svg.selectAll(".legend").data(typeNames.slice().reverse()).enter().append("g").attr("class", "legend").attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+          state.selectAll("rect").data(function(d) { return d.ages; }).enter().append("rect")
+              .attr("width", x1.rangeBand())
+              .attr("x", function(d) { return x1(d.name); })
+              .attr("y", function(d) { return y(d.value); })
+              .attr("height", function(d) { return height - y(d.value); })
+              .style("fill", function(d) { return color(d.name); });
 
-	  legend.append("rect").attr("x", width - 18).attr("width", 18).attr("height", 18).style("fill", color);
-	  legend.append("text").attr("x", width - 24).attr("y", 9).attr("dy", ".35em").style("text-anchor", "end").text(function(d) { return d; });
-	}
-	create_graphic(data_graphic);
+          var legend = svg.selectAll(".legend").data(typeNames.slice().reverse()).enter().append("g").attr("class", "legend").attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+          legend.append("rect").attr("x", width - 18).attr("width", 18).attr("height", 18).style("fill", color);
+          legend.append("text").attr("x", width - 24).attr("y", 9).attr("dy", ".35em").style("text-anchor", "end").text(function(d) { return d; });
+        }
+        create_graphic(data_graphic);
+    }
 }

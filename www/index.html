@@ -1,7 +1,7 @@
 <!doctype html>
 	<html lang="es">
 	<head>
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 		<title>Document</title>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
@@ -25,7 +25,6 @@
 		<script type="text/javascript" src="js/d3.v3.min.js"></script>
 
 	</head>
-
 	<body>
         <!--HOME-->
         <div data-role="page" id="pagina1">
@@ -54,7 +53,7 @@
                 <!-- Carousel items -->
                 <div class="carousel-inner">
                     <div class="active item">
-                        <img src="images/a1.jpg" alt="" />
+                        <img src="../images/a1.jpg" alt="" />
                         <div class="carousel-caption">
                             <h4>Intelligent Inventory.</h4>
                             <p>Optimize Your Business by buying and managing optimal inventory levels. Connect To The Only Marketplace Who tailors your inventory, based on your sales.</p>
@@ -77,7 +76,7 @@
                 </div>
             </div>
             <div class="row-fluid center_text_align" style="width: 66%;margin: 45% auto 25% auto;position: relative;z-index: 9;">
-                <form action="#" id="form_login">
+                <form action="" id="form_login_app">
                     <input class="input_login" type="text" placeholder="Username" id="username" autofocus="true">
                     <input class="input_login" type="password" placeholder="Password" id="password">
                     <input type="submit" class="btn" style="width: 100%;" id="log_in" value="Login">
@@ -89,7 +88,7 @@
         </div>
 
         <!--INVENTORY-->
-		<div data-role="page" id="pagina2" data-fullscreen="true">
+		<div data-role="page" id="pagina2">
 			<div data-role="header" data-position="fixed" data-id="head1" data-theme="b">
 				<a class="header_top_options" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
 				<h1>Royal Pioneers</h1>
@@ -233,7 +232,7 @@
 		</div>
 
 		<!--PRODUCT INVENTORY-->
-		<div data-role="page" id="pagina5" data-fullscreen="true">
+		<div data-role="page" id="pagina5">
 			<div data-role="header" data-position="fixed" data-id="head1" data-theme="b">
                 <a class="header_top_options" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
 				<h1>Inventory</h1>
@@ -304,8 +303,9 @@
                 <a href="" data-rel="back">Back</a>
                 <h1>Category</h1>
             </div>
-            <div id="categories-list">
-
+            <div data-role="content">
+                <ul data-role="listview" data-inset="true" data-theme="c" class="categories_create_product" id="categories-list">
+                </ul>
             </div>
         </div>
 
