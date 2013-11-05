@@ -22,7 +22,7 @@ function init(){
 
     $('.option-expand').live('expand', setCategory);
 
-    function loginAuth (event) {
+    function loginAuth(event) {
         event.preventDefault();
         var url = DOMAIN+'/mobile/login_buyer/';
         $.ajax({
@@ -37,7 +37,7 @@ function init(){
                 if (data.status === 'OK') {
                     getInventoryItems();
                     getAnalyzerInformation();
-                    $.mobile.navigate( "#pagina2" );
+                    $.mobile.navigate("#pagina2");
                 }
                 else {
                     $('.overlay').fadeIn().children().addClass('effect_in_out');
