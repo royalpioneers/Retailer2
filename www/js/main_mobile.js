@@ -1,12 +1,12 @@
 $(window).load(function() {
-    init();
     $(document).bind('deviceready', function () {
         init();
     });
 });
 
-function init(){
-    var DOMAIN = "http://127.0.0.1:8000";
+var DOMAIN = "http://127.0.0.1:8000";
+
+function init() {
 
     $("#log_in").on("click", loginAuth);
 
