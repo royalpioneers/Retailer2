@@ -7,12 +7,12 @@ $(window).load(function() {
 var DOMAIN = "http://roypi.com";
 
 function init() {
-
     var token = window.localStorage.getItem("rp-token");
 
     if(token != null) {
         authToken();
     }
+    $('#temp').html('prueba:'+token);
 
     $("#log_in").on("click", loginAuth);
 
