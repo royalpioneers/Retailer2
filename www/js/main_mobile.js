@@ -1,10 +1,11 @@
 $(window).load(function() {
+    init();
     $(document).bind('deviceready', function () {
         init();
     });
 });
 
-var DOMAIN = "http://roypi.com";
+var DOMAIN = "http://127.0.0.1:8000";
 
 function init() {
     var token = window.localStorage.getItem("rp-token");
@@ -74,6 +75,7 @@ function init() {
     function eventsAfterLogin(){
         getInventoryItems();
         getAnalyzerInformation();
+        $('#temp2').html('hola:'+token);
         $.mobile.navigate("#pagina2");
     }
 
