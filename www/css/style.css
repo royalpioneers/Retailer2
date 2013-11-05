@@ -1,0 +1,232 @@
+a{
+	text-decoration: none !important;
+}
+.images{
+	background: url('../images/polo8.png') no-repeat center center;
+	background-size: cover;
+	width: 100%;
+	height: 100%
+}
+.images_up{
+	background: black;
+	opacity: .5;
+	display: none;
+}
+.options_detail{
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	text-align: center;
+	list-style: none;
+}
+.image {
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+    border: none;
+    outline: none !important;
+}
+.content_details {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    text-align: center;
+}
+.content_details > li {
+    width: 60%;
+	margin: 0 auto;
+	border: 2px solid white;
+}
+.content_details > li > a {
+    text-decoration: none;
+    color: #2c3e50 !important;
+}
+.content_details  li  a {
+	color: #2c3e50 !important;
+}
+.image_logo > .ui-btn-inner{
+	padding: 0 !important;
+}
+.effect_in_out{
+	-webkit-transform: scale(1) !important;
+    -moz-transform: scale(1) !important;
+    transform: scale(1) !important;
+}
+.overlay{
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.77);
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    display: none;
+    z-index: 10;
+}
+#myModal {
+    background: transparent;
+    color: white;
+    width: 80%;
+    margin: 0 auto;
+    padding: 0;
+    position: relative;
+    left: 0;
+    border: none;
+    box-shadow: none;
+    text-align: center;
+    -webkit-transform: scale(.5);
+    -moz-transform: scale(.5);
+    transform: scale(.5);
+    transition: all .3s ease-in-out;
+	-webkit-transition: all .3s ease-in-out;
+	-moz-transition: all .3s ease-in-out;
+}
+#category-id{
+    display: none;
+}
+.options_detail > li > a {
+    color: white;
+    text-align: left;
+    text-decoration: none;
+}
+.image_logo {
+    width: 26%; margin: 0; padding: 0; position: absolute; left: 0; top: 25% !important;
+}
+.close_modal{
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+.size, .color{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	width: 100%;
+	text-align: center;
+}
+input[type="radio"] {
+margin-top: .3em;
+}
+.color > li{
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin: 5px;	
+	cursor: pointer;
+}
+.color > li:first-child{
+	background: red;
+}
+.color > li:nth-child(2){
+	background: yellow;
+}
+.color > li:nth-child(3){
+	background: green;
+}
+.color > li:last-child{
+	background: orange;
+}
+.size > li > span {
+	text-align: left;
+	color: white;
+	margin-left: -5em;
+}
+.close_panel{
+	position: absolute;
+	top: -2%;
+}
+.overlay_face {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: white;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    display: none;
+}
+.face_logo {
+    background: #4e69a2 url(https://fbstatic-a.akamaihd.net/rsrc.php/v2/y6/r/sm-NVIN8Ar3.png) no-repeat;      
+    background-position: 0px -151px;
+    width: 7em;
+    height: 2em;
+    display: inline-block;
+}
+#myModal2 > header {
+    background: #4e69a2 url(/rsrc.php/v2/y0/r/NB47cUfXHpf.png) repeat-x; 
+    border-bottom: 1px solid #4e69a2; font-weight: bold; 
+    height: 34px;   
+    width: 100%;
+    text-align: center;
+    margin-bottom: 5px;
+}
+#myModal2 > footer {
+    position: fixed;
+    bottom: 1%;
+    width: 100%;
+}
+#myModal2 > footer > ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    text-align: center;
+}
+#myModal2 > footer > ul > li {
+    width: 44%;
+    background: #e5e5e5;
+    display: inline-block;
+    padding: 5px;
+    border: 1px solid rgba(60, 60, 60, 0.11);
+    border-radius: 2px;
+    cursor: pointer;
+}
+#myModal2 > footer > ul > li:last-child{
+	background-color: #4e69a2;
+	border-color: #435a8b #3c5488 #334c83;
+	color: white;
+	-webkit-background-clip: padding-box;
+	border: 1px solid;
+	-webkit-border-radius: 2px;
+	-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+	-webkit-box-sizing: content-box;
+}
+#myModal2 > section {
+    width: 100%;
+	margin-top: 5em;
+	text-align: center;
+}
+#myModal2 > section > p {
+    width: 63%;
+	position: relative;
+	margin-top: 2em;
+	left: 20%;
+}
+.dafult_photo_royal {
+    width: 48%;
+    display: inline-block;
+}
+.default_photo_user {
+    /* width: 40%; */
+    display: inline-block;
+}
+.out{
+	display: none;
+}
+.result {
+    margin-top: 1em !important;
+    display: block;
+    margin-bottom: .5em !important;
+}
+.result > .money{
+	color: #16a085 !important;
+}
+.content_details li a > span {
+    float: left;
+}
+.buttons_footer{
+    display: inline-block;
+    width: 100%;
+}
