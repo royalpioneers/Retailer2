@@ -5,7 +5,7 @@ $(window).load(function() {
     });
 });
 
-var DOMAIN = "http://127.0.0.1:8000";
+var DOMAIN = "http://roypi.com";
 
 function init() {
     var token = window.localStorage.getItem("rp-token");
