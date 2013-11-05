@@ -1,11 +1,12 @@
 $(window).load(function() {
+    window.localStorage.setItem("prueba", 'Hello World');
+    var prueba = window.localStorage.getItem("prueba");
+    alert(prueba);
     init();
-    $(document).bind('deviceready', function () {
-        init();
-        window.localStorage.setItem("prueba", 'Hello World');
-        var prueba = window.localStorage.getItem("prueba");
-        alert(prueba);
-    });
+
+//    $(document).bind('deviceready', function () {
+//        init();
+//    });
 });
 
 //var DOMAIN = "http://roypi.com";
