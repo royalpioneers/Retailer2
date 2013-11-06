@@ -1,7 +1,4 @@
 $(window).load(function() {
-    window.localStorage.setItem("prueba", 'Hello World');
-    var prueba = window.localStorage.getItem("prueba");
-    alert(prueba);
     init();
 
 //    $(document).bind('deviceready', function () {
@@ -10,7 +7,7 @@ $(window).load(function() {
 });
 
 //var DOMAIN = "http://roypi.com";
-var DOMAIN = "http://roypi.com";
+var DOMAIN = "http://royalpioneers.com";
 
 function init() {
     var token = window.localStorage.getItem("rp-token");
