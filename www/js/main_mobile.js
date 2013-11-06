@@ -1,23 +1,24 @@
 $(window).load(function() {
     init();
-
-//    $(document).bind('deviceready', function () {
-//        init();
-//    });
 });
 
-//var DOMAIN = "http://roypi.com";
-var DOMAIN = "http://royalpioneers.com";
+//var DOMAIN = "http://royalpioneers.com";
+var DOMAIN = "http://127.0.0.1:8000";
+var urls = {
+    'login': DOMAIN+'/mobile/login_buyer/',
+    'loginToken': DOMAIN+'/mobile/login_buyer_token/',
+    'inventory': DOMAIN+'/mobile/inventory/'
+};
 
 function init() {
     var token = window.localStorage.getItem("rp-token");
-
+    //Automatic Login
     if(token != null) {
         authToken();
     }
-    $('#temp').html('prueba:'+token);
-
+    //Events
     $("#log_in").on("click", loginAuth);
+    $('#logout').on('click', logOut);
 
     $(".navbar ul li").live("click", changeTab);
 
@@ -31,9 +32,12 @@ function init() {
 
     $('.option-expand').live('expand', setCategory);
 
+
+
+    //Functions
     function loginAuth(event) {
         event.preventDefault();
-        var url = DOMAIN+'/mobile/login_buyer/';
+        var url = urls.login;
         $.ajax({
             url: url,
             data: {
@@ -46,16 +50,22 @@ function init() {
                 if (data.status === 'OK') {
                     window.localStorage.setItem("rp-token", data.token);
                     eventsAfterLogin();
-                }
-                else {
+                } else {
                     $('.overlay').fadeIn().children().addClass('effect_in_out');
                 }
             }
         });
     }
+
+    function logOut(event){
+        event.preventDefault();
+        window.localStorage.removeItem("rp-token");
+        $.mobile.navigate("#pagina1");
+    }
+
     function authToken() {
         event.preventDefault();
-        var url = DOMAIN+'/mobile/login_buyer_token/';
+        var url = urls.loginToken;
         $.ajax({
             url: url,
             data: {
@@ -76,9 +86,40 @@ function init() {
 
     function eventsAfterLogin(){
         getInventoryItems();
-        getAnalyzerInformation();
-        $('#temp2').html('hola:'+window.localStorage.getItem("rp-token"));
+        //getAnalyzerInformation();
         $.mobile.navigate("#pagina2");
+    }
+
+    function getInventoryItems(){
+        var url = urls.inventory;
+        $.ajax({
+           url: url,
+           type: 'POST',
+           data: {
+                rp_token: token
+           },
+           dataType: 'json',
+           success: function(data){
+                var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
+                    items_list = data.items_list,
+                    html_to_insert = '';
+               $.each(items_list, function(i, model){
+                   html_to_insert += '<li>\
+                                        <a href="#pagina5"\
+                                            class="model-data"\
+                                            data-model-name="'+model.model_name+'"\
+                                            data-product-name="'+model.product_name+'"\
+                                            data-retail-price="'+model.retail_price+'"\
+                                            data-quantity="'+model.quantity+'"\
+                                            >\
+                                            <img src="'+model.model_image+'"/>\
+                                        </a>\
+                                    </li>';
+               });
+               ul_for_inserting.append(html_to_insert);
+               $('.model-data').on('click', showDetail);
+           }
+        });
     }
 
     function changeTab() {
@@ -111,6 +152,7 @@ function init() {
     if (day < 10) day = "0" + day;
     var today = year + "-" + month + "-" + day;
     document.getElementById("theDate").value = today;
+
      $('.close_modal').on('click',function(){
         $('.overlay').trigger('click');
     });
@@ -160,24 +202,6 @@ function init() {
             $(this).addClass('option-collapse');
             $(this).children('div').children('div').collapsibleset().trigger('create');
         }
-    }
-
-    function logout_function (event){
-        event.preventDefault();
-        var url = DOMAIN+'/logout_ajax/';
-        $.ajax({
-            url: url,
-            type: 'POST',
-            dataType: 'json',
-            success: function (data) {
-                if (data.status === 'OK') {
-                    $.mobile.navigate( "#pagina1" );
-                }
-                else{
-                    $('.overlay').fadeIn().children().addClass('effect_in_out');
-                }
-            }
-        });
     }
 
     function saveProduct(){
@@ -256,34 +280,6 @@ function init() {
         });
     }
 
-    function getInventoryItems(){
-        var url = DOMAIN+'/mobile/inventory/';
-        $.ajax({
-           url: url,
-           type: 'GET',
-           dataType: 'json',
-           success: function(data){
-                var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
-                    items_list = data.items_list,
-                    html_to_insert = '';
-               $.each(items_list, function(i, model){
-                   html_to_insert += '<li>\
-                                        <a href="#pagina5"\
-                                            class="model-data"\
-                                            data-model-name="'+model.model_name+'"\
-                                            data-product-name="'+model.product_name+'"\
-                                            data-retail-price="'+model.retail_price+'"\
-                                            data-quantity="'+model.quantity+'"\
-                                            >\
-                                            <img src="'+model.model_image+'"/>\
-                                        </a>\
-                                    </li>';
-               });
-               ul_for_inserting.append(html_to_insert);
-               $('.model-data').on('click', showDetail);
-           }
-        });
-    }
 
     function showDetail(){
         var content = $('#pagina5').find('.inventory_detail_product'),
