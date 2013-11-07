@@ -51,7 +51,6 @@ function init() {
             dataType: 'json',
             success: function (data) {
                 if (data.status === 'OK') {
-                    debugger;
                     window.localStorage.setItem("rp-token", data.token);
                     token = data.token;
                     eventsAfterLogin();
@@ -80,7 +79,6 @@ function init() {
             dataType: 'json',
             success: function (data) {
                 if (data.status === 'OK') {
-                    debugger;
                     window.localStorage.setItem("rp-token", data.token);
                     token = data.token;
                     eventsAfterLogin();
