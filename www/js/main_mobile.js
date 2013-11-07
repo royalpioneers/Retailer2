@@ -15,7 +15,6 @@ var urls = {
 };
 
 function init() {
-    alert('inicio');
     var token = window.localStorage.getItem("rp-token");
     //Automatic Login
     if(token != null) {
