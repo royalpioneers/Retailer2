@@ -7,7 +7,11 @@ var DOMAIN = "http://127.0.0.1:8000";
 var urls = {
     'login': DOMAIN+'/mobile/login_buyer/',
     'loginToken': DOMAIN+'/mobile/login_buyer_token/',
-    'inventory': DOMAIN+'/mobile/inventory/'
+    'inventory': DOMAIN+'/mobile/inventory/',
+    'analyzer':DOMAIN+'/mobile/analyzer-information/',
+    'saveProduct': DOMAIN+'/mobile/create/product/',
+    'productInformation': DOMAIN+'/mobile/product-information/',
+    'category':DOMAIN+'/mobile/category/'
 };
 
 function init() {
@@ -31,7 +35,6 @@ function init() {
     $("#browser").live('input', getCompleteInformation);
 
     $('.option-expand').live('expand', setCategory);
-
 
 
     //Functions
@@ -86,7 +89,7 @@ function init() {
 
     function eventsAfterLogin(){
         getInventoryItems();
-        //getAnalyzerInformation();
+        getAnalyzerInformation();
         $.mobile.navigate("#pagina2");
     }
 
@@ -112,12 +115,29 @@ function init() {
                                             data-retail-price="'+model.retail_price+'"\
                                             data-quantity="'+model.quantity+'"\
                                             >\
-                                            <img src="'+model.model_image+'"/>\
+                                            <img src="'+DOMAIN+model.model_image+'"/>\
                                         </a>\
                                     </li>';
                });
+               ul_for_inserting.html('');
                ul_for_inserting.append(html_to_insert);
                $('.model-data').on('click', showDetail);
+           }
+        });
+    }
+    function getAnalyzerInformation() {
+        var analyzer_information = [];
+        var url = urls.analyzer;
+        $.ajax({
+           url: url,
+           type: 'POST',
+           data: {
+                rp_token: token
+           },
+           dataType: 'json',
+           success: function(data){
+               analyzer_information = data.context['information'];
+               processAnalyzerInformation(1, analyzer_information);
            }
         });
     }
@@ -179,15 +199,20 @@ function init() {
         var text_category = $(this).children('h3').text();
         text_category = text_category.replace("click to collapse contents", "");
         $('#category-name').text(text_category);
+
         if($(this).data('json') != 't'){
             var collapse = $(this).children('div');
-            var url = DOMAIN+'/mobile/category/?id='+$(this).data('id');
+            var url = urls.category;
             $.ajax({
                 url: url,
-                type: 'GET',
+                type: 'POST',
+                data: {
+                    rp_token: token,
+                    id: $(this).data('id')
+                },
                 dataType: 'json',
                 success: function (data) {
-                    $.each(data.category, function(i, value) {
+                    $.each(data.categories, function(i, value) {
                         collapse.prepend('' +
                             '<div data-role="collapsible" data-theme="c" class="option-expand" data-id="'+value.id+'" data-content-theme="c"> ' +
                             '<h3>'+value.name+'</h3>' +
@@ -209,11 +234,12 @@ function init() {
             nameVariant = $('#name-variant').val(),
             categoryId = $('#category-id').text(),
             quantity = $('#quantity').val(),
+            sku = $('#sku').val(),
             costPrice = $('#cost-price').val(),
             wholeSalePrice = $('#wholesale-price').val(),
             retailPrice = $('#retail-price').val();
         if(nameProduct != '' && categoryId!='' && costPrice!=''){
-            var url = DOMAIN+'/mobile/create/product/';
+            var url = urls.saveProduct;
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -222,33 +248,42 @@ function init() {
                     name_variant: nameVariant,
                     category_id: categoryId,
                     quantity : quantity,
+                    sku: sku,
                     cost_price: costPrice,
                     whole_sale_price: wholeSalePrice,
-                    retail_price: retailPrice
+                    retail_price: retailPrice,
+                    rp_token: token
                 },
                 dataType: 'json',
                 success: function(data){
-                    $.mobile.navigate( "#pagina2" );
+                    if(data.status.status == true){
+                        eventsAfterLogin();
+                    } else {
+                        alert('an error occurred');
+                    }
+
                 }
             });
         } else {
-
-            alert('no se pudo enviar -  datos incompletos');
+            alert('Data Incomplete');
         }
     }
 
     function getInformationProduct(){
-        var url = DOMAIN+'/mobile/product-information/';
+        var url = urls.productInformation;
         $.ajax({
             url: url,
-            type: 'GET',
+            type: 'POST',
+            data:{
+                rp_token: token
+            },
             dataType: 'json',
-            success: function(data) {
+            success: function(data){
                 $.each(data.products, function(i, value) {
                     $('#browsers').append('<option data-id="'+value.id+'" value="'+value.name+'">')
                 });
 
-                $.each(data.category, function(i, value) {
+                $.each(data.categories, function(i, value) {
                     $('#categories-list').append('' +
                         '<div data-role="collapsible" class="option-expand" data-theme="c" data-id="'+value.id+'" data-content-theme="c">' +
                         '<h3>'+value.name+'</h3>' +
@@ -306,22 +341,8 @@ function init() {
         content.append(html_to_insert);
     }
 
-    function getAnalyzerInformation() {
-        var analyzer_information = [];
-        var url = DOMAIN+'/mobile/analyzer-information/';
-        $.ajax({
-           url: url,
-           type: 'GET',
-           dataType: 'json',
-           success: function(data){
-               analyzer_information = data['information'];
-               // $('.model-data').on('click', showDetail);
-               processAnalyzerInformation();
-           }
-        });
-    }
-
-    function processAnalyzerInformation(type) {
+    function processAnalyzerInformation(type, data) {
+        var analyzer_information = data;
         // dates limit
         var initial_date = new Date();
         var finish_date = new Date();
@@ -350,7 +371,7 @@ function init() {
         var total_sales = 0;
         var total_units = 0;
         var total_profit = 0;
-        for (var i in analyzer_information['values']) {
+        for(var i in analyzer_information['values']) {
             item = analyzer_information['values'][i];
             date = get_date_from_string(item['date']);
             if (date >= initial_date && date <= finish_date) {
@@ -379,7 +400,7 @@ function init() {
         if (popular !== false) {
             if (typeof(analyzer_information['variants']['models'][popular['product_model_id']]) != 'undefined') {
                 details = analyzer_information['variants']['models'][popular['product_model_id']];
-                $('#pagina2').find('.tab2').find('#most_popular_img').html(details['image']);
+                $('#pagina2').find('.tab2').find('#most_popular_img').html('<img src="'+DOMAIN+details['image']+'" />');
                 $('#pagina2').find('.tab2').find('#most_popular_name').html(details['name']);
                 $('#pagina2').find('.tab2').find('#most_popular_sold').html(popular['quantity']);
             }
