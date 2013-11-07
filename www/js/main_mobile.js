@@ -2,14 +2,15 @@ $(window).load(function() {
     init();
 });
 
-//var DOMAIN = "http://royalpioneers.com";
-var DOMAIN = "http://127.0.0.1:8000";
+var DOMAIN = "http://royalpioneers.com";
+//var DOMAIN = "http://127.0.0.1:8002";
 var urls = {
     'login': DOMAIN+'/mobile/login_buyer/',
     'loginToken': DOMAIN+'/mobile/login_buyer_token/',
-    'inventory': DOMAIN+'/mobile/inventory/'
+    'inventory': DOMAIN+'/mobile/inventory/',
+    'clients_list': DOMAIN+'/mobile/clients-list/'
 };
-
+var items_list = [];
 function init() {
     var token = window.localStorage.getItem("rp-token");
     //Automatic Login
@@ -19,20 +20,16 @@ function init() {
     //Events
     $("#log_in").on("click", loginAuth);
     $('#logout').on('click', logOut);
-
     $(".navbar ul li").live("click", changeTab);
-
     $('.categories_create_product').find('a').on('click', createProduct);
-
     $('#create-product').live("click", getInformationProduct);
-
     $('#create_item').live("click", saveProduct);
-
     $("#browser").live('input', getCompleteInformation);
-
     $('.option-expand').live('expand', setCategory);
-
-
+    $('.overlay,.close_modal').live('click', showOverlay);
+    $('#graphic_month').live('click',function(){processAnalyzerInformation(1);});
+    $('#graphic_week').live('click',function(){processAnalyzerInformation(2);});
+    $('#graphic_day').live('click',function(){processAnalyzerInformation(3);});
 
     //Functions
     function loginAuth(event) {
@@ -86,7 +83,7 @@ function init() {
 
     function eventsAfterLogin(){
         getInventoryItems();
-        //getAnalyzerInformation();
+        //getAnalyzerInformation();        
         $.mobile.navigate("#pagina2");
     }
 
@@ -101,8 +98,9 @@ function init() {
            dataType: 'json',
            success: function(data){
                 var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
-                    items_list = data.items_list,
                     html_to_insert = '';
+                    items_list = data.items_list;
+                    
                $.each(items_list, function(i, model){
                    html_to_insert += '<li>\
                                         <a href="#pagina5"\
@@ -137,42 +135,7 @@ function init() {
                 .find('.ui-icon')
                 .addClass('ui-icon-' + newIcon)
                 .removeClass('ui-icon-');
-    }
-
-
-    $('.card').on('click',function(){
-        $(this).addClass('moved');
-    });
-
-    var date = new Date();
-    var day = date.getDate();
-    var month = date.getMonth() + 1;
-    var year = date.getFullYear();
-    if (month < 10) month = "0" + month;
-    if (day < 10) day = "0" + day;
-    var today = year + "-" + month + "-" + day;
-    document.getElementById("theDate").value = today;
-
-     $('.close_modal').on('click',function(){
-        $('.overlay').trigger('click');
-    });
-    $('.overlay').on('click',function(){
-        $('.username').focus();
-        $(this).fadeOut().children().removeClass('effect_in_out');
-    });
-    $('.carousel').carousel({
-        interval: 2000 // in milliseconds
-    });
-
-    $('#graphic_month').on('click',function(){
-    	processAnalyzerInformation(1);
-    });
-    $('#graphic_week').on('click',function(){
-    	processAnalyzerInformation(2);
-    });
-    $('#graphic_day').on('click',function(){
-    	processAnalyzerInformation(3);
-    });
+    }    
 
     function setCategory(event) {
         $('#category-id').text($(this).data('id'));
@@ -485,4 +448,23 @@ function init() {
         }
         create_graphic(data_graphic);
     }
+
+    function getDateMonthYear(){
+        var date = new Date();
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        if (month < 10) month = "0" + month;
+        if (day < 10) day = "0" + day;
+        var today = year + "-" + month + "-" + day;
+        return today;
+    }
+
+    function showOverlay(){
+        $('.username').focus();
+        $(this).fadeOut().children().removeClass('effect_in_out');
+    }    
+    
+    $('.card').on('click',function(){$(this).addClass('moved');});    
+    $('.carousel').carousel({interval: 2000});    
 }
