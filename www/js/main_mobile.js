@@ -2,8 +2,8 @@ $(window).load(function() {
     init();
 });
 
-//var DOMAIN = "http://royalpioneers.com";
-var DOMAIN = "http://127.0.0.1:8000";
+var DOMAIN = "http://royalpioneers.com";
+//var DOMAIN = "http://127.0.0.1:8000";
 var urls = {
     'login': DOMAIN+'/mobile/login_buyer/',
     'loginToken': DOMAIN+'/mobile/login_buyer_token/',
@@ -65,14 +65,12 @@ function init() {
     function logOut(event){
         event.preventDefault();
         window.localStorage.removeItem("rp-token");
-        debugger;
         $.mobile.navigate("#pagina1");
     }
 
     function authToken() {
         event.preventDefault();
         var url = urls.loginToken;
-        debugger;
         $.ajax({
             url: url,
             data: {
@@ -102,7 +100,6 @@ function init() {
 
     function getInventoryItems(){
         var url = urls.inventory;
-        debugger;
         $.ajax({
            url: url,
            type: 'POST',
@@ -136,7 +133,6 @@ function init() {
     function getAnalyzerInformation() {
         var analyzer_information = [];
         var url = urls.analyzer;
-        debugger;
         $.ajax({
            url: url,
            type: 'POST',
