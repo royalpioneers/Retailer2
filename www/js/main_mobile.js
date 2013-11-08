@@ -431,6 +431,7 @@ function init() {
 
         $('#graphic').html('');
         start_graphic(result);
+        $('#graphic').trigger('create');
 
         return true;
     }
