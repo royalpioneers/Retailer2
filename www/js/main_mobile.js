@@ -20,6 +20,17 @@ function init() {
     if(token != null) {
         authToken();
     }
+
+
+    function checkConnection() {
+        var networkState = navigator.network.connection.type;
+
+        if(networkState == Connection.NONE){
+            return false;
+        }
+        return true;
+    }
+
     //Events
     $("#log_in").on("click", loginAuth);
     $('#logout').on('click', logOut);
@@ -40,25 +51,30 @@ function init() {
     //Functions
     function loginAuth(event) {
         event.preventDefault();
-        var url = urls.login;
-        $.ajax({
-            url: url,
-            data: {
-                password: $('#password').val(),
-                email: $('#username').val()
-            },
-            type: 'POST',
-            dataType: 'json',
-            success: function (data) {
-                if (data.status === 'OK') {
-                    window.localStorage.setItem("rp-token", data.token);
-                    token = data.token;
-                    eventsAfterLogin();
-                } else {
-                    $('.overlay').fadeIn().children().addClass('effect_in_out');
+        var result = checkConnection(Connection.ETHERNET);
+        if(result ==  true){
+            var url = urls.login;
+            $.ajax({
+                url: url,
+                data: {
+                    password: $('#password').val(),
+                    email: $('#username').val()
+                },
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.status === 'OK') {
+                        window.localStorage.setItem("rp-token", data.token);
+                        token = data.token;
+                        eventsAfterLogin();
+                    } else {
+                        $('.overlay').fadeIn().children().addClass('effect_in_out');
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            alert('Check your internet connection')
+        }
     }
 
     function logOut(event){
@@ -69,34 +85,39 @@ function init() {
 
     function authToken() {
         event.preventDefault();
-        var url = urls.loginToken;
-        $.ajax({
-            url: url,
-            data: {
-                token: token
-            },
-            type: 'POST',
-            dataType: 'json',
-            success: function (data) {
-                if (data.status === 'OK') {
-                    window.localStorage.setItem("rp-token", data.token);
-                    token = data.token;
-                    eventsAfterLogin();
+        var result = checkConnection();
+        if(result ==  true){
+            var url = urls.loginToken;
+            $.ajax({
+                url: url,
+                data: {
+                    token: token
+                },
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.status === 'OK') {
+                        window.localStorage.setItem("rp-token", data.token);
+                        token = data.token;
+                        eventsAfterLogin();
+                    }
+                    else {
+                        $('.overlay').fadeIn().children().addClass('effect_in_out');
+                    }
                 }
-                else {
-                    $('.overlay').fadeIn().children().addClass('effect_in_out');
-                }
-            }
-        });
+            });
+        } else {
+            alert('Check your internet connection')
+        }
     }
 
-    function eventsAfterLogin(){
+    function eventsAfterLogin() {
         getInventoryItems();
         getAnalyzerInformation();
         $.mobile.navigate("#pagina2");
     }
 
-    function getInventoryItems(){
+    function getInventoryItems() {
         var url = urls.inventory;
         $.ajax({
            url: url,
@@ -154,16 +175,15 @@ function init() {
     }
 
     function createProduct() {
-            var newIcon = 'check';
-            $(this).sibling().removeClass('ui-icon-'.newIcon);
-            $(this).attr('data-icon', newIcon)
-                .find('.ui-icon')
-                .addClass('ui-icon-' + newIcon)
-                .removeClass('ui-icon-');
+        var newIcon = 'check';
+        $(this).sibling().removeClass('ui-icon-'.newIcon);
+        $(this).attr('data-icon', newIcon)
+            .find('.ui-icon')
+            .addClass('ui-icon-' + newIcon)
+            .removeClass('ui-icon-');
     }
 
-
-    $('.card').on('click',function(){
+    $('.card').on('click',function() {
         $(this).addClass('moved');
     });
 
