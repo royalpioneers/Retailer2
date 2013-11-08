@@ -111,13 +111,13 @@ function init() {
         }
     }
 
-    function eventsAfterLogin(){
+    function eventsAfterLogin() {
         getInventoryItems();
         getAnalyzerInformation();
         $.mobile.navigate("#pagina2");
     }
 
-    function getInventoryItems(){
+    function getInventoryItems() {
         var url = urls.inventory;
         $.ajax({
            url: url,
@@ -175,16 +175,15 @@ function init() {
     }
 
     function createProduct() {
-            var newIcon = 'check';
-            $(this).sibling().removeClass('ui-icon-'.newIcon);
-            $(this).attr('data-icon', newIcon)
-                .find('.ui-icon')
-                .addClass('ui-icon-' + newIcon)
-                .removeClass('ui-icon-');
+        var newIcon = 'check';
+        $(this).sibling().removeClass('ui-icon-'.newIcon);
+        $(this).attr('data-icon', newIcon)
+            .find('.ui-icon')
+            .addClass('ui-icon-' + newIcon)
+            .removeClass('ui-icon-');
     }
 
-
-    $('.card').on('click',function(){
+    $('.card').on('click',function() {
         $(this).addClass('moved');
     });
 
