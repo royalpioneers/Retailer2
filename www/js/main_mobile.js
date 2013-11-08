@@ -15,7 +15,8 @@ var urls = {
 };
 
 function init() {
-    var token = window.localStorage.getItem("rp-token");
+    var analyzer_information = [],
+        token = window.localStorage.getItem("rp-token");
     //Automatic Login
     if(token != null) {
         authToken();
@@ -29,6 +30,21 @@ function init() {
             return false;
         }
         return true;
+    }
+    $('#edit-image').on('click', takePicture);
+
+    function takePicture(){
+        navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+        destinationType: Camera.DestinationType.FILE_URI });
+    }
+
+    function onSuccess(imageURI) {
+        var image = document.getElementById('image-camera');
+        image.src = imageURI;
+    }
+
+    function onFail(message) {
+        alert('Failed because: ' + message);
     }
 
     //Events
@@ -150,7 +166,6 @@ function init() {
         });
     }
     function getAnalyzerInformation() {
-        var analyzer_information = [];
         var url = urls.analyzer;
         $.ajax({
            url: url,
@@ -161,14 +176,17 @@ function init() {
            dataType: 'json',
            success: function(data){
                analyzer_information = data.context['information'];
-               processAnalyzerInformation(1, analyzer_information);
+               processAnalyzerInformation(1);
            }
         });
     }
 
     function changeTab() {
-        var prevSelection = "tab1";
-        var newSelection = $(this).children("a").attr("data-tab-class");
+        var newSelection = $(this).find('a').data('tab-class');
+        var prevSelection = 'tab1';
+        if(newSelection == 'tab1'){
+            prevSelection = 'tab2';
+        }
         $("."+prevSelection).addClass("ui-screen-hidden");
         $("."+newSelection).removeClass("ui-screen-hidden");
         prevSelection = newSelection;
@@ -364,8 +382,7 @@ function init() {
         content.append(html_to_insert);
     }
 
-    function processAnalyzerInformation(type, data) {
-        var analyzer_information = data;
+    function processAnalyzerInformation(type) {
         // dates limit
         var initial_date = new Date();
         var finish_date = new Date();
@@ -394,6 +411,7 @@ function init() {
         var total_sales = 0;
         var total_units = 0;
         var total_profit = 0;
+
         for(var i in analyzer_information['values']) {
             item = analyzer_information['values'][i];
             date = get_date_from_string(item['date']);
