@@ -22,31 +22,6 @@ function init() {
         authToken();
     }
 
-
-    function checkConnection() {
-        var networkState = navigator.network.connection.type;
-
-        if(networkState == Connection.NONE){
-            return false;
-        }
-        return true;
-    }
-    $('#edit-image').on('click', takePicture);
-
-    function takePicture(){
-        navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-        destinationType: Camera.DestinationType.FILE_URI });
-    }
-
-    function onSuccess(imageURI) {
-        var image = document.getElementById('image-camera');
-        image.src = imageURI;
-    }
-
-    function onFail(message) {
-        alert('Failed because: ' + message);
-    }
-
     //Events
     $("#log_in").on("click", loginAuth);
     $('#logout').on('click', logOut);
@@ -62,6 +37,8 @@ function init() {
     $("#browser").live('input', getCompleteInformation);
 
     $('.option-expand').live('expand', setCategory);
+
+    $('#edit-image').on('click', takePicture);
 
 
     //Functions
@@ -546,5 +523,29 @@ function init() {
           legend.append("text").attr("x", width - 24).attr("y", 9).attr("dy", ".35em").style("text-anchor", "end").text(function(d) { return d; });
         }
         create_graphic(data_graphic);
+    }
+
+    function checkConnection() {
+        var networkState = navigator.network.connection.type;
+
+        if(networkState == Connection.NONE){
+            return false;
+        }
+        return true;
+    }
+
+    function takePicture(event) {
+        event.preventDefault();
+        navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+        destinationType: Camera.DestinationType.FILE_URI });
+    }
+
+    function onSuccess(imageURI) {
+        var image = document.getElementById('image-camera');
+        image.src = imageURI;
+    }
+
+    function onFail(message) {
+        alert('Failed because: ' + message);
     }
 }
