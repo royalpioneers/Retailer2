@@ -2,8 +2,8 @@ $(window).load(function() {
     init();
 });
 
-var DOMAIN = "http://royalpioneers.com";
-//var DOMAIN = "http://127.0.0.1:8000";
+//var DOMAIN = "http://royalpioneers.com";
+var DOMAIN = "http://127.0.0.1:8000";
 var urls = {
     'login': DOMAIN+'/mobile/login_buyer/',
     'loginToken': DOMAIN+'/mobile/login_buyer_token/',
@@ -11,7 +11,8 @@ var urls = {
     'analyzer':DOMAIN+'/mobile/analyzer-information/',
     'saveProduct': DOMAIN+'/mobile/create/product/',
     'productInformation': DOMAIN+'/mobile/product-information/',
-    'category':DOMAIN+'/mobile/category/'
+    'category':DOMAIN+'/mobile/category/',
+    'upload': DOMAIN+'upload-image/product/'
 };
 
 function init() {
@@ -537,16 +538,47 @@ function init() {
 
     function takePicture(event) {
         event.preventDefault();
-        navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-        destinationType: Camera.DestinationType.FILE_URI });
+        navigator.camera.getPicture(onSuccess, onFail, {
+            quality: 50,
+            destinationType: Camera.DestinationType.FILE_URI
+        });
     }
 
     function onSuccess(imageURI) {
         var image = document.getElementById('image-camera');
+        uploadPhoto(imageURI);
         image.src = imageURI;
     }
 
     function onFail(message) {
         alert('Failed because: ' + message);
     }
+
+    function uploadPhoto(imageURI) {
+        var options = new FileUploadOptions();
+        options.fileKey="file";
+        options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+        options.mimeType="image/jpeg";
+
+        var params = new Object();
+        params.value1 = "test";
+        params.value2 = "param";
+
+        options.params = params;
+
+        var ft = new FileTransfer();
+        ft.upload(imageURI, encodeURI(urls.upload), win, fail, options);
+    }
+
+    function win(r) {
+        alert('Win');
+//        console.log("Code = " + r.responseCode);
+//        console.log("Response = " + r.response);
+//        console.log("Sent = " + r.bytesSent);
+    }
+
+    function fail(error) {
+        //alert("An error has occurred: Code = " + error.code);
+    }
+
 }
