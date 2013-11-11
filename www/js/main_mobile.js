@@ -8,7 +8,7 @@ var urls = {
     'login': DOMAIN+'/mobile/login_buyer/',
     'loginToken': DOMAIN+'/mobile/login_buyer_token/',
     'inventory': DOMAIN+'/mobile/inventory/',
-    'clients_list': DOMAIN+'/mobile/clients-list/'
+    'clients_list': DOMAIN+'/mobile/clients-list/',
     'analyzer':DOMAIN+'/mobile/analyzer-information/',
     'saveProduct': DOMAIN+'/mobile/create/product/',
     'productInformation': DOMAIN+'/mobile/product-information/',
@@ -104,6 +104,7 @@ function init() {
     function loginAuth(event) {
         event.preventDefault();
         var result = checkConnection(Connection.ETHERNET);
+        debugger;
         if(result ==  true){
             var url = urls.login;
             $.ajax({
