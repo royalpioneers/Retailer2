@@ -8,7 +8,7 @@ var urls = {
     'login': DOMAIN+'/mobile/login_buyer/',
     'loginToken': DOMAIN+'/mobile/login_buyer_token/',
     'inventory': DOMAIN+'/mobile/inventory/',
-    'clients_list': DOMAIN+'/mobile/clients-list/'
+    'clients_list': DOMAIN+'/mobile/clients-list/',
     'analyzer':DOMAIN+'/mobile/analyzer-information/',
     'saveProduct': DOMAIN+'/mobile/create/product/',
     'productInformation': DOMAIN+'/mobile/product-information/',
@@ -77,14 +77,14 @@ function init() {
                 //$('.see_more_products_clients').text(calculateTotalPrice());
             }
         }
-        storageClients.products = productsSelected;
-        storageClients.totalPrice = 
-        localStorage.setItem('ClientDataStorage',);
+        // storageClients.products = productsSelected;
+        // storageClients.totalPrice = 
+        // localStorage.setItem('ClientDataStorage',);
     });
-    function calculateTotalPrice(val){
-        var val += val;
-        return ;
-    }
+    // function calculateTotalPrice(val){
+    //     var val += val;
+    //     return ;
+    // }
     //business client -> wholesale 1
     //consumer -> retail 2
     function calculatePrice(i){
