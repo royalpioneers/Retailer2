@@ -384,7 +384,7 @@
             <div data-role="header" data-theme="b">
                 <a class="" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>    
                 <h1>
-                    <a href="" id="goToInvoice">Invoice</a>
+                    <a href="" class="btn btn-primary" id="goToInvoice">Invoice</a>
                 </h1>
             </div>
             <div data-role="content">
@@ -397,19 +397,7 @@
             </div>
         </div>
 
-        <!--Buy client's products-->
         <div data-role="page" id="pagina12" data-fullscreen="true">
-            <div data-role="header" data-theme="b">
-                <a class="" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
-                <h1><a href="" class="see_more_products_clients">$1212</a></h1>
-            </div>
-            <div data-role="content" style="text-align: center;">
-                <ul class="products_clients_add" data-role="listview" data-filter="true" data-filter-placeholder="Search Variants...">
-                    
-                </ul>
-            </div>
-        </div>
-        <div data-role="page" id="pagina13" data-fullscreen="true">
             <div data-role="header" data-theme="b">
                 <a class="" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
                 <!-- <h1><span class="client_name"></span>'s Details</h1> -->
@@ -473,5 +461,18 @@
                 </aside>
             </div>
         </div>
+
+        <!--Buy client's products-->
+        <div data-role="page" id="pagina13" data-fullscreen="true">
+            <div data-role="header" data-theme="b">
+                <a class="saveClientStorage" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
+                <h1><a href="" class="see_more_products_clients saveClientStorage">0</a></h1>
+            </div>
+            <div data-role="content" style="text-align: center;">
+                <ul class="products_clients_add" data-role="listview" data-filter="true"></ul>
+            </div>
+        </div>
+
+        
 	</body>
 </html>

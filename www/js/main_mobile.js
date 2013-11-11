@@ -15,7 +15,7 @@ var urls = {
     'category':DOMAIN+'/mobile/category/',
     'upload': DOMAIN+'upload-image/product/'
 };
-var items_list = [], productsSelected = [], storageClients = {};
+var items_list = [], productsSelected = [], storageClients = [];
 function init() {
     var analyzer_information = [],
         token = window.localStorage.getItem("rp-token");
@@ -37,21 +37,28 @@ function init() {
     $('#graphic_month').live('click',function(){processAnalyzerInformation(1);});
     $('#graphic_week').live('click',function(){processAnalyzerInformation(2);});
     $('#graphic_day').live('click',function(){processAnalyzerInformation(3);});
+    $('.card').on('click',function(){$(this).addClass('moved');});    
+    $('.carousel').carousel({interval: 2000});
     $('#new_invoice').live('click', listClients);
     $('#goToInvoice').live('click', showInvoice);
-    $( "#pagina13" ).on( "pageshow", function( event ) {        
+    $( "#pagina12" ).on( "pageshow", function( event ) {        
         $('#theDate').val(getDateMonthYear());
     });
     $('#goToProducts').on('click', function(){
-        $.mobile.navigate("#pagina12");              
+        if(localStorage.getItem('clientSelected')){
+            $.mobile.navigate("#pagina13");
+        }
+        else{
+            alert('Chooce Someone!');
+        }                
     });
-    $( "#pagina12" ).on( "pageshow", function( event ) {
+    $( "#pagina13" ).on( "pageshow", function( event ){
         $('.products_clients_add').html('');
         var html = "";
         var products = JSON.parse(localStorage.getItem('products_inventory'));
         for(var i in products){
             html += '<li>\
-                        <a href="#" data-role="button" class="productSelected" data-id="'+products[i].id+'">\
+                        <a href="#" data-role="button" class="productSelected" data-id="'+products[i].id+'" data-selected="false">\
                             <img src="'+products[i].model_image+'">\
                             <span>'+products[i].product_name+'</span>\
                         </a>\
@@ -61,33 +68,59 @@ function init() {
         $('.products_clients_add').trigger('create');
     });
     $('.productSelected').on('click', function(e){
+        debugger;
         var products = JSON.parse(localStorage.getItem('products_inventory'));
+        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+        var currentPrice = parseInt($('.see_more_products_clients').text());
+        var productSelected;
         e.preventDefault();
         var id = $(this).data('id');        
         for(var i in products){
-            if(products[i].id === id){
-                productsSelected.push({
-                    'id': products[i].id,
-                    'product_name': products[i].product_name,
-                    'model_name': products[i].model_name,
-                    'quantity': products[i].quantity,
-                    'price': calculatePrice(i),
-                    'model_image': products[i].model_image
-                });
-                //$('.see_more_products_clients').text(calculateTotalPrice());
+            if(!$(this).data('selected')){
+                if(products[i].id === id){
+                    productSelected = {
+                        'id': products[i].id,
+                        'product_name': products[i].product_name,
+                        'model_name': products[i].model_name,
+                        'quantity': products[i].quantity,
+                        'price': calculatePrice(i),
+                        'model_image': products[i].model_image
+                    };
+                    clientSelected.products.push(productSelected);
+                    $(this).data('selected','true');
+                    clientSelected.total = calculateTotalPrice(clientSelected.total, currentPrice);
+                    $('.see_more_products_clients').text(clientSelected.total);        
+                }
             }
-        }
-        // storageClients.products = productsSelected;
-        // storageClients.totalPrice = 
-        // localStorage.setItem('ClientDataStorage',);
+            else{
+                //validar q quite selected
+            }
+        }        
     });
-    // function calculateTotalPrice(val){
-    //     var val += val;
-    //     return ;
-    // }
-    //business client -> wholesale 1
-    //consumer -> retail 2
+    $('.saveClientStorage').on('click', saveClientStorage);
+
+    function saveClientStorage(){
+        
+        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+        if(clientSelected.products != null){
+            //validar si esta repetido
+            storageClients.push(clientSelected);
+        }
+        else{
+            alert('Chooce Products');
+        }
+        
+    }
+
+    function calculateTotalPrice(a, b){
+        debugger;
+        return (a+b);
+    }
+    
     function calculatePrice(i){
+        //business client -> wholesale 1
+        //consumer -> retail 2
+        debugger;
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var a =0;
         if(clientSelected.type === 1){
@@ -165,10 +198,13 @@ function init() {
                                 'id': items_list[client].id,
                                 'name': items_list[client].name,
                                 'image': items_list[client].image,
-                                'type': items_list[client].type
+                                'type': items_list[client].type,
+                                'products':[],
+                                'total':0
                             }
                         }
                     }
+                    debugger;
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));                  
                 });
                 localStorage.setItem('clients', JSON.stringify(items_list));                
@@ -266,22 +302,27 @@ function init() {
            }
         });
     }
-
+                    
     function showInvoice(){
-        $('#selectClient').html('');
-        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-        var clients = JSON.parse(localStorage.getItem('clients'));
-        var html ='';
-        var html = '<option value="'+clientSelected.id+'">'+clientSelected.name+'</option>';   
-        for(var i in clients){
-            if(clients[i].id !== clientSelected.id){
-                html +='<option value="'+clients[i].id+'">'+clients[i].name+'</option>';   
+        if(localStorage.getItem('clientSelected')){
+            $('#selectClient').html('');
+            var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+            var clients = JSON.parse(localStorage.getItem('clients'));
+            var html ='';
+            var html = '<option value="'+clientSelected.id+'">'+clientSelected.name+'</option>';   
+            for(var i in clients){
+                if(clients[i].id !== clientSelected.id){
+                    html +='<option value="'+clients[i].id+'">'+clients[i].name+'</option>';   
+                }
             }
-        }
-        $('#selectClient').append(html);
+            $('#selectClient').append(html);
 
-        $('#selectClient-button > span > span > span').text(clientSelected.name);        
-        $.mobile.navigate("#pagina13");
+            $('#selectClient-button > span > span > span').text(clientSelected.name);        
+            $.mobile.navigate("#pagina12");
+        }
+        else{
+            alert('Chooce Someone!');
+        }        
     }
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
     function changeTab() {
@@ -424,7 +465,6 @@ function init() {
             }
         });
     }
-
 
     function showDetail(){
         var content = $('#pagina5').find('.inventory_detail_product'),
@@ -617,6 +657,7 @@ function init() {
         }
         create_graphic(data_graphic);
     }
+
     function getDateMonthYear(){
         var date = new Date();
         var day = date.getDate();
@@ -633,8 +674,6 @@ function init() {
         $(this).fadeOut().children().removeClass('effect_in_out');
     }    
     
-    $('.card').on('click',function(){$(this).addClass('moved');});    
-    $('.carousel').carousel({interval: 2000});
     function checkConnection() {
         var networkState = navigator.network.connection.type;
 
@@ -689,3 +728,19 @@ function init() {
         //alert("An error has occurred: Code = " + error.code);
     }
 }
+
+// storageClients = [
+        //     {
+        //         'id':'id',
+        //         'name':'name',
+        //         'image':'image',
+        //         'type':'type',
+        //         'products':[
+        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png'},
+        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png'},
+        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png'},
+        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png'}
+        //         ],
+        //         'total':454  
+        //     }
+        // ]
