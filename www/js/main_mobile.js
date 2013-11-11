@@ -2,8 +2,8 @@ $(window).load(function() {
     init();
 });
 
-//var DOMAIN = "http://royalpioneers.com";
-var DOMAIN = "http://127.0.0.1:8000";
+var DOMAIN = app.getDomain();
+
 var urls = {
     'login': DOMAIN+'/mobile/login_buyer/',
     'loginToken': DOMAIN+'/mobile/login_buyer_token/',

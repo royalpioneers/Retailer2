@@ -1,6 +1,6 @@
 $(function(){
 
-	var DOMAIN = "http://royalpioneers.com";
+	var DOMAIN = app.getDomain();
 
 	function setContentSize() {
 		$('.swiper-content').css({
@@ -10,14 +10,14 @@ $(function(){
 	setContentSize()
 	$(window).resize(function(){
 		setContentSize()
-	})
+	});
 
 	//Swiper Content
 	var contentSwiper = $('.swiper-content').swiper({
 		onSlideChangeStart: function(){
 			updateNavPosition()
 		}
-	})
+	});
 	//Nav
 	var navSwiper = $('.swiper-nav').swiper({
 		visibilityFullFit: true,
@@ -78,7 +78,7 @@ $(function(){
     	e.preventDefault();
     	var callback_url = $(this).attr('href');
     	chooseProductGroup(callback_url);
-    })
+    });
 
     // When make a click in group name, this is saved and the user will be redirected to previous page
 
@@ -137,4 +137,4 @@ $(function(){
 			}
 		});
 	});
-})
+});

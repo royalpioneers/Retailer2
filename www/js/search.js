@@ -1,4 +1,4 @@
-var DOMAIN = "http://127.0.0.1:8000";
+var DOMAIN = app.getDomain();
 
 $(function() {
     var token = window.localStorage.getItem("rp-token");
