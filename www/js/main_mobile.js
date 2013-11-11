@@ -40,7 +40,6 @@ function init() {
     $('.card').on('click',function(){$(this).addClass('moved');});    
     $('.carousel').carousel({interval: 2000});
     $('#new_invoice').live('click', listClients);
-    $('#goToInvoice').live('click', showInvoice);
     $( "#pagina12" ).on( "pageshow", function( event ) {        
         $('#theDate').val(getDateMonthYear());
     });
@@ -67,7 +66,7 @@ function init() {
         $('.products_clients_add').append(html);
         $('.products_clients_add').trigger('create');
     });
-    $('.productSelected').on('click', function(e){
+    $('.productSelected').live('click', function(e){
         debugger;
         var products = JSON.parse(localStorage.getItem('products_inventory'));
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
@@ -99,9 +98,9 @@ function init() {
     });
     $('.saveClientStorage').on('click', saveClientStorage);
 
-    function saveClientStorage(){
-        
+    function saveClientStorage(){        
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+
         if(clientSelected.products != null){
             //validar si esta repetido
             storageClients.push(clientSelected);
@@ -116,12 +115,12 @@ function init() {
         debugger;
         return (a+b);
     }
-    
     function calculatePrice(i){
         //business client -> wholesale 1
         //consumer -> retail 2
         debugger;
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+        var products = JSON.parse(localStorage.getItem('products_inventory'));
         var a =0;
         if(clientSelected.type === 1){
             a = products[i].wholesale_price;
@@ -204,10 +203,28 @@ function init() {
                             }
                         }
                     }
+                    //pintar select con las lista de clientes de la pagina 12
+                    $('#selectClient').html('');
+                    var html ='';
+                    var html = '<option value="'+clientSelected.id+'">'+clientSelected.name+'</option>';   
+                    for(var i in items_list){
+                        if(items_list[i].id !== clientSelected.id){
+                            html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';   
+                        }
+                    }
+                    $('#selectClient').append(html);
+                    $('#selectClient-button > span > span > span').text(clientSelected.name);  
+
+                    localStorage.setItem("clientSelected", JSON.stringify(clientSelected)); 
                     debugger;
-                    localStorage.setItem("clientSelected", JSON.stringify(clientSelected));                  
-                });
-                localStorage.setItem('clients', JSON.stringify(items_list));                
+                    if(clientSelected.products == ''){
+                        $.mobile.navigate("#pagina13");
+                    }
+                    else{
+                        $.mobile.navigate("#pagina12"); 
+                    }   
+
+                });             
             }
         });
     }
@@ -301,28 +318,6 @@ function init() {
                processAnalyzerInformation(1);
            }
         });
-    }
-                    
-    function showInvoice(){
-        if(localStorage.getItem('clientSelected')){
-            $('#selectClient').html('');
-            var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-            var clients = JSON.parse(localStorage.getItem('clients'));
-            var html ='';
-            var html = '<option value="'+clientSelected.id+'">'+clientSelected.name+'</option>';   
-            for(var i in clients){
-                if(clients[i].id !== clientSelected.id){
-                    html +='<option value="'+clients[i].id+'">'+clients[i].name+'</option>';   
-                }
-            }
-            $('#selectClient').append(html);
-
-            $('#selectClient-button > span > span > span').text(clientSelected.name);        
-            $.mobile.navigate("#pagina12");
-        }
-        else{
-            alert('Chooce Someone!');
-        }        
     }
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
     function changeTab() {
