@@ -3,7 +3,7 @@ $(window).load(function() {
 });
 
 //var DOMAIN = "http://royalpioneers.com";
-var DOMAIN = "http://127.0.0.1:8003";
+var DOMAIN = "http://127.0.0.1:8000";
 var urls = {
     'login': DOMAIN+'/mobile/login_buyer/',
     'loginToken': DOMAIN+'/mobile/login_buyer_token/',
