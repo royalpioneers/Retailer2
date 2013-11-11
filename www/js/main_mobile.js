@@ -104,7 +104,6 @@ function init() {
     function loginAuth(event) {
         event.preventDefault();
         var result = checkConnection(Connection.ETHERNET);
-        debugger;
         if(result ==  true){
             var url = urls.login;
             $.ajax({
@@ -380,7 +379,7 @@ function init() {
         }
     }
 
-    function getInformationProduct(){
+    function getInformationProduct() {
         var url = urls.productInformation;
         $.ajax({
             url: url,
