@@ -448,60 +448,60 @@
     }
     /*animations*/
     @-webkit-keyframes tilt-and-move {
-  0% {
-    left: 0;
-    top: 0;
-  }
-  10% {
-    -webkit-transform: rotate(4deg);
-    left:-10px;
-    top:-45px;
-  }
-  20% {
-    -webkit-transform: rotate(5deg);
-    left:-20px;
-    top:-40px;
-  }
-  30% {
-    -webkit-transform: rotate(6deg);
-    left:10px;
-    top:-35px;
-  }
-  40% {
-    -webkit-transform: rotate(7deg);
-    left:15px;
-    top:-45px;
-  }
-  50% {
-    -webkit-transform: rotate(8deg);
-    left:25px;
-    top:-55px;
-  }
-  60% {
-    -webkit-transform: rotate(7deg);
-    left:30px;
-    top:-65px;
-  }
-  70% {
-    -webkit-transform: rotate(8deg);
-    left:45px;
-    top:-85px;
-  }
-  80% {
-    -webkit-transform: rotate(7deg);
-    left:60px;
-    top:-95px;
-  }
-  90% {
-    -webkit-transform: rotate(8deg);
-    left:75px;
-    top:-115px;
-  }
-  100% {
-    left: 90px;
-    top: -150px;
-  }
-}
+      0% {
+        left: 0;
+        top: 0;
+      }
+      10% {
+        -webkit-transform: rotate(4deg);
+        left:-10px;
+        top:-45px;
+      }
+      20% {
+        -webkit-transform: rotate(5deg);
+        left:-20px;
+        top:-40px;
+      }
+      30% {
+        -webkit-transform: rotate(6deg);
+        left:10px;
+        top:-35px;
+      }
+      40% {
+        -webkit-transform: rotate(7deg);
+        left:15px;
+        top:-45px;
+      }
+      50% {
+        -webkit-transform: rotate(8deg);
+        left:25px;
+        top:-55px;
+      }
+      60% {
+        -webkit-transform: rotate(7deg);
+        left:30px;
+        top:-65px;
+      }
+      70% {
+        -webkit-transform: rotate(8deg);
+        left:45px;
+        top:-85px;
+      }
+      80% {
+        -webkit-transform: rotate(7deg);
+        left:60px;
+        top:-95px;
+      }
+      90% {
+        -webkit-transform: rotate(8deg);
+        left:75px;
+        top:-115px;
+      }
+      100% {
+        left: 90px;
+        top: -150px;
+      }
+    }
 
     .card {
         display: inline-block;
