@@ -88,11 +88,14 @@ function init() {
 
     function selectProduct(e){
         e.preventDefault();
-        var products = JSON.parse(localStorage.getItem('products_inventory'));
-        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-        var currentPrice = parseInt($('.see_more_products_clients').text());
-        var productSelected;
-        var id = $(this).data('id');        
+        var products = JSON.parse(localStorage.getItem('products_inventory')),
+            clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
+            currentPrice = parseInt($('.see_more_products_clients').text()),
+            productSelected,
+            id = $(this).data('id');
+
+        $(this).addClass("productSelected");
+        debugger;
         for(var i in products){
             if(!$(this).data('selected')){
                 if(products[i].id === id){
@@ -101,7 +104,7 @@ function init() {
                         'product_name': products[i].product_name,
                         'model_name': products[i].model_name,
                         'quantity': products[i].quantity,
-                        'price': calculatePrice(i),
+                        'price': calculatePrice(products[i]),
                         'model_image': products[i].model_image
                     };
                     clientSelected.products.push(productSelected);
@@ -128,18 +131,18 @@ function init() {
         
     }
 
-    function calculatePrice(i) {
+    function calculatePrice(product) {
         //business client -> wholesale 1
         //consumer -> retail 2
-        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-        var a =0;
+        var clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
+            price =0;
         if(clientSelected.type === 1) {
-            a = products[i].wholesale_price;
+            price = product.wholesale_price;
         }
         else if(clientSelected.type === 2) {
-            a = products[i].retail_price;
+            price = product.retail_price;
         }
-        return a;
+        return price;
     }
 
     function loginAuth(event) {

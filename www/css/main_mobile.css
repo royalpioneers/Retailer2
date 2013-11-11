@@ -597,3 +597,6 @@
     #goToProducts {
         text-align: center;
     }
+    .productSelected{
+        background-color: red;
+    }
