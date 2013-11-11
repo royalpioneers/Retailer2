@@ -93,9 +93,7 @@ function init() {
             currentPrice = parseInt($('.see_more_products_clients').text()),
             productSelected,
             id = $(this).data('id');
-
-        $(this).addClass("productSelected");
-        debugger;
+        var span = $(this).children('.ui-btn-inner');
         for(var i in products){
             if(!$(this).data('selected')){
                 if(products[i].id === id){
@@ -109,14 +107,14 @@ function init() {
                     };
                     clientSelected.products.push(productSelected);
                     $(this).data('selected','true');
+                    $(span).addClass("productSelected");
                     clientSelected.total = clientSelected.total + currentPrice;
-                    $('.see_more_products_clients').text(clientSelected.total);        
+                    $('.see_more_products_clients').text(clientSelected.total);
                 }
+            } else {
+                $(span).removeClass("productSelected");
             }
-            else{
-                //validar q quite selected
-            }
-        }        
+        }
     }
 
     function saveClientStorage(){
