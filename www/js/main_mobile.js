@@ -2,8 +2,6 @@ $(window).load(function() {
     init();
 });
 
-//var DOMAIN = "http://royalpioneers.com";
-var DOMAIN = "http://127.0.0.1:8001";
 var urls = {
     'login': DOMAIN+'/mobile/login_buyer/',
     'loginToken': DOMAIN+'/mobile/login_buyer_token/',
@@ -13,7 +11,9 @@ var urls = {
     'saveProduct': DOMAIN+'/mobile/create/product/',
     'productInformation': DOMAIN+'/mobile/product-information/',
     'category':DOMAIN+'/mobile/category/',
-    'upload': DOMAIN+'upload-image/product/'
+    'upload': DOMAIN+'upload-image/product/',
+    'client_create': DOMAIN+'/mobile/client/create/',
+    'client_list': DOMAIN+'/mobile/client/list/'
 };
 var items_list = [], productsSelected = [], storageClients = {};
 function init() {
@@ -99,6 +99,12 @@ function init() {
         return a;
     }
     $('#edit-image').on('click', takePicture);
+    
+    $('#add_new_client').on('click', takePicture);
+
+    /* CLIENT */
+    var client = ClientModel(urls, token);
+    client.init(); /* start list */
 
     //Functions
     function loginAuth(event) {
@@ -106,6 +112,8 @@ function init() {
         var result = checkConnection(Connection.ETHERNET);
         if(result ==  true){
             var url = urls.login;
+            console.log(url);
+            console.log('test');
             $.ajax({
                 url: url,
                 data: {
