@@ -2,19 +2,20 @@ $(window).load(function() {
     init();
 });
 
-var DOMAIN = "http://royalpioneers.com";
-//var DOMAIN = "http://127.0.0.1:8000";
+//var DOMAIN = "http://royalpioneers.com";
+var DOMAIN = "http://127.0.0.1:8003";
 var urls = {
     'login': DOMAIN+'/mobile/login_buyer/',
     'loginToken': DOMAIN+'/mobile/login_buyer_token/',
     'inventory': DOMAIN+'/mobile/inventory/',
+    'clients_list': DOMAIN+'/mobile/clients-list/'
     'analyzer':DOMAIN+'/mobile/analyzer-information/',
     'saveProduct': DOMAIN+'/mobile/create/product/',
     'productInformation': DOMAIN+'/mobile/product-information/',
     'category':DOMAIN+'/mobile/category/',
     'upload': DOMAIN+'upload-image/product/'
 };
-
+var items_list = [], productsSelected = [], storageClients = {};
 function init() {
     var analyzer_information = [],
         token = window.localStorage.getItem("rp-token");
@@ -26,21 +27,78 @@ function init() {
     //Events
     $("#log_in").on("click", loginAuth);
     $('#logout').on('click', logOut);
-
     $(".navbar ul li").live("click", changeTab);
-
     $('.categories_create_product').find('a').on('click', createProduct);
-
     $('#create-product').live("click", getInformationProduct);
-
     $('#create_item').live("click", saveProduct);
-
     $("#browser").live('input', getCompleteInformation);
-
     $('.option-expand').live('expand', setCategory);
-
+    $('.overlay,.close_modal').live('click', showOverlay);
+    $('#graphic_month').live('click',function(){processAnalyzerInformation(1);});
+    $('#graphic_week').live('click',function(){processAnalyzerInformation(2);});
+    $('#graphic_day').live('click',function(){processAnalyzerInformation(3);});
+    $('#new_invoice').live('click', listClients);
+    $('#goToInvoice').live('click', showInvoice);
+    $( "#pagina13" ).on( "pageshow", function( event ) {        
+        $('#theDate').val(getDateMonthYear());
+    });
+    $('#goToProducts').on('click', function(){
+        $.mobile.navigate("#pagina12");              
+    });
+    $( "#pagina12" ).on( "pageshow", function( event ) {
+        $('.products_clients_add').html('');
+        var html = "";
+        var products = JSON.parse(localStorage.getItem('products_inventory'));
+        for(var i in products){
+            html += '<li>\
+                        <a href="#" data-role="button" class="productSelected" data-id="'+products[i].id+'">\
+                            <img src="'+products[i].model_image+'">\
+                            <span>'+products[i].product_name+'</span>\
+                        </a>\
+                    </li>'
+        }        
+        $('.products_clients_add').append(html);
+        $('.products_clients_add').trigger('create');
+    });
+    $('.productSelected').on('click', function(e){
+        var products = JSON.parse(localStorage.getItem('products_inventory'));
+        e.preventDefault();
+        var id = $(this).data('id');        
+        for(var i in products){
+            if(products[i].id === id){
+                productsSelected.push({
+                    'id': products[i].id,
+                    'product_name': products[i].product_name,
+                    'model_name': products[i].model_name,
+                    'quantity': products[i].quantity,
+                    'price': calculatePrice(i),
+                    'model_image': products[i].model_image
+                });
+                //$('.see_more_products_clients').text(calculateTotalPrice());
+            }
+        }
+        storageClients.products = productsSelected;
+        storageClients.totalPrice = 
+        localStorage.setItem('ClientDataStorage',);
+    });
+    function calculateTotalPrice(val){
+        var val += val;
+        return ;
+    }
+    //business client -> wholesale 1
+    //consumer -> retail 2
+    function calculatePrice(i){
+        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+        var a =0;
+        if(clientSelected.type === 1){
+            a = products[i].wholesale_price;
+        }
+        else if(clientSelected.type === 2){
+            a = products[i].retail_price;
+        }
+        return a;
+    }
     $('#edit-image').on('click', takePicture);
-
 
     //Functions
     function loginAuth(event) {
@@ -70,8 +128,56 @@ function init() {
             alert('Check your internet connection')
         }
     }
+    
+    function listClients(){
+        var url = urls.clients_list;
+        var a = true;
+        var clients_name_id = [];
+        $.ajax({
+           url: url,
+           type: 'POST',
+           data: {
+                rp_token: token
+           },
+           dataType: 'json',
+           success: function(data){
+                $('#pagina11').find('#list_clients').html('');
+                var ul_for_list_clients = $('#pagina11').find('#list_clients'),
+                    html_to_insert = '';
+                    items_list = data.items_list;
+                    
+                for(var client in items_list){
+                   html_to_insert += '<input type="radio" name="radio-choice-1" id="radio-choice-'+items_list[client].id+'" data-id="'+items_list[client].id+'"value="choice-'+items_list[client].id+'"/>\
+                                    <label\
+                                        for="radio-choice-'+items_list[client].id+'"\
+                                        data-corners="false" class="labelRadioButton"\
+                                        >\
+                                        <img src="'+items_list[client].image+'" class="image_client"/>'+items_list[client].name+'\
+                                    </label>';
+                };
+                
+                ul_for_list_clients.append(html_to_insert);
+                $('#list_clients').trigger('create');
+                $(":radio").bind("change", function (event){                    
+                    for(var client in items_list){
+                        if(items_list[client].id == $(this).data('id')){
+                            var clientSelected = {
+                                'id': items_list[client].id,
+                                'name': items_list[client].name,
+                                'image': items_list[client].image,
+                                'type': items_list[client].type
+                            }
+                        }
+                    }
+                    localStorage.setItem("clientSelected", JSON.stringify(clientSelected));                  
+                });
+                localStorage.setItem('clients', JSON.stringify(items_list));                
+            }
+        });
+    }
 
     function logOut(event){
+        // localStorage.clear('products_inventory');
         event.preventDefault();
         window.localStorage.removeItem("rp-token");
         $.mobile.navigate("#pagina1");
@@ -122,8 +228,9 @@ function init() {
            dataType: 'json',
            success: function(data){
                 var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
-                    items_list = data.items_list,
                     html_to_insert = '';
+                    items_list = data.items_list;
+                    
                $.each(items_list, function(i, model){
                    html_to_insert += '<li>\
                                         <a href="#pagina5"\
@@ -139,7 +246,8 @@ function init() {
                });
                ul_for_inserting.html('');
                ul_for_inserting.append(html_to_insert);
-               $('.model-data').on('click', showDetail);
+               localStorage.setItem('products_inventory', JSON.stringify(data.items_list));
+               $('.model-data').live('click', showDetail);
            }
         });
     }
@@ -159,6 +267,23 @@ function init() {
         });
     }
 
+    function showInvoice(){
+        $('#selectClient').html('');
+        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+        var clients = JSON.parse(localStorage.getItem('clients'));
+        var html ='';
+        var html = '<option value="'+clientSelected.id+'">'+clientSelected.name+'</option>';   
+        for(var i in clients){
+            if(clients[i].id !== clientSelected.id){
+                html +='<option value="'+clients[i].id+'">'+clients[i].name+'</option>';   
+            }
+        }
+        $('#selectClient').append(html);
+
+        $('#selectClient-button > span > span > span').text(clientSelected.name);        
+        $.mobile.navigate("#pagina13");
+    }
+    $.mobile.selectmenu.prototype.options.nativeMenu = false;
     function changeTab() {
         var newSelection = $(this).find('a').data('tab-class');
         var prevSelection = 'tab1';
@@ -177,41 +302,7 @@ function init() {
             .find('.ui-icon')
             .addClass('ui-icon-' + newIcon)
             .removeClass('ui-icon-');
-    }
-
-    $('.card').on('click',function() {
-        $(this).addClass('moved');
-    });
-
-    var date = new Date();
-    var day = date.getDate();
-    var month = date.getMonth() + 1;
-    var year = date.getFullYear();
-    if (month < 10) month = "0" + month;
-    if (day < 10) day = "0" + day;
-    var today = year + "-" + month + "-" + day;
-    document.getElementById("theDate").value = today;
-
-     $('.close_modal').on('click',function(){
-        $('.overlay').trigger('click');
-    });
-    $('.overlay').on('click',function(){
-        $('.username').focus();
-        $(this).fadeOut().children().removeClass('effect_in_out');
-    });
-    $('.carousel').carousel({
-        interval: 2000 // in milliseconds
-    });
-
-    $('#graphic_month').on('click',function(){
-    	processAnalyzerInformation(1);
-    });
-    $('#graphic_week').on('click',function(){
-    	processAnalyzerInformation(2);
-    });
-    $('#graphic_day').on('click',function(){
-    	processAnalyzerInformation(3);
-    });
+    }    
 
     function setCategory(event) {
         $('#category-id').text($(this).data('id'));
@@ -526,7 +617,24 @@ function init() {
         }
         create_graphic(data_graphic);
     }
+    function getDateMonthYear(){
+        var date = new Date();
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        if (month < 10) month = "0" + month;
+        if (day < 10) day = "0" + day;
+        var today = year + "-" + month + "-" + day;
+        return today;
+    }
 
+    function showOverlay(){
+        $('.username').focus();
+        $(this).fadeOut().children().removeClass('effect_in_out');
+    }    
+    
+    $('.card').on('click',function(){$(this).addClass('moved');});    
+    $('.carousel').carousel({interval: 2000});
     function checkConnection() {
         var networkState = navigator.network.connection.type;
 
@@ -580,5 +688,4 @@ function init() {
     function fail(error) {
         //alert("An error has occurred: Code = " + error.code);
     }
-
 }
