@@ -9,14 +9,21 @@ var urls = {
     'loginToken': DOMAIN+'/mobile/login_buyer_token/',
     'inventory': DOMAIN+'/mobile/inventory/',
     'clients_list': DOMAIN+'/mobile/clients-list/'
+    'analyzer':DOMAIN+'/mobile/analyzer-information/',
+    'saveProduct': DOMAIN+'/mobile/create/product/',
+    'productInformation': DOMAIN+'/mobile/product-information/',
+    'category':DOMAIN+'/mobile/category/',
+    'upload': DOMAIN+'upload-image/product/'
 };
 var items_list = [], productsSelected = [], storageClients = {};
 function init() {
-    var token = window.localStorage.getItem("rp-token");
+    var analyzer_information = [],
+        token = window.localStorage.getItem("rp-token");
     //Automatic Login
     if(token != null) {
         authToken();
     }
+
     //Events
     $("#log_in").on("click", loginAuth);
     $('#logout').on('click', logOut);
@@ -70,7 +77,6 @@ function init() {
                 //$('.see_more_products_clients').text(calculateTotalPrice());
             }
         }
-
         storageClients.products = productsSelected;
         storageClients.totalPrice = 
         localStorage.setItem('ClientDataStorage',);
@@ -92,28 +98,35 @@ function init() {
         }
         return a;
     }
+    $('#edit-image').on('click', takePicture);
 
     //Functions
     function loginAuth(event) {
         event.preventDefault();
-        var url = urls.login;
-        $.ajax({
-            url: url,
-            data: {
-                password: $('#password').val(),
-                email: $('#username').val()
-            },
-            type: 'POST',
-            dataType: 'json',
-            success: function (data) {
-                if (data.status === 'OK') {
-                    window.localStorage.setItem("rp-token", data.token);
-                    eventsAfterLogin();
-                } else {
-                    $('.overlay').fadeIn().children().addClass('effect_in_out');
+        var result = checkConnection(Connection.ETHERNET);
+        if(result ==  true){
+            var url = urls.login;
+            $.ajax({
+                url: url,
+                data: {
+                    password: $('#password').val(),
+                    email: $('#username').val()
+                },
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.status === 'OK') {
+                        window.localStorage.setItem("rp-token", data.token);
+                        token = data.token;
+                        eventsAfterLogin();
+                    } else {
+                        $('.overlay').fadeIn().children().addClass('effect_in_out');
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            alert('Check your internet connection')
+        }
     }
     
     function listClients(){
@@ -172,32 +185,39 @@ function init() {
 
     function authToken() {
         event.preventDefault();
-        var url = urls.loginToken;
-        $.ajax({
-            url: url,
-            data: {
-                token: token
-            },
-            type: 'POST',
-            dataType: 'json',
-            success: function (data) {
-                if (data.status === 'OK') {
-                    eventsAfterLogin();
+        var result = checkConnection();
+        if(result ==  true){
+            var url = urls.loginToken;
+            $.ajax({
+                url: url,
+                data: {
+                    token: token
+                },
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.status === 'OK') {
+                        window.localStorage.setItem("rp-token", data.token);
+                        token = data.token;
+                        eventsAfterLogin();
+                    }
+                    else {
+                        $('.overlay').fadeIn().children().addClass('effect_in_out');
+                    }
                 }
-                else {
-                    $('.overlay').fadeIn().children().addClass('effect_in_out');
-                }
-            }
-        });
+            });
+        } else {
+            alert('Check your internet connection')
+        }
     }
 
-    function eventsAfterLogin(){
+    function eventsAfterLogin() {
         getInventoryItems();
-        //getAnalyzerInformation();        
+        getAnalyzerInformation();
         $.mobile.navigate("#pagina2");
     }
 
-    function getInventoryItems(){
+    function getInventoryItems() {
         var url = urls.inventory;
         $.ajax({
            url: url,
@@ -220,13 +240,29 @@ function init() {
                                             data-retail-price="'+model.retail_price+'"\
                                             data-quantity="'+model.quantity+'"\
                                             >\
-                                            <img src="'+model.model_image+'"/>\
+                                            <img src="'+DOMAIN+model.model_image+'"/>\
                                         </a>\
                                     </li>';
                });
+               ul_for_inserting.html('');
                ul_for_inserting.append(html_to_insert);
                localStorage.setItem('products_inventory', JSON.stringify(data.items_list));
                $('.model-data').live('click', showDetail);
+           }
+        });
+    }
+    function getAnalyzerInformation() {
+        var url = urls.analyzer;
+        $.ajax({
+           url: url,
+           type: 'POST',
+           data: {
+                rp_token: token
+           },
+           dataType: 'json',
+           success: function(data){
+               analyzer_information = data.context['information'];
+               processAnalyzerInformation(1);
            }
         });
     }
@@ -249,20 +285,23 @@ function init() {
     }
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
     function changeTab() {
-        var prevSelection = "tab1";
-        var newSelection = $(this).children("a").attr("data-tab-class");
+        var newSelection = $(this).find('a').data('tab-class');
+        var prevSelection = 'tab1';
+        if(newSelection == 'tab1'){
+            prevSelection = 'tab2';
+        }
         $("."+prevSelection).addClass("ui-screen-hidden");
         $("."+newSelection).removeClass("ui-screen-hidden");
         prevSelection = newSelection;
     }
 
     function createProduct() {
-            var newIcon = 'check';
-            $(this).sibling().removeClass('ui-icon-'.newIcon);
-            $(this).attr('data-icon', newIcon)
-                .find('.ui-icon')
-                .addClass('ui-icon-' + newIcon)
-                .removeClass('ui-icon-');
+        var newIcon = 'check';
+        $(this).sibling().removeClass('ui-icon-'.newIcon);
+        $(this).attr('data-icon', newIcon)
+            .find('.ui-icon')
+            .addClass('ui-icon-' + newIcon)
+            .removeClass('ui-icon-');
     }    
 
     function setCategory(event) {
@@ -270,15 +309,20 @@ function init() {
         var text_category = $(this).children('h3').text();
         text_category = text_category.replace("click to collapse contents", "");
         $('#category-name').text(text_category);
+
         if($(this).data('json') != 't'){
             var collapse = $(this).children('div');
-            var url = DOMAIN+'/mobile/category/?id='+$(this).data('id');
+            var url = urls.category;
             $.ajax({
                 url: url,
-                type: 'GET',
+                type: 'POST',
+                data: {
+                    rp_token: token,
+                    id: $(this).data('id')
+                },
                 dataType: 'json',
                 success: function (data) {
-                    $.each(data.category, function(i, value) {
+                    $.each(data.categories, function(i, value) {
                         collapse.prepend('' +
                             '<div data-role="collapsible" data-theme="c" class="option-expand" data-id="'+value.id+'" data-content-theme="c"> ' +
                             '<h3>'+value.name+'</h3>' +
@@ -300,11 +344,12 @@ function init() {
             nameVariant = $('#name-variant').val(),
             categoryId = $('#category-id').text(),
             quantity = $('#quantity').val(),
+            sku = $('#sku').val(),
             costPrice = $('#cost-price').val(),
             wholeSalePrice = $('#wholesale-price').val(),
             retailPrice = $('#retail-price').val();
         if(nameProduct != '' && categoryId!='' && costPrice!=''){
-            var url = DOMAIN+'/mobile/create/product/';
+            var url = urls.saveProduct;
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -313,33 +358,42 @@ function init() {
                     name_variant: nameVariant,
                     category_id: categoryId,
                     quantity : quantity,
+                    sku: sku,
                     cost_price: costPrice,
                     whole_sale_price: wholeSalePrice,
-                    retail_price: retailPrice
+                    retail_price: retailPrice,
+                    rp_token: token
                 },
                 dataType: 'json',
                 success: function(data){
-                    $.mobile.navigate( "#pagina2" );
+                    if(data.status.status == true){
+                        eventsAfterLogin();
+                    } else {
+                        alert('an error occurred');
+                    }
+
                 }
             });
         } else {
-
-            alert('no se pudo enviar -  datos incompletos');
+            alert('Data Incomplete');
         }
     }
 
     function getInformationProduct(){
-        var url = DOMAIN+'/mobile/product-information/';
+        var url = urls.productInformation;
         $.ajax({
             url: url,
-            type: 'GET',
+            type: 'POST',
+            data:{
+                rp_token: token
+            },
             dataType: 'json',
-            success: function(data) {
+            success: function(data){
                 $.each(data.products, function(i, value) {
                     $('#browsers').append('<option data-id="'+value.id+'" value="'+value.name+'">')
                 });
 
-                $.each(data.category, function(i, value) {
+                $.each(data.categories, function(i, value) {
                     $('#categories-list').append('' +
                         '<div data-role="collapsible" class="option-expand" data-theme="c" data-id="'+value.id+'" data-content-theme="c">' +
                         '<h3>'+value.name+'</h3>' +
@@ -397,21 +451,6 @@ function init() {
         content.append(html_to_insert);
     }
 
-    function getAnalyzerInformation() {
-        var analyzer_information = [];
-        var url = DOMAIN+'/mobile/analyzer-information/';
-        $.ajax({
-           url: url,
-           type: 'GET',
-           dataType: 'json',
-           success: function(data){
-               analyzer_information = data['information'];
-               // $('.model-data').on('click', showDetail);
-               processAnalyzerInformation();
-           }
-        });
-    }
-
     function processAnalyzerInformation(type) {
         // dates limit
         var initial_date = new Date();
@@ -441,7 +480,8 @@ function init() {
         var total_sales = 0;
         var total_units = 0;
         var total_profit = 0;
-        for (var i in analyzer_information['values']) {
+
+        for(var i in analyzer_information['values']) {
             item = analyzer_information['values'][i];
             date = get_date_from_string(item['date']);
             if (date >= initial_date && date <= finish_date) {
@@ -470,7 +510,7 @@ function init() {
         if (popular !== false) {
             if (typeof(analyzer_information['variants']['models'][popular['product_model_id']]) != 'undefined') {
                 details = analyzer_information['variants']['models'][popular['product_model_id']];
-                $('#pagina2').find('.tab2').find('#most_popular_img').html(details['image']);
+                $('#pagina2').find('.tab2').find('#most_popular_img').html('<img src="'+DOMAIN+details['image']+'" />');
                 $('#pagina2').find('.tab2').find('#most_popular_name').html(details['name']);
                 $('#pagina2').find('.tab2').find('#most_popular_sold').html(popular['quantity']);
             }
@@ -483,6 +523,7 @@ function init() {
 
         $('#graphic').html('');
         start_graphic(result);
+        $('#graphic').trigger('create');
 
         return true;
     }
@@ -576,7 +617,6 @@ function init() {
         }
         create_graphic(data_graphic);
     }
-
     function getDateMonthYear(){
         var date = new Date();
         var day = date.getDate();
@@ -594,5 +634,58 @@ function init() {
     }    
     
     $('.card').on('click',function(){$(this).addClass('moved');});    
-    $('.carousel').carousel({interval: 2000});        
+    $('.carousel').carousel({interval: 2000});
+    function checkConnection() {
+        var networkState = navigator.network.connection.type;
+
+        if(networkState == Connection.NONE){
+            return false;
+        }
+        return true;
+    }
+
+    function takePicture(event) {
+        event.preventDefault();
+        navigator.camera.getPicture(onSuccess, onFail, {
+            quality: 50,
+            destinationType: Camera.DestinationType.FILE_URI
+        });
+    }
+
+    function onSuccess(imageURI) {
+        var image = document.getElementById('image-camera');
+        uploadPhoto(imageURI);
+        image.src = imageURI;
+    }
+
+    function onFail(message) {
+        alert('Failed because: ' + message);
+    }
+
+    function uploadPhoto(imageURI) {
+        var options = new FileUploadOptions();
+        options.fileKey="file";
+        options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+        options.mimeType="image/jpeg";
+
+        var params = new Object();
+        params.value1 = "test";
+        params.value2 = "param";
+
+        options.params = params;
+
+        var ft = new FileTransfer();
+        ft.upload(imageURI, encodeURI(urls.upload), win, fail, options);
+    }
+
+    function win(r) {
+        alert('Win');
+//        console.log("Code = " + r.responseCode);
+//        console.log("Response = " + r.response);
+//        console.log("Sent = " + r.bytesSent);
+    }
+
+    function fail(error) {
+        //alert("An error has occurred: Code = " + error.code);
+    }
 }
