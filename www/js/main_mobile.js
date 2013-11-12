@@ -115,11 +115,13 @@ function init() {
                 }
             } else {
                 var remove = ''
-                for(var i in clientSelected){
-                    debugger;
-                }
+                $.each(clientSelected.products, function(i, value){
+                    if(value.id == id){
+                        remove = i
+                    }
+                });
 
-                clientSelected = clientSelected.splice(3, 1);
+                clientSelected.products.splice(remove, 1);
                 localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                 $(this).data('selected',false);
                 $(span).removeClass("productSelected");
@@ -197,7 +199,7 @@ function init() {
                 var ul_for_list_clients = $('#pagina11').find('#list_clients'),
                     html_to_insert = '';
                     items_list = data.items_list;
-                    
+                
                 for(var client in items_list){
                    html_to_insert += '<input type="radio" name="radio-choice-1" id="radio-choice-'+items_list[client].id+'" data-id="'+items_list[client].id+'"value="choice-'+items_list[client].id+'"/>\
                                     <label\
@@ -210,18 +212,27 @@ function init() {
                 
                 ul_for_list_clients.append(html_to_insert);
                 $('#list_clients').trigger('create');
-                $(":radio").bind("change", function (event){                    
+                $(":radio").bind("change", function (event){
                     for(var client in items_list){
-                        if(items_list[client].id == $(this).data('id')){
-                            var clientSelected = {
-                                'id': items_list[client].id,
-                                'name': items_list[client].name,
-                                'image': items_list[client].image,
-                                'type': items_list[client].type,
-                                'products':[],
-                                'total':0
-                            }
+                        if(storageClients != '' && storageClients[client].id === $(this).data('id')){
+                            localStorage.setItem("clientSelected", JSON.stringify(storageClients[client]));
+                            clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+                            $.mobile.navigate("#pagina12");                             
                         }
+                        else{
+                            if(items_list[client].id == $(this).data('id')){
+                                var clientSelected = {
+                                    'id': items_list[client].id,
+                                    'name': items_list[client].name,
+                                    'image': items_list[client].image,
+                                    'type': items_list[client].type,
+                                    'products':[],
+                                    'total':0
+                                }
+                            }
+                            localStorage.setItem("clientSelected", JSON.stringify(clientSelected)); 
+                        }
+                        
                     }
                     //pintar select con las lista de clientes de la pagina 12
                     $('#selectClient').html('');
@@ -233,16 +244,12 @@ function init() {
                         }
                     }
                     $('#selectClient').append(html);
-                    $('#selectClient-button > span > span > span').text(clientSelected.name);  
+                    $('#selectClient-button > span > span > span').text(clientSelected.name);
 
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     if(clientSelected.products == ''){
                         $.mobile.navigate("#pagina13");
                     }
-                    else{
-                        $.mobile.navigate("#pagina12"); 
-                    }   
-
                 });             
             }
         });
