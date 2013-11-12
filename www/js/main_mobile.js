@@ -53,11 +53,11 @@ function init() {
         $('#new_invoice').live('click', listClients);
         $('#goToInvoice').live('click', showInvoice);
         $('.productSelected').live('click', selectProduct);
-        $( "#pagina12" ).on( "pageshow", function( event ) {$('#theDate').val(getDateMonthYear());});
+        $( "#pagina12" ).on( "pageshow", pageMyProductsShow);
         $('#goToProducts').on('click', goProduct);
         $( "#pagina13" ).on( "pageshow", pageClientShow);
         $('.saveClientStorage').on('click', saveClientStorage);
-
+        $('.removeProduct').live('click', removeMyProduct);
     //Functions
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
 
@@ -75,6 +75,10 @@ function init() {
         }
         $('.products_clients_add').append(html);
         $('.products_clients_add').trigger('create');
+    }
+
+    function removeMyProduct(){
+        console.log('elimiar');
     }
 
     function goProduct(){
@@ -95,7 +99,6 @@ function init() {
             id = $(this).data('id');
 
         $(this).addClass("productSelected");
-        debugger;
         for(var i in products){
             if(!$(this).data('selected')){
                 if(products[i].id === id){
@@ -132,6 +135,27 @@ function init() {
         
     }
 
+    function pageMyProductsShow(){
+        $('#theDate').val(getDateMonthYear());
+        var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products;
+        var ul_for_my_products = $('#myProducts');
+        ul_for_my_products.html('');
+        var html = '';
+        for(var i in myProducts){
+            html += '<li class="without_radious" data-id="'+myProducts[i].id+'">\
+                        <a href="">\
+                            <img src="'+DOMAIN+myProducts[i].model_image+'" class="ui-li-icon">\
+                            <span class="ui-li-aside">'+myProducts[i].product_name+'</span><span class="ui-li-aside" contenteditable="true">'+myProducts[i].quantity+'</span>\
+                            <span class="ui-li-aside">'+myProducts[i].price+'</span>\
+                            <span class="removeProduct">X</span>\
+                        </a>\
+                    </li>';
+        }
+        ul_for_my_products.append(html);
+        debugger;
+        ul_for_my_products.trigger('create');
+    }
+
     function calculatePrice(product) {
         //business client -> wholesale 1
         //consumer -> retail 2
@@ -140,7 +164,7 @@ function init() {
         if(clientSelected.type === 1) {
             price = product.wholesale_price;
         }
-        else if(clientSelected.type === 2) {
+        else if(clientSelected.type === 2){
             price = product.retail_price;
         }
         return price;
@@ -203,7 +227,7 @@ function init() {
                 
                 ul_for_list_clients.append(html_to_insert);
                 $('#list_clients').trigger('create');
-                $(":radio").bind("change", function (event){   debugger;                             
+                $(":radio").bind("change", function (event){                            
                     for(var client in items_list){
                         if(storageClients != '' && storageClients[client].id === $(this).data('id')){
                             localStorage.setItem("clientSelected", JSON.stringify(storageClients[client]));
