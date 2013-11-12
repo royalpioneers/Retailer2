@@ -217,26 +217,26 @@ function init() {
                 ul_for_list_clients.append(html_to_insert);
                 $('#list_clients').trigger('create');
                 $(":radio").bind("change", function (event){
+                    var self = $(this);
                     for(var client in items_list){
-                        if(storageClients != '' && storageClients[client].id === $(this).data('id')){
-                            localStorage.setItem("clientSelected", JSON.stringify(storageClients[client]));
-                            clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-                            $.mobile.navigate("#pagina12");                             
-                        }
-                        else{
-                            if(items_list[client].id == $(this).data('id')){
-                                var clientSelected = {
-                                    'id': items_list[client].id,
-                                    'name': items_list[client].name,
-                                    'image': items_list[client].image,
-                                    'type': items_list[client].type,
-                                    'products':[],
-                                    'total':0
+                        if(storageClients != ''){
+                            var result = false;
+                            $.each(storageClients, function(i, value) {
+                                if(value.id === self.data('id')){
+                                    localStorage.setItem("clientSelected", JSON.stringify(storageClients[client]));
+                                    clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+                                    $.mobile.navigate("#pagina12");
+                                    result = true;
                                 }
+                            });
+                            if(result == false) {
+                                var clientSelected = createNewClient(items_list[client])
                             }
-                            localStorage.setItem("clientSelected", JSON.stringify(clientSelected)); 
+                        } else {
+                            if(items_list[client].id == $(this).data('id')){
+                                var clientSelected = createNewClient(items_list[client]);
+                            }
                         }
-                        
                     }
                     //pintar select con las lista de clientes de la pagina 12
                     $('#selectClient').html('');
@@ -257,6 +257,19 @@ function init() {
                 });             
             }
         });
+    }
+
+    function createNewClient(client){
+        var clientSelected = {
+            'id': client.id,
+            'name': client.name,
+            'image': client.image,
+            'type': client.type,
+            'products':[],
+            'total':0
+        };
+        localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+        return clientSelected;
     }
 
     function logOut(event) {
