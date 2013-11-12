@@ -53,11 +53,13 @@ function init() {
         $('#new_invoice').live('click', listClients);
         $('#goToInvoice').live('click', showInvoice);
         $('.productSelected').live('click', selectProduct);
-        $( "#pagina12" ).on( "pageshow", pageMyProductsShow);
+        $( "#pagina12" ).on( "pageshow", function( event ) {$('#theDate').val(getDateMonthYear());});
         $('#goToProducts').on('click', goProduct);
         $( "#pagina13" ).on( "pageshow", pageClientShow);
         $('.saveClientStorage').on('click', saveClientStorage);
         $('.removeProduct').live('click', removeMyProduct);
+        $( "#pagina12" ).on( "pageshow", pageMyProductsShow);
+
     //Functions
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
 
@@ -77,10 +79,6 @@ function init() {
         $('.products_clients_add').trigger('create');
     }
 
-    function removeMyProduct(){
-        console.log('elimiar');
-    }
-
     function goProduct(){
         if(localStorage.getItem('clientSelected')){
             $.mobile.navigate("#pagina13");
@@ -97,12 +95,7 @@ function init() {
             currentPrice = parseInt($('.see_more_products_clients').text()),
             productSelected,
             id = $(this).data('id');
-<<<<<<< HEAD
-
-        $(this).addClass("productSelected");
-=======
         var span = $(this).children('.ui-btn-inner');
->>>>>>> 4ea43ad294a1f430dbf0016d486c0dc542129ff3
         for(var i in products){
             if(!$(this).data('selected')){
                 //Add Products to LocalStorage
@@ -119,7 +112,7 @@ function init() {
                     $(this).data('selected',true);
                     $(span).addClass("productSelected");
                     clientSelected.total = clientSelected.total + currentPrice;
-                    $('.see_more_products_clients').text(clientSelected.total);        
+                    $('.see_more_products_clients').text(clientSelected.total);
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     break;
                 }
@@ -151,28 +144,7 @@ function init() {
         else{
             alert('Chooce Products');
         }
-        
-    }
 
-    function pageMyProductsShow(){
-        $('#theDate').val(getDateMonthYear());
-        var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products;
-        var ul_for_my_products = $('#myProducts');
-        ul_for_my_products.html('');
-        var html = '';
-        for(var i in myProducts){
-            html += '<li class="without_radious" data-id="'+myProducts[i].id+'">\
-                        <a href="">\
-                            <img src="'+DOMAIN+myProducts[i].model_image+'" class="ui-li-icon">\
-                            <span class="ui-li-aside">'+myProducts[i].product_name+'</span><span class="ui-li-aside" contenteditable="true">'+myProducts[i].quantity+'</span>\
-                            <span class="ui-li-aside">'+myProducts[i].price+'</span>\
-                            <span class="removeProduct">X</span>\
-                        </a>\
-                    </li>';
-        }
-        ul_for_my_products.append(html);
-        debugger;
-        ul_for_my_products.trigger('create');
     }
 
     function calculatePrice(product) {
@@ -183,7 +155,7 @@ function init() {
         if(clientSelected.type === 1) {
             price = product.wholesale_price;
         }
-        else if(clientSelected.type === 2){
+        else if(clientSelected.type === 2) {
             price = product.retail_price;
         }
         return price;
@@ -748,6 +720,29 @@ function init() {
         }
         create_graphic(data_graphic);
     }
+
+    function pageMyProductsShow(){
+        $('#theDate').val(getDateMonthYear());
+        var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products;
+        var ul_for_my_products = $('#myProducts');
+        ul_for_my_products.html('');
+        var html = '';
+        for(var i in myProducts){
+            html += '<li class="without_radious" data-id="'+myProducts[i].id+'">\
+                        <a href="">\
+                            <img src="'+DOMAIN+myProducts[i].model_image+'" class="ui-li-icon">\
+                            <span class="ui-li-aside">'+myProducts[i].product_name+'</span><span class="ui-li-aside" contenteditable="true">'+myProducts[i].quantity+'</span>\
+                            <span class="ui-li-aside">'+myProducts[i].price+'</span>\
+                            <span class="removeProduct">X</span>\
+                        </a>\
+                    </li>';
+        }
+        ul_for_my_products.append(html);
+        ul_for_my_products.trigger('create');
+    }
+    function removeMyProduct(){
+         console.log('elimiar');
+     }
 
     function getDateMonthYear(){
         var date = new Date();
