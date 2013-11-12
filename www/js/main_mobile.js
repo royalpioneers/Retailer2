@@ -747,17 +747,17 @@ function init() {
     }
 
     function updateMyProduct() {
-        var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products,
+        var clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
             idProduct = 1,
             quantity = $(this).html();
-
-        $.each(myProducts, function(i, value){
+        $.each(clientSelected.products, function(i, value){
              if(value.id == idProduct) {
-                 var unidPrice = value.price / value.quantity
+//                 var unidPrice = value.price / value.quantity
                  value.quantity = quantity;
-                 value.price = unidPrice * quantity;
+//                 value.price = unidPrice * quantity;
              }
         });
+
         localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
     }
 
