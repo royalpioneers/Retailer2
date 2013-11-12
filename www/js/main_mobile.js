@@ -97,12 +97,7 @@ function init() {
             currentPrice = parseInt($('.see_more_products_clients').text()),
             productSelected,
             id = $(this).data('id');
-<<<<<<< HEAD
-
-        $(this).addClass("productSelected");
-=======
         var span = $(this).children('.ui-btn-inner');
->>>>>>> 4ea43ad294a1f430dbf0016d486c0dc542129ff3
         for(var i in products){
             if(!$(this).data('selected')){
                 //Add Products to LocalStorage
