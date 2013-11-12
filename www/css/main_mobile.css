@@ -587,6 +587,15 @@
         margin-right: 1em;
         float: right;
     }
+    /*pagina12*/
+    .ui-li-aside {
+        width: 25%;
+        text-align: center;
+        display: inline-table;
+        float: none;
+        padding-top: 5px;
+        height: 2em;
+    }
     /*pagina 13*/
     #selectClient-button {
         margin: -0.5em 1em 0 4em;
@@ -599,4 +608,14 @@
     }
     .productSelected{
         background-color: red;
+    }
+    .without_radious img {
+        width: 19em;
+        height: 7em;
+        position: relative !important;
+        max-width: 2em !important;
+        max-height: 2em !important;
+        margin-top: -6px;
+        float: none !important;
+        display: inline-block;
     }
