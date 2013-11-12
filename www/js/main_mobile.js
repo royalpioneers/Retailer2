@@ -106,19 +106,29 @@ function init() {
                         'model_image': products[i].model_image
                     };
                     clientSelected.products.push(productSelected);
-                    $(this).data('selected','true');
+                    $(this).data('selected',true);
                     $(span).addClass("productSelected");
                     clientSelected.total = clientSelected.total + currentPrice;
-                    $('.see_more_products_clients').text(clientSelected.total);
+                    $('.see_more_products_clients').text(clientSelected.total);        
+                    localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+                    break;
                 }
             } else {
+                var remove = ''
+                for(var i in clientSelected){
+                    debugger;
+                }
+
+                clientSelected = clientSelected.splice(3, 1);
+                localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+                $(this).data('selected',false);
                 $(span).removeClass("productSelected");
             }
         }
     }
-
     function saveClientStorage(){
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+
         if(clientSelected.products != null){
             //validar si esta repetido
             storageClients.push(clientSelected);
@@ -194,7 +204,7 @@ function init() {
                                         for="radio-choice-'+items_list[client].id+'"\
                                         data-corners="false" class="labelRadioButton"\
                                         >\
-                                        <img src="'+items_list[client].image+'" class="image_client"/>'+items_list[client].name+'\
+                                        <img src="'+DOMAIN+items_list[client].image+'" class="image_client"/>'+items_list[client].name+'\
                                     </label>';
                 };
                 
@@ -213,10 +223,27 @@ function init() {
                             }
                         }
                     }
-                    debugger;
-                    localStorage.setItem("clientSelected", JSON.stringify(clientSelected));                  
-                });
-                localStorage.setItem('clients', JSON.stringify(items_list));                
+                    //pintar select con las lista de clientes de la pagina 12
+                    $('#selectClient').html('');
+                    var html ='';
+                    var html = '<option value="'+clientSelected.id+'">'+clientSelected.name+'</option>';   
+                    for(var i in items_list){
+                        if(items_list[i].id !== clientSelected.id){
+                            html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';   
+                        }
+                    }
+                    $('#selectClient').append(html);
+                    $('#selectClient-button > span > span > span').text(clientSelected.name);  
+
+                    localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+                    if(clientSelected.products == ''){
+                        $.mobile.navigate("#pagina13");
+                    }
+                    else{
+                        $.mobile.navigate("#pagina12"); 
+                    }   
+
+                });             
             }
         });
     }
