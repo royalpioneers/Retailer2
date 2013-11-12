@@ -59,6 +59,8 @@ function init() {
         $('.saveClientStorage').on('click', saveClientStorage);
         $('.removeProduct').live('click', removeMyProduct);
         $( "#pagina12" ).on( "pageshow", pageMyProductsShow);
+        $( ".qtyInvoice" ).live('keyup', updateMyProduct);
+
 
     //Functions
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
@@ -67,7 +69,7 @@ function init() {
         $('.products_clients_add').html('');
         var html = "";
         var products = JSON.parse(localStorage.getItem('products_inventory'));
-        for(var i in products){
+        for(var i in products) {
             html += '<li>\
                         <a href="#" data-role="button" class="productSelected" data-id="'+products[i].id+'" data-selected="false">\
                             <img src="'+DOMAIN+products[i].model_image+'">\
@@ -79,7 +81,7 @@ function init() {
         $('.products_clients_add').trigger('create');
     }
 
-    function goProduct(){
+    function goProduct() {
         if(localStorage.getItem('clientSelected')){
             $.mobile.navigate("#pagina13");
         }
@@ -88,7 +90,7 @@ function init() {
         }
     }
 
-    function selectProduct(e){
+    function selectProduct(e) {
         e.preventDefault();
         var products = JSON.parse(localStorage.getItem('products_inventory')),
             clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
@@ -134,7 +136,7 @@ function init() {
             }
         }
     }
-    function saveClientStorage(){
+    function saveClientStorage() {
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
 
         if(clientSelected.products != null){
@@ -261,7 +263,7 @@ function init() {
         });
     }
 
-    function createNewClient(client){
+    function createNewClient(client) {
         var clientSelected = {
             'id': client.id,
             'name': client.name,
@@ -366,7 +368,7 @@ function init() {
         });
     }
                     
-    function showInvoice(){
+    function showInvoice() {
         if(localStorage.getItem('clientSelected')){
             $('#selectClient').html('');
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
@@ -509,7 +511,7 @@ function init() {
         });
     }
 
-    function getCompleteInformation(event){
+    function getCompleteInformation(event) {
         var productName = $(this).val();
         var productId = 0;
         $.each($('#browsers option'), function(i, value){
@@ -529,7 +531,7 @@ function init() {
         });
     }
 
-    function showDetail(){
+    function showDetail() {
         var content = $('#pagina5').find('.inventory_detail_product'),
             $this = $(this),
             modelName = $this.data('modelName'),
@@ -721,17 +723,17 @@ function init() {
         create_graphic(data_graphic);
     }
 
-    function pageMyProductsShow(){
+    function pageMyProductsShow() {
         $('#theDate').val(getDateMonthYear());
-        var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products;
-        var ul_for_my_products = $('#myProducts');
+        var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products,
+            ul_for_my_products = $('#myProducts');
         ul_for_my_products.html('');
         var html = '';
         for(var i in myProducts){
             html += '<li class="without_radious" data-id="'+myProducts[i].id+'">\
                         <a href="">\
                             <img src="'+DOMAIN+myProducts[i].model_image+'" class="ui-li-icon">\
-                            <span class="ui-li-aside">'+myProducts[i].product_name+'</span><span class="ui-li-aside" contenteditable="true">'+myProducts[i].quantity+'</span>\
+                            <span class="ui-li-aside">'+myProducts[i].product_name+'</span><span class="ui-li-aside qtyInvoice" contenteditable="true" >'+myProducts[i].quantity+'</span>\
                             <span class="ui-li-aside">'+myProducts[i].price+'</span>\
                             <span class="removeProduct">X</span>\
                         </a>\
@@ -740,9 +742,24 @@ function init() {
         ul_for_my_products.append(html);
         ul_for_my_products.trigger('create');
     }
-    function removeMyProduct(){
+    function removeMyProduct() {
          console.log('elimiar');
-     }
+    }
+
+    function updateMyProduct() {
+        var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products,
+            idProduct = 1,
+            quantity = $(this).html();
+
+        $.each(myProducts, function(i, value){
+             if(value.id == idProduct) {
+                 var unidPrice = value.price / value.quantity
+                 value.quantity = quantity;
+                 value.price = unidPrice * quantity;
+             }
+        });
+        localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+    }
 
     function getDateMonthYear(){
         var date = new Date();
@@ -755,7 +772,7 @@ function init() {
         return today;
     }
 
-    function showOverlay(){
+    function showOverlay() {
         $('.username').focus();
         $(this).fadeOut().children().removeClass('effect_in_out');
     }    
