@@ -96,6 +96,7 @@ function init() {
         var span = $(this).children('.ui-btn-inner');
         for(var i in products){
             if(!$(this).data('selected')){
+                //Add Products to LocalStorage
                 if(products[i].id === id){
                     productSelected = {
                         'id': products[i].id,
@@ -113,18 +114,21 @@ function init() {
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     break;
                 }
+            //Remove Products to LocalStorage
             } else {
-                var remove = ''
+                var remove = -1
                 $.each(clientSelected.products, function(i, value){
                     if(value.id == id){
                         remove = i
                     }
                 });
-
-                clientSelected.products.splice(remove, 1);
-                localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
-                $(this).data('selected',false);
-                $(span).removeClass("productSelected");
+                if(remove > -1) {
+                    clientSelected.products.splice(remove, 1);
+                    localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+                    $(this).data('selected',false);
+                    $(span).removeClass("productSelected");
+                    break;
+                }
             }
         }
     }
