@@ -53,11 +53,15 @@ function init() {
         $('#new_invoice').live('click', listClients);
         $('#goToInvoice').live('click', showInvoice);
         $('.productSelected').live('click', selectProduct);
-        $( "#pagina12" ).on( "pageshow", pageMyProductsShow);
+        $( "#pagina12" ).on( "pageshow", function( event ) {$('#theDate').val(getDateMonthYear());});
         $('#goToProducts').on('click', goProduct);
         $( "#pagina13" ).on( "pageshow", pageClientShow);
         $('.saveClientStorage').on('click', saveClientStorage);
         $('.removeProduct').live('click', removeMyProduct);
+        $( "#pagina12" ).on( "pageshow", pageMyProductsShow);
+        $( ".qtyInvoice" ).live('keyup', updateMyProduct);
+
+
     //Functions
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
 
@@ -65,7 +69,7 @@ function init() {
         $('.products_clients_add').html('');
         var html = "";
         var products = JSON.parse(localStorage.getItem('products_inventory'));
-        for(var i in products){
+        for(var i in products) {
             html += '<li>\
                         <a href="#" data-role="button" class="productSelected" data-id="'+products[i].id+'" data-selected="false">\
                             <img src="'+DOMAIN+products[i].model_image+'">\
@@ -77,11 +81,7 @@ function init() {
         $('.products_clients_add').trigger('create');
     }
 
-    function removeMyProduct(){
-        console.log('elimiar');
-    }
-
-    function goProduct(){
+    function goProduct() {
         if(localStorage.getItem('clientSelected')){
             $.mobile.navigate("#pagina13");
         }
@@ -90,7 +90,7 @@ function init() {
         }
     }
 
-    function selectProduct(e){
+    function selectProduct(e) {
         e.preventDefault();
         var products = JSON.parse(localStorage.getItem('products_inventory')),
             clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
@@ -114,7 +114,7 @@ function init() {
                     $(this).data('selected',true);
                     $(span).addClass("productSelected");
                     clientSelected.total = clientSelected.total + currentPrice;
-                    $('.see_more_products_clients').text(clientSelected.total);        
+                    $('.see_more_products_clients').text(clientSelected.total);
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     break;
                 }
@@ -136,7 +136,7 @@ function init() {
             }
         }
     }
-    function saveClientStorage(){
+    function saveClientStorage() {
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
 
         if(clientSelected.products != null){
@@ -146,28 +146,7 @@ function init() {
         else{
             alert('Chooce Products');
         }
-        
-    }
 
-    function pageMyProductsShow(){
-        $('#theDate').val(getDateMonthYear());
-        var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products;
-        var ul_for_my_products = $('#myProducts');
-        ul_for_my_products.html('');
-        var html = '';
-        for(var i in myProducts){
-            html += '<li class="without_radious" data-id="'+myProducts[i].id+'">\
-                        <a href="">\
-                            <img src="'+DOMAIN+myProducts[i].model_image+'" class="ui-li-icon">\
-                            <span class="ui-li-aside">'+myProducts[i].product_name+'</span><span class="ui-li-aside" contenteditable="true">'+myProducts[i].quantity+'</span>\
-                            <span class="ui-li-aside">'+myProducts[i].price+'</span>\
-                            <span class="removeProduct">X</span>\
-                        </a>\
-                    </li>';
-        }
-        ul_for_my_products.append(html);
-        debugger;
-        ul_for_my_products.trigger('create');
     }
 
     function calculatePrice(product) {
@@ -178,7 +157,7 @@ function init() {
         if(clientSelected.type === 1) {
             price = product.wholesale_price;
         }
-        else if(clientSelected.type === 2){
+        else if(clientSelected.type === 2) {
             price = product.retail_price;
         }
         return price;
@@ -242,26 +221,26 @@ function init() {
                 ul_for_list_clients.append(html_to_insert);
                 $('#list_clients').trigger('create');
                 $(":radio").bind("change", function (event){
+                    var self = $(this);
                     for(var client in items_list){
-                        if(storageClients != '' && storageClients[client].id === $(this).data('id')){
-                            localStorage.setItem("clientSelected", JSON.stringify(storageClients[client]));
-                            clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-                            $.mobile.navigate("#pagina12");                             
-                        }
-                        else{
-                            if(items_list[client].id == $(this).data('id')){
-                                var clientSelected = {
-                                    'id': items_list[client].id,
-                                    'name': items_list[client].name,
-                                    'image': items_list[client].image,
-                                    'type': items_list[client].type,
-                                    'products':[],
-                                    'total':0
+                        if(storageClients != ''){
+                            var result = false;
+                            $.each(storageClients, function(i, value) {
+                                if(value.id === self.data('id')){
+                                    localStorage.setItem("clientSelected", JSON.stringify(storageClients[client]));
+                                    clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+                                    $.mobile.navigate("#pagina12");
+                                    result = true;
                                 }
+                            });
+                            if(result == false) {
+                                var clientSelected = createNewClient(items_list[client])
                             }
-                            localStorage.setItem("clientSelected", JSON.stringify(clientSelected)); 
+                        } else {
+                            if(items_list[client].id == $(this).data('id')){
+                                var clientSelected = createNewClient(items_list[client]);
+                            }
                         }
-                        
                     }
                     //pintar select con las lista de clientes de la pagina 12
                     $('#selectClient').html('');
@@ -282,6 +261,19 @@ function init() {
                 });             
             }
         });
+    }
+
+    function createNewClient(client) {
+        var clientSelected = {
+            'id': client.id,
+            'name': client.name,
+            'image': client.image,
+            'type': client.type,
+            'products':[],
+            'total':0
+        };
+        localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+        return clientSelected;
     }
 
     function logOut(event) {
@@ -376,7 +368,7 @@ function init() {
         });
     }
                     
-    function showInvoice(){
+    function showInvoice() {
         if(localStorage.getItem('clientSelected')){
             $('#selectClient').html('');
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
@@ -519,7 +511,7 @@ function init() {
         });
     }
 
-    function getCompleteInformation(event){
+    function getCompleteInformation(event) {
         var productName = $(this).val();
         var productId = 0;
         $.each($('#browsers option'), function(i, value){
@@ -539,7 +531,7 @@ function init() {
         });
     }
 
-    function showDetail(){
+    function showDetail() {
         var content = $('#pagina5').find('.inventory_detail_product'),
             $this = $(this),
             modelName = $this.data('modelName'),
@@ -731,6 +723,44 @@ function init() {
         create_graphic(data_graphic);
     }
 
+    function pageMyProductsShow() {
+        $('#theDate').val(getDateMonthYear());
+        var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products,
+            ul_for_my_products = $('#myProducts');
+        ul_for_my_products.html('');
+        var html = '';
+        for(var i in myProducts){
+            html += '<li class="without_radious" data-id="'+myProducts[i].id+'">\
+                        <a href="">\
+                            <img src="'+DOMAIN+myProducts[i].model_image+'" class="ui-li-icon">\
+                            <span class="ui-li-aside">'+myProducts[i].product_name+'</span><span class="ui-li-aside qtyInvoice" contenteditable="true" >'+myProducts[i].quantity+'</span>\
+                            <span class="ui-li-aside">'+myProducts[i].price+'</span>\
+                            <span class="removeProduct">X</span>\
+                        </a>\
+                    </li>';
+        }
+        ul_for_my_products.append(html);
+        ul_for_my_products.trigger('create');
+    }
+    function removeMyProduct() {
+         console.log('elimiar');
+    }
+
+    function updateMyProduct() {
+        var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products,
+            idProduct = 1,
+            quantity = $(this).html();
+
+        $.each(myProducts, function(i, value){
+             if(value.id == idProduct) {
+                 var unidPrice = value.price / value.quantity
+                 value.quantity = quantity;
+                 value.price = unidPrice * quantity;
+             }
+        });
+        localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+    }
+
     function getDateMonthYear(){
         var date = new Date();
         var day = date.getDate();
@@ -742,7 +772,7 @@ function init() {
         return today;
     }
 
-    function showOverlay(){
+    function showOverlay() {
         $('.username').focus();
         $(this).fadeOut().children().removeClass('effect_in_out');
     }    
