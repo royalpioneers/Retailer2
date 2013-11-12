@@ -97,10 +97,15 @@ function init() {
             currentPrice = parseInt($('.see_more_products_clients').text()),
             productSelected,
             id = $(this).data('id');
+<<<<<<< HEAD
 
         $(this).addClass("productSelected");
+=======
+        var span = $(this).children('.ui-btn-inner');
+>>>>>>> 4ea43ad294a1f430dbf0016d486c0dc542129ff3
         for(var i in products){
             if(!$(this).data('selected')){
+                //Add Products to LocalStorage
                 if(products[i].id === id){
                     productSelected = {
                         'id': products[i].id,
@@ -111,16 +116,30 @@ function init() {
                         'model_image': products[i].model_image
                     };
                     clientSelected.products.push(productSelected);
-                    $(this).data('selected','true');
+                    $(this).data('selected',true);
+                    $(span).addClass("productSelected");
                     clientSelected.total = clientSelected.total + currentPrice;
                     $('.see_more_products_clients').text(clientSelected.total);        
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+                    break;
+                }
+            //Remove Products to LocalStorage
+            } else {
+                var remove = -1
+                $.each(clientSelected.products, function(i, value){
+                    if(value.id == id){
+                        remove = i
+                    }
+                });
+                if(remove > -1) {
+                    clientSelected.products.splice(remove, 1);
+                    localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+                    $(this).data('selected',false);
+                    $(span).removeClass("productSelected");
+                    break;
                 }
             }
-            else{
-                //validar q quite selected
-            }
-        }        
+        }
     }
     function saveClientStorage(){
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
@@ -227,7 +246,7 @@ function init() {
                 
                 ul_for_list_clients.append(html_to_insert);
                 $('#list_clients').trigger('create');
-                $(":radio").bind("change", function (event){                            
+                $(":radio").bind("change", function (event){
                     for(var client in items_list){
                         if(storageClients != '' && storageClients[client].id === $(this).data('id')){
                             localStorage.setItem("clientSelected", JSON.stringify(storageClients[client]));
@@ -259,7 +278,9 @@ function init() {
                         }
                     }
                     $('#selectClient').append(html);
-                    $('#selectClient-button > span > span > span').text(clientSelected.name);  
+                    $('#selectClient-button > span > span > span').text(clientSelected.name);
+
+                    localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     if(clientSelected.products == ''){
                         $.mobile.navigate("#pagina13");
                     }
