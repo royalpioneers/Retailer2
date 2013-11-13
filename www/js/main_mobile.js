@@ -19,7 +19,8 @@ var urls = {
     'client_company_types': DOMAIN+'/mobile/client/company_types/',
     'countries': DOMAIN+'/mobile/countries/',
     'states_by_country': DOMAIN+'/mobile/states_by_country/',
-    'cities_by_char': DOMAIN+'/mobile/cities_by_char/'
+    'cities_by_char': DOMAIN+'/mobile/cities_by_char/',
+    'send_invoice': DOMAIN+'/mobile/buyer-inventory-create-sale/'
 };
 var items_list = [], productsSelected = [], storageClients = [];
 
@@ -911,10 +912,13 @@ function init() {
     function fail(error) {
         //alert("An error has occurred: Code = " + error.code);
     }
-    function sendProductsInvoice(){
-        debugger;
-        var url = '';
-        var data = storageClients;
+    function sendProductsInvoice() {
+        var url = urls.send_invoice;
+        var data = {
+            rp_token: token,
+            client: JSON.stringify(storageClients)
+        }
+
         $.ajax({
           url: url,
           type: 'POST',
