@@ -65,23 +65,60 @@ function init() {
     //Functions
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
 
-    function pageClientShow() {
+    function pageClientShow() {        
         $('.products_clients_add').html('');
         var html = "";
         var products = JSON.parse(localStorage.getItem('products_inventory'));
         for(var i in products) {
-            html += '<li>\
-                        <a href="#" data-role="button" class="productSelected" data-id="'+products[i].id+'" data-selected="false">\
-                            <img src="'+DOMAIN+products[i].model_image+'">\
-                            <span>'+products[i].product_name+'</span>\
-                        </a>\
-                    </li>'
+            debugger;
+            if(getArrayIndexProductsSelected().indexOf(products[i].id) !== -1){
+                debugger;
+                html += '<li class="myProductSelected">\
+                    <a href="#" data-role="button" class="productSelected" data-id="'+products[i].id+'" data-selected="true">\
+                        <img src="'+DOMAIN+products[i].model_image+'">\
+                        <span>'+products[i].product_name+'</span>\
+                    </a>\
+                </li>'
+            }
+            else{
+                debugger;
+                html += '<li>\
+                    <a href="#" data-role="button" class="productSelected" data-id="'+products[i].id+'" data-selected="false">\
+                        <img src="'+DOMAIN+products[i].model_image+'">\
+                        <span>'+products[i].product_name+'</span>\
+                    </a>\
+                </li>'
+            }
         }
         $('.products_clients_add').append(html);
         $('.products_clients_add').trigger('create');
     }
-
+    function getArrayIndexProductsSelected(){
+        debugger;
+        var arrayIndexs = [];
+        for(var i in storageClients){
+            for(var j in storageClients[i].products){
+                arrayIndexs.push(storageClients[i].products[j].id);
+            }
+        }
+        return arrayIndexs;
+    }
+    function getArrayIndexClientsSelected(){
+        debugger;
+        var arrayIndexs = [];
+        for(var i in storageClients){
+            arrayIndexs.push(storageClients[i].id);
+        }
+        return arrayIndexs;
+    }
     function goProduct() {
+        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+        //validar si esta repetido
+        var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+        if(index !== -1){
+            storageClients[index] = clientSelected;
+        }
+
         if(localStorage.getItem('clientSelected')){
             $.mobile.navigate("#pagina13");
         }
@@ -97,8 +134,9 @@ function init() {
             currentPrice = parseInt($('.see_more_products_clients').text()),
             productSelected,
             id = $(this).data('id');
-        var span = $(this).children('.ui-btn-inner');
+        var li = $(this).parent('li');
         for(var i in products){
+            debugger;
             if(!$(this).data('selected')){
                 //Add Products to LocalStorage
                 if(products[i].id === id){
@@ -111,8 +149,8 @@ function init() {
                         'model_image': products[i].model_image
                     };
                     clientSelected.products.push(productSelected);
-                    $(this).data('selected',true);
-                    $(span).addClass("productSelected");
+                    $(this).data('selected', true);
+                    $(li).addClass("myProductSelected");
                     clientSelected.total = clientSelected.total + currentPrice;
                     $('.see_more_products_clients').text(clientSelected.total);
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
@@ -130,7 +168,8 @@ function init() {
                     clientSelected.products.splice(remove, 1);
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     $(this).data('selected',false);
-                    $(span).removeClass("productSelected");
+                    $(li).removeClass("myProductSelected");
+                    pageMyProductsShow();
                     break;
                 }
             }
@@ -141,7 +180,13 @@ function init() {
 
         if(clientSelected.products != null){
             //validar si esta repetido
-            storageClients.push(clientSelected);
+            var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+            if(index !== -1){
+                storageClients[index] = clientSelected;
+            }
+            else{
+                storageClients.push(clientSelected);
+            }
         }
         else{
             alert('Chooce Products');
@@ -221,6 +266,13 @@ function init() {
                 ul_for_list_clients.append(html_to_insert);
                 $('#list_clients').trigger('create');
                 $(":radio").bind("change", function (event){
+                    var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+                    //validar si esta repetido
+                    var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+                    if(index !== -1){
+                        storageClients[index] = clientSelected;
+                    }
+
                     var self = $(this);
                     for(var client in items_list){
                         if(storageClients != ''){
@@ -723,8 +775,9 @@ function init() {
         create_graphic(data_graphic);
     }
 
-    function pageMyProductsShow() {
+    function pageMyProductsShow(){
         $('#theDate').val(getDateMonthYear());
+        debugger;
         var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products,
             ul_for_my_products = $('#myProducts');
         ul_for_my_products.html('');
@@ -733,8 +786,10 @@ function init() {
             html += '<li class="without_radious" data-id="'+myProducts[i].id+'">\
                         <a href="">\
                             <img src="'+DOMAIN+myProducts[i].model_image+'" class="ui-li-icon">\
-                            <span class="ui-li-aside">'+myProducts[i].product_name+'</span><span class="ui-li-aside qtyInvoice" contenteditable="true" >'+myProducts[i].quantity+'</span>\
+                            <span class="ui-li-aside">'+myProducts[i].product_name+'</span>\
+                            <input type="number" class="qtyInvoice" value="'+myProducts[i].quantity+'">\
                             <span class="ui-li-aside">'+myProducts[i].price+'</span>\
+                            <span class="ui-li-aside totalprice">'+(myProducts[i].price*myProducts[i].quantity)+'</span>\
                             <span class="removeProduct">X</span>\
                         </a>\
                     </li>';
@@ -743,19 +798,35 @@ function init() {
         ul_for_my_products.trigger('create');
     }
     function removeMyProduct() {
-         console.log('elimiar');
+     debugger;
+        var clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
+        currentPrice = parseInt($('.see_more_products_clients').text()),
+        id = $(this).parents('li').data('id');
+        var remove = -1
+        $.each(clientSelected.products, function(i, value){
+            if(value.id == id){
+                remove = i
+            }
+        });
+        if(remove > -1) {
+            clientSelected.products.splice(remove, 1);
+            localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+        }
+        pageMyProductsShow();
     }
-
     function updateMyProduct() {
-        var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products,
-            idProduct = 1,
-            quantity = $(this).html();
+        debugger;
+        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+        var myProducts = clientSelected.products,
+            idProduct = $(this).parents('.without_radious').data('id'),
+            quantity = $(this).val(),
+            self = $(this);
 
         $.each(myProducts, function(i, value){
              if(value.id == idProduct) {
-                 var unidPrice = value.price / value.quantity
                  value.quantity = quantity;
-                 value.price = unidPrice * quantity;
+                value.totalprice = value.price * quantity;
+                self.parent().siblings('.totalprice').text(value.totalprice);
              }
         });
         localStorage.setItem("clientSelected", JSON.stringify(clientSelected));

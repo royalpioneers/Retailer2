@@ -338,7 +338,7 @@
     }
     /*pagina11*/
     .header_client {
-        height: 5em;
+        height: 4em;
         padding-top: 1em;
         text-align: center;
         border-radius: 12px 12px 0 0;
@@ -346,6 +346,7 @@
         background: #eee;
         font-weight: bolder;
         font-size: 21px;
+        border-bottom: none;
         margin-bottom: -3em;
     }
     .header_client > a {
@@ -518,6 +519,10 @@
     /*general*/
     .without_radious{
         border-radius: 0 !important;
+        height: auto;
+        padding-top: 1em;
+        border: 1px solid #ccc;
+        padding-bottom: 1em;
     }
     div.ui-input-text {
         padding: 0px 4px 0 0 !important;
@@ -588,13 +593,27 @@
         float: right;
     }
     /*pagina12*/
-    .ui-li-aside {
-        width: 25%;
+    .without_radious .ui-li-aside {
+        width: 16%;
         text-align: center;
-        display: inline-table;
+        display: inline-block;
         float: none;
         padding-top: 5px;
         height: 2em;
+        margin: 0;
+        max-width: 16%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .ui-input-text.ui-shadow-inset.ui-corner-all.ui-btn-shadow.ui-body-c.ui-focus {
+        max-width: 6em;
+    }
+    .without_radious .ui-input-text.ui-shadow-inset.ui-corner-all.ui-btn-shadow.ui-body-c {
+        width: 5em;
+        display: inline-block;
+        margin: 0;
+        margin-right: 5%;
     }
     /*pagina 13*/
     #selectClient-button {
@@ -606,16 +625,28 @@
     #goToProducts {
         text-align: center;
     }
-    .productSelected{
-        background-color: red;
+    .myProductSelected{
+        background-color: red !important;
     }
     .without_radious img {
-        width: 19em;
-        height: 7em;
+        width: 23em;
+        height: 17em;
         position: relative !important;
-        max-width: 2em !important;
-        max-height: 2em !important;
-        margin-top: -6px;
+        max-width: 3em !important;
+        max-height: 3em !important;
+        margin-top: -37px;
         float: none !important;
         display: inline-block;
+        left: 0 !important;
+        margin-right: 0px !important;
+        margin-left: 15px !important;
+    }
+    .removeProduct {
+        float: right; margin-right: 14px; 
+        margin-top: 1em;
+    }
+    @media (min-width:320px) and (max-width:480px){
+        .without_radious img{
+            display: none !important; 
+        }
     }
