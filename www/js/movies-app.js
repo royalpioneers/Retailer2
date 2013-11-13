@@ -56,6 +56,9 @@ $(function(){
             method: 'GET',
             url: url,
             dataType: 'json',
+            data: {
+            	rp_token: rp_token: window.localStorage['rp-token']
+            },
             success: function (data) {
             	if (data.status === 'success') {
             		var len = data.groups.length, i, group;
@@ -91,7 +94,8 @@ $(function(){
             type: 'POST',
             data: {
                 productModelId: window.localStorage['productModelId'],
-                groupId: $this.data('id')
+                groupId: $this.data('id'),
+                rp_token: rp_token: window.localStorage['rp-token']
             },
             dataType: 'json',
             success: function (data) {
@@ -127,7 +131,8 @@ $(function(){
 			url: DOMAIN + '/mobile/product-group-create/',
 			type: 'POST',
 			data: {
-				name: $('#form-group-name').val()
+				name: $('#form-group-name').val(),
+				rp_token: rp_token: window.localStorage['rp-token']
 			},
 			dataType: 'json',
 			success: function (data) {
