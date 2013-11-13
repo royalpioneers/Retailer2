@@ -13,7 +13,11 @@ var urls = {
     'category':DOMAIN+'/mobile/category/',
     'upload': DOMAIN+'upload-image/product/',
     'client_create': DOMAIN+'/mobile/client/create/',
-    'client_list': DOMAIN+'/mobile/client/list/'
+    'client_list': DOMAIN+'/mobile/client/list/',
+    'client_company_types': DOMAIN+'/mobile/client/company_types/',
+    'countries': DOMAIN+'/mobile/countries/',
+    'states_by_country': DOMAIN+'/mobile/states_by_country/',
+    'cities_by_char': DOMAIN+'/mobile/cities_by_char/'
 };
 var items_list = [], productsSelected = [], storageClients = {};
 function init() {
@@ -100,10 +104,12 @@ function init() {
     }
     $('#edit-image').on('click', takePicture);
     
-    $('#add_new_client').on('click', takePicture);
-
     /* CLIENT */
-    var client = ClientModel(urls, token);
+    var countryFactory = new CountryFactory(urls, token);
+    var stateFactory = new StateFactory(urls, token);
+    var cityFactory = new CityFactory(urls, token);
+    var clientFactory = new ClientFactory(urls, token);
+    var client = ClientModel(countryFactory, stateFactory, cityFactory, clientFactory);
     client.init(); /* start list */
 
     //Functions
@@ -166,7 +172,8 @@ function init() {
                 
                 ul_for_list_clients.append(html_to_insert);
                 $('#list_clients').trigger('create');
-                $(":radio").bind("change", function (event){                    
+                client.
+                $(":radio").bind("change", function (event){
                     for(var client in items_list){
                         if(items_list[client].id == $(this).data('id')){
                             var clientSelected = {
@@ -183,7 +190,7 @@ function init() {
             }
         });
     }
-
+    
     function logOut(event){
         // localStorage.clear('products_inventory');
         event.preventDefault();
@@ -653,11 +660,11 @@ function init() {
     }
 
     function takePicture(event) {
-        event.preventDefault();
-        navigator.camera.getPicture(onSuccess, onFail, {
-            quality: 50,
-            destinationType: Camera.DestinationType.FILE_URI
-        });
+//        event.preventDefault();
+//        navigator.camera.getPicture(onSuccess, onFail, {
+//            quality: 50,
+//            destinationType: Camera.DestinationType.FILE_URI
+//        });
     }
 
     function onSuccess(imageURI) {
