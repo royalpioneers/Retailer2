@@ -360,6 +360,15 @@
     .image_invoice{
         margin-top: 0.5em;
     }
+    #sendProductsInvoice{
+        text-align: center;
+    }
+    #sendProductsInvoice .options_sendProductsInvoice{
+        width: 30%;
+        font-size: 20px;
+        color: white;
+        padding: 8%;
+    }
     /*pagina12*/
     .close_client_product {
         right: 5%;
