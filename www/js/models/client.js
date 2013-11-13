@@ -171,54 +171,55 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	};
 	
 	model.apply_event_select = function() {
-		$(":radio").unbind("change");
-		$(":radio").bind("change", function (event){
-			var items_list = JSON.parse(window.localStorage.getItem(clientFactory.id_client_list));
-            var clientSelected = JSON.parse(localStorage.getItem(model.id_client_selected));
-            //validar si esta repetido
-            var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-            if(index !== -1){
-                storageClients[index] = clientSelected;
-            }
-
-            var self = $(this);
-            for(var client in items_list){
-                if(storageClients != ''){
-                    var result = false;
-                    $.each(storageClients, function(i, value) {
-                        if(value.id === self.data('id')){
-                            localStorage.setItem(model.id_client_selected, JSON.stringify(storageClients[client]));
-                            clientSelected = JSON.parse(localStorage.getItem(model.id_client_selected));
-                            $.mobile.navigate("#pagina12");
-                            result = true;
-                        }
-                    });
-                    if(result == false) {
-                        var clientSelected = createNewClient(items_list[client])
-                    }
-                } else {
-                    if(items_list[client].id == $(this).data('id')){
-                        var clientSelected = createNewClient(items_list[client]);
-                    }
-                }
-            }
-            //pintar select con las lista de clientes de la pagina 12
-            $('#selectClient').html('');
-            var html ='';
-            var html = '<option value="'+clientSelected.id+'">'+clientSelected.name+'</option>';   
-            for(var i in items_list){
-                if(items_list[i].id !== clientSelected.id){
-                    html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';   
-                }
-            }
-            $('#selectClient').append(html);
-            $('#selectClient-button > span > span > span').text(clientSelected.name);
-
-            localStorage.setItem(model.id_client_selected, JSON.stringify(clientSelected));
-            if(clientSelected.products == ''){
-                $.mobile.navigate("#pagina13");
-            }
-        });   
+		// TODO: migrate call methods
+//		$(":radio").unbind("change");
+//		$(":radio").bind("change", function (event){
+//			var items_list = JSON.parse(window.localStorage.getItem(clientFactory.id_client_list));
+//            var clientSelected = JSON.parse(localStorage.getItem(model.id_client_selected));
+//            //validar si esta repetido
+//            var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+//            if(index !== -1){
+//                storageClients[index] = clientSelected;
+//            }
+//
+//            var self = $(this);
+//            for(var client in items_list){
+//                if(storageClients != ''){
+//                    var result = false;
+//                    $.each(storageClients, function(i, value) {
+//                        if(value.id === self.data('id')){
+//                            localStorage.setItem(model.id_client_selected, JSON.stringify(storageClients[client]));
+//                            clientSelected = JSON.parse(localStorage.getItem(model.id_client_selected));
+//                            $.mobile.navigate("#pagina12");
+//                            result = true;
+//                        }
+//                    });
+//                    if(result == false) {
+//                        var clientSelected = createNewClient(items_list[client])
+//                    }
+//                } else {
+//                    if(items_list[client].id == $(this).data('id')){
+//                        var clientSelected = createNewClient(items_list[client]);
+//                    }
+//                }
+//            }
+//            //pintar select con las lista de clientes de la pagina 12
+//            $('#selectClient').html('');
+//            var html ='';
+//            var html = '<option value="'+clientSelected.id+'">'+clientSelected.name+'</option>';   
+//            for(var i in items_list){
+//                if(items_list[i].id !== clientSelected.id){
+//                    html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';   
+//                }
+//            }
+//            $('#selectClient').append(html);
+//            $('#selectClient-button > span > span > span').text(clientSelected.name);
+//
+//            localStorage.setItem(model.id_client_selected, JSON.stringify(clientSelected));
+//            if(clientSelected.products == ''){
+//                $.mobile.navigate("#pagina13");
+//            }
+//        });   
 	};
 	
 	/* FORM */
