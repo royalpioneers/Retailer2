@@ -929,10 +929,10 @@ function init() {
         //         'image':'image',
         //         'type':'type',
         //         'products':[
-        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png'},
-        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png'},
-        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png'},
-        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png'}
+        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png', 'discount': 1},
+        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png', 'discount': 2},
+        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png', 'discount': 3},
+        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png', 'discount': 4}
         //         ],
         //         'total':454  
         //     }
