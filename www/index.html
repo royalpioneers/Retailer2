@@ -14,11 +14,17 @@
 		<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
         <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
+        
+        <script type="text/javascript" src="js/local_setting.js"></script>
+        <script type="text/javascript" src="js/models/client.js"></script>
+        <script type="text/javascript" src="js/factory/client.js"></script>
+        <script type="text/javascript" src="js/factory/address.js"></script>
+
         <script type="text/javascript" src="js/main_mobile.js"></script>
         <script type="text/javascript">
             app.initialize();
         </script>
-        
+
         <!--  GRAPHIC D3 -->
     	<style>
 			#graphic {font: 10px sans-serif;}
@@ -363,13 +369,26 @@
             </div>
             <div data-role="content">
                 <form action="" class="form_new_client">
-                    <input type="text" placeholder="Name">
-                    <input type="text" placeholder="Address">
-                    <input type="email" placeholder="Email">
+                	<select placeholder="CompanyType" name="company_type"></select>
+                    <input type="text" placeholder="Name" name="name">
+                    <input type="email" placeholder="Email" name="email">
+                    <select placeholder="Country" name="country"></select>
+                    <select placeholder="State" name="state"></select>
+                    <div id="id_city_autocomplete">
+	                    <ul placeholder="Test" data-filter="true" data-role="listview"
+	                    	data-filter-placeholder="Search city..." data-inset="true"  data-filter-reveal="true">
+	                    </ul>
+                    </div>
+                    <input type="text" placeholder="Address" name="address">
                     <input type="submit" id="add_new_client" class="btn btn-inverse btn-large">
                 </form>
+                <a data-rel="back" href="#" id="return_from_add_new_client" class="hiden"></a>
             </div>
             <a href="#pagina12"></a>
+        </div>
+        
+        <div id="id_template_option_city" style="display: none">
+        	<li><a class="class_item_city" data-value="__id__">__name__</a></div>
         </div>
 
         <!--Client-->
@@ -389,12 +408,25 @@
             </div>
             <div data-role="content">
                 <div class="header_client">
-                    <span>Clients</span>
+                	<span>Client</span>	
                     <a href="#pagina9" class="btn btn-inverse"><i class="icon-plus icon-white"></i></a>
                 </div>
                 <ul data-role="listview" data-filter="true" id="list_clients" data-filter-placeholder="Search Clients..." data-inset="true">
+                    <li>
+                        <a href="#pagina12">
+                            <img src="http://images.apple.com/euro/macbook-pro/images/overview_display_hero.png" class="image_invoice"><h2>a</h2>
+                        </a>
+                    </li>
                 </ul>
             </div>
+        </div>
+        <div id="id_client_templates" style="display: none">
+        	<div id="id_client_template">
+        		<input type="radio" name="radio-choice-1" id="radio-choice-__id__" data-id="__id__" value="choice-__id__"/>
+        		<label for="radio-choice-__id__" data-corners="false" class="labelRadioButton">
+        			<img src="__image__" class="image_client"/>__name__
+        		</label>
+        	</div>
         </div>
 
         <div data-role="page" id="pagina12" data-fullscreen="true">

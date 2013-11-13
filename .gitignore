@@ -2,3 +2,5 @@
 .idea/
 .project
 .settings/
+www/js/local_setting.js
+.gitignore~
