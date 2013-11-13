@@ -76,9 +76,7 @@ function init() {
         var html = "";
         var products = JSON.parse(localStorage.getItem('products_inventory'));
         for(var i in products) {
-            debugger;
             if(getArrayIndexProductsSelected().indexOf(products[i].id) !== -1){
-                debugger;
                 html += '<li class="myProductSelected">\
                     <a href="#" data-role="button" class="productSelected" data-id="'+products[i].id+'" data-selected="true">\
                         <img src="'+DOMAIN+products[i].model_image+'">\
@@ -87,7 +85,6 @@ function init() {
                 </li>'
             }
             else{
-                debugger;
                 html += '<li>\
                     <a href="#" data-role="button" class="productSelected" data-id="'+products[i].id+'" data-selected="false">\
                         <img src="'+DOMAIN+products[i].model_image+'">\
@@ -100,7 +97,6 @@ function init() {
         $('.products_clients_add').trigger('create');
     }
     function getArrayIndexProductsSelected(){
-        debugger;
         var arrayIndexs = [];
         for(var i in storageClients){
             for(var j in storageClients[i].products){
@@ -110,7 +106,6 @@ function init() {
         return arrayIndexs;
     }
     function getArrayIndexClientsSelected(){
-        debugger;
         var arrayIndexs = [];
         for(var i in storageClients){
             arrayIndexs.push(storageClients[i].id);
@@ -142,7 +137,6 @@ function init() {
             id = $(this).data('id');
         var li = $(this).parent('li');
         for(var i in products){
-            debugger;
             if(!$(this).data('selected')){
                 //Add Products to LocalStorage
                 if(products[i].id === id){
@@ -795,7 +789,6 @@ function init() {
 
     function pageMyProductsShow(){
         $('#theDate').val(getDateMonthYear());
-        debugger;
         var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products,
             ul_for_my_products = $('#myProducts');
         ul_for_my_products.html('');
@@ -816,7 +809,6 @@ function init() {
         ul_for_my_products.trigger('create');
     }
     function removeMyProduct() {
-     debugger;
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
         currentPrice = parseInt($('.see_more_products_clients').text()),
         id = $(this).parents('li').data('id');
@@ -833,7 +825,6 @@ function init() {
         pageMyProductsShow();
     }
     function updateMyProduct() {
-        debugger;
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var myProducts = clientSelected.products,
             idProduct = $(this).parents('.without_radious').data('id'),
