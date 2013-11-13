@@ -829,6 +829,7 @@ function init() {
                 self.parent().siblings('.totalprice').text(value.totalprice);
              }
         });
+
         localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
     }
 
