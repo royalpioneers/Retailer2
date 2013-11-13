@@ -35,7 +35,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		/* countries */
 		model.countryFactory.get_all(function(countries){
 			model.get_form_field('country').html('');
-			model.render_field_form('country', {id:'', name:'Select'});
+			model.render_field_form('country', {id:'', name:'Select Country'});
 			for (var index in countries) {
 				country = countries[index];
 				model.render_field_form('country', country);
@@ -45,7 +45,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		/* items */
 		model.clientFactory.get_company_types(function(items){
 			model.get_form_field('company_type').html('');
-			model.render_field_form('company_type', {id:'', name:'Select'});
+			model.render_field_form('company_type', {id:'', name:'Select Type'});
 			for (var index in items) {
 				item = items[index];
 				model.render_field_form('company_type', item);
