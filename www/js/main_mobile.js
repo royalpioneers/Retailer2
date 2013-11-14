@@ -940,7 +940,7 @@ function init() {
             //called when complete
           },
           success: function(data) {
-            if (data.status == 'ok') {
+            if (data.status == true ) {
                 for(var i in storageClients){
                     var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
                     if(index !== -1){                        
