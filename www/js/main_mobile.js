@@ -19,7 +19,8 @@ var urls = {
     'client_company_types': DOMAIN+'/mobile/client/company_types/',
     'countries': DOMAIN+'/mobile/countries/',
     'states_by_country': DOMAIN+'/mobile/states_by_country/',
-    'cities_by_char': DOMAIN+'/mobile/cities_by_char/'
+    'cities_by_char': DOMAIN+'/mobile/cities_by_char/',
+    'send_invoice': DOMAIN+'/mobile/buyer-inventory-create-sale/'
 };
 var items_list = [], productsSelected = [], storageClients = [];
 
@@ -924,14 +925,12 @@ function init() {
     function fail(error) {
         //alert("An error has occurred: Code = " + error.code);
     }
-
-    function sendProductsInvoice(){
-
-        debugger;      
-        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-        var url = '';
-        var data = JSON.stringify(storageClients);
-        
+    function sendProductsInvoice() {
+        var url = urls.send_invoice;
+        var data = {
+            rp_token: token,
+            client: JSON.stringify(storageClients)
+        }
         $.ajax({
           url: url,
           type: 'POST',
@@ -975,10 +974,10 @@ function init() {
         //         'image':'image',
         //         'type':'type',
         //         'products':[
-        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png'},
-        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png'},
-        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png'},
-        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png'}
+        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png', 'discount': 1},
+        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png', 'discount': 2},
+        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png', 'discount': 3},
+        //             {'name':'manzana','precio':89, 'cantidad':45, 'image':'aa.png', 'discount': 4}
         //         ],
         //         'total':454  
         //     }
