@@ -332,7 +332,7 @@
     }
     /*pagina11*/
     .header_client {
-        height: 4em;
+        height: 5em;
         padding-top: 1em;
         text-align: center;
         border-radius: 12px 12px 0 0;
@@ -345,7 +345,7 @@
     }
     .header_client > a {
         position: absolute;
-        right: 3em;
+        right: 2em;
         margin-top: -0.5em;
     }
     .ui-listview-filter.ui-bar-c.ui-listview-filter-inset {

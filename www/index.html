@@ -354,6 +354,7 @@
             <div data-role="header" data-theme="a">
                 <a class="btn_more_big" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
                 <h1>Add New Client</h1>
+
             </div>
             <div data-role="content">
                 <form action="" class="form_new_client">
@@ -396,7 +397,7 @@
             </div>
             <div data-role="content">
                 <div class="header_client">
-                	<span>Client</span>	
+                	<span>Client</span>
                     <a href="#pagina9" class="ui-bar-a btn_more_big"><i class="icon-plus icon-white"></i></a>
                 </div>
                 <ul data-role="listview" data-filter="true" id="list_clients" data-filter-placeholder="Search Clients..." data-inset="true">
@@ -424,24 +425,6 @@
             <div data-role="content">
                 <aside>
                     <div class="header_client">
-                        <span>Details</span>
-                    </div>
-                    <ul data-role="listview" data-inset="true">
-                        <li class="without_radious">
-                            <h2>Receipt Number 5HF5</h2>
-                        </li>
-                        <li>
-                            <fieldset data-role="controlgroup">
-                                <input type="checkbox" name="radio-choice" id="checkbox-choice-1" value="choice-1" checked="checked" data-iconpos="right"/>
-                                <label for="checkbox-choice-1">Send Receipt</label>
-                            </fieldset>
-                        </li>
-                        <li>
-                            <input type="date" id="theDate" placeholder="Yesterday, 7:34 PM">
-                        </li>
-                    </ul>
-
-                    <div class="header_client">
                         <span>Items</span>
                     </div>
                     <ul data-role="listview" id="myProducts" data-inset="true" data-icon="false" style="overflow-x: hidden;">                        
@@ -451,7 +434,7 @@
                     </ul>
                     <form id="formsendProductsInvoice">
                         <a href="#pagina13" class="ui-bar-b options_sendProductsInvoice cancel_sendProductsInvoice">Cancel</a>
-                        <a href="#pagina13" class="ui-bar-b options_sendProductsInvoice cancel_sendProductsInvoice" id="sendProductsInvoice">Sale</a>      
+                        <a href="#" class="ui-bar-b options_sendProductsInvoice" id="sendProductsInvoice">Sale</a>
                     </form>
                 </aside>
             </div>

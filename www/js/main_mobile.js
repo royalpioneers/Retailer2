@@ -974,7 +974,9 @@ function init() {
         //alert("An error has occurred: Code = " + error.code);
     }
 
-    function sendProductsInvoice() {
+    function sendProductsInvoice(event) {
+        event.preventDefault();
+        debugger;
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var url = urls.send_invoice;
         var data = {
@@ -1002,11 +1004,12 @@ function init() {
                             clientSelected.products = [];
                             localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                         }
-                        //listClients();
+                        alert('invoice saved')
                         $.mobile.navigate("#pagina11");
                     }
                 }
             } else {
+                alert('an error occurred');
                 $.mobile.navigate("#pagina11");
             }
           }
