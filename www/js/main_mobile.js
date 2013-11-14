@@ -30,6 +30,7 @@ function init() {
         token = window.localStorage.getItem("rp-token");
     //Automatic Login
     if(token != null) {
+        debugger;
         authToken();
     } else {
         $('#container-login').css('display','inline');
