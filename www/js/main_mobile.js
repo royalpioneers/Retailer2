@@ -69,9 +69,15 @@ function init() {
         $( ".qtyInvoice" ).live('keyup', updateMyProduct);
         $('#sendProductsInvoice').live('click', sendProductsInvoice);
         $('.cancel_sendProductsInvoice').live('click', goProduct);
+        $('.cleanClientSelected').live('click', cleanClientSelected);
 
     //Functions
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
+
+    function cleanClientSelected(){
+        localStorage.setItem('clientSelected', '');
+        pageClientShow();
+    }
 
     function pageClientShow() {        
         $('.products_clients_add').html('');
@@ -183,9 +189,9 @@ function init() {
         }
     }
     function saveClientStorage() {
-        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-
-        if(clientSelected.products != null){
+        debugger;
+        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
+        if(clientSelected.products != ''){
             //validar si esta repetido
             var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
             if(index !== -1){
@@ -196,7 +202,8 @@ function init() {
             }
         }
         else{
-            alert('Chooce Products');
+            cleanClientSelected();
+            $.mobile.navigate("#pagina11");
         }
 
     }
