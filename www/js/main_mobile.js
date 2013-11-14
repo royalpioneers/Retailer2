@@ -191,7 +191,11 @@ function init() {
     function saveClientStorage() {
         debugger;
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
-        if(clientSelected.products != ''){
+        if(clientSelected.products == ''){
+            cleanClientSelected();
+            $.mobile.navigate("#pagina11");
+        }
+        else{
             //validar si esta repetido
             var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
             if(index !== -1){
@@ -200,10 +204,6 @@ function init() {
             else{
                 storageClients.push(clientSelected);
             }
-        }
-        else{
-            cleanClientSelected();
-            $.mobile.navigate("#pagina11");
         }
 
     }
@@ -938,6 +938,7 @@ function init() {
             rp_token: token,
             client: JSON.stringify(storageClients)
         }
+        debugger;
         $.ajax({
           url: url,
           type: 'POST',
@@ -947,7 +948,8 @@ function init() {
             //called when complete
           },
           success: function(data) {
-            if (data.status == 'ok') {
+            debugger;
+            if (data.status == true) {
                 for(var i in storageClients){
                     var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
                     if(index !== -1){                        
