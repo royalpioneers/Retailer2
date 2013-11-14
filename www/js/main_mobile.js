@@ -131,7 +131,6 @@ function init() {
     }
 
     function selectProduct(e) {
-        debugger;
         e.preventDefault();
         var products = JSON.parse(localStorage.getItem('products_inventory')),
             clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
@@ -150,7 +149,7 @@ function init() {
                         'quantity': products[i].quantity,
                         'price': calculatePrice(products[i]),
                         'model_image': products[i].model_image
-                    };debugger;
+                    };
                     clientSelected.products.push(productSelected);
                     $(this).data('selected', true);
                     $(li).addClass("myProductSelected");
@@ -171,7 +170,6 @@ function init() {
                     }
                 });
                 if(remove > -1) {
-                    debugger;                       
                     clientSelected.products.splice(remove, 1);
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     $(this).data('selected',false);
@@ -847,7 +845,7 @@ function init() {
                     value.totalprice = value.price * quantity;
                     self.parent().siblings('.totalprice').text(value.totalprice);
                 }
-                else{debugger;
+                else{
                     self.val('0');
                 }
              }
