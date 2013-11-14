@@ -25,14 +25,6 @@ var urls = {
 var items_list = [], productsSelected = [], storageClients = [];
 
 function init() {
-
-	function getSize(object) {
-		var size = 0, key;
-	    for (key in object) {
-	        if (object.hasOwnProperty(key)) size++;
-	    }
-	    return size;
-	}
 	
     var analyzer_information = [],
         token = window.localStorage.getItem("rp-token");
@@ -88,7 +80,7 @@ function init() {
         pageClientShow();
     }
 
-    function pageClientShow() {        
+    function pageClientShow() {
         $('.products_clients_add').html('');
         var html = "";
         var products = JSON.parse(localStorage.getItem('products_inventory'));
@@ -164,13 +156,14 @@ function init() {
                         'quantity': products[i].quantity,
                         'price': calculatePrice(products[i]),
                         'model_image': products[i].model_image,
-                        'clients_discount': products[i].clients_discount
+                        'discount': getDiscount(products[i])
                     };
 
                     clientSelected.products.push(productSelected);
                     $(this).data('selected', true);
                     $(li).addClass("myProductSelected");
-                    clientSelected.total = parseFloat(productSelected.price) + currentPrice;
+                    var totalProduct = parseFloat(productSelected.price) * productSelected.quantity;
+                    clientSelected.total = totalProduct + currentPrice;
                     $('.see_more_products_clients').text(clientSelected.total);
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     break;
@@ -180,14 +173,12 @@ function init() {
                 var remove = -1;
                 $.each(clientSelected.products, function(x, value){
                     if(value.id == id){
-                        debugger;
-                        clientSelected.total = currentPrice - parseFloat(calculatePrice(value));
+                        clientSelected.total = currentPrice - (parseFloat(calculatePrice(value)) * value.quantity);
                         $('.see_more_products_clients').text(clientSelected.total);
-                        remove = x
+                        remove = x;
                     }
                 });
-                if(remove > -1) {
-                    debugger;                       
+                if(remove > -1) {                   
                     clientSelected.products.splice(remove, 1);
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     $(this).data('selected',false);
@@ -199,7 +190,6 @@ function init() {
         }
     }
     function saveClientStorage() {
-        debugger;
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
         if(clientSelected.products == ''){
             cleanClientSelected();
@@ -218,26 +208,32 @@ function init() {
 
     }
 
-    function getPriceProduct() {
-    	current_product = products[i];
-        var price = products[i].price;
-    	if (getSize(products[i].clients_discount) > 0) {
-    		price = products[i].clients_discount[clientSelected.id].amount;
-    	}
-    }
-
     function calculatePrice(product) {
+    	var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         //business client -> wholesale 1
         //consumer -> retail 2
-        var clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
-            price =0;
+        var price =0;
         if(clientSelected.type === 1) {
             price = product.wholesale_price;
         }
         else if(clientSelected.type === 2) {
             price = product.retail_price;
+            if (typeof(product.clients_discount[clientSelected.id]) != 'undefined') {
+        		price = product.clients_discount[clientSelected.id].amount;
+        	}
         }
         return price;
+    }
+    
+    function getDiscount(product) {
+    	var discount = 0;
+    	var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+    	if(clientSelected.type === 2) {
+            if (typeof(product.clients_discount[clientSelected.id]) != 'undefined') {
+            	discount = product.clients_discount[clientSelected.id].id;
+        	}
+        }
+    	return discount;
     }
 
     /* CLIENT */
@@ -778,7 +774,6 @@ function init() {
 
             call: create_graphic(data);
           */
-          debugger;
           var typeNames = d3.keys(data[0]).filter(function(key) { return key !== "Name"; });
 
           data.forEach(function(d) {
@@ -866,6 +861,12 @@ function init() {
             quantity = $(this).val(),
             self = $(this);
 
+        if (isNaN(parseInt(quantity))) {
+        	quantity = 0;
+        } else {
+        	quantity = parseInt(quantity);
+        }
+        
         $.each(myProducts, function(i, value){
              if(value.id == idProduct) {
                 if(quantity > 1){
@@ -873,7 +874,7 @@ function init() {
                     value.totalprice = value.price * quantity;
                     self.parent().siblings('.totalprice').text(value.totalprice);
                 }
-                else{debugger;
+                else{
                     self.val('0');
                 }
              }
@@ -965,17 +966,14 @@ function init() {
           dataType: 'json',
           data: data,
           success: function(data) {
-            debugger;
             if (data.status == true) {
-                debugger;
                 for(var i in storageClients){
                     var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-                    if(index !== -1){      
-                    debugger;                  
+                    if(index !== -1){          
                         var remove = -1;
                         $.each(storageClients, function(i, value){
                             if(value.id == clientSelected.id){
-                                remove = i
+                                remove = i;
                             }
                         });
                         if(remove > -1) {
