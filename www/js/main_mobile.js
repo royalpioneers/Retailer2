@@ -221,9 +221,11 @@ function init() {
         }
         else if(clientSelected.type === 2) {
             price = product.retail_price;
-            if (typeof(product.clients_discount[clientSelected.id]) != 'undefined') {
-        		price = product.clients_discount[clientSelected.id].amount;
-        	}
+            if (typeof(product.clients_discount) != 'undefined') {
+	            if (typeof(product.clients_discount[clientSelected.id]) != 'undefined') {
+	        		price = product.clients_discount[clientSelected.id].amount;
+	        	}
+            }
         }
         return price;
     }
