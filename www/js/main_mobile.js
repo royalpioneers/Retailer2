@@ -69,9 +69,15 @@ function init() {
         $( ".qtyInvoice" ).live('keyup', updateMyProduct);
         $('#sendProductsInvoice').live('click', sendProductsInvoice);
         $('.cancel_sendProductsInvoice').live('click', goProduct);
+        $('.cleanClientSelected').live('click', cleanClientSelected);
 
     //Functions
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
+
+    function cleanClientSelected(){
+        localStorage.setItem('clientSelected', '');
+        pageClientShow();
+    }
 
     function pageClientShow() {        
         $('.products_clients_add').html('');
@@ -181,9 +187,13 @@ function init() {
         }
     }
     function saveClientStorage() {
-        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-
-        if(clientSelected.products != null){
+        debugger;
+        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
+        if(clientSelected.products == ''){
+            cleanClientSelected();
+            $.mobile.navigate("#pagina11");
+        }
+        else{
             //validar si esta repetido
             var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
             if(index !== -1){
@@ -192,9 +202,6 @@ function init() {
             else{
                 storageClients.push(clientSelected);
             }
-        }
-        else{
-            alert('Chooce Products');
         }
 
     }
@@ -928,15 +935,13 @@ function init() {
         var data = {
             rp_token: token,
             client: JSON.stringify(storageClients)
-        }
+        };
+
         $.ajax({
           url: url,
           type: 'POST',
           dataType: 'json',
           data: data,
-          complete: function(xhr, textStatus) {
-            //called when complete
-          },
           success: function(data) {
             if (data.status == true ) {
                 for(var i in storageClients){
