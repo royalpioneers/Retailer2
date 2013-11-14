@@ -78,9 +78,15 @@ function init() {
         $( ".qtyInvoice" ).live('keyup', updateMyProduct);
         $('#sendProductsInvoice').live('click', sendProductsInvoice);
         $('.cancel_sendProductsInvoice').live('click', goProduct);
+        $('.cleanClientSelected').live('click', cleanClientSelected);
 
     //Functions
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
+
+    function cleanClientSelected(){
+        localStorage.setItem('clientSelected', '');
+        pageClientShow();
+    }
 
     function pageClientShow() {        
         $('.products_clients_add').html('');
@@ -193,9 +199,13 @@ function init() {
         }
     }
     function saveClientStorage() {
-        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-
-        if(clientSelected.products != null){
+        debugger;
+        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
+        if(clientSelected.products == ''){
+            cleanClientSelected();
+            $.mobile.navigate("#pagina11");
+        }
+        else{
             //validar si esta repetido
             var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
             if(index !== -1){
@@ -204,9 +214,6 @@ function init() {
             else{
                 storageClients.push(clientSelected);
             }
-        }
-        else{
-            alert('Chooce Products');
         }
 
     }
@@ -771,6 +778,7 @@ function init() {
 
             call: create_graphic(data);
           */
+          debugger;
           var typeNames = d3.keys(data[0]).filter(function(key) { return key !== "Name"; });
 
           data.forEach(function(d) {
@@ -807,7 +815,6 @@ function init() {
               .style("fill", function(d) { return color(d.name); });
 
           var legend = svg.selectAll(".legend").data(typeNames.slice().reverse()).enter().append("g").attr("class", "legend").attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
           legend.append("rect").attr("x", width - 18).attr("width", 18).attr("height", 18).style("fill", color);
           legend.append("text").attr("x", width - 24).attr("y", 9).attr("dy", ".35em").style("text-anchor", "end").text(function(d) { return d; });
         }
@@ -901,11 +908,11 @@ function init() {
     }
 
     function takePicture(event) {
-//        event.preventDefault();
-//        navigator.camera.getPicture(onSuccess, onFail, {
-//            quality: 50,
-//            destinationType: Camera.DestinationType.FILE_URI
-//        });
+        event.preventDefault();
+        navigator.camera.getPicture(onSuccess, onFail, {
+            quality: 50,
+            destinationType: Camera.DestinationType.FILE_URI
+        });
     }
 
     function onSuccess(imageURI) {
@@ -946,24 +953,25 @@ function init() {
     }
 
     function sendProductsInvoice() {
+        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var url = urls.send_invoice;
         var data = {
             rp_token: token,
             client: JSON.stringify(storageClients)
-        }
+        };
         $.ajax({
           url: url,
           type: 'POST',
           dataType: 'json',
           data: data,
-          complete: function(xhr, textStatus) {
-            //called when complete
-          },
           success: function(data) {
-            if (data.status == 'ok') {
+            debugger;
+            if (data.status == true) {
+                debugger;
                 for(var i in storageClients){
                     var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-                    if(index !== -1){                        
+                    if(index !== -1){      
+                    debugger;                  
                         var remove = -1;
                         $.each(storageClients, function(i, value){
                             if(value.id == clientSelected.id){
@@ -979,9 +987,6 @@ function init() {
                     }
                 }
             }
-          },
-          error: function(xhr, textStatus, errorThrown) {
-            //called when there is an error
           }
         });
     }
