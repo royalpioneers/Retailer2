@@ -70,6 +70,7 @@ function init() {
         $('#sendProductsInvoice').live('click', sendProductsInvoice);
         $('.cancel_sendProductsInvoice').live('click', goProduct);
         $('.cleanClientSelected').live('click', cleanClientSelected);
+        $('#search-redirect').on('click', changeSearch);
 
     //Functions
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
@@ -169,7 +170,6 @@ function init() {
                 var remove = -1;
                 $.each(clientSelected.products, function(x, value){
                     if(value.id == id){
-                        debugger;
                         clientSelected.total = currentPrice - parseFloat(calculatePrice(value));
                         $('.see_more_products_clients').text(clientSelected.total);
                         remove = x
@@ -187,7 +187,6 @@ function init() {
         }
     }
     function saveClientStorage() {
-        debugger;
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
         if(clientSelected.products == ''){
             cleanClientSelected();
@@ -634,6 +633,10 @@ function init() {
         content.append(html_to_insert);
     }
 
+    function changeSearch() {
+        window.location.replace("search.html");
+    }
+
     function processAnalyzerInformation(type) {
         // dates limit
         var initial_date = new Date();
@@ -758,7 +761,6 @@ function init() {
 
             call: create_graphic(data);
           */
-          debugger;
           var typeNames = d3.keys(data[0]).filter(function(key) { return key !== "Name"; });
 
           data.forEach(function(d) {
@@ -931,22 +933,22 @@ function init() {
         //alert("An error has occurred: Code = " + error.code);
     }
     function sendProductsInvoice() {
+        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var url = urls.send_invoice;
         var data = {
             rp_token: token,
             client: JSON.stringify(storageClients)
         };
-
         $.ajax({
           url: url,
           type: 'POST',
           dataType: 'json',
           data: data,
           success: function(data) {
-            if (data.status == true ) {
+            if (data.status == true) {
                 for(var i in storageClients){
                     var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-                    if(index !== -1){                        
+                    if(index !== -1){
                         var remove = -1;
                         $.each(storageClients, function(i, value){
                             if(value.id == clientSelected.id){
@@ -961,10 +963,9 @@ function init() {
                         $.mobile.navigate("#pagina11");
                     }
                 }
+            } else {
+                $.mobile.navigate("#pagina11");
             }
-          },
-          error: function(xhr, textStatus, errorThrown) {
-            //called when there is an error
           }
         });
     }

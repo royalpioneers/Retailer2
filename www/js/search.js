@@ -3,9 +3,11 @@ var DOMAIN = app.getDomain();
 $(function() {
     var token = window.localStorage.getItem("rp-token");
 
-    loadCategories();
-
+    $('#search-redirect').live('click', loadCategories);
     $('#search').live('click', search);
+    $('#back-index').on('click',backIndex)
+
+    loadCategories();
 
     function loadCategories() {
         var url = DOMAIN + '/mobile/category/';
@@ -56,5 +58,8 @@ $(function() {
                 $('#categories-list').listview('refresh');
             }
         });
+    }
+    function backIndex(){
+        window.location.replace("index.html");
     }
 });
