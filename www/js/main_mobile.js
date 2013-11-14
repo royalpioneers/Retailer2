@@ -933,26 +933,27 @@ function init() {
         //alert("An error has occurred: Code = " + error.code);
     }
     function sendProductsInvoice() {
+        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var url = urls.send_invoice;
+        debugger;
         var data = {
             rp_token: token,
             client: JSON.stringify(storageClients)
-        }
-        debugger;
+        };
+        
         $.ajax({
           url: url,
           type: 'POST',
           dataType: 'json',
           data: data,
-          complete: function(xhr, textStatus) {
-            //called when complete
-          },
           success: function(data) {
             debugger;
             if (data.status == true) {
+                debugger;
                 for(var i in storageClients){
                     var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-                    if(index !== -1){                        
+                    if(index !== -1){      
+                    debugger;                  
                         var remove = -1;
                         $.each(storageClients, function(i, value){
                             if(value.id == clientSelected.id){
@@ -968,9 +969,6 @@ function init() {
                     }
                 }
             }
-          },
-          error: function(xhr, textStatus, errorThrown) {
-            //called when there is an error
           }
         });
     }
