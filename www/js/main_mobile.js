@@ -745,6 +745,7 @@ function init() {
 
             call: create_graphic(data);
           */
+          debugger;
           var typeNames = d3.keys(data[0]).filter(function(key) { return key !== "Name"; });
 
           data.forEach(function(d) {
@@ -781,7 +782,6 @@ function init() {
               .style("fill", function(d) { return color(d.name); });
 
           var legend = svg.selectAll(".legend").data(typeNames.slice().reverse()).enter().append("g").attr("class", "legend").attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
           legend.append("rect").attr("x", width - 18).attr("width", 18).attr("height", 18).style("fill", color);
           legend.append("text").attr("x", width - 24).attr("y", 9).attr("dy", ".35em").style("text-anchor", "end").text(function(d) { return d; });
         }
@@ -869,11 +869,11 @@ function init() {
     }
 
     function takePicture(event) {
-//        event.preventDefault();
-//        navigator.camera.getPicture(onSuccess, onFail, {
-//            quality: 50,
-//            destinationType: Camera.DestinationType.FILE_URI
-//        });
+        event.preventDefault();
+        navigator.camera.getPicture(onSuccess, onFail, {
+            quality: 50,
+            destinationType: Camera.DestinationType.FILE_URI
+        });
     }
 
     function onSuccess(imageURI) {
