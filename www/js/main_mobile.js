@@ -31,6 +31,8 @@ function init() {
     //Automatic Login
     if(token != null) {
         authToken();
+    } else {
+        $('#container-login').css('display','inline');
     }
 
     //Events
@@ -373,6 +375,7 @@ function init() {
     function logOut(event) {
         // localStorage.clear('products_inventory');
         event.preventDefault();
+        $('#container-login').css('display','inline');
         window.localStorage.removeItem("rp-token");
         $.mobile.navigate("#pagina1");
     }

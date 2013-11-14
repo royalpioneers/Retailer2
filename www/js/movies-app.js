@@ -7,9 +7,9 @@ $(function(){
 			height: $(window).height()-$('.swiper-nav').height()
 		})
 	}
-	setContentSize()
+	setContentSize();
 	$(window).resize(function(){
-		setContentSize()
+		setContentSize();
 	});
 
 	//Swiper Content
