@@ -25,6 +25,15 @@ var urls = {
 var items_list = [], productsSelected = [], storageClients = [];
 
 function init() {
+
+	function getSize(object) {
+		var size = 0, key;
+	    for (key in object) {
+	        if (object.hasOwnProperty(key)) size++;
+	    }
+	    return size;
+	}
+	
     var analyzer_information = [],
         token = window.localStorage.getItem("rp-token");
     //Automatic Login
@@ -131,7 +140,6 @@ function init() {
     }
 
     function selectProduct(e) {
-        debugger;
         e.preventDefault();
         var products = JSON.parse(localStorage.getItem('products_inventory')),
             clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
@@ -149,8 +157,10 @@ function init() {
                         'model_name': products[i].model_name,
                         'quantity': products[i].quantity,
                         'price': calculatePrice(products[i]),
-                        'model_image': products[i].model_image
-                    };debugger;
+                        'model_image': products[i].model_image,
+                        'clients_discount': products[i].clients_discount
+                    };
+
                     clientSelected.products.push(productSelected);
                     $(this).data('selected', true);
                     $(li).addClass("myProductSelected");
@@ -199,6 +209,14 @@ function init() {
             alert('Chooce Products');
         }
 
+    }
+
+    function getPriceProduct() {
+    	current_product = products[i];
+        var price = products[i].price;
+    	if (getSize(products[i].clients_discount) > 0) {
+    		price = products[i].clients_discount[clientSelected.id].amount;
+    	}
     }
 
     function calculatePrice(product) {
@@ -802,6 +820,7 @@ function init() {
             ul_for_my_products = $('#myProducts');
         ul_for_my_products.html('');
         var html = '';
+
         for(var i in myProducts){
             html += '<li class="without_radious" data-id="'+myProducts[i].id+'">\
                         <a href="">\
@@ -925,6 +944,7 @@ function init() {
     function fail(error) {
         //alert("An error has occurred: Code = " + error.code);
     }
+
     function sendProductsInvoice() {
         var url = urls.send_invoice;
         var data = {
