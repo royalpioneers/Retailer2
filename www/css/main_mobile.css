@@ -629,7 +629,12 @@
             display: none !important; 
         }
     }
-
+.photo-product{
+    width: 7em;
+    height: 7em;
+    text-align: center;
+     margin:0 auto 0 auto;
+}
 .btn_more_big,.header_top_options{
     padding: 1% !important; 
     text-align: center;
