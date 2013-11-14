@@ -1,8 +1,8 @@
 
 var app = {
     getDomain: function(){
-        //return "http://127.0.0.1:8000";
-        return "http://127.0.0.1:8002";
+        return "http://127.0.0.1:8000";
+        //return "http://127.0.0.1:8002";
 
     },
     initialize: function() {

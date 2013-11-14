@@ -30,7 +30,6 @@ function init() {
         token = window.localStorage.getItem("rp-token");
     //Automatic Login
     if(token != null) {
-        debugger;
         authToken();
     } else {
         $('#container-login').css('display','inline');
@@ -143,6 +142,7 @@ function init() {
 
     function selectProduct(e) {
         e.preventDefault();
+        debugger;
         var products = JSON.parse(localStorage.getItem('products_inventory')),
             clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
             currentPrice = parseFloat($('.see_more_products_clients').text()),
@@ -309,6 +309,7 @@ function init() {
                 $('#list_clients').trigger('create');
                 $(":radio").unbind("change");
                 $(":radio").bind("change", function (event){
+                    debugger;
                     if(localStorage.getItem('clientSelected')){
                         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
                         //validar si esta repetido
@@ -378,6 +379,7 @@ function init() {
         event.preventDefault();
         $('#container-login').css('display','inline');
         window.localStorage.removeItem("rp-token");
+        window.localStorage.removeItem("clientSelected");
         $.mobile.navigate("#pagina1");
     }
 
@@ -986,7 +988,8 @@ function init() {
                         });
                         if(remove > -1) {
                             storageClients.splice(remove, 1);
-                            localStorage.setItem("clientSelected",'');
+                            clientSelected.products = [];
+                            localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                         }
                         //listClients();
                         $.mobile.navigate("#pagina11");
