@@ -76,7 +76,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	model.create = function(e){
 		e.preventDefault();
 		model.messages = [];
-		var form = $(e.target).parent()[0];
+		var form = $('#'+model.id_page_new_client).find('form')[0];
 		var params = model.get_form_params(form);
 		if (!params) {
 			model.show(model.messages);
