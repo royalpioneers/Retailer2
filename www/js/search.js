@@ -3,9 +3,11 @@ var DOMAIN = app.getDomain();
 $(function() {
     var token = window.localStorage.getItem("rp-token");
 
-    loadCategories();
-
+    $('#search-redirect').live('click', loadCategories);
     $('#search').live('click', search);
+    $('#back-index').on('click',backIndex)
+
+    loadCategories();
 
     function loadCategories() {
         var url = DOMAIN + '/mobile/category/';
@@ -46,6 +48,7 @@ $(function() {
                 $.each(data.result, function(i, value) {
 
                     $.each(value.models, function(ind, model) {
+                        debugger;
                         if(model.photo.length > 0){
                             $('#result-search').append('<li><img src="'+DOMAIN+model.photo[0].thumb+'"></li>');
                         } else {
@@ -56,5 +59,8 @@ $(function() {
                 $('#categories-list').listview('refresh');
             }
         });
+    }
+    function backIndex(){
+        window.location.replace("index.html");
     }
 });

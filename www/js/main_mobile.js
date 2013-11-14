@@ -31,6 +31,8 @@ function init() {
     //Automatic Login
     if(token != null) {
         authToken();
+    } else {
+        $('#container-login').css('display','inline');
     }
 
     //Events
@@ -71,6 +73,7 @@ function init() {
         $('#sendProductsInvoice').live('click', sendProductsInvoice);
         $('.cancel_sendProductsInvoice').live('click', goProduct);
         $('.cleanClientSelected').live('click', cleanClientSelected);
+        $('#search-redirect').on('click', changeSearch);
 
     //Functions
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
@@ -158,7 +161,6 @@ function init() {
                         'model_image': products[i].model_image,
                         'discount': getDiscount(products[i])
                     };
-
                     clientSelected.products.push(productSelected);
                     $(this).data('selected', true);
                     $(li).addClass("myProductSelected");
@@ -178,7 +180,7 @@ function init() {
                         remove = x;
                     }
                 });
-                if(remove > -1) {                   
+                if(remove > -1) {
                     clientSelected.products.splice(remove, 1);
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     $(this).data('selected',false);
@@ -373,6 +375,7 @@ function init() {
     function logOut(event) {
         // localStorage.clear('products_inventory');
         event.preventDefault();
+        $('#container-login').css('display','inline');
         window.localStorage.removeItem("rp-token");
         $.mobile.navigate("#pagina1");
     }
@@ -648,6 +651,10 @@ function init() {
                               <h2><b>Retail Price: </b><br><span class="price">$ '+retailPrice+'</span></h2>';
         content.empty();
         content.append(html_to_insert);
+    }
+
+    function changeSearch() {
+        window.location.replace("search.html");
     }
 
     function processAnalyzerInformation(type) {
@@ -969,7 +976,7 @@ function init() {
             if (data.status == true) {
                 for(var i in storageClients){
                     var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-                    if(index !== -1){          
+                    if(index !== -1){
                         var remove = -1;
                         $.each(storageClients, function(i, value){
                             if(value.id == clientSelected.id){
@@ -984,6 +991,8 @@ function init() {
                         $.mobile.navigate("#pagina11");
                     }
                 }
+            } else {
+                $.mobile.navigate("#pagina11");
             }
           }
         });
