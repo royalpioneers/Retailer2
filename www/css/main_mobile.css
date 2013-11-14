@@ -123,13 +123,6 @@
         padding: 0 !important;
         background: rgba(185, 185, 185, 0.48);
     }
-    #navbar .ui-btn-active{
-        background: white !important;
-        color: rgb(52, 73, 94) !important;
-        border: none;
-        text-shadow: none;
-        padding-bottom: 2px;
-    }
     .tab-content{
         width:100%;
         background: white;
@@ -360,13 +353,15 @@
     .image_invoice{
         margin-top: 0.5em;
     }
-    #sendProductsInvoice{
+    #formsendProductsInvoice{
         text-align: center;
     }
-    #sendProductsInvoice .options_sendProductsInvoice{
+    #formsendProductsInvoice .options_sendProductsInvoice{
         width: 30%;
         font-size: 20px;
+        text-align: center;
         color: white;
+        display: inline-table;
         padding: 8%;
     }
     /*pagina12*/
@@ -558,32 +553,7 @@
         transition: border .25s linear, color .25s linear;
         -webkit-backface-visibility: hidden;
     }
-    .ui-bar-b,.ui-btn-up-b,.btn-inverse{
-        background: #34495e !important;
-        background-color: #34495e !important;
-        transition:all .3s ease-in-out !important;
-        -webkit-transition:all .3s ease-in-out !important;
-        -moz-transition:all .3s ease-in-out !important;
-
-    }
-    .icon-white{
-        transition:all .5s ease-in-out !important;
-        -webkit-transition:all .5s ease-in-out !important;
-        -moz-transition:all .5s ease-in-out !important;
-        -webkit-transform: scale(1);
-        -moz-transform: scale(1);
-        transform: scale(1);
-    }
-    .icon-white:hover{
-        -webkit-transform: scale(1.2);
-        -moz-transform: scale(1.2);
-        transform: scale(1.2);
-    }
-    .ui-bar-b:focus,.ui-bar-b:hover,.ui-bar-b:active,.ui-btn-up-b,.btn-inverse,.ui-btn-hover-b{
-        background: #415b76 !important;
-        background-color: #415b76 !important;
-
-    }
+    
     .center_text_align{
         text-align: center;
     }
@@ -615,7 +585,7 @@
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-    .ui-input-text.ui-shadow-inset.ui-corner-all.ui-btn-shadow.ui-body-c.ui-focus {
+    .without_radious .ui-input-text.ui-shadow-inset.ui-corner-all.ui-btn-shadow.ui-body-c.ui-focus {
         max-width: 6em;
     }
     .without_radious .ui-input-text.ui-shadow-inset.ui-corner-all.ui-btn-shadow.ui-body-c {
@@ -634,8 +604,8 @@
     #goToProducts {
         text-align: center;
     }
-    .myProductSelected{
-        background-color: red !important;
+    .myProductSelected > .productSelected > span{
+        background-color: #08c !important;
     }
     .without_radious img {
         width: 23em;
@@ -659,3 +629,11 @@
             display: none !important; 
         }
     }
+
+.btn_more_big,.header_top_options{
+    padding: 1% !important; 
+    text-align: center;
+}
+.btn_more_big .ui-btn-inner {
+    border: none !important;
+}
