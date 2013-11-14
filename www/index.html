@@ -6,9 +6,9 @@
 		<meta charset="UTF-8">
 
 		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="js/jquerymobile/jquery.mobile-1.3.2.min.css">
         <link rel="stylesheet" href="css/main_mobile.css">
         <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.2.0.graphite.blue">
+        <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.3.1.css">
 
         <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
         <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
@@ -93,7 +93,7 @@
                     <input class="input_login" type="password" placeholder="Password" id="password">
                     <input type="submit" class="btn" style="width: 100%;" id="log_in" value="Login">
                 </form>
-                <div data-role="footer" data-theme="o" style="z-index: 9;">
+                <div data-role="footer" data-theme="a" style="z-index: 9;">
 
                 </div>
             </div>
@@ -101,10 +101,10 @@
 
         <!--INVENTORY-->
 		<div data-role="page" id="pagina2" data-position="fixed">
-			<div data-role="header" data-position="fixed" data-id="head1" data-theme="b">
-				<a class="header_top_options" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
+			<div data-role="header" data-position="fixed" data-id="head1" data-theme="a">
+				<a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
 				<h1>Royal Pioneers</h1>
-                <a class="header_top_options" href="search.html"><i class="icon-white icon-align-justify"></i></a>
+                <a class="header_top_options btn_more_big" href="search.html"><i class="icon-white icon-align-justify"></i></a>
 			</div>
 			<div data-role="content" class="content_tab">
 	            <div data-role="navbar" class="navbar">
@@ -148,7 +148,7 @@
 	                </div>
 	            </div>
 	        </div><!-- /content -->
-            <div data-role="panel" id="left-panel" data-theme="b">
+            <div data-role="panel" id="left-panel" data-theme="a">
                     <ul data-role="listview">
                         <li data-icon="delete">
                             <a href="#" data-rel="close">Close</a>
@@ -166,7 +166,7 @@
                         </li>
                     </ul>        
                 </div><!-- /panel -->
-                <div data-role="panel" id="right-panel" data-display="overlay" data-position="right" data-theme="b">
+                <div data-role="panel" id="right-panel" data-display="overlay" data-position="right" data-theme="a">
                     <ul data-role="listview" data-icon="false">
                         <li data-icon="delete"><a href="#" data-rel="close">Close</a></li>
                         <li data-role="list-divider">Share this page</li>
@@ -177,13 +177,8 @@
                     </ul>
                 </div><!-- /panel -->
 
-			<div data-role="footer" data-position="fixed" data-id="foo1" data-theme="b">
-				<div class="ui-grid-b">
-		   			<div class="ui-block-a">
-		   				<a href="#right-panel" data-role="button">
-		   					<i class="icon-white icon-user"></i>
-		   				</a>
-		   			</div>
+			<div data-role="footer" data-position="fixed" data-id="foo1" data-theme="a">
+				<div class="ui-grid-a">
 		   			<div class="ui-block-c">
 		   				<a href="#pagina4" data-role="button" data-transition="flip">
 		   					<i class="icon-white icon-camera"></i>
@@ -200,10 +195,10 @@
 
 		<!--SETTINGS-->
 		<div data-role="page" id="pagina3" data-fullscreen="true">
-		   <div data-role="header" data-position="fixed" data-id="head1" data-theme="b">
-				<a class="header_top_options" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
+		   <div data-role="header" data-position="fixed" data-id="head1" data-theme="a">
+				<a class="header_top_options btn_more_big" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
 				<h1>Settings</h1>
-				<a class="header_top_options" href=""><i class="icon-white icon-question-sign"></i></a>
+				<a class="header_top_options btn_more_big" href=""><i class="icon-white icon-question-sign"></i></a>
 			</div>
 		   <div data-role="content">
 		   		<div data-position="" class="content_intro_button content-social">
@@ -221,13 +216,8 @@
 					</ul>
 				</div>
 		   </div>
-		   <div data-role="footer" data-position="fixed" data-id="foo1" data-theme="b">
-               <div class="ui-grid-b">
-                   <div class="ui-block-a">
-                       <a href="#right-panel" data-role="button">
-                           <i class="icon-white icon-user"></i>
-                       </a>
-                   </div>
+		   <div data-role="footer" data-position="fixed" data-id="foo1" data-theme="a">
+               <div class="ui-grid-a">
                    <div class="ui-block-c">
                        <a href="#pagina4" data-role="button" data-transition="flip">
                            <i class="icon-white icon-camera"></i>
@@ -253,7 +243,7 @@
 
 		<!--PRODUCT INVENTORY-->
 		<div data-role="page" id="pagina5">
-			<div data-role="header" data-position="fixed" data-id="head1" data-theme="b">
+			<div data-role="header" data-position="fixed" data-id="head1" data-theme="a">
                 <a class="header_top_options" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
 				<h1>Inventory</h1>
 			</div>
@@ -262,7 +252,7 @@
 
 	            </div>
 	        </div><!-- /content -->
-			<div data-role="footer" data-position="fixed" data-id="foo1" data-theme="b">
+			<div data-role="footer" data-position="fixed" data-id="foo1" data-theme="a">
                 <div class="ui-grid-b">
                     <div class="ui-block-a">
                         <a href="#right-panel" data-role="button">
@@ -285,19 +275,18 @@
 
         <!--CREATE ITEM-->
         <div data-role="page" id="pagina6">
-            <div data-role="header" data-theme="b">
-                <a href="" data-rel="back">Cancel</a>
+            <div data-role="header" data-theme="a">
+                <a href="" class="btn_more_big" data-rel="back"><i class="icon-white icon-arrow-left"></i></a>
                 <h1>Create Item</h1>
-                <a href="">Save</a>
             </div>
             <div data-role="content">
                 <form>
-                        <div>
+                        <div class="photo-product">
                             <img src="http://royalpioneers.com/static/website/images/icon/default_product.png" id="image-camera">
-                            <a href="" data-role="button" id="edit-image" data-theme="b">Take a Photo</a>
+                            <a href="" data-role="button" id="edit-image" data-theme="a">Take a Photo</a>
                         </div>
                     </a>
-                    <ul data-role="listview" data-inset="true" data-theme="c" class="create_item_list">
+                    <ul data-role="listview" data-inset="true" data-theme="a" class="create_item_list">
                         <li>
                             <input list="browsers" name="browser" placeholder="Name Product" autofocus="true" id="browser" required>
                             <datalist id="browsers">
@@ -312,32 +301,32 @@
                         <li><input type="text" placeholder="SKU" id="sku" required></li>
                         <li><input type="number" placeholder="Quantity" id="quantity" required></li>
                     </ul>
-                    <a href="" data-role="button" id="create_item" data-theme="b">Save</a>
+                    <a href="" data-role="button" id="create_item" data-theme="a">Save</a>
                 </form>
 
             </div>
         </div>
 
         <!--CATEGORY CREATE PRODUCT-->
-        <div data-role="page" id="pagina7" data-theme="b">
+        <div data-role="page" id="pagina7" data-theme="a">
             <div data-role="header">
-                <a href="" data-rel="back">Back</a>
+                <a href="btn_more_big" data-rel="back"><i class="icon-white icon-arrow-left"></i></a>
                 <h1>Category</h1>
             </div>
             <div data-role="content">
-                <ul data-role="listview" data-inset="true" data-theme="c" class="categories_create_product" id="categories-list">
+                <ul data-role="listview" data-inset="true" data-theme="a" class="categories_create_product" id="categories-list">
                 </ul>
             </div>
         </div>
 
         <!--PRICE CREATE PRODUCT-->
         <div data-role="page" id="pagina8">
-            <div data-role="header" data-theme="b">
-                <a class="" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
+            <div data-role="header" data-theme="a">
+                <a class="btn_more_big" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
                 <h1>Prices</h1>
             </div>
             <div data-role="content">
-                <ul data-theme="c" class="price_create_product">
+                <ul data-theme="a" class="price_create_product">
                     <li>
                         <ul>
                             <li>
@@ -365,8 +354,8 @@
 
         <!--ADD CLIENT-->
         <div data-role="page" id="pagina9" data-fullscreen="true">
-            <div data-role="header" data-theme="b">
-                <a class="" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
+            <div data-role="header" data-theme="a">
+                <a class="btn_more_big" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
                 <h1>Add New Client</h1>
             </div>
             <div data-role="content">
@@ -395,8 +384,8 @@
 
         <!--Client-->
         <div data-role="page" id="pagina10" data-fullscreen="true">
-            <div data-role="header" data-theme="b">
-                <a class="" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
+            <div data-role="header" data-theme="a">
+                <a class="btn_more_big" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
                 <h2>Clients</h2>
             </div>
             <div data-role="content">
@@ -404,21 +393,16 @@
         </div>
         <!--Invoice-->
         <div data-role="page" id="pagina11" data-fullscreen="true">
-            <div data-role="header" data-theme="b">
-                <a class="" href="#pagina2"><i class="icon-white icon-arrow-left"></i></a>
+            <div data-role="header" data-theme="a">
+                <a class="btn_more_big" href="#pagina2"><i class="icon-white icon-arrow-left"></i></a>
                 <h1>Invoice</h1>
             </div>
             <div data-role="content">
                 <div class="header_client">
                 	<span>Client</span>	
-                    <a href="#pagina9" class="btn btn-inverse"><i class="icon-plus icon-white"></i></a>
+                    <a href="#pagina9" class="ui-bar-a btn_more_big"><i class="icon-plus icon-white"></i></a>
                 </div>
                 <ul data-role="listview" data-filter="true" id="list_clients" data-filter-placeholder="Search Clients..." data-inset="true">
-                    <li>
-                        <a href="#pagina12">
-                            <img src="http://images.apple.com/euro/macbook-pro/images/overview_display_hero.png" class="image_invoice"><h2>a</h2>
-                        </a>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -432,8 +416,8 @@
         </div>
 
         <div data-role="page" id="pagina12" data-fullscreen="true">
-            <div data-role="header" data-theme="b">
-                <a class="" data-fullscreen="true" href="#pagina11"><i class="icon-white icon-arrow-left"></i></a>
+            <div data-role="header" data-theme="a">
+                <a class="btn_more_big" data-fullscreen="true" href="#pagina11"><i class="icon-white icon-arrow-left"></i></a>
                 <!-- <h1><span class="client_name"></span>'s Details</h1> -->
                 <div data-role="fieldcontain">
                     <select name="select-choice-1" id="selectClient">
@@ -468,9 +452,9 @@
                     <ul data-role="listview" data-corners="false" data-inset="true">
                         <li data-icon="false"><a href="" id="goToProducts">+ Add Another Product</a></li>      
                     </ul>
-                    <form id="">
-                        <a href="#pagina13" class="btn btn-inverse options_sendProductsInvoice">Cancel  </a>
-                        <input type="sumbit" class="btn btn-inverse options_sendProductsInvoice" id="sendProductsInvoice" value="Sale">      
+                    <form id="formsendProductsInvoice">
+                        <a href="#pagina13" class="ui-bar-b options_sendProductsInvoice cancel_sendProductsInvoice">Cancel</a>
+                        <a href="#pagina13" class="ui-bar-b options_sendProductsInvoice cancel_sendProductsInvoice" id="sendProductsInvoice">Sale</a>      
                     </form>
                 </aside>
             </div>
@@ -478,8 +462,8 @@
 
         <!--Buy client's products-->
         <div data-role="page" id="pagina13" data-fullscreen="true">
-            <div data-role="header" data-theme="b">
-                <a class="saveClientStorage" href="#pagina12"><i class="icon-white icon-arrow-left"></i></a>
+            <div data-role="header" data-theme="a">
+                <a class="saveClientStorage btn_more_big" href="#pagina12"><i class="icon-white icon-arrow-left"></i></a>
                 <h1><a href="" class="see_more_products_clients saveClientStorage">0</a></h1>
             </div>
             <div data-role="content" style="text-align: center;">

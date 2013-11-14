@@ -68,6 +68,7 @@ function init() {
         $( "#pagina12" ).on( "pageshow", pageMyProductsShow);
         $( ".qtyInvoice" ).live('keyup', updateMyProduct);
         $('#sendProductsInvoice').live('click', sendProductsInvoice);
+        $('.cancel_sendProductsInvoice').live('click', goProduct);
 
     //Functions
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
@@ -130,10 +131,11 @@ function init() {
     }
 
     function selectProduct(e) {
+        debugger;
         e.preventDefault();
         var products = JSON.parse(localStorage.getItem('products_inventory')),
             clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
-            currentPrice = parseInt($('.see_more_products_clients').text()),
+            currentPrice = parseFloat($('.see_more_products_clients').text()),
             productSelected,
             id = $(this).data('id');
         var li = $(this).parent('li');
@@ -148,24 +150,28 @@ function init() {
                         'quantity': products[i].quantity,
                         'price': calculatePrice(products[i]),
                         'model_image': products[i].model_image
-                    };
+                    };debugger;
                     clientSelected.products.push(productSelected);
                     $(this).data('selected', true);
                     $(li).addClass("myProductSelected");
-                    clientSelected.total = clientSelected.total + currentPrice;
+                    clientSelected.total = parseFloat(productSelected.price) + currentPrice;
                     $('.see_more_products_clients').text(clientSelected.total);
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     break;
                 }
             //Remove Products to LocalStorage
             } else {
-                var remove = -1
-                $.each(clientSelected.products, function(i, value){
+                var remove = -1;
+                $.each(clientSelected.products, function(x, value){
                     if(value.id == id){
-                        remove = i
+                        debugger;
+                        clientSelected.total = currentPrice - parseFloat(calculatePrice(value));
+                        $('.see_more_products_clients').text(clientSelected.total);
+                        remove = x
                     }
                 });
                 if(remove > -1) {
+                    debugger;                       
                     clientSelected.products.splice(remove, 1);
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     $(this).data('selected',false);
@@ -279,11 +285,13 @@ function init() {
                 $('#list_clients').trigger('create');
                 $(":radio").unbind("change");
                 $(":radio").bind("change", function (event){
-                    var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-                    //validar si esta repetido
-                    var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-                    if(index !== -1){
-                        storageClients[index] = clientSelected;
+                    if(localStorage.getItem('clientSelected')){
+                        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+                        //validar si esta repetido
+                        var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+                        if(index !== -1){
+                            storageClients[index] = clientSelected;
+                        }
                     }
 
                     var self = $(this);
@@ -799,7 +807,7 @@ function init() {
                         <a href="">\
                             <img src="'+DOMAIN+myProducts[i].model_image+'" class="ui-li-icon">\
                             <span class="ui-li-aside">'+myProducts[i].product_name+'</span>\
-                            <input type="number" class="qtyInvoice" value="'+myProducts[i].quantity+'">\
+                            <input type="number" class="qtyInvoice" min="1" value="'+myProducts[i].quantity+'">\
                             <span class="ui-li-aside">'+myProducts[i].price+'</span>\
                             <span class="ui-li-aside totalprice">'+(myProducts[i].price*myProducts[i].quantity)+'</span>\
                             <span class="removeProduct">X</span>\
@@ -834,9 +842,14 @@ function init() {
 
         $.each(myProducts, function(i, value){
              if(value.id == idProduct) {
-                 value.quantity = quantity;
-                value.totalprice = value.price * quantity;
-                self.parent().siblings('.totalprice').text(value.totalprice);
+                if(quantity > 1){
+                    value.quantity = quantity;
+                    value.totalprice = value.price * quantity;
+                    self.parent().siblings('.totalprice').text(value.totalprice);
+                }
+                else{debugger;
+                    self.val('0');
+                }
              }
         });
 
@@ -918,7 +931,6 @@ function init() {
             rp_token: token,
             client: JSON.stringify(storageClients)
         }
-
         $.ajax({
           url: url,
           type: 'POST',
@@ -928,13 +940,30 @@ function init() {
             //called when complete
           },
           success: function(data) {
-            console.log('go!');
+            if (data.status == 'ok') {
+                for(var i in storageClients){
+                    var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+                    if(index !== -1){                        
+                        var remove = -1;
+                        $.each(storageClients, function(i, value){
+                            if(value.id == clientSelected.id){
+                                remove = i
+                            }
+                        });
+                        if(remove > -1) {
+                            storageClients.splice(remove, 1);
+                            localStorage.setItem("clientSelected",'');
+                        }
+                        //listClients();
+                        $.mobile.navigate("#pagina11");
+                    }
+                }
+            }
           },
           error: function(xhr, textStatus, errorThrown) {
             //called when there is an error
           }
         });
-        
     }
 }
 
