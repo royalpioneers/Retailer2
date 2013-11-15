@@ -28,8 +28,8 @@ function init() {
 	
     var analyzer_information = [],
         token = window.localStorage.getItem("rp-token");
-    $('#token').html(token);
     //Automatic Login
+    alert('inicio');
     if(token != null) {
         authToken();
     } else {
