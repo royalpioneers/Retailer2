@@ -13,7 +13,7 @@ var urls = {
     'saveProduct': DOMAIN+'/mobile/create/product/',
     'productInformation': DOMAIN+'/mobile/product-information/',
     'category':DOMAIN+'/mobile/category/',
-    'upload': DOMAIN+'/upload-image/product/',
+    'upload': DOMAIN+'/mobile/upload-image/product/',
     'client_create': DOMAIN+'/mobile/client/create/',
     'client_list': DOMAIN+'/mobile/client/list/',
     'client_company_types': DOMAIN+'/mobile/client/company_types/',
@@ -84,8 +84,7 @@ function init() {
         pageClientShow();
     }
 
-    function pageClientShow() { 
-    debugger;       
+    function pageClientShow() {
         $('.products_clients_add').html('');
         var html = "";
         var products = JSON.parse(localStorage.getItem('products_inventory'));
@@ -1118,7 +1117,7 @@ function init() {
             $.ajax({
                 url: urls.upload,
                 data: {
-                    data: 'aa'
+                    aa: 'aa'
                 },
                 dataType: 'json',
                 type: 'POST',
