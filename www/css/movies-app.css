@@ -170,16 +170,23 @@
 	border-radius: 4px;
 	background-color: #333;
 }
-.header_top_options{
-	box-shadow: none !important;
-	margin-top: .8em !important;
+.btn_more_big,.header_top_options{
+    padding: 1% !important; 
+    text-align: center;
+    padding: 15px 25px !important;
 }
-.header_top_options > span{
-	border: none;
+div[data-role='header']{
+    padding: 8px 0 !important;
+position: relative;
+overflow: hidden;
+min-height: 4.5em;
 }
-.ui-grid-c > div > a{
-	box-shadow: none !important;
+.btn_more_big .ui-btn-inner,.header_top_options .ui-btn-inner{
+    border: none !important;
 }
-.ui-grid-c > div > a > span{
-	border: none;
+.ui-submit {
+padding: 5%;
+}
+.ui-submit .ui-btn-inner{
+border: none;
 }

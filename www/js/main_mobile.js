@@ -203,12 +203,13 @@ function init() {
         }
     }
     function saveClientStorage() {
+        debugger;
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
         if(clientSelected.products == ''){
             cleanClientSelected();
             $.mobile.navigate("#pagina11");
         }
-        else{
+        else if(clientSelected.products != ''){
             //validar si esta repetido
             var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
             if(index !== -1){
@@ -217,6 +218,7 @@ function init() {
             else{
                 storageClients.push(clientSelected);
             }
+            $.mobile.navigate("#pagina12");
         }
 
     }
