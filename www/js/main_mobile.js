@@ -1074,6 +1074,7 @@ function init() {
             options.fileKey="file";
             options.fileName=imageURL.substr(imageURL.lastIndexOf('/')+1);
             options.mimeType="image/jpeg";
+            options.chunkedMode = false;
 
             var params = new Object();
             params.value1 = "test";
@@ -1084,6 +1085,20 @@ function init() {
 
             var ft = new FileTransfer();
             ft.upload(imageURL, encodeURI(urls.upload), win, fail, options);
+
+            $.ajax({
+                url: urls.upload,
+                data: {
+                    data: imageURL
+                },
+                type: 'POST',
+                success: function (data) {
+                    alert('ok')
+                },
+            });
+
+
+
         }
     }
 
