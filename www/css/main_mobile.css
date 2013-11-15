@@ -334,7 +334,7 @@
     }
     .header_client > a {
         position: absolute;
-        right: 6%;
+        right: 10%;
         margin-top: -0.5em;
         padding: 2% 6% !important;
         line-height: 10px;

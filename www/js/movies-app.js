@@ -59,6 +59,13 @@ $(function(){
             data: {
             	rp_token: window.localStorage['rp-token']
             },
+            beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
             success: function (data) {
             	if (data.status === 'success') {
             		var len = data.groups.length, i, group;
@@ -73,7 +80,10 @@ $(function(){
             	} else {
             		alert('no groups found');
             	}
-            }
+            },
+           complete: function(){
+                $.mobile.loading("hide");
+           }
         })
     }
 
@@ -98,6 +108,13 @@ $(function(){
                 rp_token: window.localStorage['rp-token']
             },
             dataType: 'json',
+            beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
             success: function (data) {
                 if (data.status === 'success') {
                     delete window.localStorage['productModelId'];
@@ -105,7 +122,10 @@ $(function(){
                 } else {
                 	alert(data.status);
                 }
-            }
+            },
+           complete: function(){
+                $.mobile.loading("hide");
+           }
         });
     }
 
@@ -135,11 +155,21 @@ $(function(){
 				rp_token: window.localStorage['rp-token']
 			},
 			dataType: 'json',
+			beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
 			success: function (data) {
 				if (data.status === 'success') {
 					document.location.href = '#product-group-list-page';
 				}
-			}
+			},
+           complete: function(){
+                $.mobile.loading("hide");
+           }
 		});
 	});
 });

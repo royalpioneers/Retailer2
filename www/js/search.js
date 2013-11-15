@@ -18,13 +18,23 @@ $(function() {
                 rp_token: token
             },
             dataType: 'json',
+            beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
             success: function (data) {
                 $('#categories-list').append('<li><a id="search" data-id="0" href="#">without specifying</a></li>');
                 $.each(data.categories, function(i, value) {
                     $('#categories-list').append('<li><a id="search" data-id="'+value.id+'" href="#">'+value.name+'</a></li>');
                 });
                 $('#categories-list').listview('refresh');
-            }
+            },
+           complete: function(){
+                $.mobile.loading("hide");
+           }
         });
     }
 
@@ -42,6 +52,13 @@ $(function() {
                 text: text
             },
             dataType: 'json',
+            beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
             success: function (data) {
                 $.mobile.navigate("#pagina2");
                 $('#result-search').html('');
@@ -56,7 +73,10 @@ $(function() {
                     });
                 });
                 $('#categories-list').listview('refresh');
-            }
+            },
+           complete: function(){
+                $.mobile.loading("hide");
+           }
         });
     }
     function backIndex(){

@@ -34,7 +34,6 @@ function init() {
     } else {
         $('#container-login').css('display','inline');
     }
-
     //Events
         //Login
         $("#log_in").on("click", loginAuth);
@@ -277,6 +276,13 @@ function init() {
                 },
                 type: 'POST',
                 dataType: 'json',
+                beforeSend: function(){
+                    $.mobile.loading("show", {
+                        textVisible: true,
+                        theme: 'c',
+                        textonly: false
+                    });
+                },
                 success: function (data) {
                     if (data.status === 'OK') {
                         window.localStorage.setItem("rp-token", data.token);
@@ -285,6 +291,9 @@ function init() {
                     } else {
                         $('.overlay').fadeIn().children().addClass('effect_in_out');
                     }
+                },
+                complete: function(){
+                    $.mobile.loading("hide");
                 }
             });
         } else {
@@ -303,6 +312,13 @@ function init() {
                 rp_token: token
            },
            dataType: 'json',
+           beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
            success: function(data){
                 $('#pagina11').find('#list_clients').html('');
                 var ul_for_list_clients = $('#pagina11').find('#list_clients'),
@@ -370,6 +386,9 @@ function init() {
                         $.mobile.navigate("#pagina13");
                     }
                 });             
+            },
+            complete: function(){
+                $.mobile.loading("hide");
             }
         });
     }
@@ -408,6 +427,13 @@ function init() {
                 },
                 type: 'POST',
                 dataType: 'json',
+                beforeSend: function(){
+                    $.mobile.loading("show", {
+                        textVisible: true,
+                        theme: 'c',
+                        textonly: false
+                    });
+                },
                 success: function (data) {
                     if (data.status === 'OK') {
                         window.localStorage.setItem("rp-token", data.token);
@@ -417,6 +443,9 @@ function init() {
                     else {
                         $('.overlay').fadeIn().children().addClass('effect_in_out');
                     }
+                },
+                complete: function(){
+                    $.mobile.loading("hide");
                 }
             });
         } else {
@@ -439,6 +468,13 @@ function init() {
                 rp_token: token
            },
            dataType: 'json',
+           beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
            success: function(data){
                 var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
                     html_to_insert = '';
@@ -461,6 +497,9 @@ function init() {
                ul_for_inserting.append(html_to_insert);
                localStorage.setItem('products_inventory', JSON.stringify(data.items_list));
                $('.model-data').live('click', showDetail);
+           },
+           complete: function(){
+                $.mobile.loading("hide");
            }
         });
     }
@@ -474,9 +513,19 @@ function init() {
                 rp_token: token
            },
            dataType: 'json',
+           beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
            success: function(data){
                analyzer_information = data.context['information'];
                processAnalyzerInformation(1);
+           },
+           complete: function(){
+            $.mobile.loading("hide");
            }
         });
     }
@@ -540,6 +589,13 @@ function init() {
                     id: $(this).data('id')
                 },
                 dataType: 'json',
+                beforeSend: function(){
+                    $.mobile.loading("show", {
+                        textVisible: true,
+                        theme: 'c',
+                        textonly: false
+                    });
+                },
                 success: function (data) {
                     $.each(data.categories, function(i, value) {
                         collapse.prepend('' +
@@ -549,6 +605,9 @@ function init() {
                             '</div> </div>');
                         });
                         collapse.collapsibleset().trigger('create');
+                },
+                complete: function(){
+                    $.mobile.loading("hide");
                 }
             });
             $(this).data('json', 't');
@@ -584,6 +643,13 @@ function init() {
                     rp_token: token
                 },
                 dataType: 'json',
+                beforeSend: function(){
+                    $.mobile.loading("show", {
+                        textVisible: true,
+                        theme: 'c',
+                        textonly: false
+                    });
+                },
                 success: function(data){
                     if(data.status.status == true){
                         eventsAfterLogin();
@@ -591,6 +657,9 @@ function init() {
                         alert('an error occurred');
                     }
 
+                },
+                complete: function(){
+                    $.mobile.loading("hide");
                 }
             });
         } else {
@@ -607,6 +676,13 @@ function init() {
                 rp_token: token
             },
             dataType: 'json',
+            beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
             success: function(data){
                 $.each(data.products, function(i, value) {
                     $('#browsers').append('<option data-id="'+value.id+'" value="'+value.name+'">')
@@ -620,6 +696,9 @@ function init() {
                 });
 
                 localStorage.setItem('information', JSON.stringify(data));
+            },
+            complete: function(){
+                $.mobile.loading("hide");
             }
         });
     }
@@ -990,31 +1069,40 @@ function init() {
           type: 'POST',
           dataType: 'json',
           data: data,
-          success: function(data) {
-            if (data.status == true) {
-                for(var i in storageClients){
-                    var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-                    if(index !== -1){
-                        var remove = -1;
-                        $.each(storageClients, function(i, value){
-                            if(value.id == clientSelected.id){
-                                remove = i;
+          beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
+            success: function(data) {
+                if (data.status == true) {
+                    for(var i in storageClients){
+                        var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+                        if(index !== -1){
+                            var remove = -1;
+                            $.each(storageClients, function(i, value){
+                                if(value.id == clientSelected.id){
+                                    remove = i;
+                                }
+                            });
+                            if(remove > -1) {
+                                storageClients.splice(remove, 1);
+                                clientSelected.products = [];
+                                localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                             }
-                        });
-                        if(remove > -1) {
-                            storageClients.splice(remove, 1);
-                            clientSelected.products = [];
-                            localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+                            $.mobile.navigate("#pagina11");
                         }
-                        alert('invoice saved')
-                        $.mobile.navigate("#pagina11");
                     }
+                } else {
+                    alert('an error occurred');
+                    $.mobile.navigate("#pagina11");
                 }
-            } else {
-                alert('an error occurred');
-                $.mobile.navigate("#pagina11");
+            },
+            complete: function(){
+                $.mobile.loading("hide");
             }
-          }
         });
     }
 }
