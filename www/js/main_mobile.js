@@ -214,7 +214,6 @@ function init() {
         }
     }
     function saveClientStorage() {
-        debugger;
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
         if(clientSelected.products == ''){
             cleanClientSelected();
@@ -463,7 +462,6 @@ function init() {
                 },
                 success: function (data) {
                     if (data.status === 'OK') {
-                        alert('validado');
                         window.localStorage.setItem("rp-token", data.token);
                         token = data.token;
                         eventsAfterLogin();
