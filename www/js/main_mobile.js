@@ -28,6 +28,7 @@ function init() {
 	
     var analyzer_information = [],
         token = window.localStorage.getItem("rp-token");
+    $('#token').html(token);
     //Automatic Login
     if(token != null) {
         authToken();
