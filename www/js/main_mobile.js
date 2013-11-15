@@ -27,6 +27,7 @@ var items_list = [], productsSelected = [], storageClients = [];
 function init() {
 	
     var analyzer_information = [],
+        imageURL = undefined;
         token = window.localStorage.getItem("rp-token");
     //Automatic Login
 
@@ -444,8 +445,8 @@ function init() {
 
     function authToken() {
         //Cuando regresa del search falla
-        //var result = checkConnection();
-        var result =  true;
+        var result = checkConnection();
+        //var result =  true;
         if(result ==  true){
             var url = urls.loginToken;
             $.ajax({
@@ -683,6 +684,7 @@ function init() {
                 success: function(data){
                     if(data.status.status == true){
                         eventsAfterLogin();
+                        uploadPhoto();
                     } else {
                         alert('an error occurred');
                     }
@@ -1031,12 +1033,17 @@ function init() {
     }    
     
     function checkConnection() {
+        try {
         var networkState = navigator.network.connection.type;
 
         if(networkState == Connection.NONE){
             return false;
         }
         return true;
+        }
+        catch(err) {
+            return true;
+        }
     }
 
     function takePicture(event) {
@@ -1049,28 +1056,31 @@ function init() {
 
     function onSuccess(imageURI) {
         var image = document.getElementById('image-camera');
-        uploadPhoto(imageURI);
+        imageURL = imageURI;
         image.src = imageURI;
     }
 
     function onFail(message) {
-        alert('Failed because: ' + message);
+        //alert('Failed because: ' + message);
     }
 
-    function uploadPhoto(imageURI) {
-        var options = new FileUploadOptions();
-        options.fileKey="file";
-        options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
-        options.mimeType="image/jpeg";
+    function uploadPhoto() {
+        if(imageURL != undefined) {
+            var options = new FileUploadOptions();
+            options.fileKey="file";
+            options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+            options.mimeType="image/jpeg";
 
-        var params = new Object();
-        params.value1 = "test";
-        params.value2 = "param";
+            var params = new Object();
+            params.value1 = "test";
+            params.value2 = "param";
 
-        options.params = params;
+            options.params = params;
 
-        var ft = new FileTransfer();
-        ft.upload(imageURI, encodeURI(urls.upload), win, fail, options);
+            var ft = new FileTransfer();
+            ft.upload(imageURI, encodeURI(urls.upload), win, fail, options);
+            imageURL = undefined;
+        }
     }
 
     function win(r) {
