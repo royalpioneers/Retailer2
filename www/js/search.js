@@ -18,13 +18,23 @@ $(function() {
                 rp_token: token
             },
             dataType: 'json',
+            beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
             success: function (data) {
                 $('#categories-list').append('<li><a id="search" data-id="0" href="#">without specifying</a></li>');
                 $.each(data.categories, function(i, value) {
                     $('#categories-list').append('<li><a id="search" data-id="'+value.id+'" href="#">'+value.name+'</a></li>');
                 });
                 $('#categories-list').listview('refresh');
-            }
+            },
+           complete: function(){
+                $.mobile.loading("hide");
+           }
         });
     }
 
@@ -42,6 +52,13 @@ $(function() {
                 text: text
             },
             dataType: 'json',
+            beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
             success: function (data) {
                 $.mobile.navigate("#pagina2");
                 $('#result-search').html('');
@@ -49,14 +66,17 @@ $(function() {
 
                     $.each(value.models, function(ind, model) {
                         if(model.photo.length > 0){
-                            $('#result-search').append('<li><img src="'+DOMAIN+model.photo[0].thumb+'"></li>');
+                            $('#result-search').append('<li><a class="add-to-group-btn" data-id="'+model.id+'" href="#product-group-list-page"><img src="'+DOMAIN+model.photo[0].thumb+'"></a></li>');
                         } else {
-                            $('#result-search').append('<li><img src="http://royalpioneers.com/static/website/images/icon/default_product.png"></li>');
+                            $('#result-search').append('<li><a class="add-to-group-btn" data-id="'+model.id+'" href="#product-group-list-page"><img src="http://royalpioneers.com/static/website/images/icon/default_product.png"></a></li>');
                         }
                     });
                 });
                 $('#categories-list').listview('refresh');
-            }
+            },
+           complete: function(){
+                $.mobile.loading("hide");
+           }
         });
     }
     function backIndex(){

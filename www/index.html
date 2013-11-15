@@ -5,9 +5,9 @@
 		<title>RP Retailer</title>
 		<meta charset="UTF-8">
 
-		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/main_mobile.css">
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">    
         <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.3.1.css">
+        <link rel="stylesheet" href="css/main_mobile.css">
 		<script src="js/idangerous.swiper-2.1.min.js"></script>
 
         <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
@@ -22,7 +22,6 @@
         <script type="text/javascript" src="js/models/client.js"></script>
         <script type="text/javascript" src="js/factory/client.js"></script>
         <script type="text/javascript" src="js/factory/address.js"></script>
-
         <script type="text/javascript" src="js/main_mobile.js"></script>
 
         <!--  GRAPHIC D3 -->
@@ -38,6 +37,7 @@
 	<body>
         <!--HOME-->
         <div data-role="page" id="pagina1">
+            Mi token <h1 id="token"></h1>
             <div id="container-login" style="display:none">
                 <div class="overlay">
                     <div id="myModal" class="modal options_detail_product">
@@ -98,10 +98,10 @@
 
         <!--INVENTORY-->
 		<div data-role="page" id="pagina2" data-position="fixed">
-			<div data-role="header" data-position="fixed" data-id="head1" data-theme="a">
+			<div data-role="header" data-id="head1" data-theme="a">
 				<a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
 				<h1>Royal Pioneers</h1>
-                <a class="header_top_options btn_more_big" id="search-redirect" href="#"><i class="icon-white icon-align-justify"></i></a>
+                <a class="header_top_options btn_more_big" data-transition="slide" id="search-redirect" href="#search.html"><i class="icon-white icon-search"></i></a>
 			</div>
 			<div data-role="content" class="content_tab">
 	            <div data-role="navbar" class="navbar">
@@ -163,117 +163,23 @@
                         </li>
                     </ul>        
                 </div><!-- /panel -->
-                <div data-role="panel" id="right-panel" data-display="overlay" data-position="right" data-theme="a">
-                    <ul data-role="listview" data-icon="false">
-                        <li data-icon="delete"><a href="#" data-rel="close">Close</a></li>
-                        <li data-role="list-divider">Share this page</li>
-                        <li><a href="#">Twitter</a></li>
-                        <li><a href="#">Facebook</a></li>
-                        <li><a href="#">Google +</a></li>
-                        <li><a href="#">Mail</a></li>
-                    </ul>
-                </div><!-- /panel -->
-
-			<div data-role="footer" data-position="fixed" data-id="foo1" data-theme="a">
-				<div class="ui-grid-a">
-		   			<div class="ui-block-c">
-		   				<a href="#pagina4" data-role="button" data-transition="flip">
-		   					<i class="icon-white icon-camera"></i>
-		   				</a>
-		   			</div>
-		   			<div class="ui-block-c">
-		   				<a href="#pagina3" data-role="button" data-transition="slide">
-		   					<i class="icon-white icon-cog"></i>
-		   				</a>
-		   			</div>
-		   		</div>
-			</div>
-		</div>
-
-		<!--SETTINGS-->
-		<div data-role="page" id="pagina3" data-fullscreen="true">
-		   <div data-role="header" data-position="fixed" data-id="head1" data-theme="a">
-				<a class="header_top_options btn_more_big" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
-				<h1>Settings</h1>
-				<a class="header_top_options btn_more_big" href=""><i class="icon-white icon-question-sign"></i></a>
-			</div>
-		   <div data-role="content">
-		   		<div data-position="" class="content_intro_button content-social">
-		   			<h2>Social Networks</h2>
-					<ul class="social-networks">
-						<li>
-							<a href=""><span class="icon-redes icon-facebook"></span>Facebook</a>
-						</li>
-						<li>
-							<a href=""><span class="icon-redes icon-twitter"></span>Twitter</a>
-						</li>
-						<li>
-							<a href=""><span class="icon-redes icon-pinterest"></span>Pinterest</a>
-						</li>
-					</ul>
-				</div>
-		   </div>
-		   <div data-role="footer" data-position="fixed" data-id="foo1" data-theme="a">
-               <div class="ui-grid-a">
-                   <div class="ui-block-c">
-                       <a href="#pagina4" data-role="button" data-transition="flip">
-                           <i class="icon-white icon-camera"></i>
-                       </a>
-                   </div>
-                   <div class="ui-block-c">
-                       <a href="#pagina3" data-role="button" data-transition="slide">
-                           <i class="icon-white icon-cog"></i>
-                       </a>
-                   </div>
-               </div>
-			</div>
-		</div>
-
-        <!--PHOTO-->
-		<div data-role="page" id="pagina4">
-			<div data-role="content" data-position="fixed">
-				<div data-position="fixed" class="content_intro_button">
-					<a href="#pagina2" data-role="button" data-transition="slide" class="btn-f-inverse">Snap</a>
-				</div>
-			</div>
 		</div>
 
 		<!--PRODUCT INVENTORY-->
 		<div data-role="page" id="pagina5">
-			<div data-role="header" data-position="fixed" data-id="head1" data-theme="a">
+			<div data-role="header" data-id="head1" data-theme="a">
                 <a class="header_top_options" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
 				<h1>Inventory</h1>
 			</div>
 			<div data-role="content">
-				<div class="inventory_detail_product">
-
-	            </div>
-	        </div><!-- /content -->
-			<div data-role="footer" data-position="fixed" data-id="foo1" data-theme="a">
-                <div class="ui-grid-b">
-                    <div class="ui-block-a">
-                        <a href="#right-panel" data-role="button">
-                            <i class="icon-white icon-user"></i>
-                        </a>
-                    </div>
-                    <div class="ui-block-c">
-                        <a href="#pagina4" data-role="button" data-transition="flip">
-                            <i class="icon-white icon-camera"></i>
-                        </a>
-                    </div>
-                    <div class="ui-block-c">
-                        <a href="#pagina3" data-role="button" data-transition="slide">
-                            <i class="icon-white icon-cog"></i>
-                        </a>
-                    </div>
-                </div>
-			</div>
+				<div class="inventory_detail_product"></div>
+	        </div>
 		</div>
 
         <!--CREATE ITEM-->
         <div data-role="page" id="pagina6">
             <div data-role="header" data-theme="a">
-                <a href="" class="btn_more_big" data-rel="back"><i class="icon-white icon-arrow-left"></i></a>
+                <a href="#pagina2" class="btn_more_big" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
                 <h1>Create Item</h1>
             </div>
             <div data-role="content">
@@ -283,7 +189,7 @@
                             <a href="" data-role="button" id="edit-image" data-theme="a">Take a Photo</a>
                         </div>
                     </a>
-                    <ul data-role="listview" data-inset="true" data-theme="a" class="create_item_list">
+                    <ul data-role="listview" data-inset="true" class="create_item_list">
                         <li>
                             <input list="browsers" name="browser" placeholder="Name Product" autofocus="true" id="browser" required>
                             <datalist id="browsers">
@@ -296,7 +202,7 @@
                         <li data-icon="arrow-r"><a href="#pagina7" data-trasition="slide">Category: <span id="category-name"></span><span id="category-id"></span></a></li>
                         <li data-icon="arrow-r"><a href="#pagina8" data-trasition="slide">Price: <span id="price-value"></span></a></li>
                         <li><input type="text" placeholder="SKU" id="sku" required></li>
-                        <li><input type="number" placeholder="Quantity" id="quantity" required></li>
+                        <li><input type="number" placeholder="Quantity" min="1" id="quantity" required></li>
                     </ul>
                     <a href="" data-role="button" id="create_item" data-theme="a">Save</a>
                 </form>
@@ -307,7 +213,7 @@
         <!--CATEGORY CREATE PRODUCT-->
         <div data-role="page" id="pagina7" data-theme="a">
             <div data-role="header">
-                <a href="btn_more_big" data-rel="back"><i class="icon-white icon-arrow-left"></i></a>
+                <a class="btn_more_big" href="#pagina6" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
                 <h1>Category</h1>
             </div>
             <div data-role="content">
@@ -317,9 +223,9 @@
         </div>
 
         <!--PRICE CREATE PRODUCT-->
-        <div data-role="page" id="pagina8">
-            <div data-role="header" data-theme="a">
-                <a class="btn_more_big" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
+        <div data-role="page" id="pagina8" data-theme="a">
+            <div data-role="header">
+                <a class="btn_more_big" data-transition="slide" href="#pagina6"><i class="icon-white icon-arrow-left"></i></a>
                 <h1>Prices</h1>
             </div>
             <div data-role="content">
@@ -368,7 +274,7 @@
 	                    </ul>
                     </div>
                     <input type="text" placeholder="Address" name="address">
-                    <input type="submit" id="add_new_client" class="btn btn-inverse btn-large">
+                    <input type="submit" id="add_new_client" class="btn btn-inverse btn-large" value="Save">
                 </form>
                 <a data-rel="back" href="#" id="return_from_add_new_client" class="hiden"></a>
             </div>
@@ -391,13 +297,13 @@
         <!--Invoice-->
         <div data-role="page" id="pagina11" data-fullscreen="true">
             <div data-role="header" data-theme="a">
-                <a class="btn_more_big" href="#pagina2"><i class="icon-white icon-arrow-left"></i></a>
+                <a class="btn_more_big" href="#pagina2" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
                 <h1>Invoice</h1>
             </div>
             <div data-role="content">
                 <div class="header_client">
                 	<span>Client</span>	
-                    <a href="#pagina9" class="ui-bar-a btn_more_big"><i class="icon-plus icon-white"></i></a>
+                    <a href="#pagina9" data-transition="slide" class="ui-bar-a btn_more_big"><i class="icon-plus icon-white"></i></a>
                 </div>
                 <ul data-role="listview" data-filter="true" id="list_clients" data-filter-placeholder="Search Clients..." data-inset="true">
                 </ul>
@@ -415,11 +321,8 @@
         <div data-role="page" id="pagina12" data-fullscreen="true">
             <div data-role="header" data-theme="a">
                 <a class="btn_more_big cleanClientSelected" data-fullscreen="true" href="#pagina11"><i class="icon-white icon-arrow-left"></i></a>
-                <!-- <h1><span class="client_name"></span>'s Details</h1> -->
-                <div data-role="fieldcontain">
-                    <select name="select-choice-1" id="selectClient">
-                    </select>
-                </div>
+                <select name="select-choice-1" id="selectClient">
+                </select>
             </div>
             <div data-role="content">
                 <aside>
@@ -435,9 +338,6 @@
                                 <input type="checkbox" name="radio-choice" id="checkbox-choice-1" value="choice-1" checked="checked" data-iconpos="right"/>
                                 <label for="checkbox-choice-1">Send Receipt</label>
                             </fieldset>
-                        </li>
-                        <li>
-                            <input type="date" id="theDate" placeholder="Yesterday, 7:34 PM">
                         </li>
                     </ul>
 
@@ -460,13 +360,11 @@
         <!--Buy client's products-->
         <div data-role="page" id="pagina13" data-fullscreen="true">
             <div data-role="header" data-theme="a">
-                <a class="saveClientStorage btn_more_big" href="#pagina12"><i class="icon-white icon-arrow-left"></i></a>
+                <a class="saveClientStorage btn_more_big" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
                 <h1><a href="" class="see_more_products_clients saveClientStorage">0</a></h1>
             </div>
-            <div data-role="content" style="text-align: center;">
-                <ul class="products_clients_add" data-role="listview" data-filter="true">
-
-                </ul>
+            <div data-role="content">
+                <ul class="products_clients_add" data-role="listview" data-filter="true"></ul>
             </div>
         </div>
 
