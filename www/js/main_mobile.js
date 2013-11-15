@@ -443,10 +443,7 @@ function init() {
         $.mobile.navigate("#pagina1");
     }
 
-    function authToken(event) {
-        alert('1');
-        event.preventDefault();
-        alert('2');
+    function authToken() {
         var result = checkConnection();
         if(result ==  true){
             var url = urls.loginToken;
