@@ -419,6 +419,7 @@ function init() {
     function authToken() {
         event.preventDefault();
         var result = checkConnection();
+        alert('1');
         if(result ==  true){
             var url = urls.loginToken;
             $.ajax({
@@ -437,6 +438,7 @@ function init() {
                 },
                 success: function (data) {
                     if (data.status === 'OK') {
+                        alert('validado');
                         window.localStorage.setItem("rp-token", data.token);
                         token = data.token;
                         eventsAfterLogin();
