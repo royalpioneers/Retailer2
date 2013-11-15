@@ -71,7 +71,7 @@ $(function(){
 	                list.append(html);
 	                list.trigger('create');
 	                $('.group-for-choose').on('click', groupForChoose);
-	                document.location.href = callback_url;
+	                $.mobile.navigate(callback_url);
             	} else {
             		alert('no groups found');
             	}
@@ -81,7 +81,7 @@ $(function(){
 
     $('.add-to-group-btn').live('click', function (e) {
     	e.preventDefault();
-        productModelId = $(this).data('id')
+        productModelId = $(this).data('id');
     	var callback_url = $(this).attr('href');
     	chooseProductGroup(callback_url);
     });
@@ -114,18 +114,18 @@ $(function(){
 
     $('.group-for-choose').on('click', groupForChoose);
 
-	$('.product-link').on('click', function (e) {
-		e.preventDefault();
-		var $this = $(this);
-		var id = $this.data('id');
-		window.localStorage['productModelId'] = id;
-		var url = '';
-		var $detailPage = $('#product-detail-page');
-		$detailPage.find('h1').text('fooo');
-		var detail = '#product-detail-page';
-		document.location.href = detail;
-		// TODO: add ajax for get product detail by ajax
-	});
+//	$('.product-link').on('click', function (e) {
+//		e.preventDefault();
+//		var $this = $(this);
+//		var id = $this.data('id');
+//		window.localStorage['productModelId'] = id;
+//		var url = '';
+//		var $detailPage = $('#product-detail-page');
+//		$detailPage.find('h1').text('fooo');
+//		var detail = '#product-detail-page';
+//		document.location.href = detail;
+//		// TODO: add ajax for get product detail by ajax
+//	});
 
 	$('#form-add-group').on('click', function (e) {
 		e.preventDefault();
