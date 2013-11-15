@@ -29,8 +29,9 @@ function init() {
     var analyzer_information = [],
         token = window.localStorage.getItem("rp-token");
     //Automatic Login
-    alert('inicio');
+    alert('inicio: '+token);
     if(token != null) {
+        alert('auth');
         authToken();
     } else {
         $('#container-login').css('display','inline');
