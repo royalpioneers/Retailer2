@@ -49,9 +49,9 @@ $(function() {
 
                     $.each(value.models, function(ind, model) {
                         if(model.photo.length > 0){
-                            $('#result-search').append('<li><img src="'+DOMAIN+model.photo[0].thumb+'"></li>');
+                            $('#result-search').append('<li><a class="add-to-group-btn" data-id="'+model.id+'" href="#product-group-list-page"><img src="'+DOMAIN+model.photo[0].thumb+'"></a></li>');
                         } else {
-                            $('#result-search').append('<li><img src="http://royalpioneers.com/static/website/images/icon/default_product.png"></li>');
+                            $('#result-search').append('<li><a class="add-to-group-btn" data-id="'+model.id+'" href="#product-group-list-page"><img src="http://royalpioneers.com/static/website/images/icon/default_product.png"></a></li>');
                         }
                     });
                 });

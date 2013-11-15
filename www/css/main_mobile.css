@@ -637,9 +637,12 @@ margin-left: 7em;
     }
 .photo-product{
     width: 7em;
-    height: 7em;
+    height: 10em;
     text-align: center;
      margin:0 auto 0 auto;
+}
+#edit-image{
+    width: 8em;
 }
 .btn_more_big,.header_top_options{
     padding: 1% !important; 

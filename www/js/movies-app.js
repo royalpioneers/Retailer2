@@ -1,47 +1,48 @@
 $(function(){
 
-	var DOMAIN = app.getDomain();
+	var DOMAIN = app.getDomain(),
+        productModelId = undefined;
 
-	function setContentSize() {
-		$('.swiper-content').css({
-			height: $(window).height()-$('.swiper-nav').height()
-		})
-	}
-	setContentSize();
-	$(window).resize(function(){
-		setContentSize();
-	});
-
-	//Swiper Content
-	var contentSwiper = $('.swiper-content').swiper({
-		onSlideChangeStart: function(){
-			updateNavPosition()
-		}
-	});
-	//Nav
-	var navSwiper = $('.swiper-nav').swiper({
-		visibilityFullFit: true,
-		slidesPerView:'auto',
-		//Thumbnails Clicks
-		onSlideClick: function(){
-			contentSwiper.swipeTo( navSwiper.clickedSlideIndex )
-		}
-	})
-
-	//Update Nav Position
-	function updateNavPosition(){
-		$('.swiper-nav .active-nav').removeClass('active-nav')
-		var activeNav = $('.swiper-nav .swiper-slide').eq(contentSwiper.activeIndex).addClass('active-nav')
-		if (!activeNav.hasClass('swiper-slide-visible')) {
-			if (activeNav.index()>navSwiper.activeIndex) {
-				var thumbsPerNav = Math.floor(navSwiper.width/activeNav.width())-1
-				navSwiper.swipeTo(activeNav.index()-thumbsPerNav)
-			}
-			else {
-				navSwiper.swipeTo(activeNav.index())
-			}	
-		}
-	}
+//	function setContentSize() {
+//		$('.swiper-content').css({
+//			height: $(window).height()-$('.swiper-nav').height()
+//		})
+//	}
+//	setContentSize();
+//	$(window).resize(function(){
+//		setContentSize();
+//	});
+//
+//	//Swiper Content
+//	var contentSwiper = $('.swiper-content').swiper({
+//		onSlideChangeStart: function(){
+//			updateNavPosition()
+//		}
+//	});
+//	//Nav
+//	var navSwiper = $('.swiper-nav').swiper({
+//		visibilityFullFit: true,
+//		slidesPerView:'auto',
+//		//Thumbnails Clicks
+//		onSlideClick: function(){
+//			contentSwiper.swipeTo( navSwiper.clickedSlideIndex )
+//		}
+//	})
+//
+//	//Update Nav Position
+//	function updateNavPosition(){
+//		$('.swiper-nav .active-nav').removeClass('active-nav')
+//		var activeNav = $('.swiper-nav .swiper-slide').eq(contentSwiper.activeIndex).addClass('active-nav')
+//		if (!activeNav.hasClass('swiper-slide-visible')) {
+//			if (activeNav.index()>navSwiper.activeIndex) {
+//				var thumbsPerNav = Math.floor(navSwiper.width/activeNav.width())-1
+//				navSwiper.swipeTo(activeNav.index()-thumbsPerNav)
+//			}
+//			else {
+//				navSwiper.swipeTo(activeNav.index())
+//			}
+//		}
+//	}
 
 	// choose product group view
 
@@ -60,6 +61,7 @@ $(function(){
             	rp_token: window.localStorage['rp-token']
             },
             success: function (data) {
+
             	if (data.status === 'success') {
             		var len = data.groups.length, i, group;
 	                for (i=0; i<len; i++) {
@@ -77,8 +79,9 @@ $(function(){
         })
     }
 
-    $('#add-to-group-btn').on('click', function (e) {
+    $('.add-to-group-btn').live('click', function (e) {
     	e.preventDefault();
+        productModelId = $(this).data('id')
     	var callback_url = $(this).attr('href');
     	chooseProductGroup(callback_url);
     });
@@ -93,15 +96,15 @@ $(function(){
             url: url,
             type: 'POST',
             data: {
-                productModelId: window.localStorage['productModelId'],
+                productModelId: productModelId,
                 groupId: $this.data('id'),
                 rp_token: window.localStorage['rp-token']
             },
             dataType: 'json',
             success: function (data) {
                 if (data.status === 'success') {
-                    delete window.localStorage['productModelId'];
-                    document.location.href = $this.attr('href');
+                    productModelId = undefined;
+                    $.mobile.navigate("#pagina2");
                 } else {
                 	alert(data.status);
                 }
@@ -124,7 +127,7 @@ $(function(){
 		// TODO: add ajax for get product detail by ajax
 	});
 
-	$('#form-add-group').on('submit', function (e) {
+	$('#form-add-group').on('click', function (e) {
 		e.preventDefault();
 		var $this = $(this);
 		$.ajax({
@@ -137,7 +140,8 @@ $(function(){
 			dataType: 'json',
 			success: function (data) {
 				if (data.status === 'success') {
-					document.location.href = '#product-group-list-page';
+                    var callback_url = '#product-group-list-page';
+    	            chooseProductGroup(callback_url);
 				}
 			}
 		});
