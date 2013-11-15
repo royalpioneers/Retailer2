@@ -84,12 +84,15 @@ function init() {
         pageClientShow();
     }
 
-    function pageClientShow() {        
+    function pageClientShow() { 
+    debugger;       
         $('.products_clients_add').html('');
         var html = "";
         var products = JSON.parse(localStorage.getItem('products_inventory'));
         for(var i in products) {
+            debugger;
             if(getArrayIndexProductsSelected().indexOf(products[i].id) !== -1){
+                debugger;
                 html += '<li class="myProductSelected">\
                     <a href="#" data-role="button" class="productSelected" data-id="'+products[i].id+'" data-selected="true">\
                         <img src="'+DOMAIN+products[i].model_image+'">\
@@ -98,6 +101,7 @@ function init() {
                 </li>'
             }
             else{
+                debugger;
                 html += '<li>\
                     <a href="#" data-role="button" class="productSelected" data-id="'+products[i].id+'" data-selected="false">\
                         <img src="'+DOMAIN+products[i].model_image+'">\
@@ -111,14 +115,16 @@ function init() {
     }
     
     function getClientSelected() {
+        debugger;
     	var clientSelected = false;
-        if (typeof(localStorage.getItem('clientSelected')) == 'object') {
+        if (typeof(JSON.parse(localStorage.getItem('clientSelected'))) == 'object') {
         	clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         }
         return clientSelected;
     }
 
     function getArrayIndexProductsSelected(){
+        debugger;
     	/* return indexs of client selected */
         var arrayIndexs = [];
         var clientSelected = getClientSelected();
@@ -156,6 +162,7 @@ function init() {
     }
 
     function selectProduct(e) {
+        debugger;
         e.preventDefault();
         var products = JSON.parse(localStorage.getItem('products_inventory')),
             clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
@@ -164,9 +171,12 @@ function init() {
         var li = $(this).parent('li');
         
         for(var i in products){
+            debugger;
             if(!$(this).data('selected')){
+                debugger;
                 //Add Products to LocalStorage
                 if(products[i].id === id){
+                    debugger;
                     productSelected = {
                         'id': products[i].id,
                         'product_name': products[i].product_name,
@@ -186,6 +196,7 @@ function init() {
                 }
             //Remove Products to LocalStorage
             } else {
+                debugger;
                 var remove = -1;
                 $.each(clientSelected.products, function(x, value){
                     if(value.id == id){                                                
@@ -193,6 +204,7 @@ function init() {
                     }
                 });
                 if(remove > -1) {
+                    debugger;
                     clientSelected.products.splice(remove, 1);
                     console.log('1: '+JSON.stringify(clientSelected))
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
@@ -314,6 +326,7 @@ function init() {
     }
     
     function getClientById(id) {
+        debugger;
     	/* from local storage */
     	for (index in storageClients) {
     		var client = storageClients[index];
@@ -362,11 +375,14 @@ function init() {
                 $('#list_clients').trigger('create');
                 $(":radio").unbind("change");
                 $(":radio").bind("change", function (event){
+                    debugger;
                     if(localStorage.getItem('clientSelected')){
+                        debugger;
                         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
                         //validar si esta repetido
                         var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
                         if(index !== -1){
+                            debugger;
                             storageClients[index] = clientSelected;
                         }
                     }
@@ -374,13 +390,17 @@ function init() {
                     var self = $(this);
                     for(var client in items_list){
                         if(storageClients != ''){
+                            debugger;
                             var result = false;
                             $.each(storageClients, function(i, value) {
+                                debugger;
                                 if(value.id === self.data('id')){
+                                    debugger;
                                 	result = true;
                                 	/* get client from storage */
                                 	var client_exists = getClientById(items_list[client].id);
                                 	if (client_exists) {
+                                        debugger;
                                 		localStorage.setItem("clientSelected", JSON.stringify(client_exists));
                                 		clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
                                 		$.mobile.navigate("#pagina12");
@@ -422,6 +442,7 @@ function init() {
     }
 
     function createNewClient(client) {
+        debugger;
         var clientSelected = {
             'id': client.id,
             'name': client.name,
@@ -947,9 +968,6 @@ function init() {
           legend.append("rect").attr("x", width - 18).attr("width", 18).attr("height", 18).style("fill", color);
           legend.append("text").attr("x", width - 24).attr("y", 9).attr("dy", ".35em").style("text-anchor", "end").text(function(d) { return d; });
         }
-        data_graphic =[
-            {Name: "Fisrt", Sale: "12354", Profit: "1054"}
-        ];
         create_graphic(data_graphic);
     }
 

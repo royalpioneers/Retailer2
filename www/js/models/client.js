@@ -214,8 +214,8 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	
 	model.render_city_to_list = function(city){
 		var li = $('#'+model.id_template_option_city).html();
-		li = li.replace('__id__', city.id);
-		li = li.replace('__name__', city.name);
+		li = li.replace(/__id__/g, city.id);
+		li = li.replace(/__name__/g, city.name);
 		model.get_form_field('city').append(li);
 	};
 	
