@@ -469,6 +469,7 @@ function init() {
                         eventsAfterLogin();
                     }
                     else {
+                        $('#container-login').css('display','inline');
                         $('.overlay').fadeIn().children().addClass('effect_in_out');
                     }
                 },
@@ -484,6 +485,7 @@ function init() {
     function eventsAfterLogin() {
         getInventoryItems();
         getAnalyzerInformation();
+        $('#container-login').css('display','none');
         $.mobile.navigate("#pagina2");
     }
 
