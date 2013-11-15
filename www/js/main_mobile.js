@@ -1073,7 +1073,6 @@ function init() {
             var options = new FileUploadOptions();
             options.fileKey="file";
             options.fileName=imageURL.substr(imageURL.lastIndexOf('/')+1);
-            alert(options.fileName);
             options.mimeType="image/jpeg";
 
             var params = new Object();
@@ -1081,6 +1080,7 @@ function init() {
             params.value2 = "param";
 
             options.params = params;
+            alert(urls.upload);
 
             var ft = new FileTransfer();
             ft.upload(imageURL, encodeURI(urls.upload), win, fail, options);
@@ -1096,7 +1096,9 @@ function init() {
     }
 
     function fail(error) {
-        alert("An error has occurred: Code = " + error.code);
+        alert("An error has occurred 1: Code = " + error.code);
+        alert("An error has occurred 2: Code = " + error.source);
+        alert("An error has occurred 3: Code = " + error.target);
         imageURL = undefined;
     }
 
