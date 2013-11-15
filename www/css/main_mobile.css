@@ -566,7 +566,7 @@
     }
     /*pagina12*/
     .without_radious .ui-li-aside {
-        width: 16%;
+        width: 15%;
         text-align: center;
         display: inline-block;
         float: none;
@@ -582,7 +582,7 @@
         max-width: 6em;
     }
     .without_radious .ui-input-text.ui-shadow-inset.ui-corner-all.ui-btn-shadow.ui-body-c {
-        width: 5em;
+        width: 25%;
         display: inline-block;
         margin: 0;
         margin-right: 5%;
@@ -614,7 +614,7 @@
     }
     .removeProduct {
         float: right; margin-right: 14px; 
-        margin-top: 1em;
+        margin-top: 1.5em;
     }
     @media (min-width:320px) and (max-width:420px){
         #pagina12 .ui-select {
@@ -638,7 +638,7 @@ margin: 0 auto 0 auto;
 .btn_more_big,.header_top_options{
     padding: 1% !important; 
     text-align: center;
-    padding: 15px 25px !important;
+    padding: 20px 25px !important;
 }
 .btn_more_big .ui-btn-inner,.header_top_options .ui-btn-inner{
     border: none !important;
@@ -651,7 +651,7 @@ div[data-role='header']{
     padding: 8px 0 !important;
 position: relative;
 overflow: hidden;
-min-height: 4.5em;
+min-height: 4.8em;
 }
 #create_item {
     padding: 3%;
