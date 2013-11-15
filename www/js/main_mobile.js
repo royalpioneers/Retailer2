@@ -1058,6 +1058,8 @@ function init() {
         var image = document.getElementById('image-camera');
         imageURL = imageURI;
         image.src = imageURI;
+        alert(imageURL);
+        uploadPhoto()
     }
 
     function onFail(message) {
