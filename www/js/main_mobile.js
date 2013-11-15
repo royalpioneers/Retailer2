@@ -28,8 +28,8 @@ function init() {
 	
     var analyzer_information = [],
         token = window.localStorage.getItem("rp-token");
-    $('#token').html(token);
     //Automatic Login
+
     if(token != null) {
         authToken();
     } else {
@@ -444,9 +444,7 @@ function init() {
     }
 
     function authToken() {
-        event.preventDefault();
         var result = checkConnection();
-        alert('1');
         if(result ==  true){
             var url = urls.loginToken;
             $.ajax({

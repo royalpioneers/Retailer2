@@ -79,7 +79,7 @@ $(function() {
            }
         });
     }
-    function backIndex(){
+    function backIndex() {
         window.location.replace("index.html");
     }
 });
