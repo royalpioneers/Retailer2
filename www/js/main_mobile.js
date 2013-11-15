@@ -443,9 +443,9 @@ function init() {
     }
 
     function authToken() {
-        alert('1');
-        var result = checkConnection();
-        alert('result: '+result);
+        //var result = checkConnection();
+        var result =  true;
+        alert('aa');
         if(result ==  true){
             var url = urls.loginToken;
             $.ajax({
