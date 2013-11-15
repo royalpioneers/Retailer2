@@ -17,6 +17,13 @@ var ClientFactory = function(urls, token) {
 			type: 'POST',
 			data: {rp_token: factory.token},
 			dataType: 'json',
+			beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
 			success: function(data){
 				if (data.status == 'ok') {
 					window.localStorage.setItem(factory.id_client_list, JSON.stringify(data.list));
@@ -24,7 +31,10 @@ var ClientFactory = function(urls, token) {
 				} else {
 					handler([]);
 				}
-			}
+			},
+           complete: function(){
+                $.mobile.loading("hide");
+           }
 	    });
 	};
 	
@@ -35,6 +45,13 @@ var ClientFactory = function(urls, token) {
 			type: 'POST',
 			data: params,
 			dataType: 'json',
+			beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
 			success: function(data){
 				if (data.status == 'ok') {
 					data.client.name = params.name;
@@ -45,7 +62,10 @@ var ClientFactory = function(urls, token) {
 				} else {
 					handler(false, data.messages);
 				}
-			}
+			},
+           complete: function(){
+                $.mobile.loading("hide");
+           }
 	    });
 	};
 	
@@ -66,6 +86,13 @@ var ClientFactory = function(urls, token) {
 			type: 'POST',
 			data: {rp_token: factory.token},
 			dataType: 'json',
+			beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
 			success: function(data){
 				if (data.status == 'ok') {
 					window.localStorage.setItem(factory.id_company_types, JSON.stringify(data.list));
@@ -73,7 +100,10 @@ var ClientFactory = function(urls, token) {
 				} else {
 					handler([]);
 				}
-			}
+			},
+           complete: function(){
+                $.mobile.loading("hide");
+           }
 	    });
 	};
 	
