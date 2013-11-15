@@ -13,7 +13,7 @@ var urls = {
     'saveProduct': DOMAIN+'/mobile/create/product/',
     'productInformation': DOMAIN+'/mobile/product-information/',
     'category':DOMAIN+'/mobile/category/',
-    'upload': DOMAIN+'upload-image/product/',
+    'upload': DOMAIN+'/upload-image/product/',
     'client_create': DOMAIN+'/mobile/client/create/',
     'client_list': DOMAIN+'/mobile/client/list/',
     'client_company_types': DOMAIN+'/mobile/client/company_types/',
