@@ -1107,8 +1107,9 @@ function init() {
             $.ajax({
                 url: urls.upload,
                 data: {
-                    data: encodeURI(urls.upload)
+                    data: encodeURIComponent(urls.upload)
                 },
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                 type: 'POST',
                 success: function (data) {
                     alert('ok')
@@ -1119,6 +1120,7 @@ function init() {
                 data: {
                     data: 'aa'
                 },
+                dataType: 'json',
                 type: 'POST',
                 success: function (data) {
                     alert('ok')
