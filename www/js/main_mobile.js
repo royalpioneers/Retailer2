@@ -1058,7 +1058,6 @@ function init() {
         var image = document.getElementById('image-camera');
         imageURL = imageURI;
         image.src = imageURI;
-        alert(imageURL);
         uploadPhoto()
     }
 
@@ -1071,6 +1070,7 @@ function init() {
             var options = new FileUploadOptions();
             options.fileKey="file";
             options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+            alert(options.fileName);
             options.mimeType="image/jpeg";
 
             var params = new Object();
@@ -1093,7 +1093,7 @@ function init() {
     }
 
     function fail(error) {
-        //alert("An error has occurred: Code = " + error.code);
+        alert("An error has occurred: Code = " + error.code);
     }
 
     function sendProductsInvoice(event) {
