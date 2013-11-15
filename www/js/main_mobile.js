@@ -443,9 +443,9 @@ function init() {
     }
 
     function authToken() {
+        //Cuando regresa del search falla
         //var result = checkConnection();
         var result =  true;
-        alert('aa');
         if(result ==  true){
             var url = urls.loginToken;
             $.ajax({
