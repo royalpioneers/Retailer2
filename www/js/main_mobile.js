@@ -270,7 +270,7 @@ function init() {
     var stateFactory = new StateFactory(urls, token);
     var cityFactory = new CityFactory(urls, token);
     var clientFactory = new ClientFactory(urls, token);
-    var client = ClientModel(countryFactory, stateFactory, cityFactory, clientFactory);
+    var client = ClientModel(countryFactory, stateFactory, cityFactory, clientFactory, listClients);
     client.init(); /* start list */
 
     //Functions
