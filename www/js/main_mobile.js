@@ -443,7 +443,9 @@ function init() {
     }
 
     function authToken() {
+        alert('1');
         var result = checkConnection();
+        alert('result: '+result);
         if(result ==  true){
             var url = urls.loginToken;
             $.ajax({
@@ -453,13 +455,13 @@ function init() {
                 },
                 type: 'POST',
                 dataType: 'json',
-                beforeSend: function(){
-                    $.mobile.loading("show", {
-                        textVisible: true,
-                        theme: 'c',
-                        textonly: false
-                    });
-                },
+//                beforeSend: function(){
+//                    $.mobile.loading("show", {
+//                        textVisible: true,
+//                        theme: 'c',
+//                        textonly: false
+//                    });
+//                },
                 success: function (data) {
                     if (data.status === 'OK') {
                         window.localStorage.setItem("rp-token", data.token);
