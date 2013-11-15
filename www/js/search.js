@@ -44,11 +44,10 @@ $(function() {
             dataType: 'json',
             success: function (data) {
                 $.mobile.navigate("#pagina2");
-
+                $('#result-search').html('');
                 $.each(data.result, function(i, value) {
 
                     $.each(value.models, function(ind, model) {
-                        debugger;
                         if(model.photo.length > 0){
                             $('#result-search').append('<li><img src="'+DOMAIN+model.photo[0].thumb+'"></li>');
                         } else {

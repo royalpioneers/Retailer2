@@ -30,7 +30,6 @@ function init() {
         token = window.localStorage.getItem("rp-token");
     //Automatic Login
     if(token != null) {
-        debugger;
         authToken();
     } else {
         $('#container-login').css('display','inline');
@@ -110,11 +109,15 @@ function init() {
         $('.products_clients_add').trigger('create');
     }
     function getArrayIndexProductsSelected(){
+    	/* return indexs of client selected */
         var arrayIndexs = [];
+        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         for(var i in storageClients){
-            for(var j in storageClients[i].products){
-                arrayIndexs.push(storageClients[i].products[j].id);
-            }
+        	if (storageClients[i].id == clientSelected.id) {
+	            for(var j in storageClients[i].products){
+	                arrayIndexs.push(storageClients[i].products[j].id);
+	            }
+        	}
         }
         return arrayIndexs;
     }
@@ -145,10 +148,17 @@ function init() {
         e.preventDefault();
         var products = JSON.parse(localStorage.getItem('products_inventory')),
             clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
-            currentPrice = parseFloat($('.see_more_products_clients').text()),
             productSelected,
             id = $(this).data('id');
         var li = $(this).parent('li');
+        
+        var currentPrice = $('.see_more_products_clients').text();
+        if (isNaN(parseFloat(currentPrice))) {
+        	currentPrice = 0;
+        } else {
+        	currentPrice = parseFloat(currentPrice);
+        }
+        
         for(var i in products){
             if(!$(this).data('selected')){
                 //Add Products to LocalStorage
@@ -223,9 +233,11 @@ function init() {
         }
         else if(clientSelected.type === 2) {
             price = product.retail_price;
-            if (typeof(product.clients_discount[clientSelected.id]) != 'undefined') {
-        		price = product.clients_discount[clientSelected.id].amount;
-        	}
+            if (typeof(product.clients_discount) != 'undefined') {
+	            if (typeof(product.clients_discount[clientSelected.id]) != 'undefined') {
+	        		price = product.clients_discount[clientSelected.id].amount;
+	        	}
+            }
         }
         return price;
     }
@@ -310,7 +322,7 @@ function init() {
                 ul_for_list_clients.append(html_to_insert);
                 $('#list_clients').trigger('create');
                 $(":radio").unbind("change");
-                $(":radio").bind("change", function (event){
+                $(":radio").bind("change", function (event){	
                     if(localStorage.getItem('clientSelected')){
                         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
                         //validar si esta repetido
@@ -380,6 +392,7 @@ function init() {
         event.preventDefault();
         $('#container-login').css('display','inline');
         window.localStorage.removeItem("rp-token");
+        window.localStorage.removeItem("clientSelected");
         $.mobile.navigate("#pagina1");
     }
 
@@ -963,7 +976,9 @@ function init() {
         //alert("An error has occurred: Code = " + error.code);
     }
 
-    function sendProductsInvoice() {
+    function sendProductsInvoice(event) {
+        event.preventDefault();
+        debugger;
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var url = urls.send_invoice;
         var data = {
@@ -988,13 +1003,15 @@ function init() {
                         });
                         if(remove > -1) {
                             storageClients.splice(remove, 1);
-                            localStorage.setItem("clientSelected",'');
+                            clientSelected.products = [];
+                            localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                         }
-                        //listClients();
+                        alert('invoice saved')
                         $.mobile.navigate("#pagina11");
                     }
                 }
             } else {
+                alert('an error occurred');
                 $.mobile.navigate("#pagina11");
             }
           }
