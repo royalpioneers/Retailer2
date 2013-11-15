@@ -1094,7 +1094,7 @@ function init() {
                 type: 'POST',
                 success: function (data) {
                     alert('ok')
-                },
+                }
             });
 
 
