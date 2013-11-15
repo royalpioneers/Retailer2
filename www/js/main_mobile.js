@@ -1069,7 +1069,7 @@ function init() {
         if(imageURL != undefined) {
             var options = new FileUploadOptions();
             options.fileKey="file";
-            options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+            options.fileName=imageURL.substr(imageURL.lastIndexOf('/')+1);
             alert(options.fileName);
             options.mimeType="image/jpeg";
 
@@ -1080,13 +1080,13 @@ function init() {
             options.params = params;
 
             var ft = new FileTransfer();
-            ft.upload(imageURI, encodeURI(urls.upload), win, fail, options);
-            imageURL = undefined;
+            ft.upload(imageURL, encodeURI(urls.upload), win, fail, options);
         }
     }
 
     function win(r) {
         alert('Win');
+        imageURL = undefined;
 //        console.log("Code = " + r.responseCode);
 //        console.log("Response = " + r.response);
 //        console.log("Sent = " + r.bytesSent);
@@ -1094,6 +1094,7 @@ function init() {
 
     function fail(error) {
         alert("An error has occurred: Code = " + error.code);
+        imageURL = undefined;
     }
 
     function sendProductsInvoice(event) {
