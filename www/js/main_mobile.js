@@ -108,12 +108,21 @@ function init() {
         $('.products_clients_add').append(html);
         $('.products_clients_add').trigger('create');
     }
+    
+    function getClientSelected() {
+    	var clientSelected = false;
+        if (typeof(localStorage.getItem('clientSelected')) == 'object') {
+        	clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+        }
+        return clientSelected;
+    }
+
     function getArrayIndexProductsSelected(){
     	/* return indexs of client selected */
         var arrayIndexs = [];
-        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+        var clientSelected = getClientSelected();
         for(var i in storageClients){
-        	if (storageClients[i].id == clientSelected.id) {
+        	if (storageClients && storageClients[i].id == clientSelected.id) {
 	            for(var j in storageClients[i].products){
 	                arrayIndexs.push(storageClients[i].products[j].id);
 	            }
@@ -178,6 +187,7 @@ function init() {
                     var totalProduct = parseFloat(productSelected.price) * productSelected.quantity;
                     clientSelected.total = totalProduct + currentPrice;
                     $('.see_more_products_clients').text(clientSelected.total);
+                    console.log('SE SELECCIONO' + clientSelected.id);
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     break;
                 }
@@ -193,6 +203,7 @@ function init() {
                 });
                 if(remove > -1) {
                     clientSelected.products.splice(remove, 1);
+                    console.log('1: '+JSON.stringify(clientSelected))
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     $(this).data('selected',false);
                     $(li).removeClass("myProductSelected");
@@ -290,6 +301,17 @@ function init() {
         }
     }
     
+    function getClientById(id) {
+    	/* from local storage */
+    	for (index in storageClients) {
+    		var client = storageClients[index];
+    		if (client.id == id) {
+    			return client;
+    		}
+    	}
+    	return false;
+    }
+    
     function listClients() {
         var url = urls.clients_list;
         var a = true;
@@ -320,7 +342,7 @@ function init() {
                 ul_for_list_clients.append(html_to_insert);
                 $('#list_clients').trigger('create');
                 $(":radio").unbind("change");
-                $(":radio").bind("change", function (event){	
+                $(":radio").bind("change", function (event){
                     if(localStorage.getItem('clientSelected')){
                         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
                         //validar si esta repetido
@@ -336,10 +358,16 @@ function init() {
                             var result = false;
                             $.each(storageClients, function(i, value) {
                                 if(value.id === self.data('id')){
-                                    localStorage.setItem("clientSelected", JSON.stringify(storageClients[client]));
-                                    clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-                                    $.mobile.navigate("#pagina12");
-                                    result = true;
+                                	result = true;
+                                	/* get client from storage */
+                                	var client_exists = getClientById(items_list[client].id);
+                                	if (client_exists) {
+                                		localStorage.setItem("clientSelected", JSON.stringify(client_exists));
+                                		clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+                                		$.mobile.navigate("#pagina12");
+                                	} else {
+                                		result = false;
+                                	}                                    
                                 }
                             });
                             if(result == false) {
@@ -362,7 +390,6 @@ function init() {
                     }
                     $('#selectClient').append(html);
                     $('#selectClient-button > span > span > span').text(clientSelected.name);
-
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     if(clientSelected.products == ''){
                         $.mobile.navigate("#pagina13");
@@ -900,7 +927,6 @@ function init() {
                 }
              }
         });
-
         localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
     }
 
@@ -976,7 +1002,6 @@ function init() {
 
     function sendProductsInvoice(event) {
         event.preventDefault();
-        debugger;
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var url = urls.send_invoice;
         var data = {
