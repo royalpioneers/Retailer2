@@ -29,9 +29,8 @@ function init() {
     var analyzer_information = [],
         token = window.localStorage.getItem("rp-token");
     //Automatic Login
-    alert('inicio: '+token);
+
     if(token != null) {
-        alert('auth');
         authToken();
     } else {
         $('#container-login').css('display','inline');
@@ -444,10 +443,11 @@ function init() {
         $.mobile.navigate("#pagina1");
     }
 
-    function authToken() {
-        event.preventDefault();
-        var result = checkConnection();
+    function authToken(event) {
         alert('1');
+        event.preventDefault();
+        alert('2');
+        var result = checkConnection();
         if(result ==  true){
             var url = urls.loginToken;
             $.ajax({
