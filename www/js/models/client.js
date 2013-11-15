@@ -1,4 +1,4 @@
-var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFactory) {
+var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFactory, listClients) {
 	var model= this;
 	model.messages = [];
 	model.id_city_autocomplete = 'id_city_autocomplete';
@@ -90,7 +90,8 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 					/* model.apply_event_select(); 
 					model.refresh_list(); */
 					model.clear_form(5);
-					$('#new_invoice').trigger('click');
+					listClients();
+					$.mobile.navigate("#pagina11");
 					/* model.success_create(); */
 				}
 			});
