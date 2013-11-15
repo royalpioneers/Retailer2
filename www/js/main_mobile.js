@@ -29,9 +29,8 @@ function init() {
     var analyzer_information = [],
         token = window.localStorage.getItem("rp-token");
     //Automatic Login
-    alert('inicio: '+token);
+
     if(token != null) {
-        alert('auth');
         authToken();
     } else {
         $('#container-login').css('display','inline');
@@ -84,7 +83,7 @@ function init() {
         pageClientShow();
     }
 
-    function pageClientShow() {
+    function pageClientShow() {        
         $('.products_clients_add').html('');
         var html = "";
         var products = JSON.parse(localStorage.getItem('products_inventory'));
@@ -148,6 +147,7 @@ function init() {
 
         if(localStorage.getItem('clientSelected')){
             $.mobile.navigate("#pagina13");
+            getCurrentTotal();
         }
         else{
             alert('Chooce Someone!');
@@ -162,13 +162,6 @@ function init() {
             id = $(this).data('id');
         var li = $(this).parent('li');
         
-        var currentPrice = $('.see_more_products_clients').text();
-        if (isNaN(parseFloat(currentPrice))) {
-        	currentPrice = 0;
-        } else {
-        	currentPrice = parseFloat(currentPrice);
-        }
-        
         for(var i in products){
             if(!$(this).data('selected')){
                 //Add Products to LocalStorage
@@ -182,23 +175,19 @@ function init() {
                         'model_image': products[i].model_image,
                         'discount': getDiscount(products[i])
                     };
-                    clientSelected.products.push(productSelected);
-                    $(this).data('selected', true);
-                    $(li).addClass("myProductSelected");
-                    var totalProduct = parseFloat(productSelected.price) * productSelected.quantity;
-                    clientSelected.total = totalProduct + currentPrice;
-                    $('.see_more_products_clients').text(clientSelected.total);
+                    clientSelected.products.push(productSelected);                                                                        
                     console.log('SE SELECCIONO' + clientSelected.id);
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+                    $(this).data('selected', true);
+                    $(li).addClass("myProductSelected");   
+                    $('.see_more_products_clients').text(getCurrentTotal());
                     break;
                 }
             //Remove Products to LocalStorage
             } else {
                 var remove = -1;
                 $.each(clientSelected.products, function(x, value){
-                    if(value.id == id){
-                        clientSelected.total = currentPrice - (parseFloat(calculatePrice(value)) * value.quantity);
-                        $('.see_more_products_clients').text(clientSelected.total);
+                    if(value.id == id){                                                
                         remove = x;
                     }
                 });
@@ -208,14 +197,23 @@ function init() {
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     $(this).data('selected',false);
                     $(li).removeClass("myProductSelected");
+                    $('.see_more_products_clients').text(getCurrentTotal());
                     pageMyProductsShow();
                     break;
                 }
             }
         }
     }
+    function getCurrentTotal(){
+        var totalPrice = 0;
+        var products = JSON.parse(localStorage.getItem('clientSelected')).products;
+        for(var i in products){
+            totalPrice += parseFloat(products[i].price); 
+        }
+        return totalPrice;
+    }
+
     function saveClientStorage() {
-        debugger;
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
         if(clientSelected.products == ''){
             cleanClientSelected();
@@ -445,9 +443,9 @@ function init() {
     }
 
     function authToken() {
-        event.preventDefault();
-        var result = checkConnection();
-        alert('1');
+        //var result = checkConnection();
+        var result =  true;
+        alert('aa');
         if(result ==  true){
             var url = urls.loginToken;
             $.ajax({
@@ -457,16 +455,15 @@ function init() {
                 },
                 type: 'POST',
                 dataType: 'json',
-                beforeSend: function(){
-                    $.mobile.loading("show", {
-                        textVisible: true,
-                        theme: 'c',
-                        textonly: false
-                    });
-                },
+//                beforeSend: function(){
+//                    $.mobile.loading("show", {
+//                        textVisible: true,
+//                        theme: 'c',
+//                        textonly: false
+//                    });
+//                },
                 success: function (data) {
                     if (data.status === 'OK') {
-                        alert('validado');
                         window.localStorage.setItem("rp-token", data.token);
                         token = data.token;
                         eventsAfterLogin();
