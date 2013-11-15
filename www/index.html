@@ -281,7 +281,14 @@
         </div>
         
         <div id="id_template_option_city" style="display: none">
-        	<li><a class="class_item_city" data-value="__id__">__name__</a></div>
+        	<li data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c" class="ui-btn ui-btn-up-c ui-btn-icon-right ui-li-has-arrow ui-li ui-first-child ui-screen-hidden">
+        		<div class="ui-btn-inner ui-li">
+	               <div class="ui-btn-text">
+	                   <a href="#" class="ui-link-inherit class_item_city" data-value="__id__">__name__</a>
+	               </div>
+	               <span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>
+	           </div>
+	       </li>    
         </div>
 
         <!--Client-->
@@ -325,21 +332,6 @@
             </div>
             <div data-role="content">
                 <aside>
-                    <div class="header_client">
-                        <span>Details</span>
-                    </div>
-                    <ul data-role="listview" data-inset="true">
-                        <li class="without_radious">
-                            <h2>Receipt Number 5HF5</h2>
-                        </li>
-                        <li>
-                            <fieldset data-role="controlgroup">
-                                <input type="checkbox" name="radio-choice" id="checkbox-choice-1" value="choice-1" checked="checked" data-iconpos="right"/>
-                                <label for="checkbox-choice-1">Send Receipt</label>
-                            </fieldset>
-                        </li>
-                    </ul>
-
                     <div class="header_client">
                         <span>Items</span>
                     </div>

@@ -13,7 +13,7 @@ var urls = {
     'saveProduct': DOMAIN+'/mobile/create/product/',
     'productInformation': DOMAIN+'/mobile/product-information/',
     'category':DOMAIN+'/mobile/category/',
-    'upload': DOMAIN+'upload-image/product/',
+    'upload': DOMAIN+'/upload-image/product/',
     'client_create': DOMAIN+'/mobile/client/create/',
     'client_list': DOMAIN+'/mobile/client/list/',
     'client_company_types': DOMAIN+'/mobile/client/company_types/',
@@ -27,6 +27,7 @@ var items_list = [], productsSelected = [], storageClients = [];
 function init() {
 	
     var analyzer_information = [],
+        imageURL = undefined;
         token = window.localStorage.getItem("rp-token");
     //Automatic Login
 
@@ -226,7 +227,6 @@ function init() {
     }
 
     function saveClientStorage() {
-        debugger;
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
         if(clientSelected.products == ''){
             cleanClientSelected();
@@ -281,7 +281,7 @@ function init() {
     var stateFactory = new StateFactory(urls, token);
     var cityFactory = new CityFactory(urls, token);
     var clientFactory = new ClientFactory(urls, token);
-    var client = ClientModel(countryFactory, stateFactory, cityFactory, clientFactory);
+    var client = ClientModel(countryFactory, stateFactory, cityFactory, clientFactory, listClients);
     client.init(); /* start list */
 
     //Functions
@@ -465,7 +465,9 @@ function init() {
     }
 
     function authToken() {
+        //Cuando regresa del search falla
         var result = checkConnection();
+        //var result =  true;
         if(result ==  true){
             var url = urls.loginToken;
             $.ajax({
@@ -475,21 +477,21 @@ function init() {
                 },
                 type: 'POST',
                 dataType: 'json',
-                beforeSend: function(){
-                    $.mobile.loading("show", {
-                        textVisible: true,
-                        theme: 'c',
-                        textonly: false
-                    });
-                },
+//                beforeSend: function(){
+//                    $.mobile.loading("show", {
+//                        textVisible: true,
+//                        theme: 'c',
+//                        textonly: false
+//                    });
+//                },
                 success: function (data) {
                     if (data.status === 'OK') {
-                        alert('validado');
                         window.localStorage.setItem("rp-token", data.token);
                         token = data.token;
                         eventsAfterLogin();
                     }
                     else {
+                        $('#container-login').css('display','inline');
                         $('.overlay').fadeIn().children().addClass('effect_in_out');
                     }
                 },
@@ -505,6 +507,7 @@ function init() {
     function eventsAfterLogin() {
         getInventoryItems();
         getAnalyzerInformation();
+        $('#container-login').css('display','none');
         $.mobile.navigate("#pagina2");
     }
 
@@ -702,6 +705,7 @@ function init() {
                 success: function(data){
                     if(data.status.status == true){
                         eventsAfterLogin();
+                        uploadPhoto();
                     } else {
                         alert('an error occurred');
                     }
@@ -1050,12 +1054,17 @@ function init() {
     }    
     
     function checkConnection() {
+        try {
         var networkState = navigator.network.connection.type;
 
         if(networkState == Connection.NONE){
             return false;
         }
         return true;
+        }
+        catch(err) {
+            return true;
+        }
     }
 
     function takePicture(event) {
@@ -1068,39 +1077,47 @@ function init() {
 
     function onSuccess(imageURI) {
         var image = document.getElementById('image-camera');
-        uploadPhoto(imageURI);
+        imageURL = imageURI;
         image.src = imageURI;
+        uploadPhoto()
     }
 
     function onFail(message) {
-        alert('Failed because: ' + message);
+        //alert('Failed because: ' + message);
     }
 
-    function uploadPhoto(imageURI) {
-        var options = new FileUploadOptions();
-        options.fileKey="file";
-        options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
-        options.mimeType="image/jpeg";
+    function uploadPhoto() {
+        if(imageURL != undefined) {
+            var options = new FileUploadOptions();
+            options.fileKey="file";
+            options.fileName=imageURL.substr(imageURL.lastIndexOf('/')+1);
+            options.mimeType="image/jpeg";
 
-        var params = new Object();
-        params.value1 = "test";
-        params.value2 = "param";
+            var params = new Object();
+            params.value1 = "test";
+            params.value2 = "param";
 
-        options.params = params;
+            options.params = params;
+            alert(urls.upload);
 
-        var ft = new FileTransfer();
-        ft.upload(imageURI, encodeURI(urls.upload), win, fail, options);
+            var ft = new FileTransfer();
+            ft.upload(imageURL, encodeURI(urls.upload), win, fail, options);
+        }
     }
 
     function win(r) {
         alert('Win');
+        imageURL = undefined;
 //        console.log("Code = " + r.responseCode);
 //        console.log("Response = " + r.response);
 //        console.log("Sent = " + r.bytesSent);
     }
 
     function fail(error) {
-        //alert("An error has occurred: Code = " + error.code);
+        alert("An error has occurred 1: Code = " + error.code);
+        alert("An error has occurred 2: Code = " + error.source);
+        alert("An error has occurred 3: Code = " + error.target);
+        imageURL = undefined;
     }
 
     function sendProductsInvoice(event) {
