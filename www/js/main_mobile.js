@@ -1107,15 +1107,15 @@ function init() {
             $.ajax({
                 url: urls.upload,
                 data: {
-                    data: imageURL
+                    //data: imageURL
+                    data:'a'
                 },
                 type: 'POST',
                 success: function (data) {
                     alert('ok')
                 }
             });
-
-
+            alert(imageURL);
 
         }
     }
