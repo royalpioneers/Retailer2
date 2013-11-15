@@ -12,10 +12,6 @@
         margin: 0;
         list-style: none;
     }
-    .content_intro_button > ul > li > a {
-        padding: 10px;
-        margin: 5px;
-    }
 
 /*page1*/
     .overlay{
@@ -224,27 +220,21 @@
         width: 100%;
     }
     .social-networks > li > a {
-        background: rgb(52, 73, 94);
-        margin: 0;
         border-radius: 7px;
-        padding: 5%;
+        padding: 10%;
         display: block;
         -webkit-transition: background .3s ease-in-out;
-           -moz-transition: background .3s ease-in-out;
-            -ms-transition: background .3s ease-in-out;
-             -o-transition: background .3s ease-in-out;
-                transition: background .3s ease-in-out;
+        -moz-transition: background .3s ease-in-out;
+        -ms-transition: background .3s ease-in-out;
+        -o-transition: background .3s ease-in-out;
+        transition: background .3s ease-in-out;
         color: white !important;
-        text-shadow: none;
-    }
-    .social-networks > li > a:hover {
-        background: rgb(78, 109, 141);
     }
     .icon-redes {
         height: 1.7em;
         width: 1.5em;
         vertical-align: middle;
-        margin-right: 2em;
+        margin-right: 3em;
     }
     .icon-facebook{
         background: url('http://royalpioneers.com/static/website/images/icon/facebook.png');
@@ -314,8 +304,7 @@
         margin-bottom: 1em;
     }
     .price_create_product .ui-input-text,.price_create_product .ui-input-text:focus,ui-input-text:focus,.create_item_list.ui-input-text:focus{
-        box-shadow: none !important;
-        border: none !important;
+       background: white;
     }
     .price_create_product > li > ul > li:first-child {
         border-bottom: 1px solid rgb(224, 224, 224);
@@ -323,7 +312,7 @@
         font-weight: bolder;
         font-size: 20px;
     }
-    .create_item_list > li, .create_item_list > div,.create_item_list input{
+    .create_item_list > div,.create_item_list input{
         background: white !important;
     }
     /*pagina9*/
@@ -339,14 +328,17 @@
         border: 1px solid #ccc;
         background: #eee;
         font-weight: bolder;
-        font-size: 21px;
+        font-size: 30px;
+        margin-bottom: -2.5em;
         border-bottom: none;
-        margin-bottom: -3em;
     }
     .header_client > a {
         position: absolute;
-        right: 3em;
+        right: 6%;
         margin-top: -0.5em;
+        padding: 2% 6% !important;
+        line-height: 10px;
+        border-radius: 8%;
     }
     .ui-listview-filter.ui-bar-c.ui-listview-filter-inset {
         width: 95%; margin: 0 auto;
@@ -596,19 +588,13 @@
         margin-right: 5%;
     }
     /*pagina 13*/
-    #selectClient-button {
-        float: right;
-margin: 0;
-width: 65%;
-padding: 1em;
-margin-top: -1.3em;
-margin-left: 7em;
-    }
     #selectClient-button .ui-btn-inner {
     color: white;
     }
     #goToProducts {
         text-align: center;
+        padding: 5%;
+
     }
     .myProductSelected > .productSelected > span{
         background-color: #08c !important;
@@ -630,23 +616,28 @@ margin-left: 7em;
         float: right; margin-right: 14px; 
         margin-top: 1em;
     }
+    @media (min-width:320px) and (max-width:420px){
+        #pagina12 .ui-select {
+            width: 65% !important;
+        }
+    }
     @media (min-width:320px) and (max-width:480px){
         .without_radious img{
             display: none !important; 
         }
     }
 .photo-product{
-    width: 7em;
-    height: 7em;
-    text-align: center;
-     margin:0 auto 0 auto;
+   width: 41%;
+height: auto;
+text-align: center;
+margin: 0 auto 0 auto;
 }
 .btn_more_big,.header_top_options{
     padding: 1% !important; 
     text-align: center;
     padding: 15px 25px !important;
 }
-.btn_more_big .ui-btn-inner {
+.btn_more_big .ui-btn-inner,.header_top_options .ui-btn-inner{
     border: none !important;
 }
 div.ui-input-text > input {
@@ -655,4 +646,31 @@ div.ui-input-text > input {
 }
 div[data-role='header']{
     padding: 8px 0 !important;
+position: relative;
+overflow: hidden;
+min-height: 4.5em;
+}
+#create_item {
+    padding: 3%;
+}
+#create_item > .ui-btn-inner {
+    border: none;
+}
+.ui-submit {
+    padding: 5%;
+}
+.ui-submit > span{
+ border: none;
+}
+#pagina12 .ui-select {
+    width: 75%;
+    margin-left: 2%;
+    display: inline-block;
+}
+.cleanClientSelected{
+    position: relative !important;
+}
+#pagina12 .ui-select .ui-btn-inner {
+    padding: 1.3em;
+    padding-bottom: 2em;
 }

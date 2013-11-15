@@ -28,47 +28,31 @@
 <body>
 	<!--SEARCH-->
 	<div data-role="page" id="pagina1">
-		<div data-role="header" data-position="fixed" data-id="head1" data-theme="a">
-			<a class="header_top_options" href="#" id="back-index"><i class="icon-white icon-align-justify"></i></a>
+		<div data-role="header" data-id="head1" data-theme="a">
+			<a class="header_top_options btn_more_big" href="#" data-transition="slide" id="back-index">
+					<i class="icon-white icon-arrow-left"></i>
+			</a>
 			<h1>Search</h1>
+			<a href="#pagina2" class="btn_more_big" data-role="button" data-transition="slide">
+				<i class="icon-white icon-th"></i>
+			</a>
 		</div>
-
 		<div data-role="content">
             <input type="text" name="name" id="seach-text" value=""  placeholder="Search Product"/>
             <hr>
-            <ul data-role="listview" data-inset="true" data-theme="a" data-filter="true" id="categories-list" data-filter-placeholder="Filter categories" >
-
-            </ul>
-
+            <ul data-role="listview" data-inset="true" data-theme="a" data-filter="true" id="categories-list" data-filter-placeholder="Filter categories" ></ul>
         </div>
-		<div data-role="footer" data-position="fixed" data-id="foo1">
-			<div class="ui-grid-c">
-	   			<div class="ui-block-a">
-	   				<a data-role="button" data-rel="back"><i class="icon-white icon-arrow-left"></i></a>
-	   			</div>
-	   			<div class="ui-block-b">
-	   				<a href="#pagina2" data-role="button">
-	   					<i class="icon-white icon-lock"></i>
-	   				</a>
-	   			</div>
-	   			<div class="ui-block-c">
-	   				<a href="#pagina2" data-role="button" data-transition="slide">
-	   					<i class="icon-white icon-th"></i>
-	   				</a>
-	   			</div>
-	   			<div class="ui-block-c">
-	   				<a href="#pagina2" data-role="button" data-transition="slide">
-	   					<i class="icon-white icon-time"></i>
-	   				</a>
-	   			</div>
-	   		</div>
-		</div>
 	</div>	
 
-	<div data-role="page" id="pagina2">
-		<div data-role="header" data-position="fixed" data-id="head1" data-theme="a">
-			<a class="header_top_options" id="#pagina1" href="#"><i class="icon-white icon-align-justify"></i></a>
+	<div data-role="page" id="pagina2" data-position="fixed">
+		<div data-role="header" data-id="head1" data-theme="a">
+			<a class="header_top_options btn_more_big" href="#pagina1" data-transition="slide" id="back-index">
+				<i class="icon-white icon-arrow-left"></i>
+			</a>
 			<h1>Royal Pioneers</h1>
+			<a href="#pagina3" class="btn_more_big" data-role="button" data-transition="slide">
+				<i class="icon-white icon-th"></i>
+			</a>
 		</div>
 		<div data-role="content">
             <div class="swiper-slide">
@@ -80,35 +64,18 @@
                     </ul>
                 </div>
             </div>
-        </div><!-- /content -->
-		<div data-role="footer" data-position="fixed" data-id="foo1">
-			<div class="ui-grid-c">
-	   			<div class="ui-block-a">
-	   				<a data-role="button" data-rel="back"><i class="icon-white icon-arrow-left"></i></a>
-	   			</div>
-	   			<div class="ui-block-b">
-	   				<a href="#pagina7" data-role="button">
-	   					<i class="icon-white icon-lock"></i>
-	   				</a>
-	   			</div>
-	   			<div class="ui-block-c">
-	   				<a href="#pagina3" data-role="button" data-transition="slide">
-	   					<i class="icon-white icon-th-large"></i>
-	   				</a>
-	   			</div>
-	   			<div class="ui-block-c">
-	   				<a href="#pagina3" data-role="button" data-transition="slide">
-	   					<i class="icon-white icon-time"></i>
-	   				</a>
-	   			</div>
-	   		</div>
-		</div>
+        </div><!-- /content -->		
 	</div>	
 
-	<div data-role="page" id="pagina3">
-		<div data-role="header" data-position="fixed" data-id="head1">
-			<a class="header_top_options" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
+	<div data-role="page" id="pagina3" data-position="fixed">
+		<div data-role="header" data-id="head1">
+			<a class="header_top_options btn_more_big" href="#pagina2" data-transition="slide" id="back-index">
+				<i class="icon-white icon-arrow-left"></i>
+			</a>	
 			<h1>Royal Pioneers</h1>
+			<a href="#product-detail-page" class="btn_more_big" data-role="button" data-transition="slide">
+				<i class="icon-white icon-th"></i>
+			</a>
 		</div>
 		<div data-role="content">
 			<div class="swiper-container swiper-nav">
@@ -160,65 +127,40 @@
 		        </ul>        
 		    </div><!-- /panel -->
         </div><!-- /content -->	 
-
-		<div data-role="footer" data-position="fixed" data-id="foo1">
-			<div class="ui-grid-b">
-	   			<div class="ui-block-a">
-	   				<a data-role="button" data-rel="back"><i class="icon-white icon-arrow-left"></i></a>
-	   			</div>
-	   			<div class="ui-block-b">
-	   				<a href="#pagina7" data-role="button">
-	   					<i class="icon-white icon-lock"></i>
-	   				</a>
-	   			</div>
-	   			<div class="ui-block-c">
-	   				<a href="#pagina3" data-role="button" data-transition="slide">
-	   					<i class="icon-white icon-time"></i>
-	   				</a>
-	   			</div>
-	   		</div>
-		</div>
 	</div>
 	<!-- Start page choose buyer product group -->
     <div data-role="page" id="product-group-list-page">
         <div data-role="header" data-theme="a">
+        	<a class="btn_more_big" href="#product-detail-page" data-transition="slide">
+				<i class="icon-white icon-arrow-left"></i>
+			</a>
             <h1>Choose product group</h1>
+            <a data-role="button" href="#product-group-form-page" class="btn_more_big"><i class="icon-white icon-plus"></i></a>
         </div>
         <div data-role="content">
             <ul data-role="listview"></ul>
         </div>
-        <div data-role="footer" data-position="fixed" data-id="foo1">
-			<div class="ui-grid-c">
-	   			<div class="ui-block-a">
-	   				<a data-role="button" data-rel="back"><i class="icon-white icon-arrow-left"></i></a>
-	   			</div>
-	   			<div class="ui-block-b">
-	   				<a data-role="button" href="#product-group-form-page"><i class="icon-white icon-plus"></i></a>
-	   			</div>
-	   		</div>
-		</div>
     </div>
     <!-- End page 4 -->
     <!-- Product detail -->
     <div data-role="page" id="product-detail-page">
     	<div data-role="header">
+    		<a class="btn_more_big" href="#pagina2" data-transition="slide">
+				<i class="icon-white icon-arrow-left"></i>
+			</a>
     		<h1>Product name</h1>
     	</div>
     	<div data-role="content">
-    		<a href="#product-group-list-page" id="add-to-group-btn">Add to group</a>
+    		<a href="#product-group-list-page" id="add-to-group-btn" class="btn" data-theme="a">Add to group</a>
     	</div>
-    	<div data-role="footer" data-position="fixed" data-id="foo1">
-			<div class="ui-grid-c">
-	   			<div class="ui-block-a">
-	   				<a data-role="button" data-rel="back"><i class="icon-white icon-arrow-left"></i></a>
-	   			</div>
-	   		</div>
-		</div>
     </div>
     <!-- End product detail -->
     <!-- Start Product group page -->
     <div id="product-group-form-page" data-role="page">
     	<div data-role="header">
+    		<a class="header_top_options btn_more_big" href="#product-detail-page" data-transition="slide" id="back-index">
+				<i class="icon-white icon-arrow-left"></i>
+			</a>
     		<h1>Create new group</h1>
     	</div>
     	<div data-role="content">
@@ -227,13 +169,6 @@
 				<input type="text" name="name" id="form-group-name" data-mini="true" />
 				<input type="submit" value="Save" id="btn-save-group" />
     		</form>
-    	</div>
-    	<div data-role="footer">
-    		<div class="ui-grid-c">
-	   			<div class="ui-block-a">
-	   				<a data-role="button" data-rel="back"><i class="icon-white icon-arrow-left"></i></a>
-	   			</div>
-	   		</div>
     	</div>
     </div>
     <!-- End Product group page -->
