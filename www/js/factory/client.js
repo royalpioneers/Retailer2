@@ -70,12 +70,15 @@ var ClientFactory = function(urls, token) {
 	};
 	
 	factory.store_client = function(client){
-		var client_list = JSON.parse(window.localStorage.getItem(factory.id_client_list));
-		client_list[client_list.length] = client;
-		window.localStorage.setItem(factory.id_client_list, JSON.stringify(client_list));
+		debugger;
+		if(window.localStorage.getItem(factory.id_client_list)){
+			var client_list = JSON.parse(window.localStorage.getItem(factory.id_client_list));
+			client_list[client_list.length] = client;
+			window.localStorage.setItem(factory.id_client_list, JSON.stringify(client_list));
+		}
 	};
 	
-	factory.get_company_types = function(handler) {
+	factory.get_company_types = function(handler){
 		var types_list = JSON.parse(window.localStorage.getItem(factory.id_company_types));
 		if (factory.cache && types_list != null) {
 			handler(types_list);
