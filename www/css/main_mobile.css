@@ -596,8 +596,13 @@
         padding: 5%;
 
     }
-    .myProductSelected > .productSelected > span{
-        background-image: url(images/checked_teal.png) !important;
+    .overlay_product {
+        background: url(../images/checked_teal.png) no-repeat center center!important;
+        width: 100%;
+        display: block;
+        position: absolute;
+        z-index: 2;
+        height: 100%;
     }
     .without_radious img {
         width: 23em;
