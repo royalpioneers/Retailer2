@@ -126,12 +126,10 @@ function init() {
         }
         $('.products_clients_add').append(html);
         $('.products_clients_add').trigger('create');
-        debugger;
         $('.see_more_products_clients').text(getCurrentTotal());
     }
     
     function getClientSelected() {
-        
     	var clientSelected = false;
         var objClient = localStorage.getItem('clientSelected');
         objClient = objClient != ''?objClient:false;
@@ -148,7 +146,6 @@ function init() {
     }
 
     function getArrayIndexProductsSelected(){
-        
     	/* return indexs of client selected */
         var arrayIndexs = [];
         var clientSelected = getClientSelected();
@@ -190,7 +187,6 @@ function init() {
     }
 
     function selectProduct(e) {
-        
         e.preventDefault();
         var products = JSON.parse(localStorage.getItem('products_inventory')),
             clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
@@ -199,12 +195,9 @@ function init() {
         var li = $(this).parent('li');
         
         for(var i in products){
-            
             if(!$(this).data('selected')){
-                
                 //Add Products to LocalStorage
                 if(products[i].id === id){
-                    
                     productSelected = {
                         'id': products[i].id,
                         'product_name': products[i].product_name,
@@ -224,7 +217,6 @@ function init() {
                 }
             //Remove Products to LocalStorage
             } else {
-                
                 var remove = -1;
                 $.each(clientSelected.products, function(x, value){
                     if(value.id == id){                                                
@@ -232,7 +224,6 @@ function init() {
                     }
                 });
                 if(remove > -1) {
-                    
                     clientSelected.products.splice(remove, 1);
                     console.log('1: '+JSON.stringify(clientSelected))
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
@@ -247,7 +238,6 @@ function init() {
     }
     function getCurrentTotal(){
         var totalPrice = 0;
-        debugger;
         if(localStorage.getItem('clientSelected')){
             var products = JSON.parse(localStorage.getItem('clientSelected')).products;
             for(var i in products){
@@ -730,7 +720,6 @@ function init() {
                 },
                 success: function(data){
                     if(data.status.status == true){
-                        eventsAfterLogin();
                         uploadPhoto(data.id);
                     } else {
                         alert('an error occurred');
@@ -1133,7 +1122,6 @@ function init() {
         var image = document.getElementById('image-camera');
         imageURL = imageURI;
         image.src = imageURI;
-        uploadPhoto(1)
     }
 
     function onFail(message) {
@@ -1156,35 +1144,17 @@ function init() {
 
             var ft = new FileTransfer();
             ft.upload(imageURL, encodeURI(urls.upload), win, fail, options);
-
-//            alert(urls.upload);
-//            $.ajax({
-//                url: urls.upload,
-//                data: {
-//                    data: encodeURIComponent(urls.upload)
-//                },
-//                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-//                type: 'POST',
-//                success: function (data) {
-//                    alert('ok')
-//                }
-//            });
-
         }
     }
 
     function win(r) {
-        alert('Win');
+        eventsAfterLogin();
         imageURL = undefined;
-//        console.log("Code = " + r.responseCode);
-//        console.log("Response = " + r.response);
-//        console.log("Sent = " + r.bytesSent);
     }
 
     function fail(error) {
-        alert("An error has occurred 1: Code = " + error.code);
-        alert("An error has occurred 2: Code = " + error.source);
-        alert("An error has occurred 3: Code = " + error.target);
+        eventsAfterLogin();
+        alert("An error has occurred image not upload");
         imageURL = undefined;
     }
 
