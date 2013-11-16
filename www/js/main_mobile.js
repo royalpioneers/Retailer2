@@ -81,12 +81,14 @@ function init() {
 
     function redirectToPage(){
         debugger;
+        //John Borrar debugger
         if(localStorage.getItem('clientSelected')){
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
             if(clientSelected.products == ''){
                 $.mobile.navigate("#pagina11");
                 localStorage.setItem('clientSelected', ''); 
-                debugger;          
+                debugger;
+                //John Borrar debugger
             }
         }    
         else{
