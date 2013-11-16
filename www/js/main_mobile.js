@@ -75,23 +75,38 @@ function init() {
         $('.cancel_sendProductsInvoice').live('click', goProduct);
         $('.cleanClientSelected').live('click', cleanClientSelected);
         $('#search-redirect').on('click', changeSearch);
-
+        $('#back_page').live('click', redirectToPage);
     //Functions
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
 
-    function cleanClientSelected(){
-        localStorage.setItem('clientSelected', '');
-        pageClientShow();
+    function redirectToPage(){
+        debugger;
+        if(localStorage.getItem('clientSelected')){
+            var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+            if(clientSelected.products == ''){
+                $.mobile.navigate("#pagina11");
+                localStorage.setItem('clientSelected', ''); 
+                debugger;          
+            }
+        }    
+        else{
+            $.mobile.navigate("#pagina11");
+            console.log('redirectToPage');
+        }    
     }
 
-    function pageClientShow() {
+    function cleanClientSelected(){
+        
+        pageClientShow();
+    }
+    function pageClientShow() { 
         $('.products_clients_add').html('');
         var html = "";
         var products = JSON.parse(localStorage.getItem('products_inventory'));
         for(var i in products) {
-            debugger;
+            
             if(getArrayIndexProductsSelected().indexOf(products[i].id) !== -1){
-                debugger;
+                
                 html += '<li class="myProductSelected">\
                     <a href="#" data-role="button" class="productSelected" data-id="'+products[i].id+'" data-selected="true">\
                         <img src="'+DOMAIN+products[i].model_image+'">\
@@ -100,7 +115,7 @@ function init() {
                 </li>'
             }
             else{
-                debugger;
+                
                 html += '<li>\
                     <a href="#" data-role="button" class="productSelected" data-id="'+products[i].id+'" data-selected="false">\
                         <img src="'+DOMAIN+products[i].model_image+'">\
@@ -111,12 +126,21 @@ function init() {
         }
         $('.products_clients_add').append(html);
         $('.products_clients_add').trigger('create');
+        $('.see_more_products_clients').text(getCurrentTotal());
     }
     
     function getClientSelected() {
     	var clientSelected = false;
-        if (typeof(JSON.parse(localStorage.getItem('clientSelected'))) == 'object') {
-        	clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+        var objClient = localStorage.getItem('clientSelected');
+        objClient = objClient != ''?objClient:false;
+        if(objClient){
+            if(typeof(JSON.parse(objClient)) == 'object'){
+                clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+            }        	
+        }
+        else{
+            $.mobile.navigate("#pagina11");
+            localStorage.setItem("clientSelected", '');
         }
         return clientSelected;
     }
@@ -142,19 +166,23 @@ function init() {
         return arrayIndexs;
     }
     function goProduct() {
-        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-        //validar si esta repetido
-        var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-        if(index !== -1){
-            storageClients[index] = clientSelected;
-        }
-
         if(localStorage.getItem('clientSelected')){
-            $.mobile.navigate("#pagina13");
-            getCurrentTotal();
+            var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+            //validar si esta repetido
+            var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+            if(index !== -1){
+                storageClients[index] = clientSelected;
+            }
+
+            if(localStorage.getItem('clientSelected')){
+                $.mobile.navigate("#pagina13");
+            }
+            else{
+                alert('Chooce Someone!');
+            }
         }
         else{
-            alert('Chooce Someone!');
+            console.log('goProduct');
         }
     }
 
@@ -210,31 +238,35 @@ function init() {
     }
     function getCurrentTotal(){
         var totalPrice = 0;
-        var products = JSON.parse(localStorage.getItem('clientSelected')).products;
-        for(var i in products){
-            totalPrice += parseFloat(products[i].price); 
+        if(localStorage.getItem('clientSelected')){
+            var products = JSON.parse(localStorage.getItem('clientSelected')).products;
+            for(var i in products){
+                totalPrice += parseFloat(products[i].price); 
+            }
         }
         return totalPrice;
     }
 
     function saveClientStorage() {
-        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
-        if(clientSelected.products == ''){
-            cleanClientSelected();
-            $.mobile.navigate("#pagina11");
-        }
-        else if(clientSelected.products != ''){
-            //validar si esta repetido
-            var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-            if(index !== -1){
-                storageClients[index] = clientSelected;
+        if(localStorage.getItem('clientSelected')){
+            var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
+            if(clientSelected.products == ''){
+                cleanClientSelected();
+                $.mobile.navigate("#pagina11");
             }
-            else{
-                storageClients.push(clientSelected);
+            else if(clientSelected.products != ''){
+                //validar si esta repetido
+                var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+                if(index !== -1){
+                    storageClients[index] = clientSelected;
+                }
+                else{
+                    storageClients.push(clientSelected);
+                }
+                $.mobile.navigate("#pagina12");
             }
-            $.mobile.navigate("#pagina12");
-        }
 
+        }
     }
 
     function calculatePrice(product) {
@@ -317,7 +349,7 @@ function init() {
     }
     
     function getClientById(id) {
-        debugger;
+        
     	/* from local storage */
     	for (index in storageClients) {
     		var client = storageClients[index];
@@ -366,45 +398,38 @@ function init() {
                 $('#list_clients').trigger('create');
                 $(":radio").unbind("change");
                 $(":radio").bind("change", function (event){
-                    debugger;
+                    
                     if(localStorage.getItem('clientSelected')){
-                        debugger;
+                        
                         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
                         //validar si esta repetido
                         var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
                         if(index !== -1){
-                            debugger;
+                            
                             storageClients[index] = clientSelected;
                         }
                     }
-
                     var self = $(this);
                     for(var client in items_list){
-                        if(storageClients != ''){
-                            debugger;
-                            var result = false;
-                            $.each(storageClients, function(i, value) {
-                                debugger;
-                                if(value.id === self.data('id')){
-                                    debugger;
-                                	result = true;
-                                	/* get client from storage */
-                                	var client_exists = getClientById(items_list[client].id);
-                                	if (client_exists) {
-                                        debugger;
-                                		localStorage.setItem("clientSelected", JSON.stringify(client_exists));
-                                		clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-                                		$.mobile.navigate("#pagina12");
-                                	} else {
-                                		result = false;
-                                	}                                    
+                        if(items_list[client].id === self.data('id')){
+                            if(storageClients != ''){
+                                
+                                var result = false;                                    	
+                            	/* get client from storage */
+                            	var client_exists = getClientById(items_list[client].id);
+                            	if (client_exists) {
+                                    
+                            		localStorage.setItem("clientSelected", JSON.stringify(client_exists));
+                            		clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+                            		$.mobile.navigate("#pagina12");
+                                    result = true;
+                            	} else {
+                            		result = false;
+                            	}  
+                                if(result == false) {
+                                    var clientSelected = createNewClient(items_list[client])
                                 }
-                            });
-                            if(result == false) {
-                                var clientSelected = createNewClient(items_list[client])
-                            }
-                        } else {
-                            if(items_list[client].id == $(this).data('id')){
+                            } else {
                                 var clientSelected = createNewClient(items_list[client]);
                             }
                         }
@@ -433,7 +458,7 @@ function init() {
     }
 
     function createNewClient(client) {
-        debugger;
+        
         var clientSelected = {
             'id': client.id,
             'name': client.name,
@@ -982,6 +1007,7 @@ function init() {
         }
         ul_for_my_products.append(html);
         ul_for_my_products.trigger('create');
+
     }
     function removeMyProduct() {
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
@@ -996,6 +1022,19 @@ function init() {
         if(remove > -1) {
             clientSelected.products.splice(remove, 1);
             localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+        }
+
+        //save in storage
+
+        for(var i in storageClients){
+            var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+            if(index !== -1){
+                $.each(storageClients, function(i, value){
+                    if(value.id == clientSelected.id){
+                        value.products = clientSelected.products;
+                    }
+                });
+            }
         }
         pageMyProductsShow();
     }
@@ -1024,7 +1063,21 @@ function init() {
                 }
              }
         });
+
         localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+
+        //save in storage
+
+        for(var i in storageClients){
+            var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+            if(index !== -1){
+                $.each(storageClients, function(i, value){
+                    if(value.id == clientSelected.id){
+                        value.products = clientSelected.products;
+                    }
+                });
+            }
+        }
     }
 
     function getDateMonthYear(){
