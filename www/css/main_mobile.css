@@ -596,14 +596,17 @@
         padding: 5%;
 
     }
-    .overlay_product {
+    .myProductSelected > .productSelected > span{
         background: url(../images/checked_teal.png) no-repeat center center!important;
-        width: 100%;
-        display: block;
-        position: absolute;
-        z-index: 2;
-        height: 100%;
     }
+/*    .overlay_product {
+    background: url(../images/checked_teal.png) no-repeat center center!important;
+    width: 100%;
+    display: block;
+    position: absolute;
+    z-index: 2;
+    height: 100%;
+}*/
     .without_radious img {
         width: 23em;
         height: 17em;

@@ -128,6 +128,8 @@ function init() {
         }
         $('.products_clients_add').append(html);
         $('.products_clients_add').trigger('create');
+        var a = '<a href="#" class="overlay_product"></a>';
+        $(a).insertAfter('.myProductSelected');
         $('.see_more_products_clients').text(getCurrentTotal());
     }
     
