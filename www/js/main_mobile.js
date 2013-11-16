@@ -114,7 +114,6 @@ function init() {
     }
     
     function getClientSelected() {
-        debugger;
     	var clientSelected = false;
         if (typeof(JSON.parse(localStorage.getItem('clientSelected'))) == 'object') {
         	clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
@@ -123,7 +122,6 @@ function init() {
     }
 
     function getArrayIndexProductsSelected(){
-        debugger;
     	/* return indexs of client selected */
         var arrayIndexs = [];
         var clientSelected = getClientSelected();
@@ -161,7 +159,6 @@ function init() {
     }
 
     function selectProduct(e) {
-        debugger;
         e.preventDefault();
         var products = JSON.parse(localStorage.getItem('products_inventory')),
             clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
@@ -170,12 +167,9 @@ function init() {
         var li = $(this).parent('li');
         
         for(var i in products){
-            debugger;
             if(!$(this).data('selected')){
-                debugger;
                 //Add Products to LocalStorage
                 if(products[i].id === id){
-                    debugger;
                     productSelected = {
                         'id': products[i].id,
                         'product_name': products[i].product_name,
@@ -195,7 +189,6 @@ function init() {
                 }
             //Remove Products to LocalStorage
             } else {
-                debugger;
                 var remove = -1;
                 $.each(clientSelected.products, function(x, value){
                     if(value.id == id){                                                
@@ -203,7 +196,6 @@ function init() {
                     }
                 });
                 if(remove > -1) {
-                    debugger;
                     clientSelected.products.splice(remove, 1);
                     console.log('1: '+JSON.stringify(clientSelected))
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
@@ -703,7 +695,6 @@ function init() {
                 },
                 success: function(data){
                     if(data.status.status == true){
-                        eventsAfterLogin();
                         uploadPhoto(data.id);
                     } else {
                         alert('an error occurred');
@@ -1119,17 +1110,13 @@ function init() {
     }
 
     function win(r) {
-        alert('Win');
+        eventsAfterLogin();
         imageURL = undefined;
-//        console.log("Code = " + r.responseCode);
-//        console.log("Response = " + r.response);
-//        console.log("Sent = " + r.bytesSent);
     }
 
     function fail(error) {
-        alert("An error has occurred 1: Code = " + error.code);
-        alert("An error has occurred 2: Code = " + error.source);
-        alert("An error has occurred 3: Code = " + error.target);
+        eventsAfterLogin();
+        alert("An error has occurred image not upload");
         imageURL = undefined;
     }
 
