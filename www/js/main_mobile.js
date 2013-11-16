@@ -1098,11 +1098,11 @@ function init() {
             params.value2 = "param";
 
             options.params = params;
-            alert(urls.upload);
 
             var ft = new FileTransfer();
             ft.upload(imageURL, encodeURI(urls.upload), win, fail, options);
 
+            alert(urls.upload);
             $.ajax({
                 url: urls.upload,
                 data: {
@@ -1114,18 +1114,6 @@ function init() {
                     alert('ok')
                 }
             });
-            $.ajax({
-                url: urls.upload,
-                data: {
-                    aa: 'aa'
-                },
-                dataType: 'json',
-                type: 'POST',
-                success: function (data) {
-                    alert('ok')
-                }
-            });
-            alert(encodeURI(urls.upload));
 
         }
     }
