@@ -1145,20 +1145,6 @@ function init() {
 
             var ft = new FileTransfer();
             ft.upload(imageURL, encodeURI(urls.upload), win, fail, options);
-
-//            alert(urls.upload);
-//            $.ajax({
-//                url: urls.upload,
-//                data: {
-//                    data: encodeURIComponent(urls.upload)
-//                },
-//                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-//                type: 'POST',
-//                success: function (data) {
-//                    alert('ok')
-//                }
-//            });
-
         }
     }
 
