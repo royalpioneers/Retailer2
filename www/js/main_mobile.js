@@ -13,7 +13,7 @@ var urls = {
     'saveProduct': DOMAIN+'/mobile/create/product/',
     'productInformation': DOMAIN+'/mobile/product-information/',
     'category':DOMAIN+'/mobile/category/',
-    'upload': DOMAIN+'/upload-image/product/',
+    'upload': DOMAIN+'/mobile/upload-image/product/',
     'client_create': DOMAIN+'/mobile/client/create/',
     'client_list': DOMAIN+'/mobile/client/list/',
     'client_company_types': DOMAIN+'/mobile/client/company_types/',
@@ -99,9 +99,7 @@ function init() {
         
         pageClientShow();
     }
-
     function pageClientShow() { 
-           
         $('.products_clients_add').html('');
         var html = "";
         var products = JSON.parse(localStorage.getItem('products_inventory'));
@@ -733,7 +731,7 @@ function init() {
                 success: function(data){
                     if(data.status.status == true){
                         eventsAfterLogin();
-                        uploadPhoto();
+                        uploadPhoto(data.id);
                     } else {
                         alert('an error occurred');
                     }
@@ -1135,29 +1133,43 @@ function init() {
         var image = document.getElementById('image-camera');
         imageURL = imageURI;
         image.src = imageURI;
-        uploadPhoto()
+        uploadPhoto(1)
     }
 
     function onFail(message) {
         //alert('Failed because: ' + message);
     }
 
-    function uploadPhoto() {
+    function uploadPhoto(id) {
         if(imageURL != undefined) {
             var options = new FileUploadOptions();
             options.fileKey="file";
             options.fileName=imageURL.substr(imageURL.lastIndexOf('/')+1);
             options.mimeType="image/jpeg";
+            options.chunkedMode = false;
 
             var params = new Object();
-            params.value1 = "test";
-            params.value2 = "param";
+            params.rp_token = token;
+            params.id_product_model = id;
 
             options.params = params;
-            alert(urls.upload);
 
             var ft = new FileTransfer();
             ft.upload(imageURL, encodeURI(urls.upload), win, fail, options);
+
+//            alert(urls.upload);
+//            $.ajax({
+//                url: urls.upload,
+//                data: {
+//                    data: encodeURIComponent(urls.upload)
+//                },
+//                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+//                type: 'POST',
+//                success: function (data) {
+//                    alert('ok')
+//                }
+//            });
+
         }
     }
 
