@@ -597,7 +597,7 @@
 
     }
     .myProductSelected > .productSelected > span{
-        background-color: #08c !important;
+        background-image: url(images/checked_teal.png) !important;
     }
     .without_radious img {
         width: 23em;
