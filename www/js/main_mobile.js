@@ -77,18 +77,14 @@ function init() {
         $('#search-redirect').on('click', changeSearch);
         $('#back_page').live('click', redirectToPage);
     //Functions
-    $.mobile.selectmenu.prototype.options.nativeMenu = false;
+    $.mobile.selectmenu.prototype.options.nativeMenu = true;
 
     function redirectToPage(){
-        debugger;
-        //John Borrar debugger
         if(localStorage.getItem('clientSelected')){
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
             if(clientSelected.products == ''){
                 $.mobile.navigate("#pagina11");
-                localStorage.setItem('clientSelected', ''); 
-                debugger;
-                //John Borrar debugger
+                localStorage.setItem('clientSelected', '');
             }
         }    
         else{

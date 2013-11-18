@@ -70,7 +70,6 @@ var ClientFactory = function(urls, token) {
 	};
 	
 	factory.store_client = function(client){
-		debugger;
 		if(window.localStorage.getItem(factory.id_client_list)){
 			var client_list = JSON.parse(window.localStorage.getItem(factory.id_client_list));
 			client_list[client_list.length] = client;
