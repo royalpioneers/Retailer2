@@ -24,11 +24,20 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		model.get_form_field('country').live("change", model.charge_states);
 		model.get_form_field('state').live("change", model.charge_cities);
 		$('.'+model.class_item_city).live('click', model.set_city_selected);
+		$.mobile.listview.prototype.options.filterCallback = model.filter_cities;
 		/* model.list(); */
 		
 		/* start address */
 		model.start_form_values();
 	};
+	
+	model.filter_cities = function(text, searchValue, item) {
+		if (searchValue.length < 3 || text.toString().toLowerCase().indexOf( searchValue ) === -1) {
+			return true;
+		}
+		return false;
+	}
+	
 	
 	model.start_form_values = function(){
 		model.start_countries_values();
