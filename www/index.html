@@ -24,14 +24,20 @@
         <script type="text/javascript" src="js/factory/address.js"></script>
         <script type="text/javascript" src="js/main_mobile.js"></script>
 
-        <!--  GRAPHIC D3 -->
-    	<style>
-			#graphic {font: 10px sans-serif;}
-			.axis path, .axis line {fill: none;stroke: #000;shape-rendering: crispEdges;}
-			.bar {fill: steelblue;}
-			.x.axis path {display: none;}
-		</style>
-		<script type="text/javascript" src="js/d3.v3.min.js"></script>
+        <!--  GRAPHIC JPLOT -->
+    	<link class="include" rel="stylesheet" type="text/css" href="js/jqplot/jquery.jqplot.min.css" />
+		<link type="text/css" rel="stylesheet" href="js/jqplot/syntaxhighlighter/styles/shCoreDefault.min.css" />
+		<link type="text/css" rel="stylesheet" href="js/jqplot/syntaxhighlighter/styles/shThemejqPlot.min.css" />
+		<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="js/jqplot/excanvas.js"></script><![endif]-->
+		<script class="include" type="text/javascript" src="js/jqplot/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="js/jqplot/syntaxhighlighter/scripts/shCore.min.js"></script>
+		<script type="text/javascript" src="js/jqplot/syntaxhighlighter/scripts/shBrushJScript.min.js"></script>
+		<script type="text/javascript" src="js/jqplot/syntaxhighlighter/scripts/shBrushXml.min.js"></script>
+		<script class="include" type="text/javascript" src="js/jqplot/plugins/jqplot.barRenderer.min.js"></script>
+		<script class="include" type="text/javascript" src="js/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
+		<script class="include" type="text/javascript" src="js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+		<script class="include" type="text/javascript" src="js/jqplot/plugins/jqplot.pointLabels.min.js"></script>
+
 
 	</head>
 	<body>
@@ -359,6 +365,9 @@
             </div>
         </div>
 
-        
+        <div id="content_init_graphic">
+	        <div id="graphic_jqplot">
+	        </div>
+        </div>
 	</body>
 </html>
