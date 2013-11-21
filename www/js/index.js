@@ -18,5 +18,4 @@ var app = {
     receivedEvent: function(id) {
         //Aplicacion activa
     }
-
 };

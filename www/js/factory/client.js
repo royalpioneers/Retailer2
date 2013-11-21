@@ -6,9 +6,9 @@ var ClientFactory = function(urls, token) {
 	factory.id_client_list = 'clients';
 	factory.cache = false;
 	
-	factory.get_all = function(handler) {
+	factory.get_all = function(handler, cache) {
 		var client_list = JSON.parse(window.localStorage.getItem(factory.id_client_list));
-		if (factory.cache && client_list != null) {
+		if ((factory.cache || cache) && client_list != null) {
 			handler(client_list);
 		}
 		
@@ -70,7 +70,6 @@ var ClientFactory = function(urls, token) {
 	};
 	
 	factory.store_client = function(client){
-		debugger;
 		if(window.localStorage.getItem(factory.id_client_list)){
 			var client_list = JSON.parse(window.localStorage.getItem(factory.id_client_list));
 			client_list[client_list.length] = client;

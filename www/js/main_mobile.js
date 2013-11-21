@@ -76,19 +76,16 @@ function init() {
         $('.cleanClientSelected').live('click', cleanClientSelected);
         $('#search-redirect').on('click', changeSearch);
         $('#back_page').live('click', redirectToPage);
+        $('#selectClient-listbox').find('li').live('click', moveToOtherClient);
     //Functions
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
 
     function redirectToPage(){
-        debugger;
-        //John Borrar debugger
         if(localStorage.getItem('clientSelected')){
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
             if(clientSelected.products == ''){
                 $.mobile.navigate("#pagina11");
-                localStorage.setItem('clientSelected', ''); 
-                debugger;
-                //John Borrar debugger
+                localStorage.setItem('clientSelected', '');
             }
         }    
         else{
@@ -189,7 +186,6 @@ function init() {
             console.log('goProduct');
         }
     }
-
     function selectProduct(e) {
         e.preventDefault();
         var products = JSON.parse(localStorage.getItem('products_inventory')),
@@ -233,8 +229,7 @@ function init() {
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     $(this).data('selected',false);
                     $(li).removeClass("myProductSelected");
-                    $('.see_more_products_clients').text(getCurrentTotal());
-                    pageMyProductsShow();
+                    $('.see_more_products_clients').text(getCurrentTotal());                    
                     break;
                 }
             }
@@ -269,7 +264,6 @@ function init() {
                 }
                 $.mobile.navigate("#pagina12");
             }
-
         }
     }
 
@@ -461,8 +455,7 @@ function init() {
         });
     }
 
-    function createNewClient(client) {
-        
+    function createNewClient(client) {        
         var clientSelected = {
             'id': client.id,
             'name': client.name,
@@ -497,13 +490,13 @@ function init() {
                 },
                 type: 'POST',
                 dataType: 'json',
-//                beforeSend: function(){
-//                    $.mobile.loading("show", {
-//                        textVisible: true,
-//                        theme: 'c',
-//                        textonly: false
-//                    });
-//                },
+                beforeSend: function(){
+                    $.mobile.loading("show", {
+                        textVisible: true,
+                        theme: 'c',
+                        textonly: false
+                    });
+                },
                 success: function (data) {
                     if (data.status === 'OK') {
                         window.localStorage.setItem("rp-token", data.token);
@@ -608,10 +601,10 @@ function init() {
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
             var clients = JSON.parse(localStorage.getItem('clients'));
             var html ='';
-            var html = '<option value="'+clientSelected.id+'">'+clientSelected.name+'</option>';   
+            var html = '<option value="'+clientSelected.id+' data-id="'+clientSelected.id+'">'+clientSelected.name+'</option>';   
             for(var i in clients){
                 if(clients[i].id !== clientSelected.id){
-                    html +='<option value="'+clients[i].id+'">'+clients[i].name+'</option>';   
+                    html +='<option value="'+clients[i].id+'" data-id="'+clientSelected.id+'">'+clients[i].name+'</option>';   
                 }
             }
             $('#selectClient').append(html);
@@ -931,66 +924,56 @@ function init() {
     }
 
     function start_graphic(data_graphic) {
-        var margin = {top: 20, right: 20, bottom: 30, left: 40}, width = 960 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
-        var x0 = d3.scale.ordinal().rangeRoundBands([0, width], .1);
-        var x1 = d3.scale.ordinal();
-        var y = d3.scale.linear().range([height, 0]);
-        var color = d3.scale.ordinal().range(["#98abc5", "#8a89a6"]);
-        var xAxis = d3.svg.axis().scale(x0).orient("bottom");
-        var yAxis = d3.svg.axis().scale(y).orient("left").tickFormat(d3.format(".2s"));
-        var svg = d3.select("#graphic").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+        var div = $('<div></div>');
+        	div.attr('id', 'graphic_jqplot');
+          	$('#content_init_graphic').append(div);
+         
         function create_graphic(data) {
-          /* EXAMPL DATA :
-            data =[{Name: "Fisrt", Sale: "12354", Profit: "1054"},
-                   {Name: "Second", Sale: "3354", Profit: "1454"},
-                   {Name: "Third", Sale: "1454", Profit: "854"}];
-
-            call: create_graphic(data);
-          */
-          var typeNames = d3.keys(data[0]).filter(function(key) { return key !== "Name"; });
-
-          data.forEach(function(d) {
-            d.ages = typeNames.map(function(name) { return {name: name, value: +d[name]}; });
-          });
-
-          x0.domain(data.map(function(d) { return d.Name; }));
-          x1.domain(typeNames).rangeRoundBands([0, x0.rangeBand()]);
-          y.domain([0, d3.max(data, function(d) { return d3.max(d.ages, function(d) { return d.value; }); })]);
-
-          svg.append("g")
-              .attr("class", "x axis")
-              .attr("transform", "translate(0," + height + ")")
-              .call(xAxis);
-
-          svg.append("g").attr("class", "y axis").call(yAxis).append("text")
-              .attr("transform", "rotate(-90)")
-              .attr("y", 6)
-              .attr("dy", ".71em")
-              .style("text-anchor", "end")
-              .text("$ (Dollars)");
-
-          var state = svg.selectAll(".state")
-              .data(data)
-              .enter().append("g")
-              .attr("class", "g")
-              .attr("transform", function(d) { return "translate(" + x0(d.Name) + ",0)"; });
-
-          state.selectAll("rect").data(function(d) { return d.ages; }).enter().append("rect")
-              .attr("width", x1.rangeBand())
-              .attr("x", function(d) { return x1(d.name); })
-              .attr("y", function(d) { return y(d.value); })
-              .attr("height", function(d) { return height - y(d.value); })
-              .style("fill", function(d) { return color(d.name); });
-
-          var legend = svg.selectAll(".legend").data(typeNames.slice().reverse()).enter().append("g").attr("class", "legend").attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-          legend.append("rect").attr("x", width - 18).attr("width", 18).attr("height", 18).style("fill", color);
-          legend.append("text").attr("x", width - 24).attr("y", 9).attr("dy", ".35em").style("text-anchor", "end").text(function(d) { return d; });
+        	var s1 = [];
+        	var s2 = [];
+	        var ticks = [];
+        	for(index in data) {
+       		var item = data[index];
+        		s1[s1.length] = item.Profit;
+        		s2[s2.length] = item.Sale;
+        		ticks[ticks.length] = item.Name;
+        	}
+	        plot2 = $.jqplot('graphic_jqplot', [s1, s2], {
+	            seriesDefaults: {
+	                renderer:$.jqplot.BarRenderer,
+	                pointLabels: { show: true },
+	                rendererOptions: {fillToZero: true}
+	            },
+	            axes: {
+	                xaxis: {
+	                    renderer: $.jqplot.CategoryAxisRenderer,
+	                    ticks: ticks
+	                }
+	            },
+	            series:[
+	                    {label:'Profit'},
+	                    {label:'Sale'},
+	                ],
+                legend: {
+                    show: true,
+                    placement: 'outsideGrid' /* insideGrid */
+                }
+	        });
+        	     
+	        $('#chart2').bind('jqplotDataHighlight', 
+	            function (ev, seriesIndex, pointIndex, data) {}
+	        );
+	        $('#chart2').bind('jqplotDataUnhighlight', 
+	            function (ev) {}
+	        );
+	        /* transfer graphic to view analizer */
+	        $('#graphic').append($('#graphic_jqplot'));
         }
         create_graphic(data_graphic);
     }
 
     function pageMyProductsShow(){
+        saveClientStorage();
         $('#theDate').val(getDateMonthYear());
         var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products,
             ul_for_my_products = $('#myProducts');
@@ -1093,8 +1076,7 @@ function init() {
         if (day < 10) day = "0" + day;
         var today = year + "-" + month + "-" + day;
         return today;
-    
-}
+    }
     function showOverlay() {
         $('.username').focus();
         $(this).fadeOut().children().removeClass('effect_in_out');
@@ -1210,6 +1192,65 @@ function init() {
                 $.mobile.loading("hide");
             }
         });
+    }
+
+    function moveToOtherClient(){
+        var indice = $(this).index();    
+        var idClientDestination = $('#selectClient > option').eq(indice).val();  
+        var bandera = false;
+        debugger;
+
+        if(localStorage.getItem('clientSelected')){   
+            debugger;
+            //traigo los productos y id de clientSelected
+            var productsClientSelected = JSON.parse(localStorage.getItem('clientSelected')).products;
+            var idClientSelected = JSON.parse(localStorage.getItem('clientSelected')).id;
+
+            if(storageClients){                
+                for(var i in storageClients){   
+                    debugger;
+
+                    //si ya tiene productos                 
+                    if(storageClients[i].id  == idClientDestination){
+
+                        //actualizar precios de productos para cliente destino                            
+                        for(var j in productsClientSelected){
+                            debugger;
+                            var index = getArrayIndexProductsSelected().indexOf(productsClientSelected[j].id);
+                            if(index == -1){
+                                debugger;
+                                storageClients[i].productos.push(productsClientSelected[j]);
+                                productsClientSelected[j] = [];
+                            }
+                        }  
+                        localStorage.setItem("clientSelected", JSON.stringify(storageClients[i]));
+                        saveClientStorage();
+                    }
+                    else{
+                        bandera = true;
+                    }                    
+                }
+                //si no existe, es decir no tiene productos, solo capturo sus features(type, name, id) y lo almaceno en clientSelected 
+                //para luego en storageClients
+                if(bandera){                       
+                    for(var i in items_list){
+                        debugger;
+                        if(items_list[i].id == idClientDestination){
+                            debugger;
+                            items_list[i].products = productsClientSelected;
+                            localStorage.setItem("clientSelected", JSON.stringify(items_list[i]));
+                            saveClientStorage();
+                        }
+                    }                        
+                }
+                for(var i in storageClients){
+                    if(storageClients[i].id == idClientSelected){    
+                    debugger;                    
+                        storageClients.splice(i,1);
+                    }
+                }
+            }            
+        }
     }
 }
 
