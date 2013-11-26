@@ -76,9 +76,14 @@ function init() {
         $('.cleanClientSelected').live('click', cleanClientSelected);
         $('#search-redirect').on('click', changeSearch);
         $('#back_page').live('click', redirectToPage);
-        $('#selectClient-listbox').find('li').live('click', moveToOtherClient);
+        $('#selectClient-menu').find('li').live('click', moveToOtherClient);
+        $('.kill_storage').live('click', killStorage);
     //Functions
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
+    
+    function killStorage(){
+        localStorage.setItem("clientSelected", '');
+    }
 
     function redirectToPage(){
         if(localStorage.getItem('clientSelected')){
@@ -246,7 +251,7 @@ function init() {
         return totalPrice;
     }
 
-    function saveClientStorage() {
+    function saveClientStorage(){
         if(localStorage.getItem('clientSelected')){
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
             if(clientSelected.products == ''){
@@ -272,17 +277,17 @@ function init() {
         //business client -> wholesale 1
         //consumer -> retail 2
         var price =0;
-        if(clientSelected.type === 1) {
+        if(clientSelected.type === 1) {            
             price = product.wholesale_price;
         }
-        else if(clientSelected.type === 2) {
+        else if(clientSelected.type === 2) {        
             price = product.retail_price;
-            if (typeof(product.clients_discount) != 'undefined') {
+            if (typeof(product.clients_discount) != 'undefined') {                
 	            if (typeof(product.clients_discount[clientSelected.id]) != 'undefined') {
 	        		price = product.clients_discount[clientSelected.id].amount;
 	        	}
             }
-        }
+        }        
         return price;
     }
     
@@ -435,11 +440,8 @@ function init() {
                     //pintar select con las lista de clientes de la pagina 12
                     $('#selectClient').html('');
                     var html ='';
-                    var html = '<option value="'+clientSelected.id+'">'+clientSelected.name+'</option>';   
                     for(var i in items_list){
-                        if(items_list[i].id !== clientSelected.id){
-                            html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';   
-                        }
+                        html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';
                     }
                     $('#selectClient').append(html);
                     $('#selectClient-button > span > span > span').text(clientSelected.name);
@@ -1205,26 +1207,32 @@ function init() {
             //traigo los productos y id de clientSelected
             var productsClientSelected = JSON.parse(localStorage.getItem('clientSelected')).products;
             var idClientSelected = JSON.parse(localStorage.getItem('clientSelected')).id;
+            var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
 
             if(storageClients){                
                 for(var i in storageClients){   
                     debugger;
-
                     //si ya tiene productos                 
                     if(storageClients[i].id  == idClientDestination){
-
                         //actualizar precios de productos para cliente destino                            
-                        for(var j in productsClientSelected){
-                            debugger;
-                            var index = getArrayIndexProductsSelected().indexOf(productsClientSelected[j].id);
-                            if(index == -1){
-                                debugger;
-                                storageClients[i].productos.push(productsClientSelected[j]);
-                                productsClientSelected[j] = [];
-                            }
-                        }  
-                        localStorage.setItem("clientSelected", JSON.stringify(storageClients[i]));
+                        var products = JSON.parse(localStorage.getItem('products_inventory'));
+                        for(var j in products){ 
+                            if(getArrayIndexProductsSelected().indexOf(products[j].id) !== -1){
+                                productSelected = {
+                                    'id': products[j].id,
+                                    'product_name': products[j].product_name,
+                                    'model_name': products[j].model_name,
+                                    'quantity': products[j].quantity,
+                                    'price': calculatePrice(products[j]),
+                                    'model_image': products[j].model_image,
+                                    'discount': getDiscount(products[j])
+                                };
+                                clientSelected.products.push(productSelected);                                
+                            }                            
+                        }    
+                        localStorage.setItem("clientSelected", JSON.stringify(storageClients[i]));                      
                         saveClientStorage();
+                        bandera = false;
                     }
                     else{
                         bandera = true;
@@ -1234,11 +1242,33 @@ function init() {
                 //para luego en storageClients
                 if(bandera){                       
                     for(var i in items_list){
-                        debugger;
                         if(items_list[i].id == idClientDestination){
-                            debugger;
-                            items_list[i].products = productsClientSelected;
-                            localStorage.setItem("clientSelected", JSON.stringify(items_list[i]));
+                            var clientSelected = {
+                                'id': items_list[i].id,
+                                'name': items_list[i].name,
+                                'image': items_list[i].image,
+                                'type': items_list[i].type,
+                                'products':[],
+                                'total':0
+                            };
+                            var products = JSON.parse(localStorage.getItem('products_inventory'));
+                            for(var j in products){                                                        
+                                if(getArrayIndexProductsSelected().indexOf(products[j].id) !== -1){                                   
+                                    productSelected = {
+                                        'id': products[j].id,
+                                        'product_name': products[j].product_name,
+                                        'model_name': products[j].model_name,
+                                        'quantity': products[j].quantity,
+                                        'price': calculatePrice(products[j]),
+                                        'model_image': products[j].model_image,
+                                        'discount': getDiscount(products[j])
+                                    };                                    
+                                    clientSelected.products.push(productSelected);                                    
+                                }
+                            }
+                            localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+                            
+                            //cambiar precios segun tipo cliente
                             saveClientStorage();
                         }
                     }                        
