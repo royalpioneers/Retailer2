@@ -3,47 +3,6 @@ $(function(){
 	var DOMAIN = app.getDomain(),
         productModelId = undefined;
 
-//	function setContentSize() {
-//		$('.swiper-content').css({
-//			height: $(window).height()-$('.swiper-nav').height()
-//		})
-//	}
-//	setContentSize();
-//	$(window).resize(function(){
-//		setContentSize();
-//	});
-//
-//	//Swiper Content
-//	var contentSwiper = $('.swiper-content').swiper({
-//		onSlideChangeStart: function(){
-//			updateNavPosition()
-//		}
-//	});
-//	//Nav
-//	var navSwiper = $('.swiper-nav').swiper({
-//		visibilityFullFit: true,
-//		slidesPerView:'auto',
-//		//Thumbnails Clicks
-//		onSlideClick: function(){
-//			contentSwiper.swipeTo( navSwiper.clickedSlideIndex )
-//		}
-//	})
-//
-//	//Update Nav Position
-//	function updateNavPosition(){
-//		$('.swiper-nav .active-nav').removeClass('active-nav')
-//		var activeNav = $('.swiper-nav .swiper-slide').eq(contentSwiper.activeIndex).addClass('active-nav')
-//		if (!activeNav.hasClass('swiper-slide-visible')) {
-//			if (activeNav.index()>navSwiper.activeIndex) {
-//				var thumbsPerNav = Math.floor(navSwiper.width/activeNav.width())-1
-//				navSwiper.swipeTo(activeNav.index()-thumbsPerNav)
-//			}
-//			else {
-//				navSwiper.swipeTo(activeNav.index())
-//			}
-//		}
-//	}
-
 	// choose product group view
 
 	function chooseProductGroup (callback_url) {
@@ -133,19 +92,6 @@ $(function(){
     }
 
     $('.group-for-choose').on('click', groupForChoose);
-
-//	$('.product-link').on('click', function (e) {
-//		e.preventDefault();
-//		var $this = $(this);
-//		var id = $this.data('id');
-//		window.localStorage['productModelId'] = id;
-//		var url = '';
-//		var $detailPage = $('#product-detail-page');
-//		$detailPage.find('h1').text('fooo');
-//		var detail = '#product-detail-page';
-//		document.location.href = detail;
-//		// TODO: add ajax for get product detail by ajax
-//	});
 
 	$('#form-add-group').on('click', function (e) {
 		e.preventDefault();

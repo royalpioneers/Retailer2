@@ -76,8 +76,14 @@ function init() {
         $('.cleanClientSelected').live('click', cleanClientSelected);
         $('#search-redirect').on('click', changeSearch);
         $('#back_page').live('click', redirectToPage);
+        $('#selectClient-menu').find('li').live('click', moveToOtherClient);
+        $('.kill_storage').live('click', killStorage);
     //Functions
-    $.mobile.selectmenu.prototype.options.nativeMenu = true;
+    $.mobile.selectmenu.prototype.options.nativeMenu = false;
+    
+    function killStorage(){
+        localStorage.setItem("clientSelected", '');
+    }
 
     function redirectToPage(){
         if(localStorage.getItem('clientSelected')){
@@ -185,7 +191,6 @@ function init() {
             console.log('goProduct');
         }
     }
-
     function selectProduct(e) {
         e.preventDefault();
         var products = JSON.parse(localStorage.getItem('products_inventory')),
@@ -229,8 +234,7 @@ function init() {
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     $(this).data('selected',false);
                     $(li).removeClass("myProductSelected");
-                    $('.see_more_products_clients').text(getCurrentTotal());
-                    pageMyProductsShow();
+                    $('.see_more_products_clients').text(getCurrentTotal());                    
                     break;
                 }
             }
@@ -247,25 +251,24 @@ function init() {
         return totalPrice;
     }
 
-    function saveClientStorage() {
-        if(localStorage.getItem('clientSelected')){
+    function saveClientStorage(){
+        if(localStorage.getItem('clientSelected')){            
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
             if(clientSelected.products == ''){
                 cleanClientSelected();
                 $.mobile.navigate("#pagina11");
             }
-            else if(clientSelected.products != ''){
+            else if(clientSelected.products != ''){                
                 //validar si esta repetido
                 var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-                if(index !== -1){
+                if(index !== -1){                    
                     storageClients[index] = clientSelected;
                 }
-                else{
+                else{                    
                     storageClients.push(clientSelected);
                 }
                 $.mobile.navigate("#pagina12");
             }
-
         }
     }
 
@@ -274,17 +277,17 @@ function init() {
         //business client -> wholesale 1
         //consumer -> retail 2
         var price =0;
-        if(clientSelected.type === 1) {
+        if(clientSelected.type === 1) {            
             price = product.wholesale_price;
         }
-        else if(clientSelected.type === 2) {
+        else if(clientSelected.type === 2) {        
             price = product.retail_price;
-            if (typeof(product.clients_discount) != 'undefined') {
+            if (typeof(product.clients_discount) != 'undefined') {                
 	            if (typeof(product.clients_discount[clientSelected.id]) != 'undefined') {
 	        		price = product.clients_discount[clientSelected.id].amount;
 	        	}
             }
-        }
+        }        
         return price;
     }
     
@@ -437,11 +440,8 @@ function init() {
                     //pintar select con las lista de clientes de la pagina 12
                     $('#selectClient').html('');
                     var html ='';
-                    var html = '<option value="'+clientSelected.id+'">'+clientSelected.name+'</option>';   
                     for(var i in items_list){
-                        if(items_list[i].id !== clientSelected.id){
-                            html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';   
-                        }
+                        html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';
                     }
                     $('#selectClient').append(html);
                     $('#selectClient-button > span > span > span').text(clientSelected.name);
@@ -457,8 +457,7 @@ function init() {
         });
     }
 
-    function createNewClient(client) {
-        
+    function createNewClient(client) {        
         var clientSelected = {
             'id': client.id,
             'name': client.name,
@@ -472,7 +471,7 @@ function init() {
     }
 
     function logOut(event) {
-        // localStorage.clear('products_inventory');
+        localStorage.clear('products_inventory');
         event.preventDefault();
         $('#container-login').css('display','inline');
         window.localStorage.removeItem("rp-token");
@@ -493,13 +492,13 @@ function init() {
                 },
                 type: 'POST',
                 dataType: 'json',
-//                beforeSend: function(){
-//                    $.mobile.loading("show", {
-//                        textVisible: true,
-//                        theme: 'c',
-//                        textonly: false
-//                    });
-//                },
+                beforeSend: function(){
+                    $.mobile.loading("show", {
+                        textVisible: true,
+                        theme: 'c',
+                        textonly: false
+                    });
+                },
                 success: function (data) {
                     if (data.status === 'OK') {
                         window.localStorage.setItem("rp-token", data.token);
@@ -604,10 +603,10 @@ function init() {
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
             var clients = JSON.parse(localStorage.getItem('clients'));
             var html ='';
-            var html = '<option value="'+clientSelected.id+'">'+clientSelected.name+'</option>';   
+            var html = '<option value="'+clientSelected.id+' data-id="'+clientSelected.id+'">'+clientSelected.name+'</option>';   
             for(var i in clients){
                 if(clients[i].id !== clientSelected.id){
-                    html +='<option value="'+clients[i].id+'">'+clients[i].name+'</option>';   
+                    html +='<option value="'+clients[i].id+'" data-id="'+clientSelected.id+'">'+clients[i].name+'</option>';   
                 }
             }
             $('#selectClient').append(html);
@@ -927,17 +926,16 @@ function init() {
     }
 
     function start_graphic(data_graphic) {
-    	$('#graphic').html('');
-    	var div = $('<div></div>');
-    	div.attr('id', 'graphic_jqplot');
-    	$('#content_init_graphic').append(div);
-
+        var div = $('<div></div>');
+        	div.attr('id', 'graphic_jqplot');
+          	$('#content_init_graphic').append(div);
+         
         function create_graphic(data) {
         	var s1 = [];
-	        var s2 = [];
+        	var s2 = [];
 	        var ticks = [];
         	for(index in data) {
-        		var item = data[index];
+       		var item = data[index];
         		s1[s1.length] = item.Profit;
         		s2[s2.length] = item.Sale;
         		ticks[ticks.length] = item.Name;
@@ -963,7 +961,6 @@ function init() {
                     placement: 'outsideGrid' /* insideGrid */
                 }
 	        });
-	     
 	        $('#chart2').bind('jqplotDataHighlight', 
 	            function (ev, seriesIndex, pointIndex, data) {}
 	        );
@@ -971,12 +968,13 @@ function init() {
 	            function (ev) {}
 	        );
 	        /* transfer graphic to view analizer */
-        	$('#graphic').append($('#graphic_jqplot'));
+	        $('#graphic').append($('#graphic_jqplot'));
         }
         create_graphic(data_graphic);
     }
 
     function pageMyProductsShow(){
+        saveClientStorage();
         $('#theDate').val(getDateMonthYear());
         var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products,
             ul_for_my_products = $('#myProducts');
@@ -1079,8 +1077,7 @@ function init() {
         if (day < 10) day = "0" + day;
         var today = year + "-" + month + "-" + day;
         return today;
-    
-}
+    }
     function showOverlay() {
         $('.username').focus();
         $(this).fadeOut().children().removeClass('effect_in_out');
@@ -1197,6 +1194,105 @@ function init() {
             }
         });
     }
+
+    function moveToOtherClient(){
+        var indice = $(this).index();    
+        var idClientDestination = $('#selectClient > option').eq(indice).val();  
+        var bandera = false;        
+
+        if(localStorage.getItem('clientSelected')){               
+            //traigo los productos y id de clientSelected
+            var productsClientSelected = JSON.parse(localStorage.getItem('clientSelected')).products;
+            var idClientSelected = JSON.parse(localStorage.getItem('clientSelected')).id;
+            
+            if(storageClients){                
+                for(var i in storageClients){                       
+                    //si ya tiene productos                 
+                    if(storageClients[i].id  == idClientDestination){                        
+                        //traer los productos a agregar
+                        var array = [];
+                        for(var k in storageClients[i].products){                            
+                            array.push(storageClients[i].products[k].id);
+                        }
+                        //este contendra los nuevos
+                        var productsToMigrate = [];
+                        for(var j in productsClientSelected){                            
+                            if(array.indexOf(productsClientSelected[j].id) == -1){                                
+                                productsToMigrate.push(productsClientSelected[j].id);
+                            }
+                        }
+                        //cambiar sus detalles
+                        var products = JSON.parse(localStorage.getItem('products_inventory'));
+                        for(var j in products){               
+                                                                
+                            if(productsToMigrate.indexOf(products[j].id) !== -1){                                   
+                                productSelected = {
+                                    'id': products[j].id,
+                                    'product_name': products[j].product_name,
+                                    'model_name': products[j].model_name,
+                                    'quantity': products[j].quantity,
+                                    'price': calculatePrice(products[j]),
+                                    'model_image': products[j].model_image,
+                                    'discount': getDiscount(products[j])
+                                };     
+                                //agregar al nuevo                                
+                                storageClients[i].products.push(productSelected);                                   
+                            }
+                        }                                            
+                        localStorage.setItem("clientSelected", JSON.stringify(storageClients[i]));                      
+                        saveClientStorage();
+                        bandera = false;
+                    }
+                    else{
+                        bandera = true;
+                    }                    
+                }
+                //si no existe, es decir no tiene productos, solo capturo sus features(type, name, id) y lo almaceno en clientSelected 
+                //para luego en storageClients
+                if(bandera){                       
+                    for(var i in items_list){
+                        if(items_list[i].id == idClientDestination){
+                            var clientSelected = {
+                                'id': items_list[i].id,
+                                'name': items_list[i].name,
+                                'image': items_list[i].image,
+                                'type': items_list[i].type,
+                                'products':[],
+                                'total':0
+                            };                            
+                            var products = JSON.parse(localStorage.getItem('products_inventory'));
+                            for(var j in products){  
+                                                                                
+                                if(getArrayIndexProductsSelected().indexOf(products[j].id) !== -1){                                   
+                                    productSelected = {
+                                        'id': products[j].id,
+                                        'product_name': products[j].product_name,
+                                        'model_name': products[j].model_name,
+                                        'quantity': products[j].quantity,
+                                        'price': calculatePrice(products[j]),
+                                        'model_image': products[j].model_image,
+                                        'discount': getDiscount(products[j])
+                                    };
+                                                                    
+                                    clientSelected.products.push(productSelected);                                    
+                                }
+                            }                            
+                            localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+                            
+                            //cambiar precios segun tipo cliente
+                            saveClientStorage();
+                        }
+                    }                        
+                }
+                for(var i in storageClients){
+                    if(storageClients[i].id == idClientSelected){    
+                                    
+                        storageClients.splice(i,1);
+                    }
+                }
+            }            
+        }
+    }
 }
 
 // storageClients = [
@@ -1214,3 +1310,34 @@ function init() {
         //         'total':454  
         //     }
         // ]
+Offline.options = {
+       // Should we check the connection status immediatly on page load.
+      checkOnLoad: false,
+
+      // Should we monitor AJAX requests to help decide if we have a connection.
+      interceptRequests: true,
+
+      // Should we automatically retest periodically when the connection is down (set to false to disable).
+      reconnect: {
+        // How many seconds should we wait before rechecking.
+        initialDelay: 3,
+
+        // How long should we wait between retries.
+        //delay: (1.5 * last delay, capped at 1 hour)
+      },
+
+      // Should we store and attempt to remake requests which fail while the connection is down.
+      requests: true,
+
+      // Should we show a snake game while the connection is down to keep the user entertained?
+      // It's not included in the normal build, you should bring in js/snake.js in addition to
+      // offline.min.js.
+      game: false
+    }
+
+    var run = function(){
+      if (Offline.state === 'up')
+        Offline.check();
+        //alert();
+    }
+    setInterval(run, 5000);

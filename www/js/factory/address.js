@@ -6,9 +6,9 @@ var CountryFactory = function(urls, token) {
 	factory.token = token;
 	factory.id_countries = 'id_countries';
 	
-	factory.get_all = function(handler) {
+	factory.get_all = function(handler, cache) {
 		var list = JSON.parse(window.localStorage.getItem(factory.id_countries));
-		if (factory.cache && list != null) {
+		if ((factory.cache || cache) && list != null) {
 			handler(list);
 		} 
 		
