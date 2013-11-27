@@ -252,19 +252,19 @@ function init() {
     }
 
     function saveClientStorage(){
-        if(localStorage.getItem('clientSelected')){
+        if(localStorage.getItem('clientSelected')){            
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
             if(clientSelected.products == ''){
                 cleanClientSelected();
                 $.mobile.navigate("#pagina11");
             }
-            else if(clientSelected.products != ''){
+            else if(clientSelected.products != ''){                
                 //validar si esta repetido
                 var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-                if(index !== -1){
+                if(index !== -1){                    
                     storageClients[index] = clientSelected;
                 }
-                else{
+                else{                    
                     storageClients.push(clientSelected);
                 }
                 $.mobile.navigate("#pagina12");
@@ -471,7 +471,7 @@ function init() {
     }
 
     function logOut(event) {
-        // localStorage.clear('products_inventory');
+        localStorage.clear('products_inventory');
         event.preventDefault();
         $('#container-login').css('display','inline');
         window.localStorage.removeItem("rp-token");
@@ -1199,25 +1199,34 @@ function init() {
     function moveToOtherClient(){
         var indice = $(this).index();    
         var idClientDestination = $('#selectClient > option').eq(indice).val();  
-        var bandera = false;
-        debugger;
+        var bandera = false;        
 
-        if(localStorage.getItem('clientSelected')){   
-            debugger;
+        if(localStorage.getItem('clientSelected')){               
             //traigo los productos y id de clientSelected
             var productsClientSelected = JSON.parse(localStorage.getItem('clientSelected')).products;
             var idClientSelected = JSON.parse(localStorage.getItem('clientSelected')).id;
-            var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-
+            
             if(storageClients){                
-                for(var i in storageClients){   
-                    debugger;
+                for(var i in storageClients){                       
                     //si ya tiene productos                 
-                    if(storageClients[i].id  == idClientDestination){
-                        //actualizar precios de productos para cliente destino                            
+                    if(storageClients[i].id  == idClientDestination){                        
+                        //traer los productos a agregar
+                        var array = [];
+                        for(var k in storageClients[i].products){                            
+                            array.push(storageClients[i].products[k].id);
+                        }
+                        //este contendra los nuevos
+                        var productsToMigrate = [];
+                        for(var j in productsClientSelected){                            
+                            if(array.indexOf(productsClientSelected[j].id) == -1){                                
+                                productsToMigrate.push(productsClientSelected[j].id);
+                            }
+                        }
+                        //cambiar sus detalles
                         var products = JSON.parse(localStorage.getItem('products_inventory'));
-                        for(var j in products){ 
-                            if(getArrayIndexProductsSelected().indexOf(products[j].id) !== -1){
+                        for(var j in products){               
+                                                                
+                            if(productsToMigrate.indexOf(products[j].id) !== -1){                                   
                                 productSelected = {
                                     'id': products[j].id,
                                     'product_name': products[j].product_name,
@@ -1226,10 +1235,11 @@ function init() {
                                     'price': calculatePrice(products[j]),
                                     'model_image': products[j].model_image,
                                     'discount': getDiscount(products[j])
-                                };
-                                clientSelected.products.push(productSelected);                                
-                            }                            
-                        }    
+                                };     
+                                //agregar al nuevo                                
+                                storageClients[i].products.push(productSelected);                                   
+                            }
+                        }                                            
                         localStorage.setItem("clientSelected", JSON.stringify(storageClients[i]));                      
                         saveClientStorage();
                         bandera = false;
@@ -1250,9 +1260,10 @@ function init() {
                                 'type': items_list[i].type,
                                 'products':[],
                                 'total':0
-                            };
+                            };                            
                             var products = JSON.parse(localStorage.getItem('products_inventory'));
-                            for(var j in products){                                                        
+                            for(var j in products){  
+                                                                                
                                 if(getArrayIndexProductsSelected().indexOf(products[j].id) !== -1){                                   
                                     productSelected = {
                                         'id': products[j].id,
@@ -1262,10 +1273,11 @@ function init() {
                                         'price': calculatePrice(products[j]),
                                         'model_image': products[j].model_image,
                                         'discount': getDiscount(products[j])
-                                    };                                    
+                                    };
+                                                                    
                                     clientSelected.products.push(productSelected);                                    
                                 }
-                            }
+                            }                            
                             localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                             
                             //cambiar precios segun tipo cliente
@@ -1275,7 +1287,7 @@ function init() {
                 }
                 for(var i in storageClients){
                     if(storageClients[i].id == idClientSelected){    
-                    debugger;                    
+                                    
                         storageClients.splice(i,1);
                     }
                 }
@@ -1299,3 +1311,34 @@ function init() {
         //         'total':454  
         //     }
         // ]
+Offline.options = {
+       // Should we check the connection status immediatly on page load.
+      checkOnLoad: false,
+
+      // Should we monitor AJAX requests to help decide if we have a connection.
+      interceptRequests: true,
+
+      // Should we automatically retest periodically when the connection is down (set to false to disable).
+      reconnect: {
+        // How many seconds should we wait before rechecking.
+        initialDelay: 3,
+
+        // How long should we wait between retries.
+        //delay: (1.5 * last delay, capped at 1 hour)
+      },
+
+      // Should we store and attempt to remake requests which fail while the connection is down.
+      requests: true,
+
+      // Should we show a snake game while the connection is down to keep the user entertained?
+      // It's not included in the normal build, you should bring in js/snake.js in addition to
+      // offline.min.js.
+      game: false
+    }
+
+    var run = function(){
+      if (Offline.state === 'up')
+        Offline.check();
+        //alert();
+    }
+    setInterval(run, 5000);
