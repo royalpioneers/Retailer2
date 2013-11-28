@@ -306,7 +306,6 @@ function init() {
     var countryFactory = new CountryFactory(urls, token);
     var stateFactory = new StateFactory(urls, token);
     var cityFactory = new CityFactory(urls, token);
-    alert('pasa a ' + token);
     var clientFactory = new ClientFactory(urls, token);
     var client = ClientModel(countryFactory, stateFactory, cityFactory, clientFactory, listClients);
     client.init(); /* start list */
@@ -525,6 +524,11 @@ function init() {
         getAnalyzerInformation();
         $('#container-login').css('display','none');
         $.mobile.navigate("#pagina2");
+        
+        countryFactory.set_token(token);
+        stateFactory.set_token(token);
+        cityFactory.set_token(token);
+        clientFactory.set_token(token); 
     }
 
     function getInventoryItems() {
