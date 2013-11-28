@@ -100,7 +100,6 @@ function init() {
     }
 
     function cleanClientSelected(){
-        
         pageClientShow();
     }
     function pageClientShow() { 
@@ -546,7 +545,7 @@ function init() {
                 var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
                     html_to_insert = '';
                     items_list = data.items_list;
-                    
+               debugger;
                $.each(items_list, function(i, model){
                    html_to_insert += '<li>\
                                         <a href="#pagina5"\
