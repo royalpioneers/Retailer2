@@ -109,5 +109,9 @@ var ClientFactory = function(urls, token) {
 	    });
 	};
 	
+	factory.set_token = function(token) {
+		factory.token = token;
+	};
+	
 	return factory;
 };
