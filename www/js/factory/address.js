@@ -81,7 +81,6 @@ var CityFactory = function(urls, token) {
 	factory.id_cities = 'id_cities';
 
 	factory.get_by_char = function(state, handler){
-		window.localStorage.removeItem(factory.id_cities+state);
 		var list = JSON.parse(window.localStorage.getItem(factory.id_cities+state));
 		if (factory.cache && list != null) {
 			handler(list);
