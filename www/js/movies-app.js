@@ -27,17 +27,20 @@ $(function(){
                 });
             },
             success: function (data) {
-
             	if (data.status === 'success') {
-            		var len = data.groups.length, i, group;
-	                for (i=0; i<len; i++) {
-	                    group = data.groups[i];
-	                    html += '<li data-icon="false"><a href="'+ prev +'" data-id="' + group.id + '" class="group-for-choose">' + group.name + '</a></li>'
-	                }
-	                list.append(html);
-	                list.trigger('create');
-	                $('.group-for-choose').on('click', groupForChoose);
-	                $.mobile.navigate(callback_url);
+                    var ul_for_list_clients = $('#product-group-list-page').find('#list_groups'),
+                    html_to_insert = '',
+                    groups = data.groups;
+                    ul_for_list_clients.html('');
+                    
+                    for(var i in groups){
+                        html_to_insert += '<li><a href="'+ prev +'" data-id="' + groups[i].id + '" class="group-for-choose">' + groups[i].name + '</a></li>';
+                    }
+                    ul_for_list_clients.append(html_to_insert);
+                    $('#list_groups').trigger('create');
+                    $('.group-for-choose').on('click', groupForChoose);
+                    $.mobile.navigate(callback_url);
+	                
             	} else {
             		alert('no groups found');
             	}
@@ -80,6 +83,7 @@ $(function(){
             success: function (data) {
                 if (data.status === 'success') {
                     productModelId = undefined;
+                    $('#list_groups').trigger('create');
                     $.mobile.navigate("#pagina2");
                 } else {
                 	alert(data.status);
