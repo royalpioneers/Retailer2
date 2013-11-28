@@ -39,7 +39,9 @@ var ClientFactory = function(urls, token) {
 	};
 	
 	factory.create = function(params, handler) {
+		alert('interno ' + factory.token);
 		params.rp_token = factory.token;
+		alert('param ' + params.rp_token);
 		$.ajax({
 			url: factory.urls.client_create,
 			type: 'POST',
