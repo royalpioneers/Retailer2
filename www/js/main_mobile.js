@@ -524,6 +524,11 @@ function init() {
         getAnalyzerInformation();
         $('#container-login').css('display','none');
         $.mobile.navigate("#pagina2");
+        
+        countryFactory.set_token(token);
+        stateFactory.set_token(token);
+        cityFactory.set_token(token);
+        clientFactory.set_token(token); 
     }
 
     function getInventoryItems() {
@@ -961,7 +966,6 @@ function init() {
                     placement: 'outsideGrid' /* insideGrid */
                 }
 	        });
-        	     
 	        $('#chart2').bind('jqplotDataHighlight', 
 	            function (ev, seriesIndex, pointIndex, data) {}
 	        );
