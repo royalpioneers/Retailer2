@@ -101,7 +101,6 @@ function init() {
     }
 
     function cleanClientSelected(){
-        
         pageClientShow();
     }
     function pageClientShow() { 
@@ -552,7 +551,6 @@ function init() {
                 var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
                     html_to_insert = '';
                     items_list = data.items_list;
-                    
                $.each(items_list, function(i, model){
                    html_to_insert += '<li>\
                                         <a href="#pagina5"\
@@ -716,14 +714,14 @@ function init() {
                     rp_token: token
                 },
                 dataType: 'json',
-                beforeSend: function(){
+                beforeSend: function() {
                     $.mobile.loading("show", {
                         textVisible: true,
                         theme: 'c',
                         textonly: false
                     });
                 },
-                success: function(data){
+                success: function(data) {
                     if(data.status.status == true){
                         uploadPhoto(data.id);
                     } else {
@@ -731,7 +729,7 @@ function init() {
                     }
 
                 },
-                complete: function(){
+                complete: function() {
                     $.mobile.loading("hide");
                 }
             });

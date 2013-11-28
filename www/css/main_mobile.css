@@ -341,7 +341,7 @@
         border-radius: 8%;
     }
     .ui-listview-filter.ui-bar-c.ui-listview-filter-inset {
-        width: 95%; margin: 0 auto;
+        margin: 0 auto;
     }
     .image_invoice{
         margin-top: 0.5em;
@@ -641,14 +641,12 @@ text-align: center;
 margin: 0 auto 0 auto;
 }
 #edit-image{
-    width: 8em;
+    width: 100%;
 }
 .btn_more_big,.header_top_options{
-    padding: 1% !important; 
+    margin-top: -0.5% !important;
     text-align: center;
-    padding: 20px 25px !important;
-}
-.btn_more_big .ui-btn-inner,.header_top_options .ui-btn-inner{
+    padding: 24px 25px !important;
     border: none !important;
 }
 div.ui-input-text > input {
@@ -656,10 +654,15 @@ div.ui-input-text > input {
     padding-top: 1.5em !important;
 }
 div[data-role='header']{
-    padding: 8px 0 !important;
-position: relative;
-overflow: hidden;
-min-height: 4.8em;
+    padding: 10px 0 !important;
+    position: relative;
+    overflow: hidden;
+}
+.header_top_options .ui-btn-inner{
+    border: none !important;
+}
+.header_top_options .ui-btn-inner, .btn_more_big .ui-btn-inner{
+    border: none !important;
 }
 #create_item {
     padding: 3%;
