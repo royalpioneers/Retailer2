@@ -713,14 +713,14 @@ function init() {
                     rp_token: token
                 },
                 dataType: 'json',
-                beforeSend: function(){
+                beforeSend: function() {
                     $.mobile.loading("show", {
                         textVisible: true,
                         theme: 'c',
                         textonly: false
                     });
                 },
-                success: function(data){
+                success: function(data) {
                     if(data.status.status == true){
                         uploadPhoto(data.id);
                     } else {
@@ -728,7 +728,7 @@ function init() {
                     }
 
                 },
-                complete: function(){
+                complete: function() {
                     $.mobile.loading("hide");
                 }
             });
