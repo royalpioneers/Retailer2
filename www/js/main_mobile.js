@@ -18,7 +18,8 @@ rp-token: Used in requests for user verification
 items_list: ?
 productsSelected: ?
 storageClients: ?
-
+productRelated: contains product names selected product
+categories: contains categories and sub categories
  */
 
 var DOMAIN = app.getDomain();
@@ -49,60 +50,53 @@ function init() {
     	analyzer_information = [],
         imageURL = undefined;
         token = window.localStorage.getItem("rp-token");
-    //Automatic Login
 
-    if(token != null) {
-        authToken();
-    } else {
-        $('#container-login').css('display','inline');
-    }
     //Events
-    //Login
-    $("#log_in").on("click", loginAuth);
-    $('#logout').on('click', logOut);
 
-    //Generic
-    $(".navbar ul li").live("click", changeTab);
-    $('.carousel').carousel({interval: 2000});
+        //Login
+        $("#log_in").on("click", loginAuth);
+        $('#logout').on('click', logOut);
 
-    //Create product
-    $('.categories_create_product').find('a').on('click', createProduct);
-    $('#create-product').live("click", getInformationProduct);
-    $('#create_item').live("click", saveProduct);
-    $('.option-expand').live('expand', setCategory);
-    $('#edit-image').on('click', takePicture);
+        //Generic
+        $(".navbar ul li").live("click", changeTab);
+        $('.carousel').carousel({interval: 2000});
 
-    //Analyzer
-    $("#browser").live('input', getCompleteInformation);
-    $('.overlay,.close_modal').live('click', showOverlay);
-    $('#graphic_month').live('click',function(){processAnalyzerInformation(1);});
-    $('#graphic_week').live('click',function(){processAnalyzerInformation(2);});
-    $('#graphic_day').live('click',function(){processAnalyzerInformation(3);});
-    $('.card').on('click',function(){$(this).addClass('moved');});
+        //Create product
+        $('.categories_create_product').find('a').on('click', createProduct);
+        $('#create-product').live("click", getInformationProduct);
+        $('#create_item').live("click", saveProduct);
+        $('.option-expand').live('expand', setCategory);
+        $('#edit-image').on('click', takePicture);
 
-    //Invoice
-    $('#new_invoice').live('click', listClients);
-    $('#goToInvoice').live('click', showInvoice);
-    $('.productSelected').live('click', selectProduct);    
-    $( "#pagina12" ).on( "pageshow", function( event ) {$('#theDate').val(getDateMonthYear());});
-    $('#goToProducts').on('click', goProduct);
-    $( "#pagina13" ).on( "pageshow", pageClientShow);
-    $('.saveClientStorage').on('click', saveClientStorage);
-    $('.removeProduct').live('click', removeMyProduct);
-    $( "#pagina12" ).on( "pageshow", pageMyProductsShow);
-    $( ".qtyInvoice" ).live('keyup', updateMyProduct);
-    $('#sendProductsInvoice').live('click', sendProductsInvoice);
-    $('.cancel_sendProductsInvoice').live('click', goProduct);
-    $('.cleanClientSelected').live('click', cleanClientSelected);
-    $('#search-redirect').on('click', changeSearch);
-    $('#back_page').live('click', redirectToPage);
-    $('#selectClient-menu').find('li').live('click', moveToOtherClient);
-    $('.kill_storage').live('click', killStorage);
+        //Analyzer
+        $("#browser").live('input', getCompleteInformation);
+        $('.overlay,.close_modal').live('click', showOverlay);
+        $('#graphic_month').live('click',function(){processAnalyzerInformation(1);});
+        $('#graphic_week').live('click',function(){processAnalyzerInformation(2);});
+        $('#graphic_day').live('click',function(){processAnalyzerInformation(3);});
+        $('.card').on('click',function(){$(this).addClass('moved');});
 
-    //Functions    
+        //Invoice
+        $('#new_invoice').live('click', listClients);
+        $('#goToInvoice').live('click', showInvoice);
+        $('.productSelected').live('click', selectProduct);
+        $( "#pagina12" ).on( "pageshow", function( event ) {$('#theDate').val(getDateMonthYear());});
+        $('#goToProducts').on('click', goProduct);
+        $( "#pagina13" ).on( "pageshow", pageClientShow);
+        $('.saveClientStorage').on('click', saveClientStorage);
+        $('.removeProduct').live('click', removeMyProduct);
+        $( "#pagina12" ).on( "pageshow", pageMyProductsShow);
+        $( ".qtyInvoice" ).live('keyup', updateMyProduct);
+        $('#sendProductsInvoice').live('click', sendProductsInvoice);
+        $('.cancel_sendProductsInvoice').live('click', goProduct);
+        $('.cleanClientSelected').live('click', cleanClientSelected);
+        $('#search-redirect').on('click', changeSearch);
+        $('#back_page').live('click', redirectToPage);
+        $('#selectClient-menu').find('li').live('click', moveToOtherClient);
+        $('.kill_storage').live('click', killStorage);
 
     /* PRODUCTS */
-        var categoryFactory = new CountryFactory(urls, token);
+        var categoryFactory = new CategoryFactory(urls, token);
         var buyerInventoryFactory = BuyerInventoryFactory(urls, token);
         var product = ProductModel(categoryFactory);
         product.init();/* start list */
@@ -118,7 +112,17 @@ function init() {
     /* INVOICE */
         var invoice = new InvoiceModel();
 
+
+    //Automatic Login
+
+    if(token != null) {
+        authToken();
+    } else {
+        $('#container-login').css('display','inline');
+    }
+
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
+
     $.mobile.buttonMarkup.hoverDelay = 0;
     
     function killStorage(){
@@ -510,6 +514,7 @@ function init() {
         //Cuando regresa del search falla
         var result = checkConnection();
         //var result =  true;
+        debugger;
         if(result ==  true){
             var url = urls.loginToken;
             $.ajax({
@@ -533,12 +538,21 @@ function init() {
                 },
                 complete: completeAjaxLoader()
             });
-        } else {
-            alert('Check your internet connection')
+        }
+        if (Offline.state == 'down') {
+            if(window.localStorage.getItem("rp-token") != null &&
+                window.localStorage.getItem("rp-token") != undefined){
+                token = window.localStorage.getItem("rp-token");
+                debugger;
+                eventsAfterLogin();
+            } else {
+                alert('Check your internet connection')
+            }
         }
     }
 
     function eventsAfterLogin() {
+        categoryFactory.set_token(token);
         buyerInventoryFactory.set_token(token);
         countryFactory.set_token(token);
         stateFactory.set_token(token);
@@ -721,48 +735,48 @@ function init() {
         var div = $('<div></div>');
         	div.attr('id', 'graphic_jqplot');
           	$('#content_init_graphic').append(div);
-
-        function create_graphic(data) {
-        	var s1 = [];
-        	var s2 = [];
-	        var ticks = [];
-        	for(index in data) {
-       		var item = data[index];
-        		s1[s1.length] = item.Profit;
-        		s2[s2.length] = item.Sale;
-        		ticks[ticks.length] = item.Name;
-        	}
-	        plot2 = $.jqplot('graphic_jqplot', [s1, s2], {
-	            seriesDefaults: {
-	                renderer:$.jqplot.BarRenderer,
-	                pointLabels: { show: true },
-	                rendererOptions: {fillToZero: true}
-	            },
-	            axes: {
-	                xaxis: {
-	                    renderer: $.jqplot.CategoryAxisRenderer,
-	                    ticks: ticks
-	                }
-	            },
-	            series:[
-	                    {label:'Profit'},
-	                    {label:'Sale'},
-	                ],
-                legend: {
-                    show: true,
-                    placement: 'outsideGrid' /* insideGrid */
-                }
-	        });
-	        $('#chart2').bind('jqplotDataHighlight',
-	            function (ev, seriesIndex, pointIndex, data) {}
-	        );
-	        $('#chart2').bind('jqplotDataUnhighlight',
-	            function (ev) {}
-	        );
-	        /* transfer graphic to view analizer */
-	        $('#graphic').append($('#graphic_jqplot'));
-        }
         create_graphic(data_graphic);
+    }
+
+    function create_graphic(data) {
+        var s1 = [];
+        var s2 = [];
+	    var ticks = [];
+        for(index in data) {
+        var item = data[index];
+        	s1[s1.length] = item.Profit;
+        	s2[s2.length] = item.Sale;
+        	ticks[ticks.length] = item.Name;
+        }
+	    plot2 = $.jqplot('graphic_jqplot', [s1, s2], {
+	        seriesDefaults: {
+	            renderer:$.jqplot.BarRenderer,
+	            pointLabels: { show: true },
+	            rendererOptions: {fillToZero: true}
+	        },
+	        axes: {
+	            xaxis: {
+	                renderer: $.jqplot.CategoryAxisRenderer,
+	                ticks: ticks
+	            }
+	        },
+	        series:[
+	                {label:'Profit'},
+	                {label:'Sale'},
+	            ],
+            legend: {
+                show: true,
+                placement: 'outsideGrid' /* insideGrid */
+            }
+	    });
+	    $('#chart2').bind('jqplotDataHighlight',
+	        function (ev, seriesIndex, pointIndex, data) {}
+	    );
+	    $('#chart2').bind('jqplotDataUnhighlight',
+	        function (ev) {}
+	    );
+	    /* transfer graphic to view analizer */
+	    $('#graphic').append($('#graphic_jqplot'));
     }
 
     /* Invoice */
@@ -787,6 +801,177 @@ function init() {
         else{
             alert('Chooce Someone!');
         }        
+    }
+
+    function updateAfterCreateInvoice(clientSelected) {
+    	for(var i in storageClients){
+            var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+            if(index !== -1){
+                var remove = -1;
+                $.each(storageClients, function(i, value){
+                    if(value.id == clientSelected.id){
+                        remove = i;
+                    }
+                });
+                if(remove > -1) {
+                	invoice.success_create(clientSelected.products);
+                    storageClients.splice(remove, 1);
+                    clientSelected.products = [];
+                    localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+                }
+                $.mobile.navigate("#pagina11");
+            }
+        }
+    }
+
+    function sendProductsInvoice(event) {
+        event.preventDefault();
+        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+        var data_client = [];
+        var url = urls.send_invoice;
+        for (var index in storageClients) {
+    		if (storageClients[index].id == clientSelected.id) {
+    			data_client[0] = storageClients[index];
+	        	break;
+	        }
+        }
+        var data = {
+            rp_token: token,
+            client: JSON.stringify(data_client)
+        };
+
+		if (!invoice.are_valid_products(data_client[0].products)) {
+        	alert(invoice.get_message());
+        	return false;
+        }
+
+        $.ajax({
+          url: url,
+          type: 'POST',
+          dataType: 'json',
+          data: data,
+          beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
+            success: function(data) {
+                if (data.status == true) {
+                	updateAfterCreateInvoice(clientSelected);
+                } else {
+                    alert('an error occurred');
+                    $.mobile.navigate("#pagina11");
+                }
+            },
+            complete: function(){
+                $.mobile.loading("hide");
+            }
+        });
+        if (Offline.state == 'down') {
+        	updateAfterCreateInvoice(clientSelected);
+        	$.mobile.navigate("#pagina11");
+        }
+    }
+
+    function moveToOtherClient(){
+        var indice = $(this).index();
+        var idClientDestination = $('#selectClient > option').eq(indice).val();
+        var bandera = false;
+
+        if(localStorage.getItem('clientSelected')){
+            //traigo los productos y id de clientSelected
+            var productsClientSelected = JSON.parse(localStorage.getItem('clientSelected')).products;
+            var idClientSelected = JSON.parse(localStorage.getItem('clientSelected')).id;
+
+            if(storageClients){
+                for(var i in storageClients){
+                    //si ya tiene productos
+                    if(storageClients[i].id  == idClientDestination){
+                        //traer los productos a agregar
+                        var array = [];
+                        for(var k in storageClients[i].products){
+                            array.push(storageClients[i].products[k].id);
+                        }
+                        //este contendra los nuevos
+                        var productsToMigrate = [];
+                        for(var j in productsClientSelected){
+                            if(array.indexOf(productsClientSelected[j].id) == -1){
+                                productsToMigrate.push(productsClientSelected[j].id);
+                            }
+                        }
+                        //cambiar sus detalles
+                        var products = JSON.parse(localStorage.getItem('products_inventory'));
+                        for(var j in products){
+
+                            if(productsToMigrate.indexOf(products[j].id) !== -1){
+                                productSelected = {
+                                    'id': products[j].id,
+                                    'product_name': products[j].product_name,
+                                    'model_name': products[j].model_name,
+                                    'quantity': products[j].quantity,
+                                    'price': calculatePrice(products[j]),
+                                    'model_image': products[j].model_image,
+                                    'discount': getDiscount(products[j])
+                                };
+                                //agregar al nuevo
+                                storageClients[i].products.push(productSelected);
+                            }
+                        }
+                        localStorage.setItem("clientSelected", JSON.stringify(storageClients[i]));
+                        saveClientStorage();
+                        bandera = false;
+                    }
+                    else{
+                        bandera = true;
+                    }
+                }
+                //si no existe, es decir no tiene productos, solo capturo sus features(type, name, id) y lo almaceno en clientSelected
+                //para luego en storageClients
+                if(bandera){
+                    for(var i in items_list){
+                        if(items_list[i].id == idClientDestination){
+                            var clientSelected = {
+                                'id': items_list[i].id,
+                                'name': items_list[i].name,
+                                'image': items_list[i].image,
+                                'type': items_list[i].type,
+                                'products':[],
+                                'total':0
+                            };
+                            var products = JSON.parse(localStorage.getItem('products_inventory'));
+                            for(var j in products){
+
+                                if(getArrayIndexProductsSelected().indexOf(products[j].id) !== -1){
+                                    productSelected = {
+                                        'id': products[j].id,
+                                        'product_name': products[j].product_name,
+                                        'model_name': products[j].model_name,
+                                        'quantity': products[j].quantity,
+                                        'price': calculatePrice(products[j]),
+                                        'model_image': products[j].model_image,
+                                        'discount': getDiscount(products[j])
+                                    };
+
+                                    clientSelected.products.push(productSelected);
+                                }
+                            }
+                            localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+
+                            //cambiar precios segun tipo cliente
+                            saveClientStorage();
+                        }
+                    }
+                }
+                for(var i in storageClients){
+                    if(storageClients[i].id == idClientSelected){
+
+                        storageClients.splice(i,1);
+                    }
+                }
+            }
+        }
     }
 
     function changeTab() {
@@ -1037,35 +1222,26 @@ function init() {
         text_category = text_category.replace("click to collapse contents", "");
         $('#category-name').text(text_category);
 
-        if($(this).data('json') != 't'){
+        if($(this).data('json') != 't') {
             var collapse = $(this).children('div');
-            var url = urls.category;
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: {
-                    rp_token: token,
-                    id: $(this).data('id')
-                },
-                dataType: 'json',
-                beforeSend: beforeAjaxLoader(),
-                success: function (data) {
-                    $.each(data.categories, function(i, value) {
-                        collapse.prepend('' +
-                            '<div data-role="collapsible" data-theme="c" class="option-expand" data-id="'+value.id+'" data-content-theme="c"> ' +
-                            '<h3>'+value.name+'</h3>' +
-                            '<div data-role="collapsible-set" >' +
-                            '</div> </div>');
-                        });
-                        collapse.collapsibleset().trigger('create');
-                },
-                complete: completeAjaxLoader()
-            });
+            var main_category = $(this).data('id');
+            categoryFactory.get_sub_category(show_category_detail,false , main_category,collapse);
             $(this).data('json', 't');
             $(this).removeClass('option-expand');
             $(this).addClass('option-collapse');
             $(this).children('div').children('div').collapsibleset().trigger('create');
         }
+    }
+
+    function show_category_detail(category_detail, collapse){
+        $.each(category_detail, function(i, value) {
+            collapse.prepend('' +
+                '<div data-role="collapsible" data-theme="c" class="option-expand" data-id="'+value.id+'" data-content-theme="c"> ' +
+                '<h3>'+value.name+'</h3>' +
+                '<div data-role="collapsible-set" >' +
+                '</div> </div>');
+        });
+        collapse.collapsibleset().trigger('create');
     }
 
     function saveProduct() {
@@ -1111,31 +1287,35 @@ function init() {
     }
 
     function getInformationProduct() {
-        var url = urls.productInformation;
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data:{
-                rp_token: token
-            },
-            dataType: 'json',
-            beforeSend: beforeAjaxLoader(),
-            success: function(data){
-                $.each(data.products, function(i, value) {
-                    $('#browsers').append('<option data-id="'+value.id+'" value="'+value.name+'">')
-                });
+        categoryFactory.get_main_category(showInformation, false);
+    }
 
-                $.each(data.categories, function(i, value) {
-                    $('#categories-list').append('' +
-                        '<div data-role="collapsible" class="option-expand" data-theme="c" data-id="'+value.id+'" data-content-theme="c">' +
-                        '<h3>'+value.name+'</h3>' +
-                        '</div>');
-                });
-
-                localStorage.setItem('information', JSON.stringify(data));
-            },
-            complete: completeAjaxLoader()
+    function showInformation(products, categories){
+        /*
+        Event before press Create Products
+         */
+        showProductRelated(products);
+        showMainCategories(categories);
+    }
+    function showProductRelated(products){
+        /*
+        Show products related in input name product
+         */
+        $.each(products, function(i, value) {
+            $('#browsers').append('<option data-id="'+value.id+'" value="'+value.name+'">')
         });
+    }
+
+    function showMainCategories(categories){
+        /*
+        Show main categories in create product
+         */
+        $.each(categories, function(i, value) {
+            $('#categories-list').append('' +
+                '<div data-role="collapsible" class="option-expand" data-theme="c" data-id="'+value.id+'" data-content-theme="c">' +
+                '<h3>'+value.name+'</h3>' +
+                '</div>');
+            });
     }
 
     function getCompleteInformation(event) {
@@ -1146,7 +1326,7 @@ function init() {
                 productId = $(value).data('id');
             }
         });
-        var information = localStorage.getItem('information');
+        var information = localStorage.getItem('productRelated');
         information = JSON.parse(information);
 
         $.each(information.products, function(i, value) {
@@ -1316,6 +1496,8 @@ function init() {
         }
     }
 
+    /* PHOTO */
+
     function takePicture(event) {
         event.preventDefault();
         navigator.camera.getPicture(onSuccess, onFail, {
@@ -1362,184 +1544,6 @@ function init() {
         eventsAfterLogin();
         alert("An error has occurred image not upload");
         imageURL = undefined;
-    }
-
-    function sendProductsInvoice(event) {
-        event.preventDefault();
-        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-        var data_client = [];
-        var url = urls.send_invoice;
-        for (var index in storageClients) {
-    		if (storageClients[index].id == clientSelected.id) {
-    			data_client[0] = storageClients[index];
-	        	break;
-	        }
-        }
-        var data = {
-            rp_token: token,
-            client: JSON.stringify(data_client)
-        };
-        
-		if (!invoice.are_valid_products(data_client[0].products)) {
-        	alert(invoice.get_message());
-        	return false;
-        }
-        
-        $.ajax({
-            url: url,
-            type: 'POST',
-            dataType: 'json',
-            data: data,
-            beforeSend: beforeAjaxLoader(),
-            success: function(data) {
-                if (data.status == true) {
-                	updateAfterCreateInvoice(clientSelected);
-                } else {
-                    alert('an error occurred');
-                    $.mobile.navigate("#pagina11");
-                }
-            },
-            complete: completeAjaxLoader()
-        });
-        if (Offline.state == 'down') {
-        	updateAfterCreateInvoice(clientSelected);
-        	$.mobile.navigate("#pagina11");
-        }
-    }
-    
-    function updateAfterCreateInvoice(clientSelected) {
-    	for(var i in storageClients){
-            var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-            if(index !== -1){
-                var remove = -1;
-                $.each(storageClients, function(i, value){
-                    if(value.id == clientSelected.id){
-                        remove = i;
-                    }
-                });
-                if(remove > -1) {
-                	invoice.success_create(clientSelected.products);
-                    storageClients.splice(remove, 1);
-                    clientSelected.products = [];
-                    localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
-                }
-                $.mobile.navigate("#pagina11");
-            }
-        }
-    }
-    
-
-    function handler(data){
-        return data;
-    }
-
-    function beforeAjaxLoader(){
-        $.mobile.loading("show", {
-            textVisible: true,
-            theme: 'c',
-            textonly: false
-        });
-    }
-    function completeAjaxLoader(){
-        $.mobile.loading("hide");
-    }
-    function moveToOtherClient(){
-        var indice = $(this).index();    
-        var idClientDestination = $('#selectClient > option').eq(indice).val();  
-        var bandera = false;        
-
-        if(localStorage.getItem('clientSelected')){               
-            //traigo los productos y id de clientSelected
-            var productsClientSelected = JSON.parse(localStorage.getItem('clientSelected')).products;
-            var idClientSelected = JSON.parse(localStorage.getItem('clientSelected')).id;
-            
-            if(storageClients){                
-                for(var i in storageClients){                       
-                    //si ya tiene productos                 
-                    if(storageClients[i].id  == idClientDestination){                        
-                        //traer los productos a agregar
-                        var array = [];
-                        for(var k in storageClients[i].products){                            
-                            array.push(storageClients[i].products[k].id);
-                        }
-                        //este contendra los nuevos
-                        var productsToMigrate = [];
-                        for(var j in productsClientSelected){                            
-                            if(array.indexOf(productsClientSelected[j].id) == -1){                                
-                                productsToMigrate.push(productsClientSelected[j].id);
-                            }
-                        }
-                        //cambiar sus detalles
-                        var products = JSON.parse(localStorage.getItem('products_inventory'));
-                        for(var j in products){               
-                                                                
-                            if(productsToMigrate.indexOf(products[j].id) !== -1){                                   
-                                productSelected = {
-                                    'id': products[j].id,
-                                    'product_name': products[j].product_name,
-                                    'model_name': products[j].model_name,
-                                    'quantity': products[j].quantity,
-                                    'price': calculatePrice(products[j]),
-                                    'model_image': products[j].model_image,
-                                    'discount': getDiscount(products[j])
-                                };     
-                                //agregar al nuevo                                
-                                storageClients[i].products.push(productSelected);                                   
-                            }
-                        }                                            
-                        localStorage.setItem("clientSelected", JSON.stringify(storageClients[i]));                      
-                        saveClientStorage();
-                        bandera = false;
-                    }
-                    else{
-                        bandera = true;
-                    }                    
-                }
-                //si no existe, es decir no tiene productos, solo capturo sus features(type, name, id) y lo almaceno en clientSelected 
-                //para luego en storageClients
-                if(bandera){                       
-                    for(var i in items_list){
-                        if(items_list[i].id == idClientDestination){
-                            var clientSelected = {
-                                'id': items_list[i].id,
-                                'name': items_list[i].name,
-                                'image': items_list[i].image,
-                                'type': items_list[i].type,
-                                'products':[],
-                                'total':0
-                            };                            
-                            var products = JSON.parse(localStorage.getItem('products_inventory'));
-                            for(var j in products){  
-                                                                                
-                                if(getArrayIndexProductsSelected().indexOf(products[j].id) !== -1){                                   
-                                    productSelected = {
-                                        'id': products[j].id,
-                                        'product_name': products[j].product_name,
-                                        'model_name': products[j].model_name,
-                                        'quantity': products[j].quantity,
-                                        'price': calculatePrice(products[j]),
-                                        'model_image': products[j].model_image,
-                                        'discount': getDiscount(products[j])
-                                    };
-                                                                    
-                                    clientSelected.products.push(productSelected);                                    
-                                }
-                            }                            
-                            localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
-                            
-                            //cambiar precios segun tipo cliente
-                            saveClientStorage();
-                        }
-                    }                        
-                }
-                for(var i in storageClients){
-                    if(storageClients[i].id == idClientSelected){    
-                                    
-                        storageClients.splice(i,1);
-                    }
-                }
-            }            
-        }
     }
 }
 
