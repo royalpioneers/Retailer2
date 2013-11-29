@@ -414,7 +414,6 @@
     .products_clients_add > li img {
         position: relative !important;
         float: none !important;
-        width: 70%;
         max-width: 100%;
         max-height: 100%;
     }
@@ -437,10 +436,15 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 70%;
         text-align: center;
         margin: 0 auto;
         display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background-size: contain !important;
+        height: 100%;
+        width: 100%;
     }
     /*animations*/
     @-webkit-keyframes tilt-and-move {
@@ -571,12 +575,15 @@
         display: inline-block;
         float: none;
         padding-top: 5px;
-        height: 2em;
+        height: 3em;
         margin: 0;
         max-width: 16%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+    .without_radious .ui-li-aside i {
+    display: block;
     }
     .without_radious .ui-input-text.ui-shadow-inset.ui-corner-all.ui-btn-shadow.ui-body-c.ui-focus {
         max-width: 6em;
@@ -596,8 +603,11 @@
         padding: 5%;
 
     }
-    .myProductSelected > .productSelected > span{
-        background: url(../images/checked_teal.png) no-repeat center center!important;
+    .myProductSelected > .productSelected > span > span > span{
+        background: url(../images/checked_teal.png) no-repeat center center;
+    }
+    .myProductSelected > .productSelected > span > span{        
+        display: block;    
     }
 /*    .overlay_product {
     background: url(../images/checked_teal.png) no-repeat center center!important;
@@ -653,6 +663,19 @@ div.ui-input-text > input {
     padding-bottom: 1.5em !important;
     padding-top: 1.5em !important;
 }
+.header_client > ul{
+    margin: 0;
+    list-style: none;
+    width: 100%;
+    text-align: center;
+}
+.header_client > ul li{
+    font-size: 15px;
+    display: inline-block;
+    margin-top: 1.5em;
+    margin-left: 3%;
+    margin-right: 3%;
+}
 div[data-role='header']{
     padding: 10px 0 !important;
     position: relative;
@@ -695,4 +718,7 @@ div[data-role='header']{
 }
 #password {
     font-size: 22px !important; font-weight: bolder; padding: 10px 0 !important;
+}
+.desabled{
+    background: red !important;
 }

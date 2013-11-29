@@ -4,7 +4,7 @@ var ClientFactory = function(urls, token) {
 	factory.token = token;
 	factory.id_company_types = 'id_company_types';
 	factory.id_client_list = 'clients';
-	factory.cache = false;
+	factory.cache = false;debugger;
 	
 	factory.get_all = function(handler, cache) {
 		var client_list = JSON.parse(window.localStorage.getItem(factory.id_client_list));
