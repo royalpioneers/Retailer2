@@ -5,6 +5,7 @@ var BuyerInventoryFactory = function(urls, token) {
 	factory.cache = false;
 
 	factory.get_all = function(handler, cache) {
+        debugger;
 		var list = JSON.parse(window.localStorage.getItem('buyerInventory'));
 		if ((factory.cache || cache) && list != null) {
 			handler(list);

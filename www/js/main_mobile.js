@@ -48,9 +48,9 @@ var items_list = [], productsSelected = [], storageClients = [];
 function init() {
 
     console.log(Offline.state+'jonath');
-    var analyzer_information_time = new Date();
+    var analyzer_information_time = new Date(),
     	analyzer_information = [],
-        imageURL = undefined;
+        imageURL = undefined,
         token = window.localStorage.getItem("rp-token");
 
     //Events
@@ -446,7 +446,7 @@ function init() {
     }
 
     /* Client */
-    
+
     function getClientById(id) {
 
     	/* from local storage */
