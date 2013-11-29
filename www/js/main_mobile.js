@@ -2,6 +2,15 @@ $(window).load(function() {
     init();
 });
 
+
+/*
+Storages
+
+buyerInventory: stores all the products shown in the inventory list
+rp-token: Used in requests for user verification
+
+ */
+
 var DOMAIN = app.getDomain();
 
 var urls = {
