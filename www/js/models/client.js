@@ -153,7 +153,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	
 	model.show = function(messages) {
 		var str = '';
-		for (message in messages) {
+		for (var message in messages) {
 			var message = messages[message];
 			str += message + '\n';
 		}

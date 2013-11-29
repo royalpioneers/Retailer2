@@ -97,7 +97,6 @@ function init() {
         }    
         else{
             $.mobile.navigate("#pagina11");
-            console.log('redirectToPage');
         }    
     }
 
@@ -199,7 +198,6 @@ function init() {
             productSelected,
             id = $(this).data('id');
         var li = $(this).parent('li');
-        
         for(var i in products){
             if(!$(this).data('selected')){
                 //Add Products to LocalStorage
@@ -213,8 +211,7 @@ function init() {
                         'model_image': products[i].model_image,
                         'discount': getDiscount(products[i])
                     };
-                    clientSelected.products.push(productSelected);                                                                        
-                    console.log('SE SELECCIONO' + clientSelected.id);
+                    clientSelected.products.push(productSelected);
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     $(this).data('selected', true);
                     $(li).addClass("myProductSelected");   
@@ -231,7 +228,6 @@ function init() {
                 });
                 if(remove > -1) {
                     clientSelected.products.splice(remove, 1);
-                    console.log('1: '+JSON.stringify(clientSelected))
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     $(this).data('selected',false);
                     $(li).removeClass("myProductSelected");
@@ -308,7 +304,8 @@ function init() {
     var stateFactory = new StateFactory(urls, token);
     var cityFactory = new CityFactory(urls, token);
     var clientFactory = new ClientFactory(urls, token);
-    var client = ClientModel(countryFactory, stateFactory, cityFactory, clientFactory, listClients);
+    var client = new ClientModel(countryFactory, stateFactory, cityFactory, clientFactory, listClients);
+    var invoice = new InvoiceModel();
     client.init(); /* start list */
 
     //Functions
@@ -317,8 +314,6 @@ function init() {
         var result = checkConnection(Connection.ETHERNET);
         if(result ==  true){
             var url = urls.login;
-            console.log(url);
-            console.log('test');
             $.ajax({
                 url: url,
                 data: {
@@ -355,7 +350,7 @@ function init() {
     function getClientById(id) {
         
     	/* from local storage */
-    	for (index in storageClients) {
+    	for (var index in storageClients) {
     		var client = storageClients[index];
     		if (client.id == id) {
     			return client;
@@ -898,7 +893,7 @@ function init() {
         /* graphic */
         var date_formated = analyzer_information_time.toLocaleDateString() + ' ' + analyzer_information_time.toLocaleTimeString();
         result = [{
-            Name:"Resume (generated " + date_formated + ")", Sale:total_sales, Profit:total_profit
+            Name:"Resume (" + date_formated + ")", Sale:total_sales, Profit:total_profit
         }];
 
         $('#graphic').html('');
@@ -1160,11 +1155,24 @@ function init() {
     function sendProductsInvoice(event) {
         event.preventDefault();
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+        var data_client = [];
         var url = urls.send_invoice;
+        for (var index in storageClients) {
+    		if (storageClients[index].id == clientSelected.id) {
+    			data_client[0] = storageClients[index];
+	        	break;
+	        }
+        }
         var data = {
             rp_token: token,
-            client: JSON.stringify(storageClients)
+            client: JSON.stringify(data_client)
         };
+        
+		if (!invoice.are_valid_products(data_client[0].products)) {
+        	alert(invoice.get_message());
+        	return false;
+        }
+        
         $.ajax({
           url: url,
           type: 'POST',
@@ -1179,23 +1187,7 @@ function init() {
             },
             success: function(data) {
                 if (data.status == true) {
-                    for(var i in storageClients){
-                        var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-                        if(index !== -1){
-                            var remove = -1;
-                            $.each(storageClients, function(i, value){
-                                if(value.id == clientSelected.id){
-                                    remove = i;
-                                }
-                            });
-                            if(remove > -1) {
-                                storageClients.splice(remove, 1);
-                                clientSelected.products = [];
-                                localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
-                            }
-                            $.mobile.navigate("#pagina11");
-                        }
-                    }
+                	updateAfterCreateInvoice(clientSelected);
                 } else {
                     alert('an error occurred');
                     $.mobile.navigate("#pagina11");
@@ -1205,7 +1197,33 @@ function init() {
                 $.mobile.loading("hide");
             }
         });
+        if (Offline.state == 'down') {
+        	updateAfterCreateInvoice(clientSelected);
+        	$.mobile.navigate("#pagina11");
+        }
     }
+    
+    function updateAfterCreateInvoice(clientSelected) {
+    	for(var i in storageClients){
+            var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+            if(index !== -1){
+                var remove = -1;
+                $.each(storageClients, function(i, value){
+                    if(value.id == clientSelected.id){
+                        remove = i;
+                    }
+                });
+                if(remove > -1) {
+                	invoice.success_create(clientSelected.products);
+                    storageClients.splice(remove, 1);
+                    clientSelected.products = [];
+                    localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+                }
+                $.mobile.navigate("#pagina11");
+            }
+        }
+    }
+    
 
     function moveToOtherClient(){
         var indice = $(this).index();    
