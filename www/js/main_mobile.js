@@ -235,7 +235,7 @@ function init() {
         if(Offline.state == 'down') {
             cache = true;
         }
-        buyerInventoryFactory.get_all(showInventory, false);
+        buyerInventoryFactory.get_all(showInventory, cache);
     }
 
     function showInventory(list){
@@ -764,9 +764,11 @@ function init() {
         $("."+newSelection).removeClass("ui-screen-hidden");
         prevSelection = newSelection;
     }
-        function killStorage(){
+
+    function killStorage(){
         localStorage.setItem("clientSelected", '');
     }
+
     function redirectToPage(){
         if(localStorage.getItem('clientSelected')){
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
@@ -784,6 +786,7 @@ function init() {
     function cleanClientSelected(){        
         pageClientShow();
     }
+
     function pageClientShow() { 
         $('.products_clients_add').html('');
         var html = "";
@@ -1069,7 +1072,11 @@ function init() {
     }
 
     function getInformationProduct() {
-        categoryFactory.get_main_category(showInformation, false);
+        var cache = false;
+        if(Offline.state == 'down') {
+            cache = true;
+        }
+        categoryFactory.get_main_category(showInformation, cache);
     }
 
     function showInformation(products, categories){
@@ -1079,6 +1086,7 @@ function init() {
         showProductRelated(products);
         showMainCategories(categories);
     }
+
     function showProductRelated(products){
         /*
         Show products related in input name product
@@ -1313,6 +1321,7 @@ function init() {
         alert("An error has occurred image not upload");
         imageURL = undefined;
     }
+
     function beforeAjaxLoader(){
        $.mobile.loading("show", {
            textVisible: true,
@@ -1320,7 +1329,8 @@ function init() {
            textonly: false
        });
    }
-   function completeAjaxLoader(){
+
+    function completeAjaxLoader(){
        $.mobile.loading("hide");
    }
 }
