@@ -1,5 +1,5 @@
 var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFactory, listClients) {
-	var model= this;debugger;
+	var model= this;
 	model.messages = [];
 	model.id_city_autocomplete = 'id_city_autocomplete';
 	model.id_template_option_city = 'id_template_option_city';
@@ -31,8 +31,8 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		model.start_form_values();		
 	};
 	
-	model.getDataAddressClient = function(){	
-		countryFactory.get_all(function(countries){
+	model.getDataAddressClient = function(){
+		model.countryFactory.get_all(function(countries){
 			for (var i in countries) {
 				var country = countries[i];
 				model.stateFactory.get_by_country(country.id, function(states){
@@ -106,15 +106,13 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	
 	model.create = function(e){
 		e.preventDefault();
-		debugger;
 		model.messages = [];
 		var form = $('#'+model.id_page_new_client).find('form')[0];
 		var params = model.get_form_params(form);
 		if (!params) {
 			model.show(model.messages);
-		} else {
+		} else {debugger;
 			model.clientFactory.create(params, function(data, errors){
-				debugger;
 				if (data === false) {
 					model.messages[model.messages.length] = errors;
 					model.show(model.messages);
@@ -125,12 +123,11 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 					/* model.apply_event_select(); 
 					model.refresh_list(); */
 					model.clear_form(5);
-					listClients();
+					//listClients();
 					$.mobile.navigate("#pagina11");
 					/* model.success_create(); */
 				}
 			});
-
 			debugger;
 			//create a client storage
 			if(Offline.state === 'down'){
@@ -144,15 +141,13 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 				};
 				allClients.push(newClientOffline);
 				localStorage.setItem("allClients", JSON.stringify(allClients));
-				var item_template = $('#'+model.id_item_template).html();
-				item_template = item_template.replace(/__name__/g, newClientOffline.name);
-				item_template = item_template.replace(/__id__/g, newClientOffline.id);
-				item_template = item_template.replace(/__image__/g, newClientOffline.image);	
-				item_template = item_template.replace(/__clientOffline__/g, 'desabled');	
-		        $('#'+model.id_client_list).append(item_template);
-			}
-	};
-	
+				model.set_client_to_list(newClientOffline);		
+		        model.clear_form(5);
+				//listClients();
+				$.mobile.navigate("#pagina11");
+	        }
+		}
+	}
 	model.get_form_params = function(form) {
 		params = {};
 		params.company_type = form.company_type.value;
@@ -190,7 +185,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	
 	model.show = function(messages) {
 		var str = '';
-		for (message in messages) {
+		for (var message in messages) {
 			var message = messages[message];
 			str += message + '\n';
 		}
@@ -219,7 +214,8 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		var item_template = $('#'+model.id_item_template).html();
 		item_template = item_template.replace(/__name__/g, client.name);
 		item_template = item_template.replace(/__id__/g, client.id);
-		item_template = item_template.replace(/__image__/g, client.image);		
+		item_template = item_template.replace(/__image__/g, client.image);
+		item_template = item_template.replace(/__clientOffline__/g, client.image);		
         $('#'+model.id_client_list).append(item_template);
 	};
 
