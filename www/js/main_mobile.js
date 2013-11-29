@@ -43,6 +43,25 @@ function init() {
     	analyzer_information = [],
         imageURL = undefined;
         token = window.localStorage.getItem("rp-token");
+
+    /* PRODUCTS */
+        var categoryFactory = new CategoryFactory(urls, token);
+        var buyerInventoryFactory = BuyerInventoryFactory(urls, token);
+        var product = ProductModel(categoryFactory);
+        product.init();/* start list */
+
+    /* CLIENT */
+        var countryFactory = new CountryFactory(urls, token);
+        var stateFactory = new StateFactory(urls, token);
+        var cityFactory = new CityFactory(urls, token);
+        var clientFactory = new ClientFactory(urls, token);
+        var client = new ClientModel(countryFactory, stateFactory, cityFactory, clientFactory, listClients);
+        client.init(); /* start list */
+
+    /* INVOICE */
+    var invoice = new InvoiceModel();
+
+
     //Automatic Login
 
     if(token != null) {
@@ -94,24 +113,8 @@ function init() {
         $('.kill_storage').live('click', killStorage);
     //Functions
 
-    /* PRODUCTS */
-        var categoryFactory = new CategoryFactory(urls, token);
-        var buyerInventoryFactory = BuyerInventoryFactory(urls, token);
-        var product = ProductModel(categoryFactory);
-        product.init();/* start list */
-
-    /* CLIENT */
-        var countryFactory = new CountryFactory(urls, token);
-        var stateFactory = new StateFactory(urls, token);
-        var cityFactory = new CityFactory(urls, token);
-        var clientFactory = new ClientFactory(urls, token);
-        var client = new ClientModel(countryFactory, stateFactory, cityFactory, clientFactory, listClients);
-        client.init(); /* start list */
-
-    /* INVOICE */
-        var invoice = new InvoiceModel();
-
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
+
     $.mobile.buttonMarkup.hoverDelay = 0;
     
     function killStorage(){
@@ -543,13 +546,18 @@ function init() {
                 }
             });
         } else {
-            alert('Check your internet connection')
+            if(window.localStorage.getItem("rp-token") != null &&
+                window.localStorage.getItem("rp-token") != undefined){
+                token = window.localStorage.getItem("rp-token");
+                eventsAfterLogin();
+            } else {
+                alert('Check your internet connection')
+            }
         }
     }
 
     function eventsAfterLogin() {
-
-        categoryFactory.set_token(token)
+        categoryFactory.set_token(token);
         buyerInventoryFactory.set_token(token);
         countryFactory.set_token(token);
         stateFactory.set_token(token);
