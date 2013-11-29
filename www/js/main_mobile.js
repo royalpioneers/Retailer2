@@ -1008,7 +1008,6 @@ function init() {
         collapse.collapsibleset().trigger('create');
     }
 
-
     function saveProduct() {
         var nameProduct = $('#browser').val(),
             nameVariant = $('#name-variant').val(),
