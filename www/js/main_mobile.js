@@ -38,7 +38,8 @@ var items_list = [], productsSelected = [], storageClients = [];
 
 function init() {
 	
-    var analyzer_information = [],
+    var analyzer_information_time = new Date();
+    	analyzer_information = [],
         imageURL = undefined;
         token = window.localStorage.getItem("rp-token");
     //Automatic Login
@@ -108,6 +109,7 @@ function init() {
 
 
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
+    $.mobile.buttonMarkup.hoverDelay = 0;
     
     function killStorage(){
         localStorage.setItem("clientSelected", '');
@@ -595,6 +597,9 @@ function init() {
     /* Analyzer */
 
     function getAnalyzerInformation() {
+    	if (Offline.state == 'down') {
+    		return false;
+    	}
         var url = urls.analyzer;
         $.ajax({
            url: url,
@@ -610,8 +615,9 @@ function init() {
                     textonly: false
                 });
             },
-           success: function(data){
+           success: function(data) {
                analyzer_information = data.context['information'];
+               analyzer_information_time = new Date();
                processAnalyzerInformation(1);
            },
            complete: function(){
@@ -803,6 +809,8 @@ function init() {
         var prevSelection = 'tab1';
         if(newSelection == 'tab1'){
             prevSelection = 'tab2';
+        } else {
+        	getAnalyzerInformation();
         }
         $("."+prevSelection).addClass("ui-screen-hidden");
         $("."+newSelection).removeClass("ui-screen-hidden");
@@ -1001,7 +1009,6 @@ function init() {
     function changeSearch() {
         window.location.replace("search.html");
     }
-
 
     function pageMyProductsShow(){
         saveClientStorage();
