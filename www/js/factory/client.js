@@ -7,11 +7,10 @@ var ClientFactory = function(urls, token) {
 	factory.cache = false;
 	
 	factory.get_all = function(handler, cache) {
-		var client_list = JSON.parse(window.localStorage.getItem(factory.id_client_list));
+        var client_list = JSON.parse(window.localStorage.getItem(factory.id_client_list));
 		if ((factory.cache || cache) && client_list != null) {
 			handler(client_list);
 		}
-		
 		$.ajax({
 			url: factory.urls.client_list,
 			type: 'POST',

@@ -2,6 +2,18 @@ $(window).load(function() {
     init();
 });
 
+
+/*
+Storages
+
+buyerInventory: stores all the products shown in the inventory list
+rp-token: Used in requests for user verification
+items_list: ?
+productsSelected: ?
+storageClients: ?
+
+ */
+
 var DOMAIN = app.getDomain();
 
 var urls = {
@@ -80,6 +92,24 @@ function init() {
         $('#selectClient-menu').find('li').live('click', moveToOtherClient);
         $('.kill_storage').live('click', killStorage);
     //Functions
+
+    /* PRODUCTS */
+        var categoryFactory = new CountryFactory(urls, token);
+        var buyerInventoryFactory = BuyerInventoryFactory(urls, token);
+        var product = ProductModel(categoryFactory);
+        product.init();/* start list */
+
+    /* CLIENT */
+        var countryFactory = new CountryFactory(urls, token);
+        var stateFactory = new StateFactory(urls, token);
+        var cityFactory = new CityFactory(urls, token);
+        var clientFactory = new ClientFactory(urls, token);
+        var client = ClientModel(countryFactory, stateFactory, cityFactory, clientFactory, listClients);
+        client.init(); /* start list */
+
+    /* INVOICE */
+        var invoice = new InvoiceModel();
+
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
     $.mobile.buttonMarkup.hoverDelay = 0;
     
@@ -103,6 +133,7 @@ function init() {
     function cleanClientSelected(){
         pageClientShow();
     }
+
     function pageClientShow() { 
         $('.products_clients_add').html('');
         var html = "";
@@ -164,6 +195,7 @@ function init() {
         }
         return arrayIndexs;
     }
+
     function getArrayIndexClientsSelected(){
         var arrayIndexs = [];
         for(var i in storageClients){
@@ -171,6 +203,7 @@ function init() {
         }
         return arrayIndexs;
     }
+
     function goProduct() {
         if(localStorage.getItem('clientSelected')){
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
@@ -191,6 +224,7 @@ function init() {
             console.log('goProduct');
         }
     }
+
     function selectProduct(e) {
         e.preventDefault();
         var products = JSON.parse(localStorage.getItem('products_inventory')),
@@ -237,6 +271,7 @@ function init() {
             }
         }
     }
+
     function getCurrentTotal(){
         var totalPrice = 0;
         if(localStorage.getItem('clientSelected')){
@@ -247,6 +282,8 @@ function init() {
         }
         return totalPrice;
     }
+
+    /* Client */
 
     function saveClientStorage(){
         if(localStorage.getItem('clientSelected')){            
@@ -298,54 +335,6 @@ function init() {
         }
     	return discount;
     }
-
-    /* CLIENT */
-    var countryFactory = new CountryFactory(urls, token);
-    var stateFactory = new StateFactory(urls, token);
-    var cityFactory = new CityFactory(urls, token);
-    var clientFactory = new ClientFactory(urls, token);
-    var client = new ClientModel(countryFactory, stateFactory, cityFactory, clientFactory, listClients);
-    var invoice = new InvoiceModel();
-    client.init(); /* start list */
-
-    //Functions
-    function loginAuth(event) {
-        event.preventDefault();
-        var result = checkConnection(Connection.ETHERNET);
-        if(result ==  true){
-            var url = urls.login;
-            $.ajax({
-                url: url,
-                data: {
-                    password: $('#password').val(),
-                    email: $('#username').val()
-                },
-                type: 'POST',
-                dataType: 'json',
-                beforeSend: function(){
-                    $.mobile.loading("show", {
-                        textVisible: true,
-                        theme: 'c',
-                        textonly: false
-                    });
-                },
-                success: function (data) {
-                    if (data.status === 'OK') {
-                        window.localStorage.setItem("rp-token", data.token);
-                        token = data.token;
-                        eventsAfterLogin();
-                    } else {
-                        $('.overlay').fadeIn().children().addClass('effect_in_out');
-                    }
-                },
-                complete: function(){
-                    $.mobile.loading("hide");
-                }
-            });
-        } else {
-            alert('Check your internet connection')
-        }
-    }
     
     function getClientById(id) {
         
@@ -358,7 +347,7 @@ function init() {
     	}
     	return false;
     }
-    
+
     function listClients() {
         var url = urls.clients_list;
         var a = true;
@@ -466,6 +455,48 @@ function init() {
         return clientSelected;
     }
 
+    /* Authenticate */
+
+    function loginAuth(event) {
+        event.preventDefault();
+        var result = checkConnection(Connection.ETHERNET);
+        if(result ==  true){
+            var url = urls.login;
+            console.log(url);
+            console.log('test');
+            $.ajax({
+                url: url,
+                data: {
+                    password: $('#password').val(),
+                    email: $('#username').val()
+                },
+                type: 'POST',
+                dataType: 'json',
+                beforeSend: function(){
+                    $.mobile.loading("show", {
+                        textVisible: true,
+                        theme: 'c',
+                        textonly: false
+                    });
+                },
+                success: function (data) {
+                    if (data.status === 'OK') {
+                        window.localStorage.setItem("rp-token", data.token);
+                        token = data.token;
+                        eventsAfterLogin();
+                    } else {
+                        $('.overlay').fadeIn().children().addClass('effect_in_out');
+                    }
+                },
+                complete: function(){
+                    $.mobile.loading("hide");
+                }
+            });
+        } else {
+            alert('Check your internet connection')
+        }
+    }
+
     function logOut(event) {
         localStorage.clear('products_inventory');
         event.preventDefault();
@@ -516,60 +547,52 @@ function init() {
     }
 
     function eventsAfterLogin() {
-        getInventoryItems();
-        getAnalyzerInformation();
-        $('#container-login').css('display','none');
-        $.mobile.navigate("#pagina2");
-        
+        buyerInventoryFactory.set_token(token);
         countryFactory.set_token(token);
         stateFactory.set_token(token);
         cityFactory.set_token(token);
-        clientFactory.set_token(token); 
+        clientFactory.set_token(token);
+
+        getInventoryItems();
+        getAnalyzerInformation();
+
+        $('#container-login').css('display','none');
+        $.mobile.navigate("#pagina2");
     }
 
+    /* Buyer Inventory */
+
     function getInventoryItems() {
-        var url = urls.inventory;
-        $.ajax({
-           url: url,
-           type: 'POST',
-           data: {
-                rp_token: token
-           },
-           dataType: 'json',
-           beforeSend: function(){
-                $.mobile.loading("show", {
-                    textVisible: true,
-                    theme: 'c',
-                    textonly: false
-                });
-            },
-           success: function(data){
-                var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
-                    html_to_insert = '';
-                    items_list = data.items_list;
-               $.each(items_list, function(i, model){
-                   html_to_insert += '<li>\
-                                        <a href="#pagina5"\
-                                            class="model-data"\
-                                            data-model-name="'+model.model_name+'"\
-                                            data-product-name="'+model.product_name+'"\
-                                            data-retail-price="'+model.retail_price+'"\
-                                            data-quantity="'+model.quantity+'"\
-                                            >\
-                                            <img src="'+DOMAIN+model.model_image+'"/>\
-                                        </a>\
-                                    </li>';
-               });
-               ul_for_inserting.html('');
-               ul_for_inserting.append(html_to_insert);
-               localStorage.setItem('products_inventory', JSON.stringify(data.items_list));
-               $('.model-data').live('click', showDetail);
-           },
-           complete: function(){
-                $.mobile.loading("hide");
-           }
-        });
+        buyerInventoryFactory.get_all(showInventory, false);
     }
+
+    function showInventory(list){
+        if(list != undefined){
+            var items_list = list;
+            var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
+                        html_to_insert = '';
+
+            $.each(items_list, function(i, model) {
+                html_to_insert += '<li>\
+                                     <a href="#pagina5"\
+                                         class="model-data"\
+                                         data-model-name="'+model.model_name+'"\
+                                         data-product-name="'+model.product_name+'"\
+                                         data-retail-price="'+model.retail_price+'"\
+                                         data-quantity="'+model.quantity+'"\
+                                         >\
+                                         <img src="'+DOMAIN+model.model_image+'"/>\
+                                     </a>\
+                                 </li>';
+            });
+            ul_for_inserting.html('');
+            ul_for_inserting.append(html_to_insert);
+            localStorage.setItem('products_inventory', JSON.stringify(items_list));
+            $('.model-data').live('click', showDetail);
+        }
+    }
+
+    /* Analyzer */
 
     function getAnalyzerInformation() {
     	if (Offline.state == 'down') {
@@ -600,7 +623,164 @@ function init() {
            }
         });
     }
-                    
+
+    function processAnalyzerInformation(type) {
+        // dates limit
+        var initial_date = new Date();
+        var finish_date = new Date();
+
+        /* control: 1=month, 2=week, 3=day */
+        if (typeof(type) == 'undefined') {
+            type = 1;
+        }
+
+        if (type == 1) { /* month */
+            var date = new Date();
+            var initial_date = new Date(date.getFullYear(), date.getMonth(), 1);
+            var finish_date = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        } else if (type == 2) { /* week */
+            var date = new Date();
+            var day = date.getDay(),
+                diff = date.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
+            var initial_date = new Date(date.setDate(diff));
+            var finish_date = initial_date + 6;
+
+        } else if (type == 3) { /* day */
+            var initial_date = new Date();
+            var finish_date = new Date();
+        }
+        /* TOTALS */
+        var total_sales = 0;
+        var total_units = 0;
+        var total_profit = 0;
+
+        for(var i in analyzer_information['values']) {
+            item = analyzer_information['values'][i];
+            date = get_date_from_string(item['date']);
+            if (date >= initial_date && date <= finish_date) {
+                total_sales += item['sale_value'];
+                total_units += item['sale_volume'];
+                total_profit += item['projected_profit'];
+            }
+        }
+        $('#pagina2').find('.tab2').find('#analyzer_total_sales').html(total_sales);
+        $('#pagina2').find('.tab2').find('#analyzer_total_units').html(total_units);
+        $('#pagina2').find('.tab2').find('#analyzer_total_profit').html(total_profit);
+
+        /* POPULAR */
+        var total_models_data = total_models(initial_date, finish_date, analyzer_information['variants']['data']);
+        var popular = false;
+        for (var i in total_models_data) {
+            item = total_models_data[i];
+            if (popular) {
+                if (popular['quantity'] < item['quantity']) {
+                    popular = item;
+                }
+            } else {
+                popular = item;
+            }
+        }
+        if (popular !== false) {
+            if (typeof(analyzer_information['variants']['models'][popular['product_model_id']]) != 'undefined') {
+                details = analyzer_information['variants']['models'][popular['product_model_id']];
+                $('#pagina2').find('.tab2').find('#most_popular_img').html('<img src="'+DOMAIN+details['image']+'" />');
+                $('#pagina2').find('.tab2').find('#most_popular_name').html(details['name']);
+                $('#pagina2').find('.tab2').find('#most_popular_sold').html(popular['quantity']);
+            }
+        }
+
+        /* graphic */
+        var date_formated = analyzer_information_time.toLocaleDateString() + ' ' + analyzer_information_time.toLocaleTimeString();
+        result = [{
+            Name:"Resume (" + date_formated + ")", Sale:total_sales, Profit:total_profit
+        }];
+
+        $('#graphic').html('');
+        start_graphic(result);
+        $('#graphic').trigger('create');
+
+        return true;
+    }
+
+    function total_models(initial_date, finish_date, data) {
+        result = {};
+        for (var i in data) {
+            item = data[i];
+            date = get_date_from_string(item['date']);
+            if (date >= initial_date && date <= finish_date) {
+                if (typeof(result[item['product_model_id']]) == 'undefined') {
+                    result[item['product_model_id']] = item;
+                } else {
+                    result[item['product_model_id']]['quantity'] += item['quantity'];
+                }
+            }
+        }
+        return result;
+    }
+
+    function get_date_from_string(string_date) {
+        parts = string_date.split('-');
+        var year = parts[0], month = parts[1], day = parts[2];
+        if (month.substring(0, 1) == '0') {
+            month = month.substring(1);
+        }
+        if (day.substring(0, 1) == '0') {
+            day = day.substring(1);
+        }
+        month = parseInt(month) - 1;
+        return new Date(parseInt(year), parseInt(month), parseInt(day));
+    }
+
+    function start_graphic(data_graphic) {
+        var div = $('<div></div>');
+        	div.attr('id', 'graphic_jqplot');
+          	$('#content_init_graphic').append(div);
+
+        function create_graphic(data) {
+        	var s1 = [];
+        	var s2 = [];
+	        var ticks = [];
+        	for(index in data) {
+       		var item = data[index];
+        		s1[s1.length] = item.Profit;
+        		s2[s2.length] = item.Sale;
+        		ticks[ticks.length] = item.Name;
+        	}
+	        plot2 = $.jqplot('graphic_jqplot', [s1, s2], {
+	            seriesDefaults: {
+	                renderer:$.jqplot.BarRenderer,
+	                pointLabels: { show: true },
+	                rendererOptions: {fillToZero: true}
+	            },
+	            axes: {
+	                xaxis: {
+	                    renderer: $.jqplot.CategoryAxisRenderer,
+	                    ticks: ticks
+	                }
+	            },
+	            series:[
+	                    {label:'Profit'},
+	                    {label:'Sale'},
+	                ],
+                legend: {
+                    show: true,
+                    placement: 'outsideGrid' /* insideGrid */
+                }
+	        });
+	        $('#chart2').bind('jqplotDataHighlight',
+	            function (ev, seriesIndex, pointIndex, data) {}
+	        );
+	        $('#chart2').bind('jqplotDataUnhighlight',
+	            function (ev) {}
+	        );
+	        /* transfer graphic to view analizer */
+	        $('#graphic').append($('#graphic_jqplot'));
+        }
+        create_graphic(data_graphic);
+    }
+
+    /* Invoice */
+
     function showInvoice() {
         if(localStorage.getItem('clientSelected')){
             $('#selectClient').html('');
@@ -635,6 +815,8 @@ function init() {
         $("."+newSelection).removeClass("ui-screen-hidden");
         prevSelection = newSelection;
     }
+
+    /* Product */
 
     function createProduct() {
         var newIcon = 'check';
@@ -821,163 +1003,10 @@ function init() {
         content.append(html_to_insert);
     }
 
+    /* Search */
+
     function changeSearch() {
         window.location.replace("search.html");
-    }
-
-    function processAnalyzerInformation(type) {
-        // dates limit
-        var initial_date = new Date();
-        var finish_date = new Date();
-
-        /* control: 1=month, 2=week, 3=day */
-        if (typeof(type) == 'undefined') {
-            type = 1;
-        }
-
-        if (type == 1) { /* month */
-            var date = new Date();
-            var initial_date = new Date(date.getFullYear(), date.getMonth(), 1);
-            var finish_date = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-        } else if (type == 2) { /* week */
-            var date = new Date();
-            var day = date.getDay(),
-                diff = date.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
-            var initial_date = new Date(date.setDate(diff));
-            var finish_date = initial_date + 6;
-
-        } else if (type == 3) { /* day */
-            var initial_date = new Date();
-            var finish_date = new Date();
-        }
-        /* TOTALS */
-        var total_sales = 0;
-        var total_units = 0;
-        var total_profit = 0;
-
-        for(var i in analyzer_information['values']) {
-            item = analyzer_information['values'][i];
-            date = get_date_from_string(item['date']);
-            if (date >= initial_date && date <= finish_date) {
-                total_sales += item['sale_value'];
-                total_units += item['sale_volume'];
-                total_profit += item['projected_profit'];
-            }
-        }
-        $('#pagina2').find('.tab2').find('#analyzer_total_sales').html(total_sales);
-        $('#pagina2').find('.tab2').find('#analyzer_total_units').html(total_units);
-        $('#pagina2').find('.tab2').find('#analyzer_total_profit').html(total_profit);
-
-        /* POPULAR */
-        var total_models_data = total_models(initial_date, finish_date, analyzer_information['variants']['data']);
-        var popular = false;
-        for (var i in total_models_data) {
-            item = total_models_data[i];
-            if (popular) {
-                if (popular['quantity'] < item['quantity']) {
-                    popular = item;
-                }
-            } else {
-                popular = item;
-            }
-        }
-        if (popular !== false) {
-            if (typeof(analyzer_information['variants']['models'][popular['product_model_id']]) != 'undefined') {
-                details = analyzer_information['variants']['models'][popular['product_model_id']];
-                $('#pagina2').find('.tab2').find('#most_popular_img').html('<img src="'+DOMAIN+details['image']+'" />');
-                $('#pagina2').find('.tab2').find('#most_popular_name').html(details['name']);
-                $('#pagina2').find('.tab2').find('#most_popular_sold').html(popular['quantity']);
-            }
-        }
-
-        /* graphic */
-        var date_formated = analyzer_information_time.toLocaleDateString() + ' ' + analyzer_information_time.toLocaleTimeString();
-        result = [{
-            Name:"Resume (" + date_formated + ")", Sale:total_sales, Profit:total_profit
-        }];
-
-        $('#graphic').html('');
-        start_graphic(result);
-        $('#graphic').trigger('create');
-
-        return true;
-    }
-
-    function total_models(initial_date, finish_date, data) {
-        result = {};
-        for (var i in data) {
-            item = data[i];
-            date = get_date_from_string(item['date']);
-            if (date >= initial_date && date <= finish_date) {
-                if (typeof(result[item['product_model_id']]) == 'undefined') {
-                    result[item['product_model_id']] = item;
-                } else {
-                    result[item['product_model_id']]['quantity'] += item['quantity'];
-                }
-            }
-        }
-        return result;
-    }
-
-    function get_date_from_string(string_date) {
-        parts = string_date.split('-');
-        var year = parts[0], month = parts[1], day = parts[2];
-        if (month.substring(0, 1) == '0') {
-            month = month.substring(1);
-        }
-        if (day.substring(0, 1) == '0') {
-            day = day.substring(1);
-        }
-        month = parseInt(month) - 1;
-        return new Date(parseInt(year), parseInt(month), parseInt(day));
-    }
-
-    function start_graphic(data_graphic) {
-        var div = $('<div></div>');
-        	div.attr('id', 'graphic_jqplot');
-          	$('#content_init_graphic').append(div);
-         
-        function create_graphic(data) {
-        	var s1 = [];
-        	var s2 = [];
-	        var ticks = [];
-        	for(index in data) {
-       		var item = data[index];
-        		s1[s1.length] = item.Profit;
-        		s2[s2.length] = item.Sale;
-        		ticks[ticks.length] = item.Name;
-        	}
-	        plot2 = $.jqplot('graphic_jqplot', [s1, s2], {
-	            seriesDefaults: {
-	                renderer:$.jqplot.BarRenderer,
-	                pointLabels: { show: true },
-	                rendererOptions: {fillToZero: true}
-	            },
-	            axes: {
-	                xaxis: {
-	                    renderer: $.jqplot.CategoryAxisRenderer,
-	                    ticks: ticks
-	                }
-	            },
-	            series:[
-	                    {label:'Profit'},
-	                    {label:'Sale'},
-	                ],
-                legend: {
-                    show: true,
-                    placement: 'outsideGrid' /* insideGrid */
-                }
-	        });
-	        $('#chart2').bind('jqplotDataHighlight', 
-	            function (ev, seriesIndex, pointIndex, data) {}
-	        );
-	        $('#chart2').bind('jqplotDataUnhighlight', 
-	            function (ev) {}
-	        );
-	        /* transfer graphic to view analizer */
-	        $('#graphic').append($('#graphic_jqplot'));
-        }
-        create_graphic(data_graphic);
     }
 
     function pageMyProductsShow(){
@@ -1004,6 +1033,7 @@ function init() {
         ul_for_my_products.trigger('create');
 
     }
+
     function removeMyProduct() {
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
         currentPrice = parseInt($('.see_more_products_clients').text()),
@@ -1033,6 +1063,7 @@ function init() {
         }
         pageMyProductsShow();
     }
+
     function updateMyProduct() {
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var myProducts = clientSelected.products,
@@ -1085,6 +1116,7 @@ function init() {
         var today = year + "-" + month + "-" + day;
         return today;
     }
+
     function showOverlay() {
         $('.username').focus();
         $(this).fadeOut().children().removeClass('effect_in_out');
@@ -1225,6 +1257,10 @@ function init() {
     }
     
 
+    function handler(data){
+        return data;
+    }
+
     function moveToOtherClient(){
         var indice = $(this).index();    
         var idClientDestination = $('#selectClient > option').eq(indice).val();  
@@ -1350,7 +1386,7 @@ Offline.options = {
       // Should we automatically retest periodically when the connection is down (set to false to disable).
       reconnect: {
         // How many seconds should we wait before rechecking.
-        initialDelay: 3,
+        initialDelay: 3
 
         // How long should we wait between retries.
         //delay: (1.5 * last delay, capped at 1 hour)
