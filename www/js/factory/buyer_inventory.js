@@ -17,12 +17,11 @@ var BuyerInventoryFactory = function(urls, token) {
                 rp_token: factory.token
             },
 			dataType: 'json',
-			success: function(data){
-                debugger;
+			success: function(data) {
 				if (data.status == true) {
                     window.localStorage.removeItem("buyerInventory");
 					window.localStorage.setItem('buyerInventory', JSON.stringify(data.items_list));
-					handler(data.list);
+					handler(data.items_list);
 				} else {
 					return handler([]);
 				}

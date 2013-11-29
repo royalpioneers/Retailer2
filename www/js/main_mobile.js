@@ -8,6 +8,9 @@ Storages
 
 buyerInventory: stores all the products shown in the inventory list
 rp-token: Used in requests for user verification
+items_list: ?
+productsSelected: ?
+storageClients: ?
 
  */
 
@@ -280,6 +283,8 @@ function init() {
         return totalPrice;
     }
 
+    /* Client */
+
     function saveClientStorage(){
         if(localStorage.getItem('clientSelected')){            
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
@@ -330,47 +335,6 @@ function init() {
         }
     	return discount;
     }
-
-    //Functions
-    function loginAuth(event) {
-        event.preventDefault();
-        var result = checkConnection(Connection.ETHERNET);
-        if(result ==  true){
-            var url = urls.login;
-            console.log(url);
-            console.log('test');
-            $.ajax({
-                url: url,
-                data: {
-                    password: $('#password').val(),
-                    email: $('#username').val()
-                },
-                type: 'POST',
-                dataType: 'json',
-                beforeSend: function(){
-                    $.mobile.loading("show", {
-                        textVisible: true,
-                        theme: 'c',
-                        textonly: false
-                    });
-                },
-                success: function (data) {
-                    if (data.status === 'OK') {
-                        window.localStorage.setItem("rp-token", data.token);
-                        token = data.token;
-                        eventsAfterLogin();
-                    } else {
-                        $('.overlay').fadeIn().children().addClass('effect_in_out');
-                    }
-                },
-                complete: function(){
-                    $.mobile.loading("hide");
-                }
-            });
-        } else {
-            alert('Check your internet connection')
-        }
-    }
     
     function getClientById(id) {
         
@@ -383,7 +347,7 @@ function init() {
     	}
     	return false;
     }
-    
+
     function listClients() {
         var url = urls.clients_list;
         var a = true;
@@ -491,6 +455,48 @@ function init() {
         return clientSelected;
     }
 
+    /* Authenticate */
+
+    function loginAuth(event) {
+        event.preventDefault();
+        var result = checkConnection(Connection.ETHERNET);
+        if(result ==  true){
+            var url = urls.login;
+            console.log(url);
+            console.log('test');
+            $.ajax({
+                url: url,
+                data: {
+                    password: $('#password').val(),
+                    email: $('#username').val()
+                },
+                type: 'POST',
+                dataType: 'json',
+                beforeSend: function(){
+                    $.mobile.loading("show", {
+                        textVisible: true,
+                        theme: 'c',
+                        textonly: false
+                    });
+                },
+                success: function (data) {
+                    if (data.status === 'OK') {
+                        window.localStorage.setItem("rp-token", data.token);
+                        token = data.token;
+                        eventsAfterLogin();
+                    } else {
+                        $('.overlay').fadeIn().children().addClass('effect_in_out');
+                    }
+                },
+                complete: function(){
+                    $.mobile.loading("hide");
+                }
+            });
+        } else {
+            alert('Check your internet connection')
+        }
+    }
+
     function logOut(event) {
         localStorage.clear('products_inventory');
         event.preventDefault();
@@ -554,15 +560,19 @@ function init() {
         $.mobile.navigate("#pagina2");
     }
 
+    /* Buyer Inventory */
+
     function getInventoryItems() {
-        buyerInventoryFactory.get_all(showInventory);
+        buyerInventoryFactory.get_all(showInventory, false);
     }
-    function showInventory(){
-        var items_list = JSON.parse(window.localStorage.getItem('buyerInventory'));
-        var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
-                    html_to_insert = '';
-                    items_list = items_list;
-            $.each(items_list, function(i, model){
+
+    function showInventory(list){
+        if(list != undefined){
+            var items_list = list;
+            var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
+                        html_to_insert = '';
+
+            $.each(items_list, function(i, model) {
                 html_to_insert += '<li>\
                                      <a href="#pagina5"\
                                          class="model-data"\
@@ -577,10 +587,12 @@ function init() {
             });
             ul_for_inserting.html('');
             ul_for_inserting.append(html_to_insert);
-            localStorage.setItem('products_inventory', JSON.stringify(data.items_list));
+            localStorage.setItem('products_inventory', JSON.stringify(items_list));
             $('.model-data').live('click', showDetail);
+        }
     }
 
+    /* Analyzer */
 
     function getAnalyzerInformation() {
         var url = urls.analyzer;
@@ -607,7 +619,163 @@ function init() {
            }
         });
     }
-                    
+
+    function processAnalyzerInformation(type) {
+        // dates limit
+        var initial_date = new Date();
+        var finish_date = new Date();
+
+        /* control: 1=month, 2=week, 3=day */
+        if (typeof(type) == 'undefined') {
+            type = 1;
+        }
+
+        if (type == 1) { /* month */
+            var date = new Date();
+            var initial_date = new Date(date.getFullYear(), date.getMonth(), 1);
+            var finish_date = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        } else if (type == 2) { /* week */
+            var date = new Date();
+            var day = date.getDay(),
+                diff = date.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
+            var initial_date = new Date(date.setDate(diff));
+            var finish_date = initial_date + 6;
+
+        } else if (type == 3) { /* day */
+            var initial_date = new Date();
+            var finish_date = new Date();
+        }
+        /* TOTALS */
+        var total_sales = 0;
+        var total_units = 0;
+        var total_profit = 0;
+
+        for(var i in analyzer_information['values']) {
+            item = analyzer_information['values'][i];
+            date = get_date_from_string(item['date']);
+            if (date >= initial_date && date <= finish_date) {
+                total_sales += item['sale_value'];
+                total_units += item['sale_volume'];
+                total_profit += item['projected_profit'];
+            }
+        }
+        $('#pagina2').find('.tab2').find('#analyzer_total_sales').html(total_sales);
+        $('#pagina2').find('.tab2').find('#analyzer_total_units').html(total_units);
+        $('#pagina2').find('.tab2').find('#analyzer_total_profit').html(total_profit);
+
+        /* POPULAR */
+        var total_models_data = total_models(initial_date, finish_date, analyzer_information['variants']['data']);
+        var popular = false;
+        for (var i in total_models_data) {
+            item = total_models_data[i];
+            if (popular) {
+                if (popular['quantity'] < item['quantity']) {
+                    popular = item;
+                }
+            } else {
+                popular = item;
+            }
+        }
+        if (popular !== false) {
+            if (typeof(analyzer_information['variants']['models'][popular['product_model_id']]) != 'undefined') {
+                details = analyzer_information['variants']['models'][popular['product_model_id']];
+                $('#pagina2').find('.tab2').find('#most_popular_img').html('<img src="'+DOMAIN+details['image']+'" />');
+                $('#pagina2').find('.tab2').find('#most_popular_name').html(details['name']);
+                $('#pagina2').find('.tab2').find('#most_popular_sold').html(popular['quantity']);
+            }
+        }
+
+        /* graphic */
+        result = [{
+            Name:"Resume", Sale:total_sales, Profit:total_profit
+        }];
+
+        $('#graphic').html('');
+        start_graphic(result);
+        $('#graphic').trigger('create');
+
+        return true;
+    }
+
+    function total_models(initial_date, finish_date, data) {
+        result = {};
+        for (var i in data) {
+            item = data[i];
+            date = get_date_from_string(item['date']);
+            if (date >= initial_date && date <= finish_date) {
+                if (typeof(result[item['product_model_id']]) == 'undefined') {
+                    result[item['product_model_id']] = item;
+                } else {
+                    result[item['product_model_id']]['quantity'] += item['quantity'];
+                }
+            }
+        }
+        return result;
+    }
+
+    function get_date_from_string(string_date) {
+        parts = string_date.split('-');
+        var year = parts[0], month = parts[1], day = parts[2];
+        if (month.substring(0, 1) == '0') {
+            month = month.substring(1);
+        }
+        if (day.substring(0, 1) == '0') {
+            day = day.substring(1);
+        }
+        month = parseInt(month) - 1;
+        return new Date(parseInt(year), parseInt(month), parseInt(day));
+    }
+
+    function start_graphic(data_graphic) {
+        var div = $('<div></div>');
+        	div.attr('id', 'graphic_jqplot');
+          	$('#content_init_graphic').append(div);
+
+        function create_graphic(data) {
+        	var s1 = [];
+        	var s2 = [];
+	        var ticks = [];
+        	for(index in data) {
+       		var item = data[index];
+        		s1[s1.length] = item.Profit;
+        		s2[s2.length] = item.Sale;
+        		ticks[ticks.length] = item.Name;
+        	}
+	        plot2 = $.jqplot('graphic_jqplot', [s1, s2], {
+	            seriesDefaults: {
+	                renderer:$.jqplot.BarRenderer,
+	                pointLabels: { show: true },
+	                rendererOptions: {fillToZero: true}
+	            },
+	            axes: {
+	                xaxis: {
+	                    renderer: $.jqplot.CategoryAxisRenderer,
+	                    ticks: ticks
+	                }
+	            },
+	            series:[
+	                    {label:'Profit'},
+	                    {label:'Sale'},
+	                ],
+                legend: {
+                    show: true,
+                    placement: 'outsideGrid' /* insideGrid */
+                }
+	        });
+	        $('#chart2').bind('jqplotDataHighlight',
+	            function (ev, seriesIndex, pointIndex, data) {}
+	        );
+	        $('#chart2').bind('jqplotDataUnhighlight',
+	            function (ev) {}
+	        );
+	        /* transfer graphic to view analizer */
+	        $('#graphic').append($('#graphic_jqplot'));
+        }
+        create_graphic(data_graphic);
+    }
+
+    /* Invoice */
+
     function showInvoice() {
         if(localStorage.getItem('clientSelected')){
             $('#selectClient').html('');
@@ -640,6 +808,8 @@ function init() {
         $("."+newSelection).removeClass("ui-screen-hidden");
         prevSelection = newSelection;
     }
+
+    /* Product */
 
     function createProduct() {
         var newIcon = 'check';
@@ -826,163 +996,12 @@ function init() {
         content.append(html_to_insert);
     }
 
+    /* Search */
+
     function changeSearch() {
         window.location.replace("search.html");
     }
 
-    function processAnalyzerInformation(type) {
-        // dates limit
-        var initial_date = new Date();
-        var finish_date = new Date();
-
-        /* control: 1=month, 2=week, 3=day */
-        if (typeof(type) == 'undefined') {
-            type = 1;
-        }
-
-        if (type == 1) { /* month */
-            var date = new Date();
-            var initial_date = new Date(date.getFullYear(), date.getMonth(), 1);
-            var finish_date = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-        } else if (type == 2) { /* week */
-            var date = new Date();
-            var day = date.getDay(),
-                diff = date.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
-            var initial_date = new Date(date.setDate(diff));
-            var finish_date = initial_date + 6;
-
-        } else if (type == 3) { /* day */
-            var initial_date = new Date();
-            var finish_date = new Date();
-        }
-        /* TOTALS */
-        var total_sales = 0;
-        var total_units = 0;
-        var total_profit = 0;
-
-        for(var i in analyzer_information['values']) {
-            item = analyzer_information['values'][i];
-            date = get_date_from_string(item['date']);
-            if (date >= initial_date && date <= finish_date) {
-                total_sales += item['sale_value'];
-                total_units += item['sale_volume'];
-                total_profit += item['projected_profit'];
-            }
-        }
-        $('#pagina2').find('.tab2').find('#analyzer_total_sales').html(total_sales);
-        $('#pagina2').find('.tab2').find('#analyzer_total_units').html(total_units);
-        $('#pagina2').find('.tab2').find('#analyzer_total_profit').html(total_profit);
-
-        /* POPULAR */
-        var total_models_data = total_models(initial_date, finish_date, analyzer_information['variants']['data']);
-        var popular = false;
-        for (var i in total_models_data) {
-            item = total_models_data[i];
-            if (popular) {
-                if (popular['quantity'] < item['quantity']) {
-                    popular = item;
-                }
-            } else {
-                popular = item;
-            }
-        }
-        if (popular !== false) {
-            if (typeof(analyzer_information['variants']['models'][popular['product_model_id']]) != 'undefined') {
-                details = analyzer_information['variants']['models'][popular['product_model_id']];
-                $('#pagina2').find('.tab2').find('#most_popular_img').html('<img src="'+DOMAIN+details['image']+'" />');
-                $('#pagina2').find('.tab2').find('#most_popular_name').html(details['name']);
-                $('#pagina2').find('.tab2').find('#most_popular_sold').html(popular['quantity']);
-            }
-        }
-
-        /* graphic */
-        result = [{
-            Name:"Resume", Sale:total_sales, Profit:total_profit
-        }];
-
-        $('#graphic').html('');
-        start_graphic(result);
-        $('#graphic').trigger('create');
-
-        return true;
-    }
-
-    function total_models(initial_date, finish_date, data) {
-        result = {};
-        for (var i in data) {
-            item = data[i];
-            date = get_date_from_string(item['date']);
-            if (date >= initial_date && date <= finish_date) {
-                if (typeof(result[item['product_model_id']]) == 'undefined') {
-                    result[item['product_model_id']] = item;
-                } else {
-                    result[item['product_model_id']]['quantity'] += item['quantity'];
-                }
-            }
-        }
-        return result;
-    }
-
-    function get_date_from_string(string_date) {
-        parts = string_date.split('-');
-        var year = parts[0], month = parts[1], day = parts[2];
-        if (month.substring(0, 1) == '0') {
-            month = month.substring(1);
-        }
-        if (day.substring(0, 1) == '0') {
-            day = day.substring(1);
-        }
-        month = parseInt(month) - 1;
-        return new Date(parseInt(year), parseInt(month), parseInt(day));
-    }
-
-    function start_graphic(data_graphic) {
-        var div = $('<div></div>');
-        	div.attr('id', 'graphic_jqplot');
-          	$('#content_init_graphic').append(div);
-         
-        function create_graphic(data) {
-        	var s1 = [];
-        	var s2 = [];
-	        var ticks = [];
-        	for(index in data) {
-       		var item = data[index];
-        		s1[s1.length] = item.Profit;
-        		s2[s2.length] = item.Sale;
-        		ticks[ticks.length] = item.Name;
-        	}
-	        plot2 = $.jqplot('graphic_jqplot', [s1, s2], {
-	            seriesDefaults: {
-	                renderer:$.jqplot.BarRenderer,
-	                pointLabels: { show: true },
-	                rendererOptions: {fillToZero: true}
-	            },
-	            axes: {
-	                xaxis: {
-	                    renderer: $.jqplot.CategoryAxisRenderer,
-	                    ticks: ticks
-	                }
-	            },
-	            series:[
-	                    {label:'Profit'},
-	                    {label:'Sale'},
-	                ],
-                legend: {
-                    show: true,
-                    placement: 'outsideGrid' /* insideGrid */
-                }
-	        });
-	        $('#chart2').bind('jqplotDataHighlight', 
-	            function (ev, seriesIndex, pointIndex, data) {}
-	        );
-	        $('#chart2').bind('jqplotDataUnhighlight', 
-	            function (ev) {}
-	        );
-	        /* transfer graphic to view analizer */
-	        $('#graphic').append($('#graphic_jqplot'));
-        }
-        create_graphic(data_graphic);
-    }
 
     function pageMyProductsShow(){
         saveClientStorage();
@@ -1207,6 +1226,10 @@ function init() {
                 $.mobile.loading("hide");
             }
         });
+    }
+
+    function handler(data){
+        return data;
     }
 
     function moveToOtherClient(){
