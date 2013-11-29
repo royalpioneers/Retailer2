@@ -12,16 +12,15 @@ var CategoryFactory = function(urls, token) {
 		if ((factory.cache || cache) && catData != null && prdData != null) {
 			handler(prdData, catData);
 		}
-
         $.ajax({
             url: factory.urls.productInformation,
             type: 'POST',
-            data:{
+            data: {
                 rp_token: factory.token
             },
             dataType: 'json',
-            success: function(data){
-                if(data.status == true){
+            success: function(data) {
+                if(data.status == true) {
                     window.localStorage.removeItem("productRelated");
                     window.localStorage.removeItem("categories");
                     window.localStorage.setItem('productRelated', JSON.stringify(data.products));
@@ -67,7 +66,6 @@ var CategoryFactory = function(urls, token) {
                 });
             },
             success: function (data) {
-                window.localStorage.setItem('categories', JSON.stringify(data.categories));
                 handler(data.categories, collapse);
 
             },
