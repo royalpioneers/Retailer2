@@ -39,10 +39,27 @@ var items_list = [], productsSelected = [], storageClients = [];
 
 function init() {
 	
-    var analyzer_information_time = new Date();
-    	analyzer_information = [],
-        imageURL = undefined;
-        token = window.localStorage.getItem("rp-token");
+    var analyzer_information_time = new Date(),
+      analyzer_information = [],
+      imageURL = undefined,
+      token = window.localStorage.getItem("rp-token");
+
+      Offline.options = {
+          checkOnLoad: false,
+          interceptRequests: true,
+          reconnect: {
+            initialDelay: 3
+          },
+          requests: true,
+          game: false
+      };
+
+    var run = function(){
+      if (Offline.state === 'up')
+        Offline.check();
+        //alert();
+    }
+    setInterval(run, 5000);
 
     //Events
         //Login
@@ -511,10 +528,10 @@ function init() {
     }
 
     function authToken() {
+        debugger;
         //Cuando regresa del search falla
         var result = checkConnection();
         //var result =  true;
-        debugger;
         if(result ==  true){
             var url = urls.loginToken;
             $.ajax({
@@ -547,7 +564,7 @@ function init() {
                 }
             });
         }
-        if (Offline.state == 'down') {
+        if(Offline.state == 'down') {
             if(window.localStorage.getItem("rp-token") != null &&
                 window.localStorage.getItem("rp-token") != undefined){
                 token = window.localStorage.getItem("rp-token");
@@ -1368,34 +1385,3 @@ function init() {
         //         'total':454  
         //     }
         // ]
-Offline.options = {
-       // Should we check the connection status immediatly on page load.
-      checkOnLoad: false,
-
-      // Should we monitor AJAX requests to help decide if we have a connection.
-      interceptRequests: true,
-
-      // Should we automatically retest periodically when the connection is down (set to false to disable).
-      reconnect: {
-        // How many seconds should we wait before rechecking.
-        initialDelay: 3
-
-        // How long should we wait between retries.
-        //delay: (1.5 * last delay, capped at 1 hour)
-      },
-
-      // Should we store and attempt to remake requests which fail while the connection is down.
-      requests: true,
-
-      // Should we show a snake game while the connection is down to keep the user entertained?
-      // It's not included in the normal build, you should bring in js/snake.js in addition to
-      // offline.min.js.
-      game: false
-    }
-
-    var run = function(){
-      if (Offline.state === 'up')
-        Offline.check();
-        //alert();
-    }
-    setInterval(run, 5000);
