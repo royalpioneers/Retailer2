@@ -79,6 +79,22 @@ function init() {
         $('#selectClient-menu').find('li').live('click', moveToOtherClient);
         $('.kill_storage').live('click', killStorage);
     //Functions
+
+    /* PRODUCTS */
+        var categoryFactory = new CountryFactory(urls, token);
+        var buyerInventoryFactory = BuyerInventoryFactory(urls, token);
+        var product = ProductModel(categoryFactory);
+        product.init();/* start list */
+
+    /* CLIENT */
+        var countryFactory = new CountryFactory(urls, token);
+        var stateFactory = new StateFactory(urls, token);
+        var cityFactory = new CityFactory(urls, token);
+        var clientFactory = new ClientFactory(urls, token);
+        var client = ClientModel(countryFactory, stateFactory, cityFactory, clientFactory, listClients);
+        client.init(); /* start list */
+
+
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
     
     function killStorage(){
@@ -102,6 +118,7 @@ function init() {
     function cleanClientSelected(){
         pageClientShow();
     }
+
     function pageClientShow() { 
         $('.products_clients_add').html('');
         var html = "";
@@ -163,6 +180,7 @@ function init() {
         }
         return arrayIndexs;
     }
+
     function getArrayIndexClientsSelected(){
         var arrayIndexs = [];
         for(var i in storageClients){
@@ -170,6 +188,7 @@ function init() {
         }
         return arrayIndexs;
     }
+
     function goProduct() {
         if(localStorage.getItem('clientSelected')){
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
@@ -190,6 +209,7 @@ function init() {
             console.log('goProduct');
         }
     }
+
     function selectProduct(e) {
         e.preventDefault();
         var products = JSON.parse(localStorage.getItem('products_inventory')),
@@ -239,6 +259,7 @@ function init() {
             }
         }
     }
+
     function getCurrentTotal(){
         var totalPrice = 0;
         if(localStorage.getItem('clientSelected')){
@@ -300,14 +321,6 @@ function init() {
         }
     	return discount;
     }
-
-    /* CLIENT */
-    var countryFactory = new CountryFactory(urls, token);
-    var stateFactory = new StateFactory(urls, token);
-    var cityFactory = new CityFactory(urls, token);
-    var clientFactory = new ClientFactory(urls, token);
-    var client = ClientModel(countryFactory, stateFactory, cityFactory, clientFactory, listClients);
-    client.init(); /* start list */
 
     //Functions
     function loginAuth(event) {
@@ -519,60 +532,46 @@ function init() {
     }
 
     function eventsAfterLogin() {
-        getInventoryItems();
-        getAnalyzerInformation();
-        $('#container-login').css('display','none');
-        $.mobile.navigate("#pagina2");
-        
+        buyerInventoryFactory.set_token(token);
         countryFactory.set_token(token);
         stateFactory.set_token(token);
         cityFactory.set_token(token);
-        clientFactory.set_token(token); 
+        clientFactory.set_token(token);
+
+        getInventoryItems();
+        getAnalyzerInformation();
+
+        $('#container-login').css('display','none');
+        $.mobile.navigate("#pagina2");
     }
 
     function getInventoryItems() {
-        var url = urls.inventory;
-        $.ajax({
-           url: url,
-           type: 'POST',
-           data: {
-                rp_token: token
-           },
-           dataType: 'json',
-           beforeSend: function(){
-                $.mobile.loading("show", {
-                    textVisible: true,
-                    theme: 'c',
-                    textonly: false
-                });
-            },
-           success: function(data){
-                var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
-                    html_to_insert = '';
-                    items_list = data.items_list;
-               $.each(items_list, function(i, model){
-                   html_to_insert += '<li>\
-                                        <a href="#pagina5"\
-                                            class="model-data"\
-                                            data-model-name="'+model.model_name+'"\
-                                            data-product-name="'+model.product_name+'"\
-                                            data-retail-price="'+model.retail_price+'"\
-                                            data-quantity="'+model.quantity+'"\
-                                            >\
-                                            <img src="'+DOMAIN+model.model_image+'"/>\
-                                        </a>\
-                                    </li>';
-               });
-               ul_for_inserting.html('');
-               ul_for_inserting.append(html_to_insert);
-               localStorage.setItem('products_inventory', JSON.stringify(data.items_list));
-               $('.model-data').live('click', showDetail);
-           },
-           complete: function(){
-                $.mobile.loading("hide");
-           }
-        });
+        buyerInventoryFactory.get_all(showInventory);
     }
+    function showInventory(){
+        var items_list = JSON.parse(window.localStorage.getItem('buyerInventory'));
+        var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
+                    html_to_insert = '';
+                    items_list = items_list;
+            $.each(items_list, function(i, model){
+                html_to_insert += '<li>\
+                                     <a href="#pagina5"\
+                                         class="model-data"\
+                                         data-model-name="'+model.model_name+'"\
+                                         data-product-name="'+model.product_name+'"\
+                                         data-retail-price="'+model.retail_price+'"\
+                                         data-quantity="'+model.quantity+'"\
+                                         >\
+                                         <img src="'+DOMAIN+model.model_image+'"/>\
+                                     </a>\
+                                 </li>';
+            });
+            ul_for_inserting.html('');
+            ul_for_inserting.append(html_to_insert);
+            localStorage.setItem('products_inventory', JSON.stringify(data.items_list));
+            $('.model-data').live('click', showDetail);
+    }
+
 
     function getAnalyzerInformation() {
         var url = urls.analyzer;
@@ -1000,6 +999,7 @@ function init() {
         ul_for_my_products.trigger('create');
 
     }
+
     function removeMyProduct() {
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
         currentPrice = parseInt($('.see_more_products_clients').text()),
@@ -1029,6 +1029,7 @@ function init() {
         }
         pageMyProductsShow();
     }
+
     function updateMyProduct() {
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var myProducts = clientSelected.products,
@@ -1081,6 +1082,7 @@ function init() {
         var today = year + "-" + month + "-" + day;
         return today;
     }
+
     function showOverlay() {
         $('.username').focus();
         $(this).fadeOut().children().removeClass('effect_in_out');
@@ -1323,7 +1325,7 @@ Offline.options = {
       // Should we automatically retest periodically when the connection is down (set to false to disable).
       reconnect: {
         // How many seconds should we wait before rechecking.
-        initialDelay: 3,
+        initialDelay: 3
 
         // How long should we wait between retries.
         //delay: (1.5 * last delay, capped at 1 hour)
