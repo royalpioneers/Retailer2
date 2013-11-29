@@ -44,31 +44,6 @@ function init() {
         imageURL = undefined;
         token = window.localStorage.getItem("rp-token");
 
-    /* PRODUCTS */
-        var categoryFactory = new CategoryFactory(urls, token);
-        var buyerInventoryFactory = BuyerInventoryFactory(urls, token);
-        var product = ProductModel(categoryFactory);
-        product.init();/* start list */
-
-    /* CLIENT */
-        var countryFactory = new CountryFactory(urls, token);
-        var stateFactory = new StateFactory(urls, token);
-        var cityFactory = new CityFactory(urls, token);
-        var clientFactory = new ClientFactory(urls, token);
-        var client = new ClientModel(countryFactory, stateFactory, cityFactory, clientFactory, listClients);
-        client.init(); /* start list */
-
-    /* INVOICE */
-    var invoice = new InvoiceModel();
-
-
-    //Automatic Login
-
-    if(token != null) {
-        authToken();
-    } else {
-        $('#container-login').css('display','inline');
-    }
     //Events
         //Login
         $("#log_in").on("click", loginAuth);
@@ -111,7 +86,32 @@ function init() {
         $('#back_page').live('click', redirectToPage);
         $('#selectClient-menu').find('li').live('click', moveToOtherClient);
         $('.kill_storage').live('click', killStorage);
-    //Functions
+
+    /* PRODUCTS */
+        var categoryFactory = new CategoryFactory(urls, token);
+        var buyerInventoryFactory = BuyerInventoryFactory(urls, token);
+        var product = ProductModel(categoryFactory);
+        product.init();/* start list */
+
+    /* CLIENT */
+        var countryFactory = new CountryFactory(urls, token);
+        var stateFactory = new StateFactory(urls, token);
+        var cityFactory = new CityFactory(urls, token);
+        var clientFactory = new ClientFactory(urls, token);
+        var client = new ClientModel(countryFactory, stateFactory, cityFactory, clientFactory, listClients);
+        client.init(); /* start list */
+
+    /* INVOICE */
+        var invoice = new InvoiceModel();
+
+
+    //Automatic Login
+
+    if(token != null) {
+        authToken();
+    } else {
+        $('#container-login').css('display','inline');
+    }
 
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
 
@@ -514,6 +514,7 @@ function init() {
         //Cuando regresa del search falla
         var result = checkConnection();
         //var result =  true;
+        debugger;
         if(result ==  true){
             var url = urls.loginToken;
             $.ajax({
@@ -545,10 +546,12 @@ function init() {
                     $.mobile.loading("hide");
                 }
             });
-        } else {
+        }
+        if (Offline.state == 'down') {
             if(window.localStorage.getItem("rp-token") != null &&
                 window.localStorage.getItem("rp-token") != undefined){
                 token = window.localStorage.getItem("rp-token");
+                debugger;
                 eventsAfterLogin();
             } else {
                 alert('Check your internet connection')
@@ -746,48 +749,48 @@ function init() {
         var div = $('<div></div>');
         	div.attr('id', 'graphic_jqplot');
           	$('#content_init_graphic').append(div);
-
-        function create_graphic(data) {
-        	var s1 = [];
-        	var s2 = [];
-	        var ticks = [];
-        	for(index in data) {
-       		var item = data[index];
-        		s1[s1.length] = item.Profit;
-        		s2[s2.length] = item.Sale;
-        		ticks[ticks.length] = item.Name;
-        	}
-	        plot2 = $.jqplot('graphic_jqplot', [s1, s2], {
-	            seriesDefaults: {
-	                renderer:$.jqplot.BarRenderer,
-	                pointLabels: { show: true },
-	                rendererOptions: {fillToZero: true}
-	            },
-	            axes: {
-	                xaxis: {
-	                    renderer: $.jqplot.CategoryAxisRenderer,
-	                    ticks: ticks
-	                }
-	            },
-	            series:[
-	                    {label:'Profit'},
-	                    {label:'Sale'},
-	                ],
-                legend: {
-                    show: true,
-                    placement: 'outsideGrid' /* insideGrid */
-                }
-	        });
-	        $('#chart2').bind('jqplotDataHighlight',
-	            function (ev, seriesIndex, pointIndex, data) {}
-	        );
-	        $('#chart2').bind('jqplotDataUnhighlight',
-	            function (ev) {}
-	        );
-	        /* transfer graphic to view analizer */
-	        $('#graphic').append($('#graphic_jqplot'));
-        }
         create_graphic(data_graphic);
+    }
+
+    function create_graphic(data) {
+        var s1 = [];
+        var s2 = [];
+	    var ticks = [];
+        for(index in data) {
+        var item = data[index];
+        	s1[s1.length] = item.Profit;
+        	s2[s2.length] = item.Sale;
+        	ticks[ticks.length] = item.Name;
+        }
+	    plot2 = $.jqplot('graphic_jqplot', [s1, s2], {
+	        seriesDefaults: {
+	            renderer:$.jqplot.BarRenderer,
+	            pointLabels: { show: true },
+	            rendererOptions: {fillToZero: true}
+	        },
+	        axes: {
+	            xaxis: {
+	                renderer: $.jqplot.CategoryAxisRenderer,
+	                ticks: ticks
+	            }
+	        },
+	        series:[
+	                {label:'Profit'},
+	                {label:'Sale'},
+	            ],
+            legend: {
+                show: true,
+                placement: 'outsideGrid' /* insideGrid */
+            }
+	    });
+	    $('#chart2').bind('jqplotDataHighlight',
+	        function (ev, seriesIndex, pointIndex, data) {}
+	    );
+	    $('#chart2').bind('jqplotDataUnhighlight',
+	        function (ev) {}
+	    );
+	    /* transfer graphic to view analizer */
+	    $('#graphic').append($('#graphic_jqplot'));
     }
 
     /* Invoice */
