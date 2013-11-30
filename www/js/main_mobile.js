@@ -46,8 +46,6 @@ var urls = {
 var items_list = [], productsSelected = [], storageClients = [];
 
 function init() {
-
-    console.log(Offline.state+'jonath');
     var analyzer_information_time = new Date(),
     	analyzer_information = [],
         imageURL = undefined,
@@ -79,6 +77,7 @@ function init() {
         $('.card').on('click',function(){$(this).addClass('moved');});
 
         //Invoice
+        $('.offline').live('click', msgOffline);
         $('#new_invoice').live('click', listClients);
         $('#goToInvoice').live('click', showInvoice);
         $('.productSelected').live('click', selectProduct);
@@ -169,6 +168,11 @@ function init() {
         }
     }
 
+    function msgOffline(event) {
+        event.preventDefault();
+        alert('the action can not be processed');
+    }
+
     function logOut(event) {
         event.preventDefault();
         window.localStorage.removeItem('buyerInventory');
@@ -178,7 +182,6 @@ function init() {
         window.localStorage.removeItem('storageClients');
         window.localStorage.removeItem('productRelated');
         window.localStorage.removeItem('categories');
-        window.localStorage.removeItem('products_inventory');                
         window.localStorage.removeItem("rp-token");
         window.localStorage.removeItem("clientSelected");
         $('#container-login').css('display','inline');
@@ -195,6 +198,7 @@ function init() {
                 alert('Check your internet connection')
             }
         } else {
+            debugger;
             var url = urls.loginToken;
             $.ajax({
                 url: url,
@@ -251,14 +255,20 @@ function init() {
             var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
                         html_to_insert = '';
             $.each(items_list, function(i, model) {
+                var _offline='';
+                if(model.offline == true){
+                    var _offline='offline';
+                }
+
                 if (Offline.state == 'down') {
-                        html_to_insert += '<li>\
+                        html_to_insert += '<li class="'+_offline+'">\
                                      <a href="#pagina5"\
                                          class="model-data"\
                                          data-model-name="'+model.model_name+'"\
                                          data-product-name="'+model.product_name+'"\
                                          data-retail-price="'+model.retail_price+'"\
                                          data-quantity="'+model.quantity+'"\
+                                         class="'+_offline+'"\
                                          >\
                                          <img src="images/default_product.png"/>\
                                      </a>\
@@ -279,7 +289,6 @@ function init() {
             });
             ul_for_inserting.html('');
             ul_for_inserting.append(html_to_insert);
-            localStorage.setItem('products_inventory', JSON.stringify(items_list));
             $('.model-data').live('click', showDetail);
         }
     }
@@ -699,8 +708,8 @@ function init() {
                             }
                         }
                         //cambiar sus detalles
-                        var products = JSON.parse(localStorage.getItem('products_inventory'));
-                        for(var j in products){
+                        var products = JSON.parse(localStorage.getItem('buyerInventory'));
+                        for(var j in products) {
 
                             if(productsToMigrate.indexOf(products[j].id) !== -1){
                                 productSelected = {
@@ -737,7 +746,7 @@ function init() {
                                 'products':[],
                                 'total':0
                             };
-                            var products = JSON.parse(localStorage.getItem('products_inventory'));
+                            var products = JSON.parse(localStorage.getItem('buyerInventory'));
                             for(var j in products){
 
                                 if(getArrayIndexProductsSelected().indexOf(products[j].id) !== -1){
@@ -808,14 +817,17 @@ function init() {
 
     function pageClientShow() { 
         $('.products_clients_add').html('');
-        var html = "";
-        var products = JSON.parse(localStorage.getItem('products_inventory'));
+        var html = "",
+            products = JSON.parse(localStorage.getItem('buyerInventory'));
         for(var i in products) {
-            
-            if(getArrayIndexProductsSelected().indexOf(products[i].id) !== -1){
-                
+            var _offline = ""
+            if(products[i].offline != undefined){
+                _offline = "offline";
+            }
+
+            if(getArrayIndexProductsSelected().indexOf(products[i].id) !== -1) {
                 html += '<li class="myProductSelected">\
-                    <a href="#" data-role="button" class="productSelected" data-id="'+products[i].id+'" data-selected="true">\
+                    <a href="#" data-role="button" class="productSelected '+_offline+' " data-id="'+products[i].id+'" data-selected="true">\
                         <img src="'+DOMAIN+products[i].model_image+'">\
                         <span>'+products[i].product_name+'</span>\
                     </a>\
@@ -899,7 +911,7 @@ function init() {
 
     function selectProduct(e) {
         e.preventDefault();
-        var products = JSON.parse(localStorage.getItem('products_inventory')),
+        var products = JSON.parse(localStorage.getItem('buyerInventory')),
             clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
             productSelected,
             id = $(this).data('id');
@@ -1095,7 +1107,7 @@ function init() {
                     quantity: quantity,
                     retail_price: retailPrice,
                     wholesale_price: retailPrice,
-                    status: false
+                    offline: true
                 };
                 buyerInventoryFactory.store_inventory(newInventory);
                 win();

@@ -63,6 +63,9 @@
     .input_login {
         box-shadow: none !important;
     }
+    .offline{
+        background-color: bisque;
+    }
     .btn_accept_option{
         color: #2c3e50 !important;
     }
