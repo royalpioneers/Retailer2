@@ -1006,6 +1006,9 @@ function init() {
         var text_category = $(this).children('h3').text();
         text_category = text_category.replace("click to collapse contents", "");
         $('#category-name').text(text_category);
+         if(Offline.state == 'down') {
+            return false;
+        }
 
         if($(this).data('json') != 't') {
             var collapse = $(this).children('div');
@@ -1030,6 +1033,7 @@ function init() {
     }
 
     function saveProduct() {
+
         var nameProduct = $('#browser').val(),
             nameVariant = $('#name-variant').val(),
             categoryId = $('#category-id').text(),
@@ -1062,13 +1066,29 @@ function init() {
                     } else {
                         alert('an error occurred');
                     }
-
                 },
                 complete: completeAjaxLoader()
             });
+            if(Offline.state == 'down') {
+                var newInventory = {
+                    model_image: "/media/pictures/1385679100287.jpg.200x170_q100_crop_key-1_text-small.jpg",
+                    model_name: nameVariant,
+                    product_name: nameProduct,
+                    quantity: quantity,
+                    retail_price: retailPrice,
+                    wholesale_price: retailPrice,
+                    status: false
+                };
+
+                debugger;
+
+                BuyerInventoryFactory.store_inventory(newInventory);
+                win();
+            }
         } else {
             alert('Data Incomplete');
         }
+
     }
 
     function getInformationProduct() {
