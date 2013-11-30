@@ -1,8 +1,8 @@
 $(window).load(function() {
     var run = function(){
     if (Offline.state === 'up')
-    Offline.check();
-    }
+        Offline.check();
+    };
     setInterval(run, 5000);
     setTimeout(function(){
         init();
@@ -41,12 +41,15 @@ var urls = {
     'cities_by_char': DOMAIN+'/mobile/cities_by_char/',
     'send_invoice': DOMAIN+'/mobile/buyer-inventory-create-sale/'
 };
+
 var items_list = [], productsSelected = [], storageClients = [];
 
 function init() {
-    var analyzer_information_time = new Date();
+
+    console.log(Offline.state+'jonath');
+    var analyzer_information_time = new Date(),
     	analyzer_information = [],
-        imageURL = undefined;
+        imageURL = undefined,
         token = window.localStorage.getItem("rp-token");
 
     //Events
@@ -524,25 +527,12 @@ function init() {
         }
     }
 
-    function createNewClient(client) {        
-        var clientSelected = {
-            'id': client.id,
-            'name': client.name,
-            'image': client.image,
-            'type': client.type,
-            'products':[],
-            'total':0
-        };
-        localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
-        return clientSelected;
-    }
 
     /* Authenticate */
 
     function loginAuth(event) {
         event.preventDefault();
-        var result = checkConnection(Connection.ETHERNET);
-        if(result ==  true){
+        if(Offline.state == 'up') {
             var url = urls.login;
             console.log(url);
             console.log('test');
@@ -581,6 +571,13 @@ function init() {
 
     function logOut(event) {
         event.preventDefault();
+        window.localStorage.removeItem('buyerInventory');
+        window.localStorage.removeItem('rp-token');
+        window.localStorage.removeItem('items_list');
+        window.localStorage.removeItem('productsSelected');
+        window.localStorage.removeItem('storageClients');
+        window.localStorage.removeItem('productRelated');
+        window.localStorage.removeItem('categories');
         window.localStorage.removeItem('products_inventory');                
         window.localStorage.removeItem("rp-token");
         window.localStorage.removeItem("clientSelected");
@@ -589,11 +586,15 @@ function init() {
     }
 
     function authToken() {
-        //Cuando regresa del search falla
-        var result = checkConnection();
-        //var result =  true;
-        
-        if(result ==  true){
+        if(Offline.state == 'down') {
+            if(window.localStorage.getItem("rp-token") != null &&
+                window.localStorage.getItem("rp-token") != undefined){
+                token = window.localStorage.getItem("rp-token");
+                eventsAfterLogin();
+            } else {
+                alert('Check your internet connection')
+            }
+        } else {
             var url = urls.loginToken;
             $.ajax({
                 url: url,
@@ -649,17 +650,33 @@ function init() {
     /* Buyer Inventory */
 
     function getInventoryItems() {
-        buyerInventoryFactory.get_all(showInventory, false);
+        var cache = false;
+        if(Offline.state == 'down') {
+            cache = true;
+        }
+        buyerInventoryFactory.get_all(showInventory, cache);
     }
 
-    function showInventory(list){
-        if(list != undefined){
+    function showInventory(list) {
+        if(list != undefined) {
             var items_list = list;
             var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
                         html_to_insert = '';
-
             $.each(items_list, function(i, model) {
-                html_to_insert += '<li>\
+                if (Offline.state == 'down') {
+                        html_to_insert += '<li>\
+                                     <a href="#pagina5"\
+                                         class="model-data"\
+                                         data-model-name="'+model.model_name+'"\
+                                         data-product-name="'+model.product_name+'"\
+                                         data-retail-price="'+model.retail_price+'"\
+                                         data-quantity="'+model.quantity+'"\
+                                         >\
+                                         <img src="images/default_product.png"/>\
+                                     </a>\
+                                 </li>';
+                } else {
+                    html_to_insert += '<li>\
                                      <a href="#pagina5"\
                                          class="model-data"\
                                          data-model-name="'+model.model_name+'"\
@@ -670,6 +687,7 @@ function init() {
                                          <img src="'+DOMAIN+model.model_image+'"/>\
                                      </a>\
                                  </li>';
+                }
             });
             ul_for_inserting.html('');
             ul_for_inserting.append(html_to_insert);
@@ -857,6 +875,117 @@ function init() {
 	    );
 	    /* transfer graphic to view analizer */
 	    $('#graphic').append($('#graphic_jqplot'));
+    }
+
+    /* Client */
+
+    function getClientById(id) {
+
+    	/* from local storage */
+    	for (var index in storageClients) {
+    		var client = storageClients[index];
+    		if (client.id == id) {
+    			return client;
+    		}
+    	}
+    	return false;
+    }
+
+    function listClients() {
+        var url = urls.clients_list;
+        var clients_name_id = [];
+        $.ajax({
+           url: url,
+           type: 'POST',
+           data: {
+                rp_token: token
+           },
+           dataType: 'json',
+           beforeSend: beforeAjaxLoader(),
+           success: function(data){
+                $('#pagina11').find('#list_clients').html('');
+                var ul_for_list_clients = $('#pagina11').find('#list_clients'),
+                    html_to_insert = '';
+                    items_list = data.items_list;
+
+                for(var client in items_list){
+                   html_to_insert += '<input type="radio" name="radio-choice-1" id="radio-choice-'+items_list[client].id+'" data-id="'+items_list[client].id+'"value="choice-'+items_list[client].id+'"/>\
+                                    <label\
+                                        for="radio-choice-'+items_list[client].id+'"\
+                                        data-corners="false" class="labelRadioButton"\
+                                        >\
+                                        <img src="'+DOMAIN+items_list[client].image+'" class="image_client"/>'+items_list[client].name+'\
+                                    </label>';
+                };
+
+                ul_for_list_clients.append(html_to_insert);
+                $('#list_clients').trigger('create');
+                $(":radio").unbind("change");
+                $(":radio").bind("change", function(){
+                    if(localStorage.getItem('clientSelected')){
+                        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+                        //validar si esta repetido
+                        var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+                        if(index !== -1){
+
+                            storageClients[index] = clientSelected;
+                        }
+                    }
+                    var self = $(this);
+                    for(var client in items_list){
+                        if(items_list[client].id === self.data('id')){
+                            if(storageClients != ''){
+
+                                var result = false;
+                                /* get client from storage */
+                                var client_exists = getClientById(items_list[client].id);
+                                if (client_exists) {
+
+                                    localStorage.setItem("clientSelected", JSON.stringify(client_exists));
+                                    clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+                                    $.mobile.navigate("#pagina12");
+                                    result = true;
+                                } else {
+                                    result = false;
+                                }
+                                if(result == false) {
+                                    var clientSelected = createNewClient(items_list[client])
+                                }
+                            } else {
+                                var clientSelected = createNewClient(items_list[client]);
+                            }
+                        }
+                    }
+                    //pintar select con las lista de clientes de la pagina 12
+                    $('#selectClient').html('');
+                    var html ='';
+                    for(var i in items_list){
+                        html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';
+                    }
+                    $('#selectClient').append(html);
+                    $('#selectClient-button > span > span > span').text(clientSelected.name);
+                    localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+                    if(clientSelected.products == ''){
+                        $.mobile.navigate("#pagina13");
+                    }
+                });
+                //localStorage.setItem("allClients", JSON.stringify(items_list));
+            },
+            complete: completeAjaxLoader()
+        });
+    }
+
+    function createNewClient(client) {
+        var clientSelected = {
+            'id': client.id,
+            'name': client.name,
+            'image': client.image,
+            'type': client.type,
+            'products':[],
+            'total':0
+        };
+        localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+        return clientSelected;
     }
 
     /* Invoice */
@@ -1066,9 +1195,11 @@ function init() {
         $("."+newSelection).removeClass("ui-screen-hidden");
         prevSelection = newSelection;
     }
-        function killStorage(){
+
+    function killStorage(){
         localStorage.setItem("clientSelected", '');
     }
+
     function redirectToPage(){
         if(localStorage.getItem('clientSelected')){
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
@@ -1086,6 +1217,7 @@ function init() {
     function cleanClientSelected(){        
         pageClientShow();
     }
+
     function pageClientShow() { 
         $('.products_clients_add').html('');
         var html = "";
@@ -1147,6 +1279,7 @@ function init() {
         }
         return arrayIndexs;
     }
+
     function getArrayIndexClientsSelected(){
         var arrayIndexs = [];
         for(var i in storageClients){
@@ -1154,6 +1287,7 @@ function init() {
         }
         return arrayIndexs;
     }
+
     function goProduct() {
         if(localStorage.getItem('clientSelected')){
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
@@ -1174,6 +1308,7 @@ function init() {
             console.log('goProduct');
         }
     }
+
     function selectProduct(e) {
         e.preventDefault();
         var products = JSON.parse(localStorage.getItem('products_inventory')),
@@ -1223,6 +1358,7 @@ function init() {
             }
         }
     }
+
     function getCurrentTotal(){
         var totalPrice = 0;
         if(localStorage.getItem('clientSelected')){
@@ -1301,6 +1437,9 @@ function init() {
         var text_category = $(this).children('h3').text();
         text_category = text_category.replace("click to collapse contents", "");
         $('#category-name').text(text_category);
+         if(Offline.state == 'down') {
+            return false;
+        }
 
         if($(this).data('json') != 't') {
             var collapse = $(this).children('div');
@@ -1325,6 +1464,7 @@ function init() {
     }
 
     function saveProduct() {
+
         var nameProduct = $('#browser').val(),
             nameVariant = $('#name-variant').val(),
             categoryId = $('#category-id').text(),
@@ -1357,17 +1497,33 @@ function init() {
                     } else {
                         alert('an error occurred');
                     }
-
                 },
                 complete: completeAjaxLoader()
             });
+            if(Offline.state == 'down') {
+                var newInventory = {
+                    model_name: nameVariant,
+                    product_name: nameProduct,
+                    quantity: quantity,
+                    retail_price: retailPrice,
+                    wholesale_price: retailPrice,
+                    status: false
+                };
+                buyerInventoryFactory.store_inventory(newInventory);
+                win();
+            }
         } else {
             alert('Data Incomplete');
         }
+
     }
 
     function getInformationProduct() {
-        categoryFactory.get_main_category(showInformation, false);
+        var cache = false;
+        if(Offline.state == 'down') {
+            cache = true;
+        }
+        categoryFactory.get_main_category(showInformation, cache);
     }
 
     function showInformation(products, categories){
@@ -1377,6 +1533,7 @@ function init() {
         showProductRelated(products);
         showMainCategories(categories);
     }
+
     function showProductRelated(products){
         /*
         Show products related in input name product
@@ -1560,20 +1717,6 @@ function init() {
     function showOverlay() {
         $('.username').focus();
         $(this).fadeOut().children().removeClass('effect_in_out');
-    }    
-    
-    function checkConnection() {
-        try {
-        var networkState = navigator.network.connection.type;
-
-        if(networkState == Connection.NONE){
-            return false;
-        }
-        return true;
-        }
-        catch(err) {
-            return true;
-        }
     }
 
     /* PHOTO */
@@ -1593,7 +1736,7 @@ function init() {
     }
 
     function onFail(message) {
-        //alert('Failed because: ' + message);
+        alert('Failed because: ' + message);
     }
     function uploadPhoto(id) {
         if(imageURL != undefined) {
@@ -1812,6 +1955,7 @@ function init() {
         //         'total':454  
         //     }
         // ]
+
 Offline.options = {
        // Should we check the connection status immediatly on page load.
       checkOnLoad: true,
@@ -1836,5 +1980,3 @@ Offline.options = {
       // offline.min.js.
       game: false
     }
-
-

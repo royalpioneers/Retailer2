@@ -2,7 +2,7 @@
 var app = {
     getDomain: function() {
         return "http://roypi.com"
-        //return "http://localhost:8001/";
+        //return "http://192.168.1.6:8000";
     },
     initialize: function() {
         this.bindEvents();
