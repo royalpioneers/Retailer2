@@ -1324,7 +1324,7 @@ function init() {
     }
 
     function onFail(message) {
-        //alert('Failed because: ' + message);
+        alert('Failed because: ' + message);
     }
 
     function uploadPhoto(id) {
