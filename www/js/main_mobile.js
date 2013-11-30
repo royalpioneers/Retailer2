@@ -238,14 +238,26 @@ function init() {
         buyerInventoryFactory.get_all(showInventory, cache);
     }
 
-    function showInventory(list){
-        if(list != undefined){
+    function showInventory(list) {
+        if(list != undefined) {
             var items_list = list;
             var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
                         html_to_insert = '';
-
             $.each(items_list, function(i, model) {
-                html_to_insert += '<li>\
+                if (Offline.state == 'down') {
+                        html_to_insert += '<li>\
+                                     <a href="#pagina5"\
+                                         class="model-data"\
+                                         data-model-name="'+model.model_name+'"\
+                                         data-product-name="'+model.product_name+'"\
+                                         data-retail-price="'+model.retail_price+'"\
+                                         data-quantity="'+model.quantity+'"\
+                                         >\
+                                         <img src="images/default_product.png"/>\
+                                     </a>\
+                                 </li>';
+                } else {
+                    html_to_insert += '<li>\
                                      <a href="#pagina5"\
                                          class="model-data"\
                                          data-model-name="'+model.model_name+'"\
@@ -256,6 +268,7 @@ function init() {
                                          <img src="'+DOMAIN+model.model_image+'"/>\
                                      </a>\
                                  </li>';
+                }
             });
             ul_for_inserting.html('');
             ul_for_inserting.append(html_to_insert);
@@ -1071,7 +1084,7 @@ function init() {
             });
             if(Offline.state == 'down') {
                 var newInventory = {
-                    model_image: "/media/pictures/1385679100287.jpg.200x170_q100_crop_key-1_text-small.jpg",
+                    image_offline: "/images/default_product.png",
                     model_name: nameVariant,
                     product_name: nameProduct,
                     quantity: quantity,
@@ -1079,10 +1092,7 @@ function init() {
                     wholesale_price: retailPrice,
                     status: false
                 };
-
-                debugger;
-
-                BuyerInventoryFactory.store_inventory(newInventory);
+                buyerInventoryFactory.store_inventory(newInventory);
                 win();
             }
         } else {

@@ -7,7 +7,7 @@ var BuyerInventoryFactory = function(urls, token) {
 	factory.get_all = function(handler, cache) {
 		var list = JSON.parse(window.localStorage.getItem('buyerInventory'));
 		if ((factory.cache || cache) && list != null) {
-			handler(list);
+			return handler(list);
 		}
 
 		$.ajax({
@@ -32,7 +32,7 @@ var BuyerInventoryFactory = function(urls, token) {
     factory.store_inventory = function(inventory) {
 		if(window.localStorage.getItem('buyerInventory')){
 			var inventory_list = JSON.parse(window.localStorage.getItem('buyerInventory'));
-			inventory_list.push = inventory;
+			inventory_list.push(inventory);
 			window.localStorage.setItem('buyerInventory', JSON.stringify(inventory_list));
 		}
 	};
