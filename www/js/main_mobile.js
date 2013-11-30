@@ -171,6 +171,13 @@ function init() {
 
     function logOut(event) {
         event.preventDefault();
+        window.localStorage.removeItem('buyerInventory');
+        window.localStorage.removeItem('rp-token');
+        window.localStorage.removeItem('items_list');
+        window.localStorage.removeItem('productsSelected');
+        window.localStorage.removeItem('storageClients');
+        window.localStorage.removeItem('productRelated');
+        window.localStorage.removeItem('categories');
         window.localStorage.removeItem('products_inventory');                
         window.localStorage.removeItem("rp-token");
         window.localStorage.removeItem("clientSelected");
