@@ -569,7 +569,6 @@ function init() {
         return clientSelected;
     }
 
-
     /* Invoice */
 
     function showInvoice() {
@@ -1084,7 +1083,6 @@ function init() {
             });
             if(Offline.state == 'down') {
                 var newInventory = {
-                    image_offline: "/images/default_product.png",
                     model_name: nameVariant,
                     product_name: nameProduct,
                     quantity: quantity,
