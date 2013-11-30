@@ -1,4 +1,4 @@
-var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFactory, listClients) {
+var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFactory) {
 	var model= this;
 	model.messages = [];
 	model.id_city_autocomplete = 'id_city_autocomplete';
@@ -21,8 +21,8 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	
 	model.init = function() {
 		$("#"+model.id_btn_create).live("click", model.create);
-		model.get_form_field('country').live("change", model.charge_states);
-		model.get_form_field('state').live("change", model.charge_cities);
+		model.get_form_field('country').live("click", model.charge_states);
+		model.get_form_field('state').live("click", model.charge_cities);
 		$('.'+model.class_item_city).live('click', model.set_city_selected);
 		$.mobile.listview.prototype.options.filterCallback = model.filter_cities;
 		/* model.list(); */
@@ -31,7 +31,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		model.start_form_values();		
 	};
 	
-	model.getDataAddressClient = function(){
+	model.getDataAddressClient = function(){		
 		model.countryFactory.get_all(function(countries){
 			for (var i in countries) {
 				var country = countries[i];
@@ -74,12 +74,14 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	model.start_company_type_values = function(cache) {
 		/* items */
 		model.clientFactory.get_company_types(function(items){
+			
 			model.get_form_field('company_type').html('');
 			model.render_field_form('company_type', {id:'', name:'Select Type'});
 			for (var index in items) {
 				item = items[index];
 				model.render_field_form('company_type', item);
 			}
+			
 			try {model.get_form_field('company_type').selectmenu('refresh', true);}catch(e){}
 		}, cache);
 	};
@@ -111,30 +113,29 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		var params = model.get_form_params(form);
 		if (!params) {
 			model.show(model.messages);
-		} else {debugger;
+		} else {
 			model.clientFactory.create(params, function(data, errors){
 				if (data === false) {
 					model.messages[model.messages.length] = errors;
 					model.show(model.messages);
 				} else {
 					model.set_client_to_list(data);
-					debugger;
+					
 					/* TODO: uncomment when code pass to client */
 					/* model.apply_event_select(); 
 					model.refresh_list(); */
 					model.clear_form(5);
-					//listClients();
 					$.mobile.navigate("#pagina11");
 					/* model.success_create(); */
 				}
 			});
-			debugger;
+			
 			//create a client storage
 			if(Offline.state === 'down'){
-				debugger;
+				
 				var allClients = JSON.parse(localStorage.getItem('allClients'));
 				var newClientOffline = {
-					id: null,
+					id: 0,
 					name: params.name, 
 					image: "http://roypi.com/static/img/designer_default_photo.jpg", 
 					type: params.company_type
@@ -143,7 +144,6 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 				localStorage.setItem("allClients", JSON.stringify(allClients));
 				model.set_client_to_list(newClientOffline);		
 		        model.clear_form(5);
-				//listClients();
 				$.mobile.navigate("#pagina11");
 	        }
 		}
@@ -210,13 +210,18 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		model.refresh_list();
 	};
 
-	model.set_client_to_list = function(client) {		
+	model.set_client_to_list = function(client) {
+				
 		var item_template = $('#'+model.id_item_template).html();
 		item_template = item_template.replace(/__name__/g, client.name);
 		item_template = item_template.replace(/__id__/g, client.id);
 		item_template = item_template.replace(/__image__/g, client.image);
-		item_template = item_template.replace(/__clientOffline__/g, client.image);		
+		if(Offline.state === 'down'){
+			item_template = item_template.replace(/__clientOffline__/g, 'disabled');	
+		}
+		
         $('#'+model.id_client_list).append(item_template);
+        $('#'+model.id_client_list).trigger('create');
 	};
 
 	model.refresh_list = function() {

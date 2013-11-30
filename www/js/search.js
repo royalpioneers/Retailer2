@@ -1,5 +1,4 @@
 var DOMAIN = app.getDomain();
-
 $(function() {
     var token = window.localStorage.getItem("rp-token");
 
@@ -80,6 +79,13 @@ $(function() {
         });
     }
     function backIndex() {
-        window.location.replace("index.html");
+        $.mobile.changePage('index.html',
+         {
+          allowSamePageTransition : true,
+          transition : 'slide',
+          showLoadMsg : true,
+          reloadPage : true
+         }
+        );     
     }
 });
