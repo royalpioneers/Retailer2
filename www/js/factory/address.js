@@ -17,6 +17,13 @@ var CountryFactory = function(urls, token) {
 			type: 'POST',
 			data: {rp_token: factory.token},
 			dataType: 'json',
+			beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
 			success: function(data){
 				if (data.status == 'ok') {
 					window.localStorage.setItem(factory.id_countries, JSON.stringify(data.list));
@@ -24,6 +31,9 @@ var CountryFactory = function(urls, token) {
 				} else {
 					return handler([]);
 				}
+			},
+			complete: function(){
+				$.mobile.loading("hide");
 			}
 	    });
 	};
@@ -54,6 +64,13 @@ var StateFactory = function(urls, token) {
 			type: 'POST',
 			data: {rp_token: factory.token, country: country},
 			dataType: 'json',
+			beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
 			success: function(data){
 				if (data.status == 'ok') {
 					window.localStorage.setItem(factory.id_states+country, JSON.stringify(data.list));
@@ -61,6 +78,9 @@ var StateFactory = function(urls, token) {
 				} else {
 					return handler([]);
 				}
+			},
+			complete: function(){
+				$.mobile.loading("hide");
 			}
 	    });
 	};
@@ -91,6 +111,13 @@ var CityFactory = function(urls, token) {
 			type: 'POST',
 			data: {rp_token: factory.token, state: state},
 			dataType: 'json',
+			beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
 			success: function(data){
 				if (data.status == 'ok') {
 					window.localStorage.setItem(factory.id_cities+state, JSON.stringify(data.list));
@@ -98,6 +125,9 @@ var CityFactory = function(urls, token) {
 				} else {
 					return handler([]);
 				}
+			},
+			complete: function(){
+				$.mobile.loading("hide");
 			}
 	    });
 	};
