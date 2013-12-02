@@ -4,7 +4,6 @@ $(function() {
 
     $('#search-redirect').live('click', loadCategories);
     $('#search').live('click', search);
-    $('#back-index').on('click',backIndex)
 
     loadCategories();
 
@@ -77,15 +76,5 @@ $(function() {
                 $.mobile.loading("hide");
            }
         });
-    }
-    function backIndex() {
-        $.mobile.changePage('index.html',
-         {
-          allowSamePageTransition : true,
-          transition : 'slide',
-          showLoadMsg : true,
-          reloadPage : true
-         }
-        );     
-    }
+    }   
 });

@@ -20,7 +20,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	model.city_selected = 0;
 	
 	model.init = function() {
-		$("#"+model.id_btn_create).live("click", model.create);debugger;
+		$("#"+model.id_btn_create).live("click", model.create);
 		model.get_form_field('country').live("change", model.charge_states);
 		model.get_form_field('state').live("change", model.charge_cities);
 		$('.'+model.class_item_city).live('click', model.set_city_selected);
@@ -59,7 +59,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	};
 	
 	model.start_countries_values = function(cache) {
-		/* countries */debugger;
+		/* countries */
 		model.countryFactory.get_all(function(countries){
 			model.get_form_field('country').html('');
 			model.render_field_form('country', {id:'', name:'Select Country'});
@@ -86,12 +86,12 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		}, cache);
 	};
 	
-	model.get_form_field  = function(field) {debugger;
+	model.get_form_field  = function(field) {
 		if (field == 'city') {
 			var select = $('#'+model.id_city_autocomplete).find('ul')[0];
 			return $(select);
 		}
-		if($("#"+model.id_page_new_client)){
+		if($("#"+model.id_page_new_client).length > 0){
 			field_select = $("#"+model.id_page_new_client).find('form')[0][field];
 			return $(field_select);
 		}		
@@ -235,7 +235,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	};
 	
 	/* FORM */
-	model.charge_states = function(e){debugger;
+	model.charge_states = function(e){
 		e.preventDefault();
 		var country_id = model.get_form_field('country').find('option:selected').attr('value');
 		model.render_states(country_id);

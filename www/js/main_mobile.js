@@ -45,6 +45,16 @@ var urls = {
 var items_list = [], productsSelected = [], storageClients = [];
 
 function init() {
+    //cuando es offline hacer lo siguiente
+    // setInterval(function(){
+    //     if(Offline.state == 'down') {
+    //         $('#search-redirect').show();
+    //     }
+    //     if(Offline.state == 'up'){
+    //         $('#search-redirect').hide();
+    //     }
+    // }, 1000);
+    
     var analyzer_information_time = new Date(),
     	analyzer_information = [],
         imageURL = undefined,
@@ -96,8 +106,8 @@ function init() {
         $('#selectClient-menu').find('li').live('click', moveToOtherClient);
         $('.kill_storage').live('click', killStorage);
 
-        /*Client offline*/
-        $('.disabled').live('click', function(){
+        /*Client offline*/        
+        $('.disabled').parents('.ui-radio').bind('click', function(){debugger;
             alert('Check Your Connection!');
         });
         $('#undefined-menu a').live('click', function(event){            
@@ -296,7 +306,8 @@ function init() {
         countryFactory.set_token(token);
         stateFactory.set_token(token);
         cityFactory.set_token(token);
-        clientFactory.set_token(token);     
+        clientFactory.set_token(token); 
+
         client.start_countries_values();
         getInventoryItems();
         listClients();

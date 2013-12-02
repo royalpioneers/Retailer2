@@ -17,13 +17,6 @@ var CountryFactory = function(urls, token) {
 			type: 'POST',
 			data: {rp_token: factory.token},
 			dataType: 'json',
-			beforeSend: function(){
-                $.mobile.loading("show", {
-                    textVisible: true,
-                    theme: 'c',
-                    textonly: false
-                });
-            },
 			success: function(data){
 				if (data.status == 'ok') {
 					window.localStorage.setItem(factory.id_countries, JSON.stringify(data.list));
@@ -55,7 +48,7 @@ var StateFactory = function(urls, token) {
 
 	factory.get_by_country = function(country,  handler){
 		var list = JSON.parse(window.localStorage.getItem(factory.id_states+country));
-		if (factory.cache && list != null) {
+		if ((factory.cache || cache) && list != null) {
 			handler(list);
 		} 
 		
@@ -64,13 +57,6 @@ var StateFactory = function(urls, token) {
 			type: 'POST',
 			data: {rp_token: factory.token, country: country},
 			dataType: 'json',
-			beforeSend: function(){
-                $.mobile.loading("show", {
-                    textVisible: true,
-                    theme: 'c',
-                    textonly: false
-                });
-            },
 			success: function(data){
 				if (data.status == 'ok') {
 					window.localStorage.setItem(factory.id_states+country, JSON.stringify(data.list));
@@ -102,7 +88,7 @@ var CityFactory = function(urls, token) {
 
 	factory.get_by_char = function(state, handler){
 		var list = JSON.parse(window.localStorage.getItem(factory.id_cities+state));
-		if (factory.cache && list != null) {
+		if ((factory.cache || cache) && list != null) {
 			handler(list);
 		} 
 		
