@@ -598,7 +598,6 @@ function init() {
                 alert('Check your internet connection')
             }
         } else {
-            debugger;
             var url = urls.loginToken;
             $.ajax({
                 url: url,
