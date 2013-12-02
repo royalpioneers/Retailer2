@@ -1249,6 +1249,9 @@ function init() {
                 '<h3>'+value.name+'</h3>' +
                 '</div>');
             });
+            $('#categories-list').trigger('create');
+            $('#categories-list').listview('refresh');
+
     }
 
     function getCompleteInformation(event) {
