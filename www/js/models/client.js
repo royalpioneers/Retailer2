@@ -20,9 +20,9 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	model.city_selected = 0;
 	
 	model.init = function() {
-		$("#"+model.id_btn_create).live("click", model.create);
-		model.get_form_field('country').live("click", model.charge_states);
-		model.get_form_field('state').live("click", model.charge_cities);
+		$("#"+model.id_btn_create).live("click", model.create);debugger;
+		model.get_form_field('country').live("change", model.charge_states);
+		model.get_form_field('state').live("change", model.charge_cities);
 		$('.'+model.class_item_city).live('click', model.set_city_selected);
 		$.mobile.listview.prototype.options.filterCallback = model.filter_cities;
 		/* model.list(); */
@@ -59,7 +59,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	};
 	
 	model.start_countries_values = function(cache) {
-		/* countries */
+		/* countries */debugger;
 		model.countryFactory.get_all(function(countries){
 			model.get_form_field('country').html('');
 			model.render_field_form('country', {id:'', name:'Select Country'});
@@ -86,13 +86,15 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		}, cache);
 	};
 	
-	model.get_form_field  = function(field) {
+	model.get_form_field  = function(field) {debugger;
 		if (field == 'city') {
 			var select = $('#'+model.id_city_autocomplete).find('ul')[0];
 			return $(select);
 		}
-		field_select = $("#"+model.id_page_new_client).find('form')[0][field];
-		return $(field_select);
+		if($("#"+model.id_page_new_client)){
+			field_select = $("#"+model.id_page_new_client).find('form')[0][field];
+			return $(field_select);
+		}		
 	};
 	
 	model.render_field_form = function(field, item_to_render, label_name){
@@ -233,7 +235,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	};
 	
 	/* FORM */
-	model.charge_states = function(e){
+	model.charge_states = function(e){debugger;
 		e.preventDefault();
 		var country_id = model.get_form_field('country').find('option:selected').attr('value');
 		model.render_states(country_id);

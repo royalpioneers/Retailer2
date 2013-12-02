@@ -102,7 +102,6 @@ function init() {
         });
         $('#undefined-menu a').live('click', function(event){            
             event.preventDefault();
-            event.stopImmediatePropagation();
         });
 
     /* PRODUCTS */
@@ -640,14 +639,12 @@ function init() {
         countryFactory.set_token(token);
         stateFactory.set_token(token);
         cityFactory.set_token(token);
-        clientFactory.set_token(token);
-
-        client.start_company_type_values();        
+        clientFactory.set_token(token);     
+        client.start_countries_values();
         getInventoryItems();
         listClients();
-        getAnalyzerInformation();
-        
         client.getDataAddressClient();
+        getAnalyzerInformation();
         $('#container-login').css('display','none');
         $.mobile.navigate("#pagina2");
     }
@@ -900,90 +897,6 @@ function init() {
     	return false;
     }
 
-    function listClients() {
-        var url = urls.clients_list;
-        var clients_name_id = [];
-        $.ajax({
-           url: url,
-           type: 'POST',
-           data: {
-                rp_token: token
-           },
-           dataType: 'json',
-           beforeSend: beforeAjaxLoader(),
-           success: function(data){
-                $('#pagina11').find('#list_clients').html('');
-                var ul_for_list_clients = $('#pagina11').find('#list_clients'),
-                    html_to_insert = '';
-                    items_list = data.items_list;
-
-                for(var client in items_list){
-                   html_to_insert += '<input type="radio" name="radio-choice-1" id="radio-choice-'+items_list[client].id+'" data-id="'+items_list[client].id+'"value="choice-'+items_list[client].id+'"/>\
-                                    <label\
-                                        for="radio-choice-'+items_list[client].id+'"\
-                                        data-corners="false" class="labelRadioButton"\
-                                        >\
-                                        <img src="'+DOMAIN+items_list[client].image+'" class="image_client"/>'+items_list[client].name+'\
-                                    </label>';
-                };
-
-                ul_for_list_clients.append(html_to_insert);
-                $('#list_clients').trigger('create');
-                $(":radio").unbind("change");
-                $(":radio").bind("change", function(){
-                    if(localStorage.getItem('clientSelected')){
-                        var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-                        //validar si esta repetido
-                        var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-                        if(index !== -1){
-
-                            storageClients[index] = clientSelected;
-                        }
-                    }
-                    var self = $(this);
-                    for(var client in items_list){
-                        if(items_list[client].id === self.data('id')){
-                            if(storageClients != ''){
-
-                                var result = false;
-                                /* get client from storage */
-                                var client_exists = getClientById(items_list[client].id);
-                                if (client_exists) {
-
-                                    localStorage.setItem("clientSelected", JSON.stringify(client_exists));
-                                    clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-                                    $.mobile.navigate("#pagina12");
-                                    result = true;
-                                } else {
-                                    result = false;
-                                }
-                                if(result == false) {
-                                    var clientSelected = createNewClient(items_list[client])
-                                }
-                            } else {
-                                var clientSelected = createNewClient(items_list[client]);
-                            }
-                        }
-                    }
-                    //pintar select con las lista de clientes de la pagina 12
-                    $('#selectClient').html('');
-                    var html ='';
-                    for(var i in items_list){
-                        html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';
-                    }
-                    $('#selectClient').append(html);
-                    $('#selectClient-button > span > span > span').text(clientSelected.name);
-                    localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
-                    if(clientSelected.products == ''){
-                        $.mobile.navigate("#pagina13");
-                    }
-                });
-                //localStorage.setItem("allClients", JSON.stringify(items_list));
-            },
-            complete: completeAjaxLoader()
-        });
-    }
-
     function createNewClient(client) {
         var clientSelected = {
             'id': client.id,
@@ -1184,7 +1097,6 @@ function init() {
                 }
                 for(var i in storageClients){
                     if(storageClients[i].id == idClientSelected){
-
                         storageClients.splice(i,1);
                     }
                 }
