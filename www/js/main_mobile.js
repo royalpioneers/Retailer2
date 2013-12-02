@@ -120,6 +120,7 @@ function init() {
 
     /* INVOICE */
         var invoice = new InvoiceModel();
+
     //Automatic Login
 
     if(token != null) {
@@ -131,7 +132,6 @@ function init() {
     $.mobile.selectmenu.prototype.options.nativeMenu = false;
 
     $.mobile.buttonMarkup.hoverDelay = 0;
-
 
     function saveClientStorage(){
         if(localStorage.getItem('clientSelected')){            
@@ -183,7 +183,6 @@ function init() {
         }
     	return discount;
     }
-
 
     /* Authenticate */
 
@@ -544,7 +543,6 @@ function init() {
 
     /* Client */
 
-
     function getClientById(id) {
 
     	/* from local storage */
@@ -560,8 +558,7 @@ function init() {
     function listClients() {
         var url = urls.clients_list;
         var clients_name_id = [];
-        var result = checkConnection(Connection.ETHERNET);
-        if(result ==  true){
+        if(Offline.state == 'up') {
             $.ajax({
                url: url,
                type: 'POST',
