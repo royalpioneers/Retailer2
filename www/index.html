@@ -158,9 +158,6 @@
 	        </div><!-- /content -->
             <div data-role="panel" id="left-panel" data-theme="a">
                     <ul data-role="listview">
-                        <li data-icon="delete">
-                            <a class="btn_more_big" href="#" data-rel="close">Close</a>
-                        </li>
                         <li data-role="list-divider"></li>
                         <li data-icon="plus">
                             <a class="btn_more_big" href="#pagina6" data-transition="slide" id="create-product">Create Item</a>
@@ -365,8 +362,8 @@
         <!--Buy client's products-->
         <div data-role="page" id="pagina13" data-fullscreen="true">
             <div data-role="header" data-theme="a">
-                <a class="saveClientStorage btn_more_big" data-transition="slide">Invoice</a>
-                <h1><a href="" class="see_more_products_clients saveClientStorage">0</a></h1>
+                <a href="#pagina11" class="btn_more_big" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
+                <h1><a href="" class="ui-bar-b btn see_more_products_clients btn_more_big saveClientStorage" data-transition="slide">0</a></h1>
             </div>
             <div data-role="content">
                 <ul class="products_clients_add" data-role="listview" data-filter="true"></ul>
