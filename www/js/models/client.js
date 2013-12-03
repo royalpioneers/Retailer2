@@ -19,12 +19,14 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	
 	model.city_selected = 0;
 	
-	model.init = function(cache) {
+	model.init = function(cache) {		
 		$("#"+model.id_btn_create).live("click", model.create);
-		model.get_form_field('country').live("change", model.charge_states);
-		model.get_form_field('state').live("change", model.charge_cities);
-		$('.'+model.class_item_city).live('click', model.set_city_selected);
-		$.mobile.listview.prototype.options.filterCallback = model.filter_cities;
+		if(!(model.get_form_field('country') === undefined)){
+			model.get_form_field('country').live("change", model.charge_states);
+			model.get_form_field('state').live("change", model.charge_cities);
+			$('.'+model.class_item_city).live('click', model.set_city_selected);	
+			$.mobile.listview.prototype.options.filterCallback = model.filter_cities;
+		}				
 		/* model.list(); */
 		
 		/* start address */

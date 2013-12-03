@@ -732,3 +732,20 @@ div[data-role='header']{
 .options_detail h3 {
     font-size: 150%;
 }
+.see_more_products_clients:hover{
+    max-width: 2em;
+max-height: 1em;
+margin-top: -5px !important;
+background: linear-gradient( #0093EA /*{b-bar-background-start}*/, #007dcd /*{b-bar-background-end}*/);
+}
+.see_more_products_clients{
+    max-width: 2em;
+max-height: 1em;
+margin-top: -5px !important;
+background: linear-gradient( #0093EA /*{b-bar-background-start}*/, #007dcd /*{b-bar-background-end}*/);
+}
+.see_more_products_clients::before{
+    content: '$';
+    font-size: 16px;
+    margin-right: 3px;
+}
