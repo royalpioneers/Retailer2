@@ -1,7 +1,7 @@
-var CountryFactory = function(urls, token) {
+var CountryFactory = function(urls, token, cache) {
 	var factory = {};
 
-	factory.cache = true;
+	factory.cache = cache;
 	factory.urls = urls;
 	factory.token = token;
 	factory.id_countries = 'id_countries';
@@ -38,10 +38,10 @@ var CountryFactory = function(urls, token) {
 	return factory;
 };
 
-var StateFactory = function(urls, token) {
+var StateFactory = function(urls, token, cache) {
 	var factory = {};
 	
-	factory.cache = true;
+	factory.cache = cache;
 	factory.urls = urls;
 	factory.token = token;
 	factory.id_states = 'id_states';
@@ -78,10 +78,10 @@ var StateFactory = function(urls, token) {
 	return factory;
 };
 
-var CityFactory = function(urls, token) {
+var CityFactory = function(urls, token, cache) {
 	var factory = {};
 
-	factory.cache = true;
+	factory.cache = cache;
 	factory.urls = urls;
 	factory.token = token;
 	factory.id_cities = 'id_cities';

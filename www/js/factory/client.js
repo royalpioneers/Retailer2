@@ -1,10 +1,10 @@
-var ClientFactory = function(urls, token) {
+var ClientFactory = function(urls, token, cache) {
 	var factory = {};
 	factory.urls = urls;
 	factory.token = token;
 	factory.id_company_types = 'id_company_types';
 	factory.id_client_list = 'clients';
-	factory.cache = false;
+	factory.cache = cache;
 	
 	factory.get_all = function(handler, cache) {
         var client_list = JSON.parse(window.localStorage.getItem(factory.id_client_list));

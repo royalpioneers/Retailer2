@@ -125,10 +125,10 @@ function init() {
         product.init();/* start list */
 
     /* CLIENT */
-        var countryFactory = new CountryFactory(urls, token);
-        var stateFactory = new StateFactory(urls, token);
-        var cityFactory = new CityFactory(urls, token);
-        var clientFactory = new ClientFactory(urls, token);
+        var countryFactory = new CountryFactory(urls, token, window.localStorage.getItem("rp-cache"));
+        var stateFactory = new StateFactory(urls, token, window.localStorage.getItem("rp-cache"));
+        var cityFactory = new CityFactory(urls, token, window.localStorage.getItem("rp-cache"));
+        var clientFactory = new ClientFactory(urls, token, window.localStorage.getItem("rp-cache"));
         var client = new ClientModel(countryFactory, stateFactory, cityFactory, clientFactory);
         client.init(window.localStorage.getItem("rp-cache")); /* start list */
 
@@ -1193,7 +1193,6 @@ function init() {
                 beforeSend: beforeAjaxLoader(),
                 success: function(data){
                     if(data.status.status == true){
-                        debugger;
                         buyerInventoryFactory.store_inventory(data);
                         uploadPhoto(data.id);
 
