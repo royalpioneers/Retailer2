@@ -64,7 +64,9 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	model.start_countries_values = function(cache){
 		/* countries */
 		model.countryFactory.get_all(function(countries){
-			model.get_form_field('country').html('');
+			if (model.get_form_field('country') !== undefined) {
+				model.get_form_field('country').html('');	
+			};			
 			model.render_field_form('country', {id:'', name:'Select Country'});
 			for (var index in countries) {
 				country = countries[index];
@@ -142,7 +144,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 				var newClientOffline = {
 					id: 0,
 					name: params.name, 
-					image: "http://roypi.com/static/img/designer_default_photo.jpg", 
+					image: "images/designer_default_photo.jpg", 
 					type: params.company_type
 				};
 				allClients.push(newClientOffline);

@@ -1,5 +1,40 @@
+    @font-face
+    {
+    font-family: kabell;
+    src: url(../font/kabell.woff);
+    }
+    @font-face
+    {
+    font-family: kabell-heavy;
+    src: url(../font/kabell-heavy.woff);
+    }
+    @font-face
+    {
+    font-family: metapro;
+    src: url(../font/metapro.woff);
+    }
+    div[data-role='header'] h1{
+        font-family: kabell, Helvetica, Arial, sans-serif !important;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: rgb(241, 241, 241);
+        text-shadow: 1px 1px 0px black;
+        margin: .6em 25% 0.8em !important;
+        font-size: 1.8em !important;
+        margin-bottom: 0 !important;
+    }
+    b{
+        font-family: metapro, Helvetica, Arial, sans-serif !important;
+        font-size: 1.2em;        
+    }
     a{
         text-decoration: none !important;
+        font-family: metapro, Helvetica, Arial, sans-serif !important;
+        font-size: 1.1em !important;
+    }
+    .ui-btn-text{
+        text-decoration: none !important;
+        font-family: metapro, Helvetica, Arial, sans-serif !important;
     }
     .content_intro_button {
         width: 100%;
@@ -260,6 +295,7 @@
     .price {
         font-size: 30px;
         font-weight: bolder;
+        font-family: metapro, Helvetica, Arial, sans-serif !important;
         margin-top: 8px;
         color: #1abc9c;
     }
@@ -331,17 +367,26 @@
         border: 1px solid #ccc;
         background: #eee;
         font-weight: bolder;
-        font-size: 30px;
-        margin-bottom: -2.5em;
+        margin-bottom: 0em;
         border-bottom: none;
+        text-decoration: none !important;
+        font-family: metapro, Helvetica, Arial, sans-serif !important;        
+        font-weight: bold;
+    }
+    .header_client > h2 {
+        display: inline;
+        line-height: 2em;
     }
     .header_client > a {
         position: absolute;
         right: 10%;
-        margin-top: -0.5em;
-        padding: 2% 6% !important;
-        line-height: 10px;
+        padding: 4% 7% !important;
         border-radius: 8%;
+        height: 25px !important;
+        border: none;
+    }
+    #myProducts {
+        margin-top: -0.5em;
     }
     .ui-listview-filter.ui-bar-c.ui-listview-filter-inset {
         margin: 0 auto;
@@ -382,17 +427,19 @@
     }
     .see_more_products_clients{
         font-size: 18px !important;
-        -webkit-transition: all 1s ease-in-out;
-        -moz-transition: all 1s ease-in-out;
-        transition: all 1s ease-in-out;
+        -webkit-transition: all 3s ease-in-out;
+        -moz-transition: all 3s ease-in-out;
+        transition: all 3s ease-in-out;
         color: rgb(171, 206, 211) !important;
     }
     .see_more_products_clients:hover,.see_more_products_clients:focus{
-        width: 100%;
-        height: 100%;
         display: block;
         color: white !important;
-        font-size: 20px !important;
+    }
+    .see_more_products_clients::before{
+        content: '$';
+        font-size: 16px;
+        margin-right: 3px;
     }
     .products_clients_add {
         list-style: none;
@@ -437,10 +484,10 @@
     .products_clients_add > li span > span > span{
         padding: 0;
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
         text-align: center;
         margin: 0 auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
         display: block;
         position: absolute;
         left: 0;
@@ -448,6 +495,10 @@
         background-size: contain !important;
         height: 100%;
         width: 100%;
+        color: white;
+        font-weight: bold;
+        text-shadow: 0 1px 0 rgb(82, 76, 76), 0 2px 0 rgb(109, 94, 94), 0 0px 4px rgb(165, 165, 165);
+        font-size: 1.2em;
     }
     /*animations*/
     @-webkit-keyframes tilt-and-move {
@@ -657,10 +708,9 @@ margin: 0 auto 0 auto;
     width: 100%;
 }
 .btn_more_big,.header_top_options{
-    margin-top: -0.5% !important;
-    text-align: center;
-    padding: 24px 25px !important;
+    padding: 4% 4% !important;
     border: none !important;
+    top: 10px !important;
 }
 div.ui-input-text > input {
     padding-bottom: 1.5em !important;
@@ -673,9 +723,8 @@ div.ui-input-text > input {
     text-align: center;
 }
 .header_client > ul li{
-    font-size: 15px;
     display: inline-block;
-    margin-top: 1.5em;
+    margin-top: .4em;
     margin-left: 3%;
     margin-right: 3%;
 }
@@ -731,21 +780,4 @@ div[data-role='header']{
 }
 .options_detail h3 {
     font-size: 150%;
-}
-.see_more_products_clients:hover{
-    max-width: 2em;
-max-height: 1em;
-margin-top: -5px !important;
-background: linear-gradient( #0093EA /*{b-bar-background-start}*/, #007dcd /*{b-bar-background-end}*/);
-}
-.see_more_products_clients{
-    max-width: 2em;
-max-height: 1em;
-margin-top: -5px !important;
-background: linear-gradient( #0093EA /*{b-bar-background-start}*/, #007dcd /*{b-bar-background-end}*/);
-}
-.see_more_products_clients::before{
-    content: '$';
-    font-size: 16px;
-    margin-right: 3px;
 }
