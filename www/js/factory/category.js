@@ -10,7 +10,7 @@ var CategoryFactory = function(urls, token) {
         var prdData = JSON.parse(window.localStorage.getItem('productRelated'));
         var catData = JSON.parse(window.localStorage.getItem('categories'));
         if ((factory.cache || cache) && catData != null && prdData != null) {
-			handler(prdData, catData);
+		    return handler(prdData, catData);
 		}
         $.ajax({
             url: factory.urls.productInformation,

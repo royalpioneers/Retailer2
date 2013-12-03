@@ -1,7 +1,11 @@
 $(window).load(function() {
     var run = function(){
-    if (Offline.state === 'up')
-        Offline.check();
+        if (Offline.state === 'up') {
+            window.localStorage.setItem("rp-cache", false);
+            Offline.check();
+        } else {
+            window.localStorage.setItem("rp-cache", true);
+        }
     };
     setInterval(run, 5000);
     setTimeout(function(){
@@ -19,7 +23,7 @@ productsSelected: ?
 storageClients: ?
 productRelated: contains product names selected product
 categories: contains categories and sub categories
- */
+*/
 
 var DOMAIN = app.getDomain();
 
@@ -58,6 +62,7 @@ function init() {
     var analyzer_information_time = new Date(),
     	analyzer_information = [],
         imageURL = undefined,
+        cache=false,
         token = window.localStorage.getItem("rp-token");
 
     //Events
@@ -90,7 +95,6 @@ function init() {
         $('#new_invoice').live('click', listClients);
         $('#goToInvoice').live('click', showInvoice);
         $('.productSelected').live('click', selectProduct);
-        $( "#pagina12" ).live( "pageshow", function( event ) {$('#theDate').val(getDateMonthYear());});
         $('#goToProducts').live('click', goProduct);
         $( "#pagina13" ).live( "pageshow", pageClientShow);
         $('.saveClientStorage').live('click', saveClientStorage);
@@ -107,7 +111,7 @@ function init() {
         $('.kill_storage').live('click', killStorage);
 
         /*Client offline*/        
-        $('.disabled').parents('.ui-radio').bind('click', function(){debugger;
+        $('.disabled').parents('.ui-radio').bind('click', function(){;
             alert('Check Your Connection!');
         });
         $('#undefined-menu a').live('click', function(event){            
@@ -126,7 +130,7 @@ function init() {
         var cityFactory = new CityFactory(urls, token);
         var clientFactory = new ClientFactory(urls, token);
         var client = new ClientModel(countryFactory, stateFactory, cityFactory, clientFactory);
-        client.init(); /* start list */                     
+        client.init(window.localStorage.getItem("rp-cache")); /* start list */
 
     /* INVOICE */
         var invoice = new InvoiceModel();
@@ -1226,6 +1230,7 @@ function init() {
         /*
         Event before press Create Products
          */
+        debugger;
         showProductRelated(products);
         showMainCategories(categories);
     }
@@ -1249,6 +1254,8 @@ function init() {
                 '<h3>'+value.name+'</h3>' +
                 '</div>');
             });
+            $('#categories-list').trigger('create');
+
     }
 
     function getCompleteInformation(event) {
