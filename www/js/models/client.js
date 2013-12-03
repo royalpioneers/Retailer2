@@ -140,7 +140,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 				var newClientOffline = {
 					id: 0,
 					name: params.name, 
-					image: "http://roypi.com/static/img/designer_default_photo.jpg", 
+					image: "",
 					type: params.company_type
 				};
 				allClients.push(newClientOffline);

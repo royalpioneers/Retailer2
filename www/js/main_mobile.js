@@ -1193,7 +1193,10 @@ function init() {
                 beforeSend: beforeAjaxLoader(),
                 success: function(data){
                     if(data.status.status == true){
+                        debugger;
+                        buyerInventoryFactory.store_inventory(data);
                         uploadPhoto(data.id);
+
                     } else {
                         alert('an error occurred');
                     }
@@ -1230,7 +1233,6 @@ function init() {
         /*
         Event before press Create Products
          */
-        debugger;
         showProductRelated(products);
         showMainCategories(categories);
     }
