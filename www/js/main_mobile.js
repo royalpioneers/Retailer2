@@ -23,7 +23,7 @@ productsSelected: ?
 storageClients: ?
 productRelated: contains product names selected product
 categories: contains categories and sub categories
- */
+*/
 
 var DOMAIN = app.getDomain();
 
@@ -95,7 +95,6 @@ function init() {
         $('#new_invoice').live('click', listClients);
         $('#goToInvoice').live('click', showInvoice);
         $('.productSelected').live('click', selectProduct);
-        $( "#pagina12" ).live( "pageshow", function( event ) {$('#theDate').val(getDateMonthYear());});
         $('#goToProducts').live('click', goProduct);
         $( "#pagina13" ).live( "pageshow", pageClientShow);
         $('.saveClientStorage').live('click', saveClientStorage);
@@ -1231,6 +1230,7 @@ function init() {
         /*
         Event before press Create Products
          */
+        debugger;
         showProductRelated(products);
         showMainCategories(categories);
     }
@@ -1255,7 +1255,6 @@ function init() {
                 '</div>');
             });
             $('#categories-list').trigger('create');
-            $('#categories-list').listview('refresh');
 
     }
 

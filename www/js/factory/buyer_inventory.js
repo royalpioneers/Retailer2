@@ -9,7 +9,6 @@ var BuyerInventoryFactory = function(urls, token) {
 		if ((factory.cache || cache) && list != null) {
 			return handler(list);
 		}
-
 		$.ajax({
 			url: factory.urls.inventory,
 			type: 'POST',
