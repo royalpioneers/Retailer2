@@ -31,7 +31,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		model.start_form_values();		
 	};
 	
-	model.getDataAddressClient = function(){		
+	model.getDataAddressClient = function(){	
 		model.countryFactory.get_all(function(countries){
 			for (var i in countries) {
 				var country = countries[i];
@@ -58,7 +58,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		model.start_company_type_values();
 	};
 	
-	model.start_countries_values = function(cache) {
+	model.start_countries_values = function(cache){
 		/* countries */
 		model.countryFactory.get_all(function(countries){
 			model.get_form_field('country').html('');
