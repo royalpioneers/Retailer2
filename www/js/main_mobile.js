@@ -1200,7 +1200,10 @@ function init() {
                         // retailPrice.val('');
                         // sku.val('');
                         // costPrice.val('');
+                        buyerInventoryFactory.store_inventory(data);
+
                         uploadPhoto(data.id);
+
                     } else {
                         alert('an error occurred');
                     }
@@ -1237,7 +1240,6 @@ function init() {
         /*
         Event before press Create Products
          */
-        debugger;
         showProductRelated(products);
         showMainCategories(categories);
     }
