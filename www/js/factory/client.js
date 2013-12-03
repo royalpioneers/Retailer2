@@ -76,11 +76,12 @@ var ClientFactory = function(urls, token) {
 		}
 	};
 	
-	factory.get_company_types = function(handler){
+	factory.get_company_types = function(handler, cache){
+        //2
 		var types_list = JSON.parse(window.localStorage.getItem(factory.id_company_types));
-		if (factory.cache && types_list != null) {
+		if (cache && types_list != null) {
 			handler(types_list);
-		} 
+		}
 		
 		$.ajax({
 			url: factory.urls.client_company_types,

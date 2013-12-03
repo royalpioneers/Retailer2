@@ -1,7 +1,11 @@
 $(window).load(function() {
     var run = function(){
-    if (Offline.state === 'up')
-        Offline.check();
+        if (Offline.state === 'up') {
+            window.localStorage.setItem("rp-cache", false);
+            Offline.check();
+        } else {
+            window.localStorage.setItem("rp-cache", true);
+        }
     };
     setInterval(run, 5000);
     setTimeout(function(){
@@ -58,6 +62,7 @@ function init() {
     var analyzer_information_time = new Date(),
     	analyzer_information = [],
         imageURL = undefined,
+        cache=false,
         token = window.localStorage.getItem("rp-token");
 
     //Events
@@ -107,7 +112,7 @@ function init() {
         $('.kill_storage').live('click', killStorage);
 
         /*Client offline*/        
-        $('.disabled').parents('.ui-radio').bind('click', function(){debugger;
+        $('.disabled').parents('.ui-radio').bind('click', function(){;
             alert('Check Your Connection!');
         });
         $('#undefined-menu a').live('click', function(event){            
@@ -126,7 +131,7 @@ function init() {
         var cityFactory = new CityFactory(urls, token);
         var clientFactory = new ClientFactory(urls, token);
         var client = new ClientModel(countryFactory, stateFactory, cityFactory, clientFactory);
-        client.init(); /* start list */                     
+        client.init(window.localStorage.getItem("rp-cache")); /* start list */
 
     /* INVOICE */
         var invoice = new InvoiceModel();

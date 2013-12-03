@@ -19,7 +19,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	
 	model.city_selected = 0;
 	
-	model.init = function() {
+	model.init = function(cache) {
 		$("#"+model.id_btn_create).live("click", model.create);
 		model.get_form_field('country').live("change", model.charge_states);
 		model.get_form_field('state').live("change", model.charge_cities);
@@ -28,7 +28,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		/* model.list(); */
 		
 		/* start address */
-		model.start_form_values();		
+		model.start_form_values(cache);
 	};
 	
 	model.getDataAddressClient = function(){		
@@ -53,9 +53,10 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	};
 	
 	
-	model.start_form_values = function(){
+	model.start_form_values = function(cache){
 		model.start_countries_values();
-		model.start_company_type_values();
+        //1
+		model.start_company_type_values(cache);
 	};
 	
 	model.start_countries_values = function(cache) {
@@ -73,8 +74,8 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	
 	model.start_company_type_values = function(cache) {
 		/* items */
-		model.clientFactory.get_company_types(function(items){
-			
+		model.clientFactory.get_company_types(function(items) {
+			//3
 			model.get_form_field('company_type').html('');
 			model.render_field_form('company_type', {id:'', name:'Select Type'});
 			for (var index in items) {
@@ -291,10 +292,10 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 			try {select.selectmenu('refresh', true);}catch(e){}
 		}
 		if (lvl > 2) {
-			model.start_countries_values(true);
+			model.start_countries_values(window.localStorage.getItem("rp-cache"));
 		}
 		if (lvl > 3) {
-			model.start_company_type_values(true);
+			model.start_company_type_values(window.localStorage.getItem("rp-cache"));
 		}
 		if (lvl > 4) {
 			model.get_form_field('name').attr('value', '');
