@@ -64,7 +64,9 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	model.start_countries_values = function(cache){
 		/* countries */
 		model.countryFactory.get_all(function(countries){
-			model.get_form_field('country').html('');
+			if (model.get_form_field('country') !== undefined) {
+				model.get_form_field('country').html('');	
+			};			
 			model.render_field_form('country', {id:'', name:'Select Country'});
 			for (var index in countries) {
 				country = countries[index];
@@ -78,7 +80,10 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		/* items */
 		model.clientFactory.get_company_types(function(items) {
 			//3
-			model.get_form_field('company_type').html('');
+			var form = model.get_form_field('company_type');
+            if(form != undefined){
+                form.html('');
+            }
 			model.render_field_form('company_type', {id:'', name:'Select Type'});
 			for (var index in items) {
 				item = items[index];
@@ -89,8 +94,8 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		}, cache);
 	};
 	
-	model.get_form_field  = function(field) {
-		if (field == 'city') {
+	model.get_form_field  = function(field){
+		if (field == 'city'){
 			var select = $('#'+model.id_city_autocomplete).find('ul')[0];
 			return $(select);
 		}
@@ -104,11 +109,13 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		if (typeof(label_name) == 'undefined') {
 			label_name = 'name';
 		}
-		field_select = model.get_form_field(field);
+		var field_select = model.get_form_field(field);
 		var option = $('<option></option>');
 		option.attr('value', item_to_render.id);
 		option.html(item_to_render[label_name]);
-		field_select.append(option);
+        if(field_select != undefined){
+            field_select.append(option);
+        }
 	};
 	
 	model.create = function(e){
@@ -142,7 +149,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 				var newClientOffline = {
 					id: 0,
 					name: params.name, 
-					image: "",
+					image: "images/designer_default_photo.jpg", 
 					type: params.company_type
 				};
 				allClients.push(newClientOffline);

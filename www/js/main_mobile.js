@@ -1193,7 +1193,15 @@ function init() {
                 beforeSend: beforeAjaxLoader(),
                 success: function(data){
                     if(data.status.status == true){
+                        // nameProduct.val('');
+                        // nameVariant.val('');
+                        // quantity.val('');
+                        // wholeSalePrice.val('');
+                        // retailPrice.val('');
+                        // sku.val('');
+                        // costPrice.val('');
                         buyerInventoryFactory.store_inventory(data);
+
                         uploadPhoto(data.id);
 
                     } else {
