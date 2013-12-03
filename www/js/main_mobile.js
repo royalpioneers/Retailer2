@@ -1520,7 +1520,7 @@ Offline.options = {
       // Should we automatically retest periodically when the connection is down (set to false to disable).
       reconnect: {
         // How many seconds should we wait before rechecking.
-        initialDelay: 0
+        initialDelay: 1
 
         // How long should we wait between retries.
         //delay: (1.5 * last delay, capped at 1 hour)
