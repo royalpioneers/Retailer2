@@ -125,10 +125,10 @@ function init() {
         product.init();/* start list */
 
     /* CLIENT */
-        var countryFactory = new CountryFactory(urls, token);
-        var stateFactory = new StateFactory(urls, token);
-        var cityFactory = new CityFactory(urls, token);
-        var clientFactory = new ClientFactory(urls, token);
+        var countryFactory = new CountryFactory(urls, token, window.localStorage.getItem("rp-cache"));
+        var stateFactory = new StateFactory(urls, token, window.localStorage.getItem("rp-cache"));
+        var cityFactory = new CityFactory(urls, token, window.localStorage.getItem("rp-cache"));
+        var clientFactory = new ClientFactory(urls, token, window.localStorage.getItem("rp-cache"));
         var client = new ClientModel(countryFactory, stateFactory, cityFactory, clientFactory);
         client.init(window.localStorage.getItem("rp-cache")); /* start list */
 
@@ -827,6 +827,7 @@ function init() {
                 $.mobile.loading("hide");
             }
         });
+
         if (Offline.state == 'down') {
         	updateAfterCreateInvoice(clientSelected);
         	$.mobile.navigate("#pagina11");
@@ -1520,7 +1521,7 @@ Offline.options = {
       // Should we automatically retest periodically when the connection is down (set to false to disable).
       reconnect: {
         // How many seconds should we wait before rechecking.
-        initialDelay: 0
+        initialDelay: 1
 
         // How long should we wait between retries.
         //delay: (1.5 * last delay, capped at 1 hour)

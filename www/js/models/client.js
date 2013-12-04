@@ -80,7 +80,10 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		/* items */
 		model.clientFactory.get_company_types(function(items) {
 			//3
-			model.get_form_field('company_type').html('');
+			var form = model.get_form_field('company_type');
+            if(form != undefined){
+                form.html('');
+            }
 			model.render_field_form('company_type', {id:'', name:'Select Type'});
 			for (var index in items) {
 				item = items[index];
@@ -91,8 +94,8 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		}, cache);
 	};
 	
-	model.get_form_field  = function(field) {
-		if (field == 'city') {
+	model.get_form_field  = function(field){
+		if (field == 'city'){
 			var select = $('#'+model.id_city_autocomplete).find('ul')[0];
 			return $(select);
 		}
@@ -106,11 +109,13 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		if (typeof(label_name) == 'undefined') {
 			label_name = 'name';
 		}
-		field_select = model.get_form_field(field);
+		var field_select = model.get_form_field(field);
 		var option = $('<option></option>');
 		option.attr('value', item_to_render.id);
 		option.html(item_to_render[label_name]);
-		field_select.append(option);
+        if(field_select != undefined){
+            field_select.append(option);
+        }
 	};
 	
 	model.create = function(e){

@@ -1,7 +1,7 @@
-var CountryFactory = function(urls, token) {
+var CountryFactory = function(urls, token, cache) {
 	var factory = {};
 
-	factory.cache = true;
+	factory.cache = cache;
 	factory.urls = urls;
 	factory.token = token;
 	factory.id_countries = 'id_countries';
@@ -9,7 +9,7 @@ var CountryFactory = function(urls, token) {
 	factory.get_all = function(handler, cache) {
 		var list = JSON.parse(window.localStorage.getItem(factory.id_countries));
 		if ((factory.cache || cache) && list != null) {
-			handler(list);
+			return handler(list);
 		} 
 		
 		$.ajax({
@@ -38,10 +38,10 @@ var CountryFactory = function(urls, token) {
 	return factory;
 };
 
-var StateFactory = function(urls, token) {
+var StateFactory = function(urls, token, cache) {
 	var factory = {};
 	
-	factory.cache = true;
+	factory.cache = cache;
 	factory.urls = urls;
 	factory.token = token;
 	factory.id_states = 'id_states';
@@ -49,7 +49,7 @@ var StateFactory = function(urls, token) {
 	factory.get_by_country = function(country,  handler){
 		var list = JSON.parse(window.localStorage.getItem(factory.id_states+country));
 		if ((factory.cache || cache) && list != null) {
-			handler(list);
+			return handler(list);
 		} 
 		
 		$.ajax({
@@ -78,10 +78,10 @@ var StateFactory = function(urls, token) {
 	return factory;
 };
 
-var CityFactory = function(urls, token) {
+var CityFactory = function(urls, token, cache) {
 	var factory = {};
 
-	factory.cache = true;
+	factory.cache = cache;
 	factory.urls = urls;
 	factory.token = token;
 	factory.id_cities = 'id_cities';
@@ -89,7 +89,7 @@ var CityFactory = function(urls, token) {
 	factory.get_by_char = function(state, handler){
 		var list = JSON.parse(window.localStorage.getItem(factory.id_cities+state));
 		if ((factory.cache || cache) && list != null) {
-			handler(list);
+			return handler(list);
 		} 
 		
 		$.ajax({

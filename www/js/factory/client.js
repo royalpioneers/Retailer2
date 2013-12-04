@@ -1,15 +1,15 @@
-var ClientFactory = function(urls, token) {
+var ClientFactory = function(urls, token, cache) {
 	var factory = {};
 	factory.urls = urls;
 	factory.token = token;
 	factory.id_company_types = 'id_company_types';
 	factory.id_client_list = 'clients';
-	factory.cache = false;
+	factory.cache = cache;
 	
 	factory.get_all = function(handler, cache) {
         var client_list = JSON.parse(window.localStorage.getItem(factory.id_client_list));
 		if ((factory.cache || cache) && client_list != null) {
-			handler(client_list);
+			return handler(client_list);
 		}
 		$.ajax({
 			url: factory.urls.client_list,
@@ -80,7 +80,7 @@ var ClientFactory = function(urls, token) {
         //2
 		var types_list = JSON.parse(window.localStorage.getItem(factory.id_company_types));
 		if (cache && types_list != null) {
-			handler(types_list);
+			return handler(types_list);
 		}
 		
 		$.ajax({

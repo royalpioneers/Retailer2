@@ -925,7 +925,6 @@
                     }
                     for (j=0; j<nc; j++) {
                         if (idx < pd.length){
-                            // debugger
                             lt = this.labels[idx] || pd[idx][0].toString();
                             color = s.color;
                             if (!reverse){
@@ -978,7 +977,6 @@
     // setup default renderers for axes and legend so user doesn't have to
     // called with scope of plot
     function preInit(target, data, options) {
-        // debugger
         options = options || {};
         options.axesDefaults = options.axesDefaults || {};
         options.legend = options.legend || {};
