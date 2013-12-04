@@ -47,7 +47,7 @@ var CategoryFactory = function(urls, token) {
     factory.get_sub_category = function(handler, cache, main, collapse) {
         var subCategory = self.search_by_id(main);
         if ((factory.cache || cache) && subCategory != null && subCategory != undefined) {
-            handler(catData, collapse);
+            return handler(catData, collapse);
         }
 
         $.ajax({

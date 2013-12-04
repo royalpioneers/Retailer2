@@ -9,7 +9,7 @@ var CountryFactory = function(urls, token, cache) {
 	factory.get_all = function(handler, cache) {
 		var list = JSON.parse(window.localStorage.getItem(factory.id_countries));
 		if ((factory.cache || cache) && list != null) {
-			handler(list);
+			return handler(list);
 		} 
 		
 		$.ajax({
@@ -49,7 +49,7 @@ var StateFactory = function(urls, token, cache) {
 	factory.get_by_country = function(country,  handler){
 		var list = JSON.parse(window.localStorage.getItem(factory.id_states+country));
 		if ((factory.cache || cache) && list != null) {
-			handler(list);
+			return handler(list);
 		} 
 		
 		$.ajax({
@@ -89,7 +89,7 @@ var CityFactory = function(urls, token, cache) {
 	factory.get_by_char = function(state, handler){
 		var list = JSON.parse(window.localStorage.getItem(factory.id_cities+state));
 		if ((factory.cache || cache) && list != null) {
-			handler(list);
+			return handler(list);
 		} 
 		
 		$.ajax({
