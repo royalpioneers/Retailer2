@@ -827,6 +827,7 @@ function init() {
                 $.mobile.loading("hide");
             }
         });
+
         if (Offline.state == 'down') {
         	updateAfterCreateInvoice(clientSelected);
         	$.mobile.navigate("#pagina11");

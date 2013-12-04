@@ -1,7 +1,7 @@
 var InvoiceModel = function() {
 	var model = this;
 	model.message = '';
-	model.id_products = 'products_inventory';
+	model.id_products = 'buyerInventory';
 	
 	model.success_create = function(client_products) {
 		var products = JSON.parse(localStorage.getItem(model.id_products));
@@ -13,8 +13,7 @@ var InvoiceModel = function() {
 				}
 			}
 		}
-		
-		localStorage.setItem('products_inventory', JSON.stringify(products));
+		localStorage.setItem(model.id_products, JSON.stringify(products));
 	};
 
 	model.are_valid_products = function(client_products) {
