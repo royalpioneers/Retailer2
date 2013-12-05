@@ -11,6 +11,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	model.id_page_new_client = 'pagina9';
 	model.id_client_selected = 'clientSelected';
 	model.class_item_city = 'class_item_city';
+	model.id_btn_go_to_form = 'btn_go_to_client_form';
 	
 	model.countryFactory = countryFactory;
 	model.stateFactory = stateFactory;
@@ -19,8 +20,12 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	
 	model.city_selected = 0;
 	
-	model.init = function(cache) {		
+	model.init = function(cache) {
+		$("#"+model.id_btn_go_to_form).live("click", function(event){
+			model.start_form_values(cache);
+		});
 		$("#"+model.id_btn_create).live("click", model.create);
+		
 		if(!(model.get_form_field('country') === undefined)){
 			model.get_form_field('country').live("change", model.charge_states);
 			model.get_form_field('state').live("change", model.charge_cities);
@@ -54,11 +59,11 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		return false;
 	};
 	
-	
 	model.start_form_values = function(cache){
+		model.clear_form(5);
 		model.start_countries_values();
-        //1
-		model.start_company_type_values(cache);
+		model.start_company_type_values();
+		
 	};
 	
 	model.start_countries_values = function(cache){
@@ -75,7 +80,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 			try {model.get_form_field('country').selectmenu('refresh', true);}catch(e){}
 		}, cache);
 	};
-	
+		
 	model.start_company_type_values = function(cache) {
 		/* items */
 		model.clientFactory.get_company_types(function(items) {
@@ -291,14 +296,17 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		model.city_selected = 0;
 		if (lvl > 0) {
 			var select = model.get_form_field('city');
-			select.html('');
-			try {select.trigger('refresh');}catch(e){}
-			
+			if (select) {
+				select.html('');
+				try {select.trigger('refresh');}catch(e){}
+			}
 		}
 		if (lvl > 1) {
 			var select = model.get_form_field('state');
-			select.html('');
-			try {select.selectmenu('refresh', true);}catch(e){}
+			if (select) {
+				select.html('');
+				try {select.selectmenu('refresh', true);}catch(e){}
+			}
 		}
 		if (lvl > 2) {
 			model.start_countries_values(window.localStorage.getItem("rp-cache"));
@@ -307,10 +315,22 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 			model.start_company_type_values(window.localStorage.getItem("rp-cache"));
 		}
 		if (lvl > 4) {
-			model.get_form_field('name').attr('value', '');
-			model.get_form_field('email').attr('value', '');
-			model.get_form_field('address').attr('value', '');
-			$('#'+model.id_city_autocomplete).find('div input')[0].value = '';
+			var name = model.get_form_field('name');
+			if (name) {
+				name.attr('value', '');
+			}
+			var email = model.get_form_field('email');
+			if (email) {
+				email.attr('value', '');
+			}
+			var address = model.get_form_field('address');
+			if (address) {
+				address = address.attr('value', '');	
+			}
+			var city_autocmoplete = $('#'+model.id_city_autocomplete).find('div input');
+			if (city_autocmoplete.length) {
+				city_autocmoplete[0].value = '';
+			}
 		}
 	};
 	
