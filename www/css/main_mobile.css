@@ -782,3 +782,7 @@ div[data-role='header']{
 .options_detail h3 {
     font-size: 150%;
 }
+.clone{
+    position:absolute;
+    z-index:100;
+}

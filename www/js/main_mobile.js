@@ -1086,7 +1086,36 @@ function init() {
                     console.log('SE SELECCIONO' + clientSelected.id);
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     $(this).data('selected', true);
-                    $(li).addClass("myProductSelected");   
+                    $(li).addClass("myProductSelected");
+
+                    //animation
+                    var self = $(this).parent('.myProductSelected');
+                    var clone = $(this).parent('.myProductSelected').clone(), 
+                    position = $(this).parent('.myProductSelected').position();debugger;
+                    clone.addClass('clone');
+                    
+                    var bezier_params = {
+                        start: { 
+                          x: position.left, 
+                          y: position.top-100, 
+                          angle: -150
+                        },  
+                        end: {
+                          x:110,
+                          y:-400, 
+                          angle: 180, 
+                          length: .2
+                        }
+                    };      
+
+                    clone.appendTo('.products_clients_add');
+
+                    clone.animate({path : new $.path.bezier(bezier_params)}, 800);
+                    setTimeout(function(){
+                        self.siblings('.clone').remove();
+                    }, 8000);
+                    //end animation
+                    //show prices
                     $('.see_more_products_clients').text(getCurrentTotal());
                     break;
                 }
@@ -1510,7 +1539,6 @@ function init() {
         //         'total':454  
         //     }
         // ]
-
 Offline.options = {
        // Should we check the connection status immediatly on page load.
       checkOnLoad: true,
