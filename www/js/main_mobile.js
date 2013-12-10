@@ -1361,7 +1361,7 @@ function init() {
                         <a href="">\
                             <img src="'+DOMAIN+myProducts[i].model_image+'" class="ui-li-icon">\
                             <span class="ui-li-aside">'+myProducts[i].product_name+'</span>\
-                            <input type="number" class="qtyInvoice" min="1" value="'+myProducts[i].quantity+'">\
+                            <input type="text" class="qtyInvoice" value="'+myProducts[i].quantity+'">\
                             <span class="ui-li-aside">'+myProducts[i].price+'</span>\
                             <span class="ui-li-aside totalprice">'+(myProducts[i].price*myProducts[i].quantity)+'</span>\
                             <span class="removeProduct">X</span>\

@@ -103,7 +103,7 @@
                 </div>
                 <div class="row-fluid center_text_align" style="width: 66%;margin: 45% auto 25% auto;position: relative;z-index: 9;">
                     <form action="" id="form_login_app">
-                        <input class="input_login" type="email" placeholder="Username" id="username" autofocus="true">
+                        <input class="input_login" type="email" placeholder="Username" id="username">
                         <input class="input_login" type="password" placeholder="Password" id="password">
                         <input type="submit" class="btn" style="width: 100%;" id="log_in" value="Login">
                     </form>
@@ -284,7 +284,7 @@
 	                    </ul>
                     </div>
                     <input type="text" placeholder="Address" name="address">
-                    <input type="submit" id="add_new_client" class="btn btn-inverse btn-large" value="Save">
+                    <input type="submit" class="ui-bar-a btn_more_big" id="add_new_client" data-theme="a" value="Save">
                 </form>
                 <a data-rel="back" href="#" id="return_from_add_new_client" class="hiden"></a>
             </div>
@@ -354,6 +354,7 @@
                     <ul data-role="listview" id="myProducts" data-inset="true" data-icon="false" style="overflow-x: hidden;">                        
                     </ul>
                     <ul data-role="listview" data-corners="false" data-inset="true">
+                        <li><span class="total_invoice">Total: <b class="see_more_products_clients"></b></span></li>
                         <li data-icon="false"><a href="" id="goToProducts">+ Add Another Product</a></li>      
                     </ul>
                     <form id="formsendProductsInvoice">
@@ -367,13 +368,38 @@
         <div data-role="page" id="pagina13" data-fullscreen="true">
             <div data-role="header" data-theme="a">
                 <a href="#pagina11" class="btn_more_big" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
-                <h2><a href="" class="see_more_products_clients saveClientStorage" data-transition="slide">0</a></h2>
+                <h2 class="total_price_title"><a href="" class="see_more_products_clients saveClientStorage" data-transition="slide">0</a></h2>
             </div>
             <div data-role="content">
                 <ul class="products_clients_add" data-role="listview" data-filter="true"></ul>
             </div>
         </div>
-
+        
+        <div data-role="page" id="pagina14" data-theme="b">
+            <div data-role="header">
+                <a class="btn_more_big returnToSelectedProducts" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
+                <h1>Invoice</h1>
+            </div>            
+            <div data-role="content">
+                <header class="header_client">
+                    <h3 id="selected_product_name">Producto name</h3>
+                    <h4 id="selected_product_variant_name">Model name</h4>  
+                </header>                                
+                <fieldset data-role="controlgroup" class="header_client">
+                    <legend><b>Sub variants list</b>
+                        <ul class="sub_variants_ul">
+                            <li>name</li>
+                            <li>price</li>
+                        </ul>
+                    </legend>
+                    <ul data-role="listview" data-inset="true" id="id_selected_product_variants_list">
+                        <input type="checkbox" data-theme="c" name="radio-choice-1" id="radio-choice-1" 
+                        data-id="1" data-parent="1" value="choice-1" class="class_selected_variant"/>
+                        <label for="radio-choice-1" data-corners="false" class="labelRadioButton">Nombre a mostrar    :    $50.58</label>
+                    </ul>
+                </fieldset>
+            </div>
+        </div>
         <div id="content_init_graphic">
 	        <div id="graphic_jqplot">
 	        </div>

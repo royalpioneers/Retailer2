@@ -357,33 +357,34 @@
     /*pagina9*/
     #add_new_client {
         width: 100%;
+        padding: 8% !important;
+        border-radius: 5px;
+        font-size: 2em;
     }
     /*pagina11*/
     .header_client {
-        height: 5em;
-        padding-top: 1em;
+        position: relative;
         text-align: center;
         border-radius: 12px 12px 0 0;
         border: 1px solid #ccc;
         background: #eee;
         font-weight: bolder;
-        margin-bottom: 0em;
-        border-bottom: none;
         text-decoration: none !important;
-        font-family: metapro, Helvetica, Arial, sans-serif !important;        
+        font-family: metapro, Helvetica, Arial, sans-serif !important;
         font-weight: bold;
     }
     .header_client > h2 {
         display: inline;
-        line-height: 2em;
+        line-height: 1.5em;
+        font-size: 3.5em;
     }
     .header_client > a {
-        position: absolute;
-        right: 10%;
-        padding: 4% 7% !important;
+        padding: 2% 5% !important;
         border-radius: 8%;
-        height: 25px !important;
         border: none;
+        margin-left: 1em;
+        margin-top: -1em;
+        display: inline-table;
     }
     #myProducts {
         margin-top: -0.5em;
@@ -398,7 +399,7 @@
         text-align: center;
     }
     #formsendProductsInvoice .options_sendProductsInvoice{
-        width: 30%;
+        width: 33%;
         font-size: 20px;
         text-align: center;
         color: white;
@@ -425,22 +426,37 @@
     .overlay_client_products > aside {
         width: 60%; margin: 0 auto;
     }
-    .see_more_products_clients{
+    h2 > .see_more_products_clients{
 
-        font-size: 18px !important;
+        font-size: 23px !important;
         -webkit-transition: all 3s ease-in-out;
         -moz-transition: all 3s ease-in-out;
         transition: all 3s ease-in-out;
         color: rgb(171, 206, 211) !important;
     }
-    .see_more_products_clients:hover,.see_more_products_clients:focus{
+    h2 > .see_more_products_clients:hover,.see_more_products_clients:focus{
         display: block;
         color: white !important;
     }
-    .see_more_products_clients::before{
+    h2 > .see_more_products_clients::before{
+        content: 'Go To Invoice: $';
+        font-size: 21px;
+        margin-right: 10px;
+    }
+    b.see_more_products_clients::before{
         content: '$';
-        font-size: 16px;
-        margin-right: 3px;
+        font-size: 21px;
+        margin-right: 10px;
+        color: black;
+        font-family: metapro, Helvetica, Arial, sans-serif !important;
+    }
+    .total_invoice{
+        text-align: center;
+        width: 100%;
+        margin: 0 auto;
+        display: block;
+        font-size: 2em;
+        padding: 2% 0;
     }
     .products_clients_add {
         list-style: none;
@@ -640,9 +656,6 @@
     .without_radious .ui-li-aside i {
     display: block;
     }
-    .without_radious .ui-input-text.ui-shadow-inset.ui-corner-all.ui-btn-shadow.ui-body-c.ui-focus {
-        max-width: 6em;
-    }
     .without_radious .ui-input-text.ui-shadow-inset.ui-corner-all.ui-btn-shadow.ui-body-c {
         width: 25%;
         display: inline-block;
@@ -650,6 +663,10 @@
         margin-right: 5%;
     }
     /*pagina 13*/
+    .total_price_title{
+        overflow: visible !important;
+        text-overflow: initial !important;
+    }
     #selectClient-button .ui-btn-inner {
     color: white;
     }
@@ -691,7 +708,7 @@
     }
     @media (min-width:320px) and (max-width:420px){
         #pagina12 .ui-select {
-            width: 65% !important;
+            width: 73% !important;
         }
     }
     @media (min-width:320px) and (max-width:480px){
@@ -742,9 +759,13 @@ div[data-role='header']{
 }
 #create_item {
     padding: 3%;
+    border-radius: 5px;
+    font-size: 2em !important;
+    border: none;
 }
 #create_item > .ui-btn-inner {
     border: none;
+    font-size: 1em !important;
 }
 .ui-submit {
     padding: 5%;
@@ -753,7 +774,7 @@ div[data-role='header']{
  border: none;
 }
 #pagina12 .ui-select {
-    width: 75%;
+    width: 83%;
     margin-left: 2%;
     display: inline-block;
 }
@@ -785,4 +806,13 @@ div[data-role='header']{
 .clone{
     position:absolute;
     z-index:100;
+}
+/*pagina14*/
+.sub_variants_ul {
+    margin: 0;
+}
+.sub_variants_ul > li {
+    display: inline-block;
+    margin: 0 10%;
+    text-transform: uppercase;
 }
