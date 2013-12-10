@@ -103,6 +103,7 @@
     }
     .btn_accept_option{
         color: #2c3e50 !important;
+        padding: 3% 8%;
     }
     .options_detail_product{
         background: white !important;
@@ -132,17 +133,20 @@
         min-height: 100%;
     }
     #log_in{
-        background: #48c9b0;
+        font-family: metapro, Helvetica, Arial, sans-serif !important;
+       background: #48c9b0;
         color: white;
         border: none;
         text-shadow: none;
-        padding: 11px 0;
-        font-size: 18px;
+        padding: 7%;
+        font-size: 27px;
+        font-weight: bolder;
     }
     article[data-theme='flat_blue']{
         background: #415b76;
     }
     .options_detail{
+        font-family: metapro, Helvetica, Arial, sans-serif !important;
         margin: 0;
         padding: 0;
         width: 100%;
@@ -181,9 +185,11 @@
     }
     .total_units, .total_profit,.total_sales,#analyzer_most_popular {
         width: 49%; display: inline-block;
+        font-family: metapro, Helvetica, Arial, sans-serif !important;
         text-align: center;margin-bottom: 3%;
     }
     .total_units h1, .total_profit h1,.total_sales h1,#analyzer_most_popular h1 {
+        font-family: metapro, Helvetica, Arial, sans-serif !important;
         font-size: 14px;
         margin: 0;
         width: 80%;
@@ -231,10 +237,12 @@
     .total_units > p, .total_profit > p, .total_sales > p, #analyzer_most_popular > p {
         font-weight: bolder;
         font-size: 25px;
+        font-family: metapro, Helvetica, Arial, sans-serif !important;
     }
     .total_units > p:before, .total_profit > p:before, .total_sales > p:before, #analyzer_most_popular > p:before {
         content: "$";
         padding-right: 3%;
+        font-family: metapro, Helvetica, Arial, sans-serif !important;
     }
 /*page4*/
     .content-social{
@@ -788,9 +796,11 @@ div[data-role='header']{
 #username {
     font-size: 150% !important;
     font-weight: bolder;
+    font-family: metapro, Helvetica, Arial, sans-serif !important;
     padding: 10px 0 !important;
 }
 #password {
+    font-family: metapro, Helvetica, Arial, sans-serif !important;
     font-size: 150% !important; font-weight: bolder; padding: 10px 0 !important;
 }
 .disabled,.disabled:hover{
@@ -801,7 +811,7 @@ div[data-role='header']{
     font-size: 120%;
 }
 .options_detail h3 {
-    font-size: 150%;
+    font-size: 200%;
 }
 .clone{
     position:absolute;
