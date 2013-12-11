@@ -777,15 +777,22 @@ function init() {
 	        	break;
 	        }
         }
+
+        var today = new Date();
+            // Today eg: '2013-12-15'
+            today = today.getFullYear() + '-' + today.getMonth() + 1 + '-' + today.getDate();
+
         var data = {
             rp_token: token,
-            client: JSON.stringify(data_client)
+            client: JSON.stringify(data_client),
+            dateOfSale: today
         };
 
 		if (!invoice.are_valid_products(data_client[0].products)) {
         	alert(invoice.get_message());
         	return false;
         }
+
         $.ajax({
           url: url,
           type: 'POST',
