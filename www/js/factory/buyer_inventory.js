@@ -3,6 +3,7 @@ var BuyerInventoryFactory = function(urls, token) {
 	factory.urls = urls;
 	factory.token = token;
 	factory.cache = false;
+	factory.storage_id_inventory = 'buyerInventory';
 
 	factory.get_all = function(handler, cache) {
 		var list = JSON.parse(window.localStorage.getItem('buyerInventory'));
@@ -40,6 +41,17 @@ var BuyerInventoryFactory = function(urls, token) {
 		factory.token = token;
 	};
 
+	factory.get_by_id = function(id) {
+		var product = false;
+		var list = JSON.parse(window.localStorage.getItem(factory.storage_id_inventory));
+		for (var index in list) {
+			if (list[index].id == id) {
+				product = list[index];
+			}
+		}
+		return product;
+	};
+		
     return factory;
 
 }
