@@ -29,10 +29,10 @@ var InvoiceModel = function() {
 			client_product = client_products[index1];
 			for (var index in products) {
 				if (products[index].id == client_product.id) {
-					if (client_product.quantity == 0 || client_product.quantity > products[index].quantity) {
+					if (client_product.quantity == 0 || client_product.quantity > client_product.max) {
 						model.message = 'Invalid quantity for "' + client_product.model_name + '"';
 						return false;
-					}					
+					}
 				}
 			}
 		}

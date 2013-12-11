@@ -402,7 +402,7 @@ function init() {
             var day = date.getDay(),
                 diff = date.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
             var initial_date = new Date(date.setDate(diff));
-            var finish_date = initial_date + 6;
+            var finish_date = new Date(date.setDate(diff + 6));
 
         } else if (type == 3) { /* day */
             var initial_date = new Date();
@@ -496,7 +496,7 @@ function init() {
         var div = $('<div></div>');
         	div.attr('id', 'graphic_jqplot');
           	$('#content_init_graphic').append(div);
-        create_graphic(data_graphic);
+        try{create_graphic(data_graphic);}catch(e){}
     }
 
     function create_graphic(data) {
@@ -1509,15 +1509,15 @@ function init() {
     }
 
     function beforeAjaxLoader(){
-        $.mobile.loading("show", {
+    	try{$.mobile.loading("show", {
             textVisible: true,
             theme: 'c',
             textonly: false
-        });
+        });}catch(e){}
     }
 
     function completeAjaxLoader(){
-        $.mobile.loading("hide");
+    	try{$.mobile.loading("hide");}catch(e){}
     }
 }
 

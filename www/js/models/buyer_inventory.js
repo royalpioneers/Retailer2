@@ -130,7 +130,7 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
     	var productSelected = {
             'id': product.id,
             'product_name': product.product_name,
-            'model_name': product.model_name,
+            'model_name': product.model_name + ' - ' + variant.name + ' ' + variant.value,
             'quantity': variant.quantity,
             'max': variant.quantity,
             'price': model.calculate_price_by_client_selected(product, variant_id),
