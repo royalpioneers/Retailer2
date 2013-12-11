@@ -746,7 +746,6 @@ function init() {
     }
 
     function updateAfterCreateInvoice(clientSelected) {
-        debugger;
     	for(var i in storageClients){
             var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
             if(index !== -1){
@@ -755,7 +754,7 @@ function init() {
                     if(value.id == clientSelected.id){
                         remove = i;
                     }
-                });debugger;
+                });
                 if(remove > -1) {
                 	invoice.success_create(clientSelected.products);
                     storageClients.splice(remove, 1);
@@ -768,19 +767,16 @@ function init() {
     }
 
     function sendProductsInvoice(event) {
-        debugger;
         event.preventDefault();
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var data_client = [];
         var url = urls.send_invoice;
         for (var index in storageClients) {
     		if (storageClients[index].id == clientSelected.id) {
-                debugger;
     			data_client[0] = storageClients[index];
 	        	break;
 	        }
         }
-        debugger;
         var data = {
             rp_token: token,
             client: JSON.stringify(data_client)
@@ -790,7 +786,6 @@ function init() {
         	alert(invoice.get_message());
         	return false;
         }
-        debugger;
         $.ajax({
           url: url,
           type: 'POST',
