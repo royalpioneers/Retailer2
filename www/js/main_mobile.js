@@ -406,7 +406,9 @@ function init() {
 
         } else if (type == 3) { /* day */
             var initial_date = new Date();
+                initial_date = new Date(initial_date.getFullYear(), initial_date.getMonth(), initial_date.getDate());
             var finish_date = new Date();
+                finish_date = new Date(finish_date.getFullYear(), finish_date.getMonth(), finish_date.getDate());
         }
         /* TOTALS */
         var total_sales = 0;
@@ -744,6 +746,7 @@ function init() {
     }
 
     function updateAfterCreateInvoice(clientSelected) {
+        debugger;
     	for(var i in storageClients){
             var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
             if(index !== -1){
@@ -752,7 +755,7 @@ function init() {
                     if(value.id == clientSelected.id){
                         remove = i;
                     }
-                });
+                });debugger;
                 if(remove > -1) {
                 	invoice.success_create(clientSelected.products);
                     storageClients.splice(remove, 1);
@@ -765,16 +768,19 @@ function init() {
     }
 
     function sendProductsInvoice(event) {
+        debugger;
         event.preventDefault();
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var data_client = [];
         var url = urls.send_invoice;
         for (var index in storageClients) {
     		if (storageClients[index].id == clientSelected.id) {
+                debugger;
     			data_client[0] = storageClients[index];
 	        	break;
 	        }
         }
+        debugger;
         var data = {
             rp_token: token,
             client: JSON.stringify(data_client)
@@ -784,7 +790,7 @@ function init() {
         	alert(invoice.get_message());
         	return false;
         }
-
+        debugger;
         $.ajax({
           url: url,
           type: 'POST',
@@ -1400,20 +1406,20 @@ function init() {
             self = $(this);
 
         if (isNaN(parseInt(quantity))) {
-        	quantity = 0;
+        	quantity = 1;
         } else {
         	quantity = parseInt(quantity);
         }
         
         $.each(myProducts, function(i, value){
              if(value.id == idProduct) {
-                if(quantity > 1){
+                if(quantity >1){
                     value.quantity = quantity;
                     value.totalprice = value.price * quantity;
                     self.parent().siblings('.totalprice').text(value.totalprice);
                 }
                 else{
-                    self.val('0');
+                    self.val('1');
                 }
              }
         });
