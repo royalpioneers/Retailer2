@@ -780,7 +780,7 @@ function init() {
 
         var today = new Date();
             // Today eg: '2013-12-15'
-            today = today.getFullYear() + '-' + today.getMonth() + 1 + '-' + today.getDate();
+            today = today.getFullYear() + '-' + (parseInt(today.getMonth()) + 1) + '-' + today.getDate();
 
         var data = {
             rp_token: token,
