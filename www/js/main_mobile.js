@@ -424,7 +424,9 @@ function init() {
 
         } else if (type == 3) { /* day */
             var initial_date = new Date();
+                initial_date = new Date(initial_date.getFullYear(), initial_date.getMonth(), initial_date.getDate());
             var finish_date = new Date();
+                finish_date = new Date(finish_date.getFullYear(), finish_date.getMonth(), finish_date.getDate());
         }
         /* TOTALS */
         var total_sales = 0;
@@ -1095,7 +1097,7 @@ function init() {
                     //animation
                     var self = $(this).parent('.myProductSelected');
                     var clone = $(this).parent('.myProductSelected').clone(), 
-                    position = $(this).parent('.myProductSelected').position();debugger;
+                    position = $(this).parent('.myProductSelected').position();
                     clone.addClass('clone');
                     
                     var bezier_params = {
