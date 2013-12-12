@@ -109,6 +109,7 @@ function init() {
         $('#back_page').live('click', redirectToPage);
         $('#selectClient-menu').find('li').live('click', moveToOtherClient);
         $('.kill_storage').live('click', killStorage);
+        $('.returnToSelectedProducts').live('click', goProduct);
 
         /*Client offline*/        
         $('.disabled').parents('.ui-radio').bind('click', function(){;
@@ -118,12 +119,6 @@ function init() {
             event.preventDefault();
         });
 
-    /* PRODUCTS */
-        var categoryFactory = new CategoryFactory(urls, token);
-        var buyerInventoryFactory = BuyerInventoryFactory(urls, token);
-        var product = ProductModel(categoryFactory);
-        product.init();/* start list */
-
     /* CLIENT */
         var countryFactory = new CountryFactory(urls, token, window.localStorage.getItem("rp-cache"));
         var stateFactory = new StateFactory(urls, token, window.localStorage.getItem("rp-cache"));
@@ -132,6 +127,12 @@ function init() {
         var client = new ClientModel(countryFactory, stateFactory, cityFactory, clientFactory);
         client.init(window.localStorage.getItem("rp-cache")); /* start list */
 
+    /* PRODUCTS */
+        var categoryFactory = new CategoryFactory(urls, token);
+        var buyerInventoryFactory = new BuyerInventoryFactory(urls, token);
+        var buyerInventory = new BuyerInventoryModel(categoryFactory, buyerInventoryFactory, clientFactory);
+        buyerInventory.init();
+        
     /* INVOICE */
         var invoice = new InvoiceModel();
 
@@ -143,16 +144,17 @@ function init() {
         $('#container-login').css('display','inline');
     }
 
-    $.mobile.selectmenu.prototype.options.nativeMenu = false;
-
-    $.mobile.buttonMarkup.hoverDelay = 0;
+    try{
+    	$.mobile.selectmenu.prototype.options.nativeMenu = false;
+    	$.mobile.buttonMarkup.hoverDelay = 0;
+    }catch(e){}
 
     function saveClientStorage(){
         if(localStorage.getItem('clientSelected')){            
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
             if(clientSelected.products == ''){
                 cleanClientSelected();
-                $.mobile.navigate("#pagina11");
+                try{$.mobile.navigate("#pagina11");}catch(e){}
             }
             else if(clientSelected.products != ''){                
                 //validar si esta repetido
@@ -163,38 +165,18 @@ function init() {
                 else{                    
                     storageClients.push(clientSelected);
                 }
-                $.mobile.navigate("#pagina12");
+                try{$.mobile.navigate("#pagina12");}catch(e){}
             }
         }
     }
 
     function calculatePrice(product) {
-    	var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-        //business client -> wholesale 1
-        //consumer -> retail 2
-        var price =0;
-        if(clientSelected.type === 1) {            
-            price = product.wholesale_price;
-        }
-        else if(clientSelected.type === 2) {        
-            price = product.retail_price;
-            if (typeof(product.clients_discount) != 'undefined') {                
-	            if (typeof(product.clients_discount[clientSelected.id]) != 'undefined') {
-	        		price = product.clients_discount[clientSelected.id].amount;
-	        	}
-            }
-        }        
+        var price = buyerInventory.calculate_price_by_client_selected(product);
         return price;
     }
     
     function getDiscount(product) {
-    	var discount = 0;
-    	var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-    	if(clientSelected.type === 2) {
-            if (typeof(product.clients_discount[clientSelected.id]) != 'undefined') {
-            	discount = product.clients_discount[clientSelected.id].id;
-        	}
-        }
+    	var discount = buyerInventory.get_discount_id_by_client_selected(product);
     	return discount;
     }
 
@@ -215,11 +197,11 @@ function init() {
                 type: 'POST',
                 dataType: 'json',
                 beforeSend: function(){
-                    $.mobile.loading("show", {
+                    try{$.mobile.loading("show", {
                         textVisible: true,
                         theme: 'c',
                         textonly: false
-                    });
+                    });}catch(e){}
                 },
                 success: function (data) {
                     if (data.status === 'OK') {
@@ -231,11 +213,11 @@ function init() {
                     }
                 },
                 complete: function(){
-                    $.mobile.loading("hide");
+                    try{$.mobile.loading("hide");}catch(e){}
                 }
             });
         } else {
-            alert('Check your internet connection')
+            alert('Check your internet connection');
         }
     }
 
@@ -266,7 +248,7 @@ function init() {
                 token = window.localStorage.getItem("rp-token");
                 eventsAfterLogin();
             } else {
-                alert('Check your internet connection')
+                alert('Check your internet connection');
             }
         } else {
             var url = urls.loginToken;
@@ -299,7 +281,7 @@ function init() {
                 
                 eventsAfterLogin();
             } else {
-                alert('Check your internet connection')
+                alert('Check your internet connection');
             }
         }
     }
@@ -318,7 +300,7 @@ function init() {
         client.getDataAddressClient();
         getAnalyzerInformation();
         $('#container-login').css('display','none');
-        $.mobile.navigate("#pagina2");
+        try{$.mobile.navigate("#pagina2");}catch(e){}
     }
 
     /* Buyer Inventory */
@@ -396,7 +378,7 @@ function init() {
                processAnalyzerInformation(1);
            },
            complete: function(){
-            $.mobile.loading("hide");
+        	   try{$.mobile.loading("hide");}catch(e){}
            }
         });
     }
@@ -420,7 +402,7 @@ function init() {
             var day = date.getDay(),
                 diff = date.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
             var initial_date = new Date(date.setDate(diff));
-            var finish_date = initial_date + 6;
+            var finish_date = new Date(date.setDate(diff + 6));
 
         } else if (type == 3) { /* day */
             var initial_date = new Date();
@@ -514,7 +496,7 @@ function init() {
         var div = $('<div></div>');
         	div.attr('id', 'graphic_jqplot');
           	$('#content_init_graphic').append(div);
-        create_graphic(data_graphic);
+        try{create_graphic(data_graphic);}catch(e){}
     }
 
     function create_graphic(data) {
@@ -625,13 +607,13 @@ function init() {
 
                                         localStorage.setItem("clientSelected", JSON.stringify(client_exists));
                                         clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-                                        $.mobile.navigate("#pagina12");
+                                        try{$.mobile.navigate("#pagina12");}catch(e){}
                                         result = true;
                                     } else {
                                         result = false;
                                     }
                                     if(result == false) {
-                                        var clientSelected = createNewClient(items_list[client])
+                                        var clientSelected = createNewClient(items_list[client]);
                                     }
                                 } else {
                                     var clientSelected = createNewClient(items_list[client]);
@@ -648,7 +630,7 @@ function init() {
                         $('#selectClient-button > span > span > span').text(clientSelected.name);
                         localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                         if(clientSelected.products == ''){
-                            $.mobile.navigate("#pagina13");
+                            try{$.mobile.navigate("#pagina13");}catch(e){}
                         }
                     });
                     localStorage.setItem("allClients", JSON.stringify(items_list));
@@ -697,13 +679,13 @@ function init() {
 
                                         localStorage.setItem("clientSelected", JSON.stringify(client_exists));
                                         clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-                                        $.mobile.navigate("#pagina12");
+                                        try{$.mobile.navigate("#pagina12");}catch(e){}
                                         result = true;
                                     } else {
                                         result = false;
                                     }
                                     if(result == false) {
-                                        var clientSelected = createNewClient(items_list[client])
+                                        var clientSelected = createNewClient(items_list[client]);
                                     }
                                 } else {
                                     var clientSelected = createNewClient(items_list[client]);
@@ -720,7 +702,7 @@ function init() {
                         $('#selectClient-button > span > span > span').text(clientSelected.name);
                         localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                         if(clientSelected.products == ''){
-                            $.mobile.navigate("#pagina13");
+                            try{$.mobile.navigate("#pagina13");}catch(e){}
                         }
                     });
                     localStorage.setItem("allClients", JSON.stringify(items_list));
@@ -764,7 +746,6 @@ function init() {
     }
 
     function updateAfterCreateInvoice(clientSelected) {
-        debugger;
     	for(var i in storageClients){
             var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
             if(index !== -1){
@@ -773,7 +754,7 @@ function init() {
                     if(value.id == clientSelected.id){
                         remove = i;
                     }
-                });debugger;
+                });
                 if(remove > -1) {
                 	invoice.success_create(clientSelected.products);
                     storageClients.splice(remove, 1);
@@ -786,29 +767,32 @@ function init() {
     }
 
     function sendProductsInvoice(event) {
-        debugger;
         event.preventDefault();
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var data_client = [];
         var url = urls.send_invoice;
         for (var index in storageClients) {
     		if (storageClients[index].id == clientSelected.id) {
-                debugger;
     			data_client[0] = storageClients[index];
 	        	break;
 	        }
         }
-        debugger;
+
+        var today = new Date();
+            // Today eg: '2013-12-15'
+            today = today.getFullYear() + '-' + (parseInt(today.getMonth()) + 1) + '-' + today.getDate();
+
         var data = {
             rp_token: token,
-            client: JSON.stringify(data_client)
+            client: JSON.stringify(data_client),
+            dateOfSale: today
         };
 
 		if (!invoice.are_valid_products(data_client[0].products)) {
         	alert(invoice.get_message());
         	return false;
         }
-        debugger;
+
         $.ajax({
           url: url,
           type: 'POST',
@@ -978,18 +962,18 @@ function init() {
         var html = "",
             products = JSON.parse(localStorage.getItem('buyerInventory'));
         for(var i in products) {
-            var _offline = ""
+            var _offline = "";
             if(products[i].offline != undefined){
                 _offline = "offline";
             }
 
-            if(getArrayIndexProductsSelected().indexOf(products[i].id) !== -1) {
+            if(getArrayIndexProductsSelected().indexOf(products[i].id) !== -1 || buyerInventory.is_inventory_in_current_select_variant(products[i].id)) {
                 html += '<li class="myProductSelected">\
                     <a href="#" data-role="button" class="productSelected '+_offline+' " data-id="'+products[i].id+'" data-selected="true">\
                         <img src="'+DOMAIN+products[i].model_image+'">\
                         <span>'+products[i].product_name+'</span>\
                     </a>\
-                </li>'
+                </li>';
             }
             else{
                 
@@ -998,7 +982,7 @@ function init() {
                         <img src="'+DOMAIN+products[i].model_image+'">\
                         <span>'+products[i].product_name+'</span>\
                     </a>\
-                </li>'
+                </li>';
             }
         }
         $('.products_clients_add').append(html);
@@ -1079,17 +1063,21 @@ function init() {
             if(!$(this).data('selected')){
                 //Add Products to LocalStorage
                 if(products[i].id === id){
+                	if (buyerInventory.inventory_has_variants(id)) {
+                		buyerInventory.go_to_sub_variant_view(id);
+                		break;
+                	}
                     productSelected = {
                         'id': products[i].id,
                         'product_name': products[i].product_name,
                         'model_name': products[i].model_name,
                         'quantity': products[i].quantity,
+                        'max': products[i].quantity,
                         'price': calculatePrice(products[i]),
                         'model_image': products[i].model_image,
                         'discount': getDiscount(products[i])
                     };
-                    clientSelected.products.push(productSelected);                                                                        
-                    console.log('SE SELECCIONO' + clientSelected.id);
+                    clientSelected.products.push(productSelected);
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     $(this).data('selected', true);
                     $(li).addClass("myProductSelected");
@@ -1127,6 +1115,10 @@ function init() {
                 }
             //Remove Products to LocalStorage
             } else {
+            	if (buyerInventory.inventory_has_variants(id)) {
+            		buyerInventory.go_to_sub_variant_view(id);
+            		break;
+            	}
                 var remove = -1;
                 $.each(clientSelected.products, function(x, value){
                     if(value.id == id){                                                
@@ -1135,7 +1127,6 @@ function init() {
                 });
                 if(remove > -1) {
                     clientSelected.products.splice(remove, 1);
-                    console.log('1: '+JSON.stringify(clientSelected))
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     $(this).data('selected',false);
                     $(li).removeClass("myProductSelected");
@@ -1285,7 +1276,7 @@ function init() {
         Show products related in input name product
          */
         $.each(products, function(i, value) {
-            $('#browsers').append('<option data-id="'+value.id+'" value="'+value.name+'">')
+            $('#browsers').append('<option data-id="'+value.id+'" value="'+value.name+'">');
         });
     }
 
@@ -1368,6 +1359,7 @@ function init() {
                             <img src="'+DOMAIN+myProducts[i].model_image+'" class="ui-li-icon">\
                             <span class="ui-li-aside">'+myProducts[i].model_name+'</span>\
                             <input type="text" class="qtyInvoice" placeholder="0" value="'+myProducts[i].quantity+'">\
+
                             <span class="ui-li-aside">'+myProducts[i].price+'</span>\
                             <span class="ui-li-aside totalprice">'+(myProducts[i].price*myProducts[i].quantity)+'</span>\
                             <span class="removeProduct">X</span>\
@@ -1383,10 +1375,10 @@ function init() {
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
         currentPrice = parseInt($('.see_more_products_clients').text()),
         id = $(this).parents('li').data('id');
-        var remove = -1
+        var remove = -1;
         $.each(clientSelected.products, function(i, value){
             if(value.id == id){
-                remove = i
+                remove = i;
             }
         });
         if(remove > -1) {
@@ -1528,15 +1520,15 @@ function init() {
     }
 
     function beforeAjaxLoader(){
-        $.mobile.loading("show", {
+    	try{$.mobile.loading("show", {
             textVisible: true,
             theme: 'c',
             textonly: false
-        });
+        });}catch(e){}
     }
 
     function completeAjaxLoader(){
-        $.mobile.loading("hide");
+    	try{$.mobile.loading("hide");}catch(e){}
     }
 }
 
@@ -1578,4 +1570,4 @@ Offline.options = {
       // It's not included in the normal build, you should bring in js/snake.js in addition to
       // offline.min.js.
       game: false
-    }
+    };

@@ -5,6 +5,7 @@ var ClientFactory = function(urls, token, cache) {
 	factory.id_company_types = 'id_company_types';
 	factory.id_client_list = 'clients';
 	factory.cache = cache;
+	factory.storage_id_client_selected = 'clientSelected';
 	
 	factory.get_all = function(handler, cache) {
         var client_list = JSON.parse(window.localStorage.getItem(factory.id_client_list));
@@ -17,11 +18,11 @@ var ClientFactory = function(urls, token, cache) {
 			data: {rp_token: factory.token},
 			dataType: 'json',
 			beforeSend: function(){
-                $.mobile.loading("show", {
+                try{$.mobile.loading("show", {
                     textVisible: true,
                     theme: 'c',
                     textonly: false
-                });
+                });}catch(e){}
             },
 			success: function(data){
 				if (data.status == 'ok') {
@@ -32,7 +33,7 @@ var ClientFactory = function(urls, token, cache) {
 				}
 			},
            complete: function(){
-                $.mobile.loading("hide");
+                try{$.mobile.loading("hide");}catch(e){}
            }
 	    });
 	};
@@ -45,11 +46,11 @@ var ClientFactory = function(urls, token, cache) {
 			data: params,
 			dataType: 'json',
 			beforeSend: function(){
-                $.mobile.loading("show", {
+                try{$.mobile.loading("show", {
                     textVisible: true,
                     theme: 'c',
                     textonly: false
-                });
+                });}catch(e){}
             },
 			success: function(data){
 				if (data.status == 'ok') {
@@ -63,7 +64,7 @@ var ClientFactory = function(urls, token, cache) {
 				}
 			},
            complete: function(){
-                $.mobile.loading("hide");
+                try{$.mobile.loading("hide");}catch(e){}
            }
 	    });
 	};
@@ -89,11 +90,11 @@ var ClientFactory = function(urls, token, cache) {
 			data: {rp_token: factory.token},
 			dataType: 'json',
 			beforeSend: function(){
-                $.mobile.loading("show", {
+                try{$.mobile.loading("show", {
                     textVisible: true,
                     theme: 'c',
                     textonly: false
-                });
+                });}catch(e){}
             },
 			success: function(data){
 				if (data.status == 'ok') {
@@ -104,13 +105,22 @@ var ClientFactory = function(urls, token, cache) {
 				}
 			},
            complete: function(){
-                $.mobile.loading("hide");
+                try{$.mobile.loading("hide");}catch(e){}
            }
 	    });
 	};
 	
 	factory.set_token = function(token) {
 		factory.token = token;
+	};
+	
+	factory.get_client_selected = function() {
+		var clientSelected = JSON.parse(localStorage.getItem(factory.storage_id_client_selected));
+		return clientSelected;
+	};
+
+	factory.set_client_selected = function(client) {
+		localStorage.setItem(factory.storage_id_client_selected, JSON.stringify(client));
 	};
 	
 	return factory;

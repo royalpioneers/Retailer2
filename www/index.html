@@ -21,10 +21,10 @@
         <!--  Client -->
         <script type="text/javascript" src="js/models/client.js"></script>
         <script type="text/javascript" src="js/models/invoice.js"></script>
+        <script type="text/javascript" src="js/models/buyer_inventory.js"></script>
         <script type="text/javascript" src="js/factory/client.js"></script>
         <script type="text/javascript" src="js/factory/address.js"></script>
         <!--  Product -->
-        <script type="text/javascript" src="js/models/product.js"></script>
         <script type="text/javascript" src="js/factory/buyer_inventory.js"></script>
         <script type="text/javascript" src="js/factory/category.js"></script>
         <!--  Aplication -->
@@ -378,5 +378,35 @@
 	        <div id="graphic_jqplot">
 	        </div>
         </div>
+        
+        <!-- PRODUCT VARIANT: SUB-VARIANT -->
+        <div data-role="page" id="pagina14" data-theme="b">
+            <div data-role="header">
+                <a class="btn_more_big returnToSelectedProducts" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
+                <h1>Invoice</h1>
+            </div>
+            
+            <div data-role="content">
+                <div class="header_client">
+                	<span id="selected_product_name"></span><br />
+                	<span id="selected_product_variant_name"></span><br />
+                	<span>Sub variants list</span><br />
+                	<ul>
+                		<li>name</li>
+                		<li>price</li>
+                	</ul>
+                </div>
+                
+                <ul data-role="listview" data-inset="true" data-theme="a" id="id_selected_product_variants_list">
+                </ul>
+            </div>
+        </div>
+        
+        <div id="id_template_option_variant" style="display: none">
+       		<input type="checkbox" name="radio-choice-__id__" id="radio-choice-__id__"  __checked__
+       		data-id="__id__" data-parent="__parent__" value="choice-__id__" class="class_selected_variant"/>
+       		<label for="radio-choice-__id__" data-corners="false" class="labelRadioButton">__name__    :    __price__</label>
+        </div>
+        
 	</body>
 </html>
