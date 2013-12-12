@@ -1366,8 +1366,8 @@ function init() {
             html += '<li class="without_radious" data-id="'+myProducts[i].id+'">\
                         <a href="">\
                             <img src="'+DOMAIN+myProducts[i].model_image+'" class="ui-li-icon">\
-                            <span class="ui-li-aside">'+myProducts[i].product_name+'</span>\
-                            <input type="text" class="qtyInvoice" value="'+myProducts[i].quantity+'">\
+                            <span class="ui-li-aside">'+myProducts[i].model_name+'</span>\
+                            <input type="text" class="qtyInvoice" placeholder="0" value="'+myProducts[i].quantity+'">\
                             <span class="ui-li-aside">'+myProducts[i].price+'</span>\
                             <span class="ui-li-aside totalprice">'+(myProducts[i].price*myProducts[i].quantity)+'</span>\
                             <span class="removeProduct">X</span>\
@@ -1376,7 +1376,7 @@ function init() {
         }
         ul_for_my_products.append(html);
         ul_for_my_products.trigger('create');
-
+        $( ".qtyInvoice" ).trigger('keyup');
     }
 
     function removeMyProduct() {
@@ -1409,7 +1409,7 @@ function init() {
         pageMyProductsShow();
     }
 
-    function updateMyProduct() {
+    function updateMyProduct(){
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var myProducts = clientSelected.products,
             idProduct = $(this).parents('.without_radious').data('id'),
@@ -1417,26 +1417,26 @@ function init() {
             self = $(this);
 
         if (isNaN(parseInt(quantity))) {
-        	quantity = 1;
+        	quantity = 0;
         } else {
         	quantity = parseInt(quantity);
         }
         
         $.each(myProducts, function(i, value){
              if(value.id == idProduct) {
-                if(quantity >1){
+                if(quantity >=0){
                     value.quantity = quantity;
                     value.totalprice = value.price * quantity;
                     self.parent().siblings('.totalprice').text(value.totalprice);
                 }
                 else{
-                    self.val('1');
+                    self.val('');
                 }
-             }
+             }             
         });
-
+        
         localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
-
+        
         //save in storage
 
         for(var i in storageClients){
@@ -1449,6 +1449,16 @@ function init() {
                 });
             }
         }
+
+        //get total current price
+        var newProducts = JSON.parse(localStorage.getItem('clientSelected')).products;
+        var acumTotal=0;              
+        for(var i in newProducts){
+            if(newProducts[i].totalprice){
+                acumTotal += parseFloat(newProducts[i].totalprice);
+            }              
+        }           
+        $('.see_total_from_invoice').text(acumTotal);
     }
 
     function getDateMonthYear(){
