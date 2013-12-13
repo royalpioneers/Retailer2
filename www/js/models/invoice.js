@@ -31,6 +31,7 @@ var InvoiceModel = function() {
 				if (products[index].id == client_product.id) {
 					if (client_product.quantity == 0 || client_product.quantity > client_product.max) {
 						model.message = 'Invalid quantity for "' + client_product.model_name + '"';
+
 						return false;
 					}
 				}
