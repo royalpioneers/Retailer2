@@ -1191,7 +1191,6 @@ function init() {
                             <img src="'+DOMAIN+myProducts[i].model_image+'" class="ui-li-icon">\
                             <span class="ui-li-aside">'+myProducts[i].model_name+'</span>\
                             <input type="text" class="qtyInvoice" placeholder="0" value="'+myProducts[i].quantity+'">\
-
                             <span class="ui-li-aside">'+myProducts[i].price+'</span>\
                             <span class="ui-li-aside totalprice">'+(myProducts[i].price*myProducts[i].quantity)+'</span>\
                             <span class="removeProduct">X</span>\
