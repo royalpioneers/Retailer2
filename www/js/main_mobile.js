@@ -59,9 +59,7 @@ function init() {
     //     }
     // }, 1000);
     
-    var analyzer_information_time = new Date(),
-    	analyzer_information = [],
-        imageURL = undefined,
+    var imageURL = undefined,
         cache=false,
         token = window.localStorage.getItem("rp-token");
 
@@ -135,6 +133,10 @@ function init() {
         
     /* INVOICE */
         var invoice = new InvoiceModel();
+        
+    /* ANALIZER */
+        var analyzer = new AnalyzerModel(buyerInventoryFactory);
+        analyzer.set_domain(DOMAIN);
 
     //Automatic Login
 
@@ -358,186 +360,16 @@ function init() {
     }
 
     /* Analyzer */
-
-    function getAnalyzerInformation() {
+    function getAnalyzerInformation(type) {
+    	var analyzer_cache = false;
     	if (Offline.state == 'down') {
-    		return false;
+    		analyzer_cache = true;
     	}
-        var url = urls.analyzer;
-        $.ajax({
-           url: url,
-           type: 'POST',
-           data: {
-                rp_token: token
-           },
-           dataType: 'json',
-           beforeSend: beforeAjaxLoader(),
-           success: function(data){
-               analyzer_information = data.context['information'];
-               analyzer_information_time = new Date();
-               processAnalyzerInformation(1);
-           },
-           complete: function(){
-        	   try{$.mobile.loading("hide");}catch(e){}
-           }
-        });
+    	analyzer.update(analyzer_cache, type);
     }
-
+    
     function processAnalyzerInformation(type) {
-        // dates limit
-        var initial_date = new Date();
-        var finish_date = new Date();
-
-        /* control: 1=month, 2=week, 3=day */
-        if (typeof(type) == 'undefined') {
-            type = 1;
-        }
-
-        if (type == 1) { /* month */
-            var date = new Date();
-            var initial_date = new Date(date.getFullYear(), date.getMonth(), 1);
-            var finish_date = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-        } else if (type == 2) { /* week */
-            var date = new Date();
-            var day = date.getDay(),
-                diff = date.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
-            var initial_date = new Date(date.setDate(diff));
-            var finish_date = new Date(date.setDate(diff + 6));
-
-        } else if (type == 3) { /* day */
-            var initial_date = new Date();
-                initial_date = new Date(initial_date.getFullYear(), initial_date.getMonth(), initial_date.getDate());
-            var finish_date = new Date();
-                finish_date = new Date(finish_date.getFullYear(), finish_date.getMonth(), finish_date.getDate());
-        }
-        /* TOTALS */
-        var total_sales = 0;
-        var total_units = 0;
-        var total_profit = 0;
-
-        for(var i in analyzer_information['values']) {
-            item = analyzer_information['values'][i];
-            date = get_date_from_string(item['date']);
-            if (date >= initial_date && date <= finish_date) {
-                total_sales += item['sale_value'];
-                total_units += item['sale_volume'];
-                total_profit += item['projected_profit'];
-            }
-        }
-        $('#pagina2').find('.tab2').find('#analyzer_total_sales').html(total_sales);
-        $('#pagina2').find('.tab2').find('#analyzer_total_units').html(total_units);
-        $('#pagina2').find('.tab2').find('#analyzer_total_profit').html(total_profit);
-
-        /* POPULAR */
-        var total_models_data = total_models(initial_date, finish_date, analyzer_information['variants']['data']);
-        var popular = false;
-        for (var i in total_models_data) {
-            item = total_models_data[i];
-            if (popular) {
-                if (popular['quantity'] < item['quantity']) {
-                    popular = item;
-                }
-            } else {
-                popular = item;
-            }
-        }
-        if (popular !== false) {
-            if (typeof(analyzer_information['variants']['models'][popular['product_model_id']]) != 'undefined') {
-                details = analyzer_information['variants']['models'][popular['product_model_id']];
-                $('#pagina2').find('.tab2').find('#most_popular_img').html('<img src="'+DOMAIN+details['image']+'" />');
-                $('#pagina2').find('.tab2').find('#most_popular_name').html(details['name']);
-                $('#pagina2').find('.tab2').find('#most_popular_sold').html(popular['quantity']);
-            }
-        }
-
-        /* graphic */
-        var date_formated = analyzer_information_time.toLocaleDateString() + ' ' + analyzer_information_time.toLocaleTimeString();
-        result = [{
-            Name:"Resume (" + date_formated + ")", Sale:total_sales, Profit:total_profit
-        }];
-
-        $('#graphic').html('');
-        start_graphic(result);
-        $('#graphic').trigger('create');
-
-        return true;
-    }
-
-    function total_models(initial_date, finish_date, data) {
-        result = {};
-        for (var i in data) {
-            item = data[i];
-            date = get_date_from_string(item['date']);
-            if (date >= initial_date && date <= finish_date) {
-                if (typeof(result[item['product_model_id']]) == 'undefined') {
-                    result[item['product_model_id']] = item;
-                } else {
-                    result[item['product_model_id']]['quantity'] += item['quantity'];
-                }
-            }
-        }
-        return result;
-    }
-
-    function get_date_from_string(string_date) {
-        parts = string_date.split('-');
-        var year = parts[0], month = parts[1], day = parts[2];
-        if (month.substring(0, 1) == '0') {
-            month = month.substring(1);
-        }
-        if (day.substring(0, 1) == '0') {
-            day = day.substring(1);
-        }
-        month = parseInt(month) - 1;
-        return new Date(parseInt(year), parseInt(month), parseInt(day));
-    }
-
-    function start_graphic(data_graphic) {
-        var div = $('<div></div>');
-        	div.attr('id', 'graphic_jqplot');
-          	$('#content_init_graphic').append(div);
-        try{create_graphic(data_graphic);}catch(e){}
-    }
-
-    function create_graphic(data) {
-        var s1 = [];
-        var s2 = [];
-	    var ticks = [];
-        for(index in data) {
-        var item = data[index];
-        	s1[s1.length] = item.Profit;
-        	s2[s2.length] = item.Sale;
-        	ticks[ticks.length] = item.Name;
-        }
-	    plot2 = $.jqplot('graphic_jqplot', [s1, s2], {
-	        seriesDefaults: {
-	            renderer:$.jqplot.BarRenderer,
-	            pointLabels: { show: true },
-	            rendererOptions: {fillToZero: true}
-	        },
-	        axes: {
-	            xaxis: {
-	                renderer: $.jqplot.CategoryAxisRenderer,
-	                ticks: ticks
-	            }
-	        },
-	        series:[
-	                {label:'Profit'},
-	                {label:'Sale'},
-	            ],
-            legend: {
-                show: true,
-                placement: 'outsideGrid' /* insideGrid */
-            }
-	    });
-	    $('#chart2').bind('jqplotDataHighlight',
-	        function (ev, seriesIndex, pointIndex, data) {}
-	    );
-	    $('#chart2').bind('jqplotDataUnhighlight',
-	        function (ev) {}
-	    );
-	    /* transfer graphic to view analizer */
-	    $('#graphic').append($('#graphic_jqplot'));
+    	analyzer.show_graphic(type);
     }
 
     /* Client */
@@ -928,7 +760,7 @@ function init() {
         if(newSelection == 'tab1'){
             prevSelection = 'tab2';
         } else {
-        	getAnalyzerInformation();
+        	getAnalyzerInformation(1);
         }
         $("."+prevSelection).addClass("ui-screen-hidden");
         $("."+newSelection).removeClass("ui-screen-hidden");

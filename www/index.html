@@ -22,6 +22,7 @@
         <script type="text/javascript" src="js/models/client.js"></script>
         <script type="text/javascript" src="js/models/invoice.js"></script>
         <script type="text/javascript" src="js/models/buyer_inventory.js"></script>
+        <script type="text/javascript" src="js/models/analyzer.js"></script>
         <script type="text/javascript" src="js/factory/client.js"></script>
         <script type="text/javascript" src="js/factory/address.js"></script>
         <!--  Product -->
@@ -138,7 +139,10 @@
                             <li><a id="graphic_day">Day</a></li>
 	                	</ul>
 	                	
-	                	<div id="graphic"></div>
+	                	<div id="content_graphic_1"></div>
+	                	<div id="content_graphic_2"></div>
+	                	<div id="content_graphic_3"></div>
+	                	
                         <div class="total_sales">
                             <h1>TOTAL SALES</h1>
                             <p id="analyzer_total_sales"></p>
@@ -373,11 +377,10 @@
             <div data-role="content">
                 <ul class="products_clients_add" data-role="listview" data-filter="true"></ul>
             </div>
-        </div>            
-        <div id="content_init_graphic">
-	        <div id="graphic_jqplot">
-	        </div>
-        </div>
+        </div>        
+
+		<!-- MANDATORY FOR GRAPHIC -->
+        <div id="content_init_graphic" style="visibility: hidden;"></div>
         
         <!-- PRODUCT VARIANT: SUB-VARIANT -->
         <div data-role="page" id="pagina14" data-theme="b">
