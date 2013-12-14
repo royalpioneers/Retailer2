@@ -156,16 +156,20 @@ var AnalyzerModel = function(buyerInventoryFactory) {
 	};
 	
 	model.show_graphic = function(type) {
+		alert('show graphic');
 		if (model.current_type == type) {
+			alert('same type');
 			return false;
 		}
 		model.current_type = type; 
 		var info_type = model.get_info_by_type(type);
 		if (model.exists_graphic(type)) {
+			alert('exists');
 			/* show div */
 			model.hidden_graphics();
 			$('#' + model.prefix_content + type).append($('#' + model.prefix_jqplot + type));
 		} else {
+			alert('not exists');
 			model.hidden_graphics();
 			$('#' + model.prefix_content + type).html('');
 			$('#' + model.prefix_content + type).trigger('create');
@@ -173,13 +177,16 @@ var AnalyzerModel = function(buyerInventoryFactory) {
 //			var clone = $('#' + model.prefix_jqplot + type).clone();
 //			$('#' + model.prefix_content + type).append(clone);
 			$('#' + model.prefix_content + type).append($('#' + model.prefix_jqplot + type));
-			
+			alert('charged graphic');
 //			$('#' + model.prefix_content + type).trigger('create');
 		}
+		alert('resume');
 		model.show_resume_values(info_type);
+		alert('complete show graphic');
     };
     
     model.hidden_graphics = function() {
+    	alert('return graphic');
     	if ($('#' + model.prefix_jqplot + 1)) {
     		$('#' + model.id_div_source_graphic).append($('#' + model.prefix_jqplot + 1));
 //    		$('#' + model.prefix_content + 1).trigger('create');
@@ -192,6 +199,7 @@ var AnalyzerModel = function(buyerInventoryFactory) {
     		$('#' + model.id_div_source_graphic).append($('#' + model.prefix_jqplot + 3));
 //    		$('#' + model.prefix_content + 3).trigger('update');
     	}
+    	alert('complete return graphic');
     }
     
     model.create_graphic = function(data, type) {
