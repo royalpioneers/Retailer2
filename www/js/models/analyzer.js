@@ -173,7 +173,7 @@ var AnalyzerModel = function(buyerInventoryFactory) {
 			model.hidden_graphics();
 			$('#' + model.prefix_content + type).html('');
 			$('#' + model.prefix_content + type).trigger('create');
-			model.create_graphic(info_type['data_graphic'], type);
+			try{model.create_graphic(info_type['data_graphic'], type);}catch(e){alert('Errr12XXX');alert(e)}
 //			var clone = $('#' + model.prefix_jqplot + type).clone();
 //			$('#' + model.prefix_content + type).append(clone);
 			$('#' + model.prefix_content + type).append($('#' + model.prefix_jqplot + type));

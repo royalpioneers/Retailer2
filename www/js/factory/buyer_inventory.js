@@ -90,7 +90,10 @@ var BuyerInventoryFactory = function(urls, token) {
 	               alert(new_date_time);
 	               alert(info);
 	               handler(info);
-	        	   }catch(e){alert(e);}
+	        	   }catch(e){
+	        		   alert('erroror XXXXX')
+	        		   alert(e);
+	        		}
 	           },
 	           complete: function(){
 	        	   alert('COMPLETE');
