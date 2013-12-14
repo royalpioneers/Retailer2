@@ -57,8 +57,6 @@ var BuyerInventoryFactory = function(urls, token) {
 	factory.get_analyzer_information = function(handler, cache) {
 		var info = JSON.parse(window.localStorage.getItem(factory.storage_id_analyzer_information));
 		if (cache && info != null) {
-			alert('return cache');
-			alert(info);
 			return handler(info);
 		}
 		$.ajax({
@@ -76,7 +74,6 @@ var BuyerInventoryFactory = function(urls, token) {
 			       });}catch(e){}
 			   },
 	           success: function(data){
-	        	   alert('call complete');
 	        	   var info = data.context['information'];
 	               window.localStorage.removeItem(factory.storage_id_analyzer_information);
 	               window.localStorage.setItem(factory.storage_id_analyzer_information, JSON.stringify(info));
@@ -88,8 +85,7 @@ var BuyerInventoryFactory = function(urls, token) {
 	               handler(info);
 	           },
 	           complete: function(){
-	        	   alert('COMPLETE');
-	        	   try{$.mobile.loading("hide");}catch(e){alert(e);}
+	        	   try{$.mobile.loading("hide");}catch(e){}
 	           }
 	        });
 	};
