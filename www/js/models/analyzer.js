@@ -13,21 +13,7 @@ var AnalyzerModel = function(buyerInventoryFactory) {
 	model.prefix_jqplot = 'graphic_jqplot_';
 	model.prefix_content = 'content_graphic_';
 	model.domain = '';
-    
-    
-//    function show_graphic(type) {
-//    	/* transfer graphic to view analizer */
-//	    $('#content_graphic_' + type).append($('#graphic_jqplot_' + type));
-//    }
-    
-    
-    
-/////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
+
 	model.set_domain = function(domain) {
 		model.domain = domain;
 	};
@@ -36,9 +22,7 @@ var AnalyzerModel = function(buyerInventoryFactory) {
     	buyerInventoryFactory.get_analyzer_information(function(info){
     		model.info = info;
     		model.time = buyerInventoryFactory.get_analyzer_information_time();
-//    		if (!cache) {
-        		model.clear_graphics();
-//        	}
+        	model.clear_graphics();
     		if (!isNaN(parseInt(type))) {
     			$('#graphic_month').trigger('click');
     		}
@@ -218,16 +202,7 @@ var AnalyzerModel = function(buyerInventoryFactory) {
                 placement: 'outsideGrid' /* insideGrid */
             }
 	    });
-//	    $('#chart2').bind('jqplotDataHighlight',
-//	        function (ev, seriesIndex, pointIndex, data) {}
-//	    );
-//	    $('#chart2').bind('jqplotDataUnhighlight',
-//	        function (ev) {}
-//	    );
 	    model.set_exists_graphic(type, true);
-	    /* transfer graphic to view analizer */
-//	    $('#graphic').append($('#graphic_jqplot'));
-//	    show_graphic(type);
     };
     
     model.show_resume_values = function(info_type) {
