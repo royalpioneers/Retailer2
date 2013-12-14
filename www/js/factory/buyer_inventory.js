@@ -77,6 +77,8 @@ var BuyerInventoryFactory = function(urls, token) {
 			   },
 	           success: function(data){
 	        	   alert('call complete');
+	        	   try{
+	        	   alert(data);
 	        	   var info = data.context['information'];
 	               window.localStorage.removeItem(factory.storage_id_analyzer_information);
 	               window.localStorage.setItem(factory.storage_id_analyzer_information, JSON.stringify(info));
@@ -88,6 +90,7 @@ var BuyerInventoryFactory = function(urls, token) {
 	               alert(new_date_time);
 	               alert(info);
 	               handler(info);
+	        	   }catch(e){alert(e);}
 	           },
 	           complete: function(){
 	        	   alert('COMPLETE');
