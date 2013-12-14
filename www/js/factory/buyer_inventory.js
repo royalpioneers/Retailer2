@@ -63,7 +63,7 @@ var BuyerInventoryFactory = function(urls, token) {
 	           url: urls.analyzer,
 	           type: 'POST',
 	           data: {
-	                rp_token: token
+	                rp_token: factory.token
 	           },
 	           dataType: 'json',
 	           beforeSend: function beforeAjaxLoader(){
