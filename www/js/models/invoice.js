@@ -9,13 +9,14 @@ var InvoiceModel = function() {
 			var product = client_products[index1];
 			for (var index in products) {
 				if (products[index].id == parseInt(product.id)) {
-					products[index].quantity-=product.quantity;
 					if (typeof(product.variant_id) != 'undefined' && parseInt(product.variant_id) > 0) {
 						for (var index2 in products[index].variants) {
 							if (product.variant_id == products[index].variants[index2].id) {
 								products[index].variants[index2].quantity-=product.quantity;
 							}
 						}
+					} else {
+						products[index].quantity-=product.quantity;
 					}
 				}
 			}

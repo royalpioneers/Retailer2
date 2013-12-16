@@ -609,7 +609,6 @@ function init() {
 	        	break;
 	        }
         }
-
         var today = new Date();
             // Today eg: '2013-12-15'
             today = today.getFullYear() + '-' + (parseInt(today.getMonth()) + 1) + '-' + today.getDate();
@@ -1184,9 +1183,12 @@ function init() {
             ul_for_my_products = $('#myProducts');
         ul_for_my_products.html('');
         var html = '';
-
         for(var i in myProducts){
-            html += '<li class="without_radious" data-id="'+myProducts[i].id+'">\
+        	var variant_id = '0';
+            if (!isNaN(parseInt(myProducts[i].variant_id))) {
+            	variant_id = myProducts[i].variant_id;
+            }
+            html += '<li class="without_radious" data-id="'+myProducts[i].id+'", data-variant="'+variant_id+'">\
                         <a href="">\
                             <img src="'+DOMAIN+myProducts[i].model_image+'" class="ui-li-icon">\
                             <span class="ui-li-aside">'+myProducts[i].model_name+'</span>\
@@ -1205,10 +1207,16 @@ function init() {
     function removeMyProduct() {
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
         currentPrice = parseInt($('.see_more_products_clients').text()),
-        id = $(this).parents('li').data('id');
-        var remove = -1;
+        id = $(this).parents('li').data('id'),
+        variant_id = $(this).parents('li').data('variant'),
+        remove = -1;
+
         $.each(clientSelected.products, function(i, value){
-            if(value.id == id){
+        	var value_variant = 0;
+        	if (!isNaN(parseInt(value.variant_id))) {
+        		value_variant = parseInt(value.variant_id);
+        	}
+            if(value.id == id && value_variant == variant_id){
                 remove = i;
             }
         });
@@ -1218,7 +1226,6 @@ function init() {
         }
 
         //save in storage
-
         for(var i in storageClients){
             var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
             if(index !== -1){
@@ -1236,6 +1243,7 @@ function init() {
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var myProducts = clientSelected.products,
             idProduct = $(this).parents('.without_radious').data('id'),
+            idVariant = $(this).parents('.without_radious').data('variant'),
             quantity = $(this).val(),
             self = $(this);
 
@@ -1246,7 +1254,11 @@ function init() {
         }
         
         $.each(myProducts, function(i, value){
-             if(value.id == idProduct) {
+        	var value_variant = 0;
+        	if (!isNaN(parseInt(value.variant_id))) {
+        		value_variant = parseInt(value.variant_id);
+        	}
+            if(value.id == idProduct && value_variant == idVariant) {
                 if(quantity >=0){
                     value.quantity = quantity;
                     value.totalprice = value.price * quantity;
@@ -1255,13 +1267,12 @@ function init() {
                 else{
                     self.val('');
                 }
-             }             
+            }             
         });
         
         localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
         
         //save in storage
-
         for(var i in storageClients){
             var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
             if(index !== -1){
