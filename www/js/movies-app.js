@@ -42,7 +42,7 @@ $(function(){
                     $.mobile.navigate(callback_url);
 	                
             	} else {
-            		alert('no groups found');
+            		$.mobile.navigate(callback_url);
             	}
             },
            complete: function(){
