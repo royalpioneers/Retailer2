@@ -61,8 +61,8 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	
 	model.start_form_values = function(cache){
 		model.clear_form(5);
-		model.start_countries_values();
-		model.start_company_type_values();
+		model.start_countries_values(cache);
+		model.start_company_type_values(cache);
 		
 	};
 	
