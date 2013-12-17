@@ -172,6 +172,14 @@ function init() {
         }
     }
 
+    function loading(){
+        $.mobile.loading("show", {
+            textVisible: true,
+            theme: 'c',
+            textonly: false
+        });
+    }
+
     function calculatePrice(product) {
         var price = buyerInventory.calculate_price_by_client_selected(product);
         return price;
@@ -199,11 +207,7 @@ function init() {
                 type: 'POST',
                 dataType: 'json',
                 beforeSend: function(){
-                    try{$.mobile.loading("show", {
-                        textVisible: true,
-                        theme: 'c',
-                        textonly: false
-                    });}catch(e){}
+                    loading()
                 },
                 success: function (data) {
                     if (data.status === 'OK') {
@@ -631,11 +635,7 @@ function init() {
           dataType: 'json',
           data: data,
           beforeSend: function(){
-                $.mobile.loading("show", {
-                    textVisible: true,
-                    theme: 'c',
-                    textonly: false
-                });
+                loading()
             },
             success: function(data) {
                 if (data.status == true) {
@@ -1351,11 +1351,7 @@ function init() {
     }
 
     function beforeAjaxLoader(){
-    	try{$.mobile.loading("show", {
-            textVisible: true,
-            theme: 'c',
-            textonly: false
-        });}catch(e){}
+    	loading()
     }
 
     function completeAjaxLoader(){
