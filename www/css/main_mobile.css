@@ -750,9 +750,13 @@ div.ui-input-text > input {
 }
 .header_client > ul li{
     display: inline-block;
-    margin-top: .4em;
-    margin-left: 3%;
-    margin-right: 3%;
+    font-size: 20px;
+    padding: 2% 0;
+    border-bottom: 1px solid;
+    width: 35%;
+    text-transform: uppercase;
+    border-top: 1px solid;
+    margin-bottom: 2%;
 }
 div[data-role='header']{
     padding: 10px 0 !important;
@@ -818,6 +822,10 @@ div[data-role='header']{
     z-index:100;
 }
 /*pagina14*/
+.label_sub_variant > .ui-btn-inner{
+    text-align: center;
+    display: block;
+}
 .sub_variants_ul {
     margin: 0;
 }
@@ -826,3 +834,53 @@ div[data-role='header']{
     margin: 0 10%;
     text-transform: uppercase;
 }
+.label_sub_variant_name {
+    display: inline-block;
+    width: 38%;
+}
+.label_sub_variant_price {
+    width: 45%;
+    display: inline-block;
+}
+#selected_product_name {
+    font-size: 30px;
+    padding: 6% 0 0 0;
+    display: block;
+    text-transform: uppercase;
+    line-height: 0;
+}
+#selected_product_variant_name {
+    font-size: 19px;
+    display: block;
+}
+.separator_sub_variant{
+    display: block;
+    line-height: 0 0;
+    margin-bottom: -13px;
+    font-size: 15px;
+    color: rgb(173, 56, 56);
+    text-transform: uppercase;
+}
+.invoice_header_item{
+    font-size: 30px;
+    display: block;
+    padding: 6% 0 2% 0;
+    text-transform: uppercase;
+}
+.header_invoice > ul{
+    margin: 0 8%;
+    list-style: none;
+    width: 90%;
+    text-align: center;
+}
+.header_invoice > ul > li{
+    display: inline-block;
+    font-size: 20px;
+    padding: 2% 0;
+    width: 20%;
+    text-transform: uppercase;
+    margin: 2% 2% 2% 0;
+    text-align: center;
+    border: none;
+}
+
