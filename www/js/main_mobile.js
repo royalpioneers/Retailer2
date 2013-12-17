@@ -265,7 +265,7 @@ function init() {
                 },
                 type: 'POST',
                 dataType: 'json',
-                beforeSend: beforeAjaxLoader(),
+                beforeSend: loading(),
                 success: function (data) {
                     if (data.status === 'OK') {
                         window.localStorage.setItem("rp-token", data.token);
@@ -293,6 +293,7 @@ function init() {
     }
 
     function eventsAfterLogin() {
+        debugger;
         categoryFactory.set_token(token);
         buyerInventoryFactory.set_token(token);
         countryFactory.set_token(token);
@@ -301,6 +302,7 @@ function init() {
         clientFactory.set_token(token); 
 
         client.start_countries_values();
+        debugger;
         getInventoryItems();
         listClients();
         client.getDataAddressClient();
@@ -320,6 +322,7 @@ function init() {
     }
 
     function showInventory(list) {
+        debugger;
         if(list != undefined) {
             var items_list = list;
             var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
@@ -364,6 +367,7 @@ function init() {
     }
 
     /* Analyzer */
+
     function getAnalyzerInformation(type) {
     	var analyzer_cache = false;
     	if (Offline.state == 'down') {
@@ -401,7 +405,7 @@ function init() {
                     rp_token: token
                },
                dataType: 'json',
-               beforeSend: beforeAjaxLoader(),
+               beforeSend: loading(),
                success: function(data){
                     $('#pagina11').find('#list_clients').html('');
                     var ul_for_list_clients = $('#pagina11').find('#list_clients'),
@@ -544,6 +548,7 @@ function init() {
                     localStorage.setItem("allClients", JSON.stringify(items_list));
         }
     }
+
     function createNewClient(client) {
         var clientSelected = {
             'id': client.id,
@@ -1022,68 +1027,71 @@ function init() {
     }
 
     function saveProduct() {
+        var self = $(this);
+        if(self.data('status') == "true" || self.data('status') == true){
+            var nameProduct = $('#browser').val(),
+                nameVariant = $('#name-variant').val(),
+                categoryId = $('#category-id').text(),
+                quantity = $('#quantity').val(),
+                sku = $('#sku').val(),
+                costPrice = $('#cost-price').val(),
+                wholeSalePrice = $('#wholesale-price').val(),
+                retailPrice = $('#retail-price').val();
+            if(nameProduct != '' && categoryId!='' && costPrice!=''){
+                self.data('status',"false");
+                var url = urls.saveProduct;
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        name_product: nameProduct,
+                        name_variant: nameVariant,
+                        category_id: categoryId,
+                        quantity : quantity,
+                        sku: sku,
+                        cost_price: costPrice,
+                        whole_sale_price: wholeSalePrice,
+                        retail_price: retailPrice,
+                        rp_token: token
+                    },
+                    dataType: 'json',
+                    beforeSend: loading(),
+                    success: function(data){
+                        if(data.status.status == true) {
+//                            nameProduct.val('');
+//                            nameVariant.val('');
+//                            quantity.val('');
+//                            wholeSalePrice.val('');
+//                            retailPrice.val('');
+//                            sku.val('');
+//                            costPrice.val('');
+                            buyerInventoryFactory.store_inventory(data);
 
-        var nameProduct = $('#browser').val(),
-            nameVariant = $('#name-variant').val(),
-            categoryId = $('#category-id').text(),
-            quantity = $('#quantity').val(),
-            sku = $('#sku').val(),
-            costPrice = $('#cost-price').val(),
-            wholeSalePrice = $('#wholesale-price').val(),
-            retailPrice = $('#retail-price').val();
-        if(nameProduct != '' && categoryId!='' && costPrice!=''){
-            var url = urls.saveProduct;
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: {
-                    name_product: nameProduct,
-                    name_variant: nameVariant,
-                    category_id: categoryId,
-                    quantity : quantity,
-                    sku: sku,
-                    cost_price: costPrice,
-                    whole_sale_price: wholeSalePrice,
-                    retail_price: retailPrice,
-                    rp_token: token
-                },
-                dataType: 'json',
-                beforeSend: beforeAjaxLoader(),
-                success: function(data){
-                    if(data.status.status == true){
-                        // nameProduct.val('');
-                        // nameVariant.val('');
-                        // quantity.val('');
-                        // wholeSalePrice.val('');
-                        // retailPrice.val('');
-                        // sku.val('');
-                        // costPrice.val('');
-                        buyerInventoryFactory.store_inventory(data);
-
-                        uploadPhoto(data.id);
-
-                    } else {
-                        alert('an error occurred');
-                    }
-                },
-                complete: completeAjaxLoader()
-            });
-            if(Offline.state == 'down') {
-                var newInventory = {
-                    model_name: nameVariant,
-                    product_name: nameProduct,
-                    quantity: quantity,
-                    retail_price: retailPrice,
-                    wholesale_price: retailPrice,
-                    offline: true
-                };
-                buyerInventoryFactory.store_inventory(newInventory);
-                win();
+                            uploadPhoto(data.id);
+                            self.data('status',"true");
+                        } else {
+                            alert('an error occurred');
+                        }
+                    },
+                    complete: completeAjaxLoader()
+                });
+                if(Offline.state == 'down') {
+                    var newInventory = {
+                        model_name: nameVariant,
+                        product_name: nameProduct,
+                        quantity: quantity,
+                        retail_price: retailPrice,
+                        wholesale_price: retailPrice,
+                        offline: true
+                    };
+                    buyerInventoryFactory.store_inventory(newInventory);
+                    win();
+                    self.data('status',"true");
+                }
+            } else {
+                alert('Data Incomplete');
             }
-        } else {
-            alert('Data Incomplete');
         }
-
     }
 
     function getInformationProduct() {
@@ -1333,6 +1341,7 @@ function init() {
 
     function uploadPhoto(id) {
         if(imageURL != undefined) {
+            loading();
             var options = new FileUploadOptions();
             options.fileKey="file";
             options.fileName=imageURL.substr(imageURL.lastIndexOf('/')+1);
@@ -1347,22 +1356,22 @@ function init() {
 
             var ft = new FileTransfer();
             ft.upload(imageURL, encodeURI(urls.upload), win, fail, options);
+        } else {
+            eventsAfterLogin();
         }
     }
 
     function win(r) {
         eventsAfterLogin();
         imageURL = undefined;
+        $.mobile.loading("hide");
     }
 
     function fail(error) {
         eventsAfterLogin();
         alert("An error has occurred image not upload");
         imageURL = undefined;
-    }
-
-    function beforeAjaxLoader(){
-    	loading()
+        $.mobile.loading("hide");
     }
 
     function completeAjaxLoader(){
