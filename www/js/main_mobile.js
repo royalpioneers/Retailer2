@@ -1,8 +1,9 @@
 $(window).load(function() {
     var run = function(){
         if (Offline.state === 'up') {
-            if(window.localStorage.setItem("rp-cache") == true){
-                eventsAfterLogin()
+
+            if(window.localStorage.getItem("rp-cache") == true || window.localStorage.getItem("rp-cache") == "true" ){
+                init(true);
             }
             window.localStorage.setItem("rp-cache", false);
             Offline.check();
@@ -51,17 +52,8 @@ var urls = {
 
 var items_list = [], productsSelected = [], storageClients = [];
 
-function init() {
-    //cuando es offline hacer lo siguiente
-    // setInterval(function(){
-    //     if(Offline.state == 'down') {
-    //         $('#search-redirect').show();
-    //     }
-    //     if(Offline.state == 'up'){
-    //         $('#search-redirect').hide();
-    //     }
-    // }, 1000);
-    
+function init(reconection) {
+
     var imageURL = undefined,
         cache=false,
         token = window.localStorage.getItem("rp-token");
@@ -143,6 +135,10 @@ function init() {
 
     //Automatic Login
 
+    if(reconection == true){
+        eventsAfterLogin();
+    }
+
     if(token != null) {
         authToken();
     } else {
@@ -176,11 +172,13 @@ function init() {
     }
 
     function loading(){
-        $.mobile.loading("show", {
-            textVisible: true,
-            theme: 'c',
-            textonly: false
-        });
+        try{
+            $.mobile.loading("show", {
+                textVisible: true,
+                theme: 'c',
+                textonly: false
+            });
+        }catch(e){}
     }
 
     function calculatePrice(product) {
@@ -297,13 +295,14 @@ function init() {
     }
 
     function eventsAfterLogin() {
-        window.localStorage.setItem("rp-synchronization", false);
+
         categoryFactory.set_token(token);
         buyerInventoryFactory.set_token(token);
         countryFactory.set_token(token);
         stateFactory.set_token(token);
         cityFactory.set_token(token);
         clientFactory.set_token(token);
+
         client.start_countries_values();
         client.getDataAddressClient();
         getInventoryItems();
