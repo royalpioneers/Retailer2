@@ -1,6 +1,9 @@
 $(window).load(function() {
     var run = function(){
         if (Offline.state === 'up') {
+            if(window.localStorage.setItem("rp-cache") == true){
+                eventsAfterLogin()
+            }
             window.localStorage.setItem("rp-cache", false);
             Offline.check();
         } else {
@@ -236,6 +239,7 @@ function init() {
         event.preventDefault();
         window.localStorage.removeItem('buyerInventory');
         window.localStorage.removeItem('rp-token');
+        window.localStorage.removeItem('rp-synchronization');
         window.localStorage.removeItem('items_list');
         window.localStorage.removeItem('productsSelected');
         window.localStorage.removeItem('storageClients');
@@ -293,20 +297,19 @@ function init() {
     }
 
     function eventsAfterLogin() {
-        debugger;
+        window.localStorage.setItem("rp-synchronization", false);
         categoryFactory.set_token(token);
         buyerInventoryFactory.set_token(token);
         countryFactory.set_token(token);
         stateFactory.set_token(token);
         cityFactory.set_token(token);
-        clientFactory.set_token(token); 
-
+        clientFactory.set_token(token);
         client.start_countries_values();
-        debugger;
+        client.getDataAddressClient();
         getInventoryItems();
         listClients();
-        client.getDataAddressClient();
         getAnalyzerInformation();
+        getInformationProduct();
         $('#container-login').css('display','none');
         try{$.mobile.navigate("#pagina2");}catch(e){}
     }
@@ -322,7 +325,6 @@ function init() {
     }
 
     function showInventory(list) {
-        debugger;
         if(list != undefined) {
             var items_list = list;
             var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
@@ -608,6 +610,7 @@ function init() {
     }
 
     function sendProductsInvoice(event) {
+        var self = $(this);
         event.preventDefault();
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var data_client = [];
@@ -632,31 +635,35 @@ function init() {
         	alert(invoice.get_message());
         	return false;
         }
-
-        $.ajax({
-          url: url,
-          type: 'POST',
-          dataType: 'json',
-          data: data,
-          beforeSend: function(){
-                loading()
-            },
-            success: function(data) {
-                if (data.status == true) {
-                	updateAfterCreateInvoice(clientSelected);
-                } else {
-                    alert('an error occurred');
-                    $.mobile.navigate("#pagina11");
+        if(self.data('status')=="true" || self.data('status') == true){
+            self.data('status','false');
+            $.ajax({
+              url: url,
+              type: 'POST',
+              dataType: 'json',
+              data: data,
+              beforeSend: function(){
+                    loading()
+                },
+                success: function(data) {
+                    self.data('status','true');
+                    if (data.status == true) {
+                        updateAfterCreateInvoice(clientSelected);
+                    } else {
+                        alert('an error occurred');
+                        $.mobile.navigate("#pagina11");
+                    }
+                },
+                complete: function(){
+                    $.mobile.loading("hide");
                 }
-            },
-            complete: function(){
-                $.mobile.loading("hide");
-            }
-        });
+            });
 
-        if (Offline.state == 'down') {
-        	updateAfterCreateInvoice(clientSelected);
-        	$.mobile.navigate("#pagina11");
+            if (Offline.state == 'down') {
+                self.data('status','true');
+                updateAfterCreateInvoice(clientSelected);
+                $.mobile.navigate("#pagina11");
+            }
         }
     }
 
