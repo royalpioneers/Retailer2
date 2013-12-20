@@ -43,7 +43,9 @@ var urls = {
     'countries': DOMAIN+'/mobile/countries/',
     'states_by_country': DOMAIN+'/mobile/states_by_country/',
     'cities_by_char': DOMAIN+'/mobile/cities_by_char/',
-    'send_invoice': DOMAIN+'/mobile/buyer-inventory-create-sale/'
+    'send_invoice': DOMAIN+'/mobile/buyer-inventory-create-sale/',
+    'features': DOMAIN+'/mobile/__idModel__/available-features/',
+    'valuesFeatures': DOMAIN+'/mobile/__idModel__/feature-values/__idFeature__/'
 };
 
 var items_list = [], productsSelected = [], storageClients = [];
@@ -79,6 +81,10 @@ function init() {
         $('#create_item').live("click", saveProduct);
         $('.option-expand').live('expand', setCategory);
         $('#edit-image').live('click', takePicture);
+
+        //features
+        $('#features').live( "click", getFeatures);
+        $('.feature_option').live('click', getValuesFeatures);
 
         //Analyzer
         $("#browser").live('input', getCompleteInformation);
@@ -125,8 +131,9 @@ function init() {
         var client = new ClientModel(countryFactory, stateFactory, cityFactory, clientFactory);
         client.init(window.localStorage.getItem("rp-cache")); /* start list */
 
-    /* PRODUCTS */
+    /* PRODUCTS */        
         var categoryFactory = new CategoryFactory(urls, token);
+        var featureFactory = new FeatureFactory(urls, token);
         var buyerInventoryFactory = new BuyerInventoryFactory(urls, token);
         var buyerInventory = new BuyerInventoryModel(categoryFactory, buyerInventoryFactory, clientFactory);
         buyerInventory.init();
@@ -290,6 +297,7 @@ function init() {
 
     function eventsAfterLogin() {
         categoryFactory.set_token(token);
+        featureFactory.set_token(token);
         buyerInventoryFactory.set_token(token);
         countryFactory.set_token(token);
         stateFactory.set_token(token);
@@ -1021,8 +1029,7 @@ function init() {
         collapse.collapsibleset().trigger('create');
     }
 
-    function saveProduct() {
-
+    function saveProduct() {        
         var nameProduct = $('#browser').val(),
             nameVariant = $('#name-variant').val(),
             categoryId = $('#category-id').text(),
@@ -1059,9 +1066,10 @@ function init() {
                         // sku.val('');
                         // costPrice.val('');
                         buyerInventoryFactory.store_inventory(data);
-
-                        uploadPhoto(data.id);
-
+                        localStorage.setItem('productModelId', data.id);
+                        uploadPhoto(data.id);                        
+                        alert('Success!');
+                        try{$.mobile.navigate("#pagina15");}catch(e){}
                     } else {
                         alert('an error occurred');
                     }
@@ -1122,16 +1130,17 @@ function init() {
                 '</div>');
             });
             $('#categories-list').trigger('create');
-
     }
 
     function getCompleteInformation(event) {
         var productName = $(this).val();
         var productId = 0;
         $.each($('#browsers option'), function(i, value){
-            if(value.value == productName){
-                productId = $(value).data('id');
-            }
+            if($('#browsers option').length != 0){
+                if(value.value == productName){
+                    productId = $(value).data('id');
+                }
+            }            
         });
         var information = localStorage.getItem('productRelated');
         information = JSON.parse(information);
@@ -1169,6 +1178,64 @@ function init() {
         content.empty();
         content.append(html_to_insert);
     }
+
+    
+    /* Features */
+    function getFeatures(){
+        
+        var idProduct = JSON.parse(localStorage.getItem('productModelId'));
+        var cache = false;
+        if(Offline.state == 'down') {
+            cache = true;
+        }
+        featureFactory.getFeatures(showFeatures, cache, idProduct);
+    }
+    function showFeatures(features){
+        /*
+        Show avaliables features
+        */                
+        $('#features-list').html('');
+        var html = "";
+        for(var i in features){
+            html += '<li class="feature_option" data-id="'+features[i].id+'"><a href="#">' + features[i].name+ '</a></li>';
+        }
+        $('#features-list').append(html);
+        setTimeout(function(){
+             $('#features-list').trigger('create');  
+        }, 2000);                          
+    }
+
+    
+    /* Values Features */
+    function getValuesFeatures(){        
+        var idProduct = JSON.parse(localStorage.getItem('productModelId'));
+        var idFeature = $(this).data('id');
+        var featureName = $(this).text();
+        var cache = false;
+        if(Offline.state == 'down') {
+            cache = true;
+        }
+        debugger;
+        featureFactory.getValuesFeatures(showValuesFeatures, cache, idProduct, idFeature); 
+        $('#featureName').text(featureName); 
+        try{$.mobile.navigate("#pagina15");}catch(e){}      
+    }
+    function showValuesFeatures(valuesFeatures){
+        /*
+        Show avaliables features
+        */
+        debugger;        
+        $('#values-features-list').html('');
+        var html = "";
+        for(var i in valuesFeatures){
+            html += '<li data-theme="a" data-id="'+valuesFeatures[i].id+'"><a href="#">' +valuesFeatures[i].name+ '</a></li>'; 
+        }
+        $('#values-features-list').append(html);
+        setTimeout(function(){
+             $('#values-features-list').trigger('create');
+        }, 2000);             
+    }
+
 
     /* Search */
 

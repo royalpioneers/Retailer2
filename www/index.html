@@ -27,13 +27,13 @@
         <script type="text/javascript" src="js/factory/address.js"></script>
         <!--  Product -->
         <script type="text/javascript" src="js/factory/buyer_inventory.js"></script>
-        <script type="text/javascript" src="js/factory/category.js"></script>
+        <script type="text/javascript" src="js/factory/category.js"></script>      
+        <!-- Features -->
+        <script type="text/javascript" src="js/factory/features.js"></script>
         <!--  Aplication -->
-
         <script type="text/javascript" src="js/offline.min.js"></script>
         <script type="text/javascript" src="js/plugins.js"></script>
         <script type="text/javascript" src="js/main_mobile.js"></script>
-
        
                
 
@@ -114,7 +114,7 @@
 
         <!--INVENTORY-->
 		<div data-role="page" id="pagina2" data-position="fixed">
-			<div data-role="header" data-id="head1" data-theme="a">
+			<div data-role="header" data-id="head1" data-theme="a" data-position="fixed">
 				<a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
 				<h1>Royal Pioneers</h1>
                 <a class="header_top_options btn_more_big" data-transition="slide" id="search-redirect" href="#search.html"><i class="icon-white icon-search"></i></a>
@@ -200,14 +200,13 @@
             </div>
             <div data-role="content">
                 <form>
-                        <div class="photo-product">
-                            <img src="images/default_product.png" id="image-camera">
-                            <a href="" data-role="button" id="edit-image" data-theme="a">Take a Photo</a>
-                        </div>
-                    </a>
+                    <div class="photo-product">
+                        <img src="images/default_product.png" id="image-camera">
+                        <a href="" data-role="button" id="edit-image" data-theme="a">Take a Photo</a>
+                    </div>
                     <ul data-role="listview" data-inset="true" class="create_item_list">
                         <li>
-                            <input list="browsers" name="browser" placeholder="Name Product" autofocus="true" id="browser" required>
+                            <input list="browsers" name="browser" placeholder="Name Product" autofocus="true" id="browser" required />
                             <datalist id="browsers"></datalist>
                         </li>
                         <li>
@@ -220,7 +219,6 @@
                     </ul>
                     <a href="" data-role="button" id="create_item" data-theme="a">Save</a>
                 </form>
-
             </div>
         </div>
 
@@ -370,11 +368,11 @@
         </div>
         <!--Buy client's products-->
         <div data-role="page" id="pagina13" data-fullscreen="true">
-            <div data-role="header" data-theme="a">
+            <div data-role="header" data-theme="a" data-position="fixed">
                 <a href="#pagina11" class="btn_more_big" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
                 <h2 class="total_price_title"><a href="" class="see_more_products_clients saveClientStorage" data-transition="slide">0</a></h2>
             </div>
-            <div data-role="content">
+            <div data-role="content" style="padding-top: 8em;">
                 <ul class="products_clients_add" data-role="listview" data-filter="true"></ul>
             </div>
         </div>        
@@ -403,14 +401,40 @@
                 <ul data-role="listview" data-inset="true" data-theme="a" id="id_selected_product_variants_list">
                 </ul>
             </div>
-        </div>
-        
+        </div>        
         <div id="id_template_option_variant" style="display: none">
        		<input type="checkbox" name="radio-choice-__id__" id="radio-choice-__id__"  __checked__
        		data-id="__id__" data-parent="__parent__" value="choice-__id__" class="class_selected_variant"/>
        		<label for="radio-choice-__id__" data-corners="false" class="labelRadioButton label_sub_variant">
-                <span class="label_sub_variant_name">__name__    </span>: <span class="label_sub_variant_price"> __price__</span></label>
+                <span class="label_sub_variant_name">__name__</span>: <span class="label_sub_variant_price"> __price__</span></label>
         </div>
-        
+        <div data-role="page" id="pagina15" data-theme="b">
+            <div data-role="header">
+                <a class="btn_more_big" href="#pagina6" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
+                <h1>SubVariants</h1>
+            </div>            
+            <div data-role="content">                                            
+                <form>                                                                 
+                    <a href="#pagina16" id="features" data-trasition="slide" data-icon="arrow-r" data-iconpos="right">Feature: <span id="featureName"></span></a>        
+                    <br>         
+                    <ul data-role="listview" data-theme="c" id="values-features-list">
+                    </ul>
+                    <input type="number" placeholder="Additional Cost" id="additionalCost" required>
+                    <input type="number" placeholder="Variant Quantity" min="1" id="variantQuantity" required>                    
+                    <a href="" data-role="button" id="createSubVariant" data-theme="a">Save</a>
+                </form>
+            </div>
+        </div> 
+        <!--FEATURES-->
+        <div data-role="page" id="pagina16" data-theme="a">
+            <div data-role="header">
+                <a class="btn_more_big" href="#pagina15" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
+                <h1>Features</h1>
+            </div>
+            <div data-role="content">
+                <ul data-role="listview" data-inset="true" data-theme="a" id="features-list">
+                </ul>                
+            </div>
+        </div>                
 	</body>
 </html>
