@@ -1,6 +1,10 @@
 $(window).load(function() {
     var run = function(){
         if (Offline.state === 'up') {
+
+            if(window.localStorage.getItem("rp-cache") == true || window.localStorage.getItem("rp-cache") == "true" ){
+                init(true);
+            }
             window.localStorage.setItem("rp-cache", false);
             Offline.check();
         } else {
@@ -50,17 +54,8 @@ var urls = {
 
 var items_list = [], productsSelected = [], storageClients = [];
 
-function init() {
-    //cuando es offline hacer lo siguiente
-    // setInterval(function(){
-    //     if(Offline.state == 'down') {
-    //         $('#search-redirect').show();
-    //     }
-    //     if(Offline.state == 'up'){
-    //         $('#search-redirect').hide();
-    //     }
-    // }, 1000);
-    
+function init(reconection) {
+
     var imageURL = undefined,
         cache=false,
         token = window.localStorage.getItem("rp-token");
@@ -147,6 +142,10 @@ function init() {
 
     //Automatic Login
 
+    if(reconection == true){
+        eventsAfterLogin();
+    }
+
     if(token != null) {
         authToken();
     } else {
@@ -179,6 +178,16 @@ function init() {
         }
     }
 
+    function loading(){
+        try{
+            $.mobile.loading("show", {
+                textVisible: true,
+                theme: 'c',
+                textonly: false
+            });
+        }catch(e){}
+    }
+
     function calculatePrice(product) {
         var price = buyerInventory.calculate_price_by_client_selected(product);
         return price;
@@ -206,11 +215,7 @@ function init() {
                 type: 'POST',
                 dataType: 'json',
                 beforeSend: function(){
-                    try{$.mobile.loading("show", {
-                        textVisible: true,
-                        theme: 'c',
-                        textonly: false
-                    });}catch(e){}
+                    loading()
                 },
                 success: function (data) {
                     if (data.status === 'OK') {
@@ -239,6 +244,7 @@ function init() {
         event.preventDefault();
         window.localStorage.removeItem('buyerInventory');
         window.localStorage.removeItem('rp-token');
+        window.localStorage.removeItem('rp-synchronization');
         window.localStorage.removeItem('items_list');
         window.localStorage.removeItem('productsSelected');
         window.localStorage.removeItem('storageClients');
@@ -268,7 +274,7 @@ function init() {
                 },
                 type: 'POST',
                 dataType: 'json',
-                beforeSend: beforeAjaxLoader(),
+                beforeSend: loading(),
                 success: function (data) {
                     if (data.status === 'OK') {
                         window.localStorage.setItem("rp-token", data.token);
@@ -296,19 +302,21 @@ function init() {
     }
 
     function eventsAfterLogin() {
+
         categoryFactory.set_token(token);
         featureFactory.set_token(token);
         buyerInventoryFactory.set_token(token);
         countryFactory.set_token(token);
         stateFactory.set_token(token);
         cityFactory.set_token(token);
-        clientFactory.set_token(token); 
+        clientFactory.set_token(token);
 
         client.start_countries_values();
+        client.getDataAddressClient();
         getInventoryItems();
         listClients();
-        client.getDataAddressClient();
         getAnalyzerInformation();
+        getInformationProduct();
         $('#container-login').css('display','none');
         try{$.mobile.navigate("#pagina2");}catch(e){}
     }
@@ -368,6 +376,7 @@ function init() {
     }
 
     /* Analyzer */
+
     function getAnalyzerInformation(type) {
     	var analyzer_cache = false;
     	if (Offline.state == 'down') {
@@ -405,7 +414,7 @@ function init() {
                     rp_token: token
                },
                dataType: 'json',
-               beforeSend: beforeAjaxLoader(),
+               beforeSend: loading(),
                success: function(data){
                     $('#pagina11').find('#list_clients').html('');
                     var ul_for_list_clients = $('#pagina11').find('#list_clients'),
@@ -548,6 +557,7 @@ function init() {
                     localStorage.setItem("allClients", JSON.stringify(items_list));
         }
     }
+
     function createNewClient(client) {
         var clientSelected = {
             'id': client.id,
@@ -607,6 +617,7 @@ function init() {
     }
 
     function sendProductsInvoice(event) {
+        var self = $(this);
         event.preventDefault();
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var data_client = [];
@@ -631,35 +642,35 @@ function init() {
         	alert(invoice.get_message());
         	return false;
         }
-
-        $.ajax({
-          url: url,
-          type: 'POST',
-          dataType: 'json',
-          data: data,
-          beforeSend: function(){
-                $.mobile.loading("show", {
-                    textVisible: true,
-                    theme: 'c',
-                    textonly: false
-                });
-            },
-            success: function(data) {
-                if (data.status == true) {
-                	updateAfterCreateInvoice(clientSelected);
-                } else {
-                    alert('an error occurred');
-                    $.mobile.navigate("#pagina11");
+        if(self.data('status')=="true" || self.data('status') == true){
+            self.data('status','false');
+            $.ajax({
+              url: url,
+              type: 'POST',
+              dataType: 'json',
+              data: data,
+              beforeSend: function(){
+                    loading()
+                },
+                success: function(data) {
+                    self.data('status','true');
+                    if (data.status == true) {
+                        updateAfterCreateInvoice(clientSelected);
+                    } else {
+                        alert('an error occurred');
+                        $.mobile.navigate("#pagina11");
+                    }
+                },
+                complete: function(){
+                    $.mobile.loading("hide");
                 }
-            },
-            complete: function(){
-                $.mobile.loading("hide");
-            }
-        });
+            });
 
-        if (Offline.state == 'down') {
-        	updateAfterCreateInvoice(clientSelected);
-        	$.mobile.navigate("#pagina11");
+            if (Offline.state == 'down') {
+                self.data('status','true');
+                updateAfterCreateInvoice(clientSelected);
+                $.mobile.navigate("#pagina11");
+            }
         }
     }
 
@@ -1028,7 +1039,6 @@ function init() {
         });
         collapse.collapsibleset().trigger('create');
     }
-
     function saveProduct() {        
         var nameProduct = $('#browser').val(),
             nameVariant = $('#name-variant').val(),
@@ -1088,10 +1098,7 @@ function init() {
                 buyerInventoryFactory.store_inventory(newInventory);
                 win();
             }
-        } else {
-            alert('Data Incomplete');
         }
-
     }
 
     function getInformationProduct() {
@@ -1400,6 +1407,7 @@ function init() {
 
     function uploadPhoto(id) {
         if(imageURL != undefined) {
+            loading();
             var options = new FileUploadOptions();
             options.fileKey="file";
             options.fileName=imageURL.substr(imageURL.lastIndexOf('/')+1);
@@ -1414,26 +1422,22 @@ function init() {
 
             var ft = new FileTransfer();
             ft.upload(imageURL, encodeURI(urls.upload), win, fail, options);
+        } else {
+            eventsAfterLogin();
         }
     }
 
     function win(r) {
         eventsAfterLogin();
         imageURL = undefined;
+        $.mobile.loading("hide");
     }
 
     function fail(error) {
         eventsAfterLogin();
         alert("An error has occurred image not upload");
         imageURL = undefined;
-    }
-
-    function beforeAjaxLoader(){
-    	try{$.mobile.loading("show", {
-            textVisible: true,
-            theme: 'c',
-            textonly: false
-        });}catch(e){}
+        $.mobile.loading("hide");
     }
 
     function completeAjaxLoader(){
