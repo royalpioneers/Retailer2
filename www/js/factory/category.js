@@ -9,7 +9,7 @@ var CategoryFactory = function(urls, token) {
 	factory.get_main_category = function(handler, cache) {
         var prdData = JSON.parse(window.localStorage.getItem('productRelated'));
         var catData = JSON.parse(window.localStorage.getItem('categories'));
-        if ((factory.cache || cache) && catData != null && prdData != null) {
+        if ((factory.cache || cache) && catData != '' && prdData != '') {
 		    return handler(prdData, catData);
 		}
         $.ajax({
