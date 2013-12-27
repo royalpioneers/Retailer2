@@ -22,11 +22,7 @@ $(function() {
             },
             dataType: 'json',
             beforeSend: function(){
-                $.mobile.loading("show", {
-                    textVisible: true,
-                    theme: 'c',
-                    textonly: false
-                });
+                loader();
             },
             success: function(data) {
                 $('#categories-list').append('<li><a id="search" data-id="0" href="#">without specifying</a></li>');
@@ -36,7 +32,7 @@ $(function() {
                 $('#categories-list').listview('refresh');
             },
            complete: function(){
-                $.mobile.loading("hide");
+               try{$.mobile.loading("hide");}catch(e){}
            }
         });
     }
@@ -56,11 +52,7 @@ $(function() {
             },
             dataType: 'json',
             beforeSend: function(){
-                $.mobile.loading("show", {
-                    textVisible: true,
-                    theme: 'c',
-                    textonly: false
-                });
+                loader();
             },
             success: function (data) {
                 $.mobile.navigate("#pagina2");
@@ -78,8 +70,16 @@ $(function() {
                 $('#categories-list').listview('refresh');
             },
            complete: function(){
-                $.mobile.loading("hide");
+               try{$.mobile.loading("hide");}catch(e){}
            }
         });
+    }
+
+    function loader(){
+        try{$.mobile.loading("show", {
+            textVisible: true,
+            theme: 'c',
+            textonly: false
+        });}catch(e){}
     }   
 });

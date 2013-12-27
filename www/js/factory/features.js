@@ -6,22 +6,18 @@ var FeatureFactory = function(urls, token) {
 	factory.cache = false;
 
 
-	factory.getFeatures = function(handler, cache, idProduct) {
-        var url = factory.urls.features.replace('__idModel__', idProduct);
+	factory.getFeatures = function(handler, cache, idProductModel) {
+        var url = factory.urls.features.replace('__idModel__', idProductModel);
         $.ajax({
             url: url,
             type: 'POST',
             data: {
                 rp_token: factory.token,
-                model_id: idProduct
+                id_product_model: idProductModel
             },
             dataType: 'json',
             beforeSend: function(){
-                $.mobile.loading("show", {
-                    textVisible: true,
-                    theme: 'c',
-                    textonly: false
-                });
+                loader();
             },
             success: function(data) {
                 if(data.status == true) {           
@@ -30,50 +26,104 @@ var FeatureFactory = function(urls, token) {
 					return handler([], []);
 				}
             },
-            error: function(err) {
-                /* Act on the event */
-            },
             complete: function(){
-                $.mobile.loading("hide");
-            }
+               try{$.mobile.loading("hide");}catch(e){}
+           }
 	    });
     };
 
-    factory.getValuesFeatures = function(handler, cache, idProduct, idFeature) {        
-        var url = factory.urls.valuesFeatures.replace('__idModel__', idProduct).replace('__idFeature__', idFeature);
-        debugger;
+    factory.getValuesFeatures = function(handler, cache, idProductModel, idFeature) {        
+        var url = factory.urls.valuesFeatures.replace('__idModel__', idProductModel).replace('__idFeature__', idFeature);
         $.ajax({
             url: url,
             type: 'POST',
             data: {
                 rp_token: factory.token,
-                model_id: idProduct
+                id_product_model: idProductModel
             },
             dataType: 'json',
             beforeSend: function(){
-                $.mobile.loading("show", {
-                    textVisible: true,
-                    theme: 'c',
-                    textonly: false
-                });
+                loader();
             },
-            success: function (data) {
-                debugger;                
-                if(data.status == true) {           
+            success: function (data) {                     
+                if(data.status == true) {     
+                    alert('Success!');      
                     handler(data.values_features);
                 } else {
                     return handler([], []);
                 }
             },
             complete: function(){
-                $.mobile.loading("hide");
-            }
+               try{$.mobile.loading("hide");}catch(e){}
+           }
         });
 	};
 
     factory.set_token = function(token) {
 		factory.token = token;
 	};
+
+    factory.create_sub_variant = function(idProductModel, idFeature, idFeatureValue, additionalCost, variantQuantity){        
+        $.ajax({
+            url: factory.urls.saveProductModelVariant,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                rp_token: factory.token,
+                id_product_model: idProductModel,
+                feature_id: idFeature,
+                feature_value_id: idFeatureValue,
+                additional_cost : additionalCost,
+                quantity: variantQuantity
+            },
+            beforeSend: function(){
+                loader();
+            },
+            success: function(data){              
+                if (data.status){
+                    alert('Success!');
+                };
+                try{$.mobile.navigate("#pagina11");}catch(e){}
+            },
+            complete: function(){
+                try{$.mobile.loading("hide");}catch(e){}
+            }
+        });
+    };
+
+    factory.getAllTheFeaturesByBuyer = function(){        
+          
+        $.ajax({
+            url: factory.urls.getAllTheFeaturesByBuyer,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                rp_token: factory.token
+            },
+            beforeSend: function(){
+                loader();
+            },
+            success: function(data){    
+                debugger;                          
+                if (data.status){
+                    alert('Success!');
+                };
+            },
+            complete: function(){
+                try{$.mobile.loading("hide");}catch(e){}
+            }
+        });
+    };
+
+    function loader(){
+        try{
+            $.mobile.loading("show", {
+                textVisible: true,
+                theme: 'c',
+                textonly: false
+            });
+        }catch(e){}
+    }
 
     return factory;
 };

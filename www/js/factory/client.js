@@ -18,11 +18,7 @@ var ClientFactory = function(urls, token, cache) {
 			data: {rp_token: factory.token},
 			dataType: 'json',
 			beforeSend: function(){
-                try{$.mobile.loading("show", {
-                    textVisible: true,
-                    theme: 'c',
-                    textonly: false
-                });}catch(e){}
+                factory.loader();
             },
 			success: function(data){
 				if (data.status == 'ok') {
@@ -46,11 +42,7 @@ var ClientFactory = function(urls, token, cache) {
 			data: params,
 			dataType: 'json',
 			beforeSend: function(){
-                try{$.mobile.loading("show", {
-                    textVisible: true,
-                    theme: 'c',
-                    textonly: false
-                });}catch(e){}
+                factory.loader();
             },
 			success: function(data){
 				if (data.status == 'ok') {
@@ -90,11 +82,7 @@ var ClientFactory = function(urls, token, cache) {
 			data: {rp_token: factory.token},
 			dataType: 'json',
 			beforeSend: function(){
-                try{$.mobile.loading("show", {
-                    textVisible: true,
-                    theme: 'c',
-                    textonly: false
-                });}catch(e){}
+                factory.loader();
             },
 			success: function(data){
 				if (data.status == 'ok') {
@@ -122,6 +110,14 @@ var ClientFactory = function(urls, token, cache) {
 	factory.set_client_selected = function(client) {
 		localStorage.setItem(factory.storage_id_client_selected, JSON.stringify(client));
 	};
+
+	factory.loader = function(){
+		try{$.mobile.loading("show", {
+            textVisible: true,
+            theme: 'c',
+            textonly: false
+        });}catch(e){}
+	}
 	
 	return factory;
 };

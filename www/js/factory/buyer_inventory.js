@@ -8,7 +8,11 @@ var BuyerInventoryFactory = function(urls, token) {
 	factory.storage_id_analyzer_information_time = 'StorageAnalizerInformationTime';
 	
 	factory.get_all = function(handler, cache) {
-		var list = JSON.parse(window.localStorage.getItem('buyerInventory'));
+		var storage = window.localStorage.getItem('buyerInventory');
+		var list = null;
+		if(storage != 'undefined'){
+			list = JSON.parse(storage);
+		}		
 		if ((factory.cache || cache) && list != null) {
 			return handler(list);
 		}
@@ -19,15 +23,22 @@ var BuyerInventoryFactory = function(urls, token) {
                 rp_token: factory.token
             },
 			dataType: 'json',
+			beforeSend: function(){
+				loader();	           	
+		   },
 			success: function(data) {
 				if (data.status == true) {
+					
                     window.localStorage.removeItem(factory.storage_id_inventory);
 					window.localStorage.setItem(factory.storage_id_inventory, JSON.stringify(data.items_list));
 					handler(data.items_list);
 				} else {
 					return handler([]);
 				}
-			}
+			},
+			complete: function(){
+        	   try{$.mobile.loading("hide");}catch(e){}
+           }
 	    });
 	};
 
@@ -66,12 +77,8 @@ var BuyerInventoryFactory = function(urls, token) {
 	                rp_token: factory.token
 	           },
 	           dataType: 'json',
-	           beforeSend: function beforeAjaxLoader(){
-			       try{$.mobile.loading("show", {
-			           textVisible: true,
-			           theme: 'c',
-			           textonly: false
-			       });}catch(e){}
+	           beforeSend: function(){
+					loader();	           	
 			   },
 	           success: function(data){
 	        	   var info = data.context['information'];
@@ -93,6 +100,14 @@ var BuyerInventoryFactory = function(urls, token) {
 	factory.get_analyzer_information_time = function() {
 		return JSON.parse(window.localStorage.getItem(factory.storage_id_analyzer_information_time));
 	};
-		
+	
+	function loader(){
+		try{$.mobile.loading("show", {
+            textVisible: true,
+            theme: 'c',
+            textonly: false
+        });}catch(e){}
+	}
+
     return factory;
 }

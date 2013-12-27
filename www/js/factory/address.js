@@ -17,6 +17,9 @@ var CountryFactory = function(urls, token, cache) {
 			type: 'POST',
 			data: {rp_token: factory.token},
 			dataType: 'json',
+			beforeSend: function(){
+                loader();
+            },
 			success: function(data){
 				if (data.status == 'ok') {
 					window.localStorage.setItem(factory.id_countries, JSON.stringify(data.list));
@@ -34,6 +37,14 @@ var CountryFactory = function(urls, token, cache) {
 	factory.set_token = function(token) {
 		factory.token = token;
 	};
+	
+	function loader(){
+		try{$.mobile.loading("show", {
+            textVisible: true,
+            theme: 'c',
+            textonly: false
+        });}catch(e){}
+	}
 	
 	return factory;
 };
@@ -57,6 +68,9 @@ var StateFactory = function(urls, token, cache) {
 			type: 'POST',
 			data: {rp_token: factory.token, country: country},
 			dataType: 'json',
+			beforeSend: function(){
+                loader();
+            },
 			success: function(data){
 				if (data.status == 'ok') {
 					window.localStorage.setItem(factory.id_states+country, JSON.stringify(data.list));
@@ -74,6 +88,14 @@ var StateFactory = function(urls, token, cache) {
 	factory.set_token = function(token) {
 		factory.token = token;
 	};
+
+	function loader(){
+		try{$.mobile.loading("show", {
+            textVisible: true,
+            theme: 'c',
+            textonly: false
+        });}catch(e){}
+	}
 
 	return factory;
 };
@@ -98,11 +120,7 @@ var CityFactory = function(urls, token, cache) {
 			data: {rp_token: factory.token, state: state},
 			dataType: 'json',
 			beforeSend: function(){
-                try{$.mobile.loading("show", {
-                    textVisible: true,
-                    theme: 'c',
-                    textonly: false
-                });}catch(e){}
+                loader();
             },
 			success: function(data){
 				if (data.status == 'ok') {
@@ -121,6 +139,14 @@ var CityFactory = function(urls, token, cache) {
 	factory.set_token = function(token) {
 		factory.token = token;
 	};
+
+	function loader(){
+		try{$.mobile.loading("show", {
+            textVisible: true,
+            theme: 'c',
+            textonly: false
+        });}catch(e){}
+	}
 
 	return factory;
 };
