@@ -18,22 +18,25 @@ var AnalyzerModel = function(buyerInventoryFactory) {
 		model.domain = domain;
 	};
 	
-    model.update = function(cache, type) {
-    	buyerInventoryFactory.get_analyzer_information(function(info){
+    model.update = function(store, cache, type) {
+    	buyerInventoryFactory.get_analyzer_information(store, function(info){
     		model.info = info;
-    		model.time = buyerInventoryFactory.get_analyzer_information_time();
-        	model.clear_graphics();
+    		model.time = buyerInventoryFactory.get_analyzer_information_time(store);
+    		model.clear_graphics();
     		if (!isNaN(parseInt(type))) {
     			$('#graphic_month').trigger('click');
     		}
     	}, cache);
     };
         
-    model.clear_graphics = function() {
+    model.clear_graphics = function(store) {
     	model.graphic_month = false;
 		model.graphic_week = false;
 		model.graphic_day = false;
 		model.current_type = 0;
+		$('#' + model.prefix_content + '1').html('');
+		$('#' + model.prefix_content + '2').html('');
+		$('#' + model.prefix_content + '3').html('');
 		$('#' + model.id_div_source_graphic).html('');
       	model.set_div(1);
       	model.set_div(2);
@@ -86,8 +89,9 @@ var AnalyzerModel = function(buyerInventoryFactory) {
             var day = date.getDay(),
                 diff = date.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
             var initial_date = new Date(date.setDate(diff));
+            	initial_date = new Date(initial_date.getFullYear(), initial_date.getMonth(), initial_date.getDate());
             var finish_date = new Date(date.setDate(diff + 6));
-
+            	finish_date = new Date(finish_date.getFullYear(), finish_date.getMonth(), finish_date.getDate());
         } else if (type == 3) { /* day */
             var initial_date = new Date();
                 initial_date = new Date(initial_date.getFullYear(), initial_date.getMonth(), initial_date.getDate());
@@ -211,9 +215,9 @@ var AnalyzerModel = function(buyerInventoryFactory) {
     		total_profit = info_type['total_profit'],
     		popular = info_type['popular'];
 
-    	$('#pagina2').find('.tab2').find('#analyzer_total_sales').html(total_sales);
+    	$('#pagina2').find('.tab2').find('#analyzer_total_sales').html(total_sales.toFixed(2));
         $('#pagina2').find('.tab2').find('#analyzer_total_units').html(total_units);
-        $('#pagina2').find('.tab2').find('#analyzer_total_profit').html(total_profit);
+        $('#pagina2').find('.tab2').find('#analyzer_total_profit').html(total_profit.toFixed(2));
         
         if (popular !== false) {
             if (typeof(model.info['variants']['models'][popular['product_model_id']]) != 'undefined') {

@@ -114,6 +114,10 @@ function init(reconection) {
         $('#selectClient-menu').find('li').live('click', moveToOtherClient);
         $('.kill_storage').live('click', killStorage);
         $('.returnToSelectedProducts').live('click', goProduct);
+        $('#select_buyer_store').bind('change', changeSelectStore);
+        $('#store_total_qty').bind('change', changeInventoryQuantities);
+        
+        
 
         /*Client offline*/        
         $('.disabled').parents('.ui-radio').bind('click', function(){;
@@ -134,12 +138,12 @@ function init(reconection) {
     /* PRODUCTS */        
         var categoryFactory = new CategoryFactory(urls, token);
         var featureFactory = new FeatureFactory(urls, token);
-        var buyerInventoryFactory = new BuyerInventoryFactory(urls, token);
+        var buyerInventoryFactory = new BuyerInventoryFactory(urls, token, window.localStorage.getItem("rp-cache"));
         var buyerInventory = new BuyerInventoryModel(categoryFactory, buyerInventoryFactory, clientFactory);
         buyerInventory.init();
         
     /* INVOICE */
-        var invoice = new InvoiceModel();
+        var invoice = new InvoiceModel(buyerInventoryFactory);
         
     /* ANALIZER */
         var analyzer = new AnalyzerModel(buyerInventoryFactory);
@@ -324,7 +328,8 @@ function init(reconection) {
         client.getDataAddressClient();
         getInventoryItems();
         listClients();
-        getAnalyzerInformation();
+        client.getDataAddressClient();
+        startAnalyzerInformation();
         getInformationProduct();
         featureFactory.getAllTheFeaturesByBuyer();
         $('#container-login').css('display','none');
@@ -333,12 +338,27 @@ function init(reconection) {
 
     /* Buyer Inventory */
 
+    function changeInventoryQuantities() {
+    	var all = false;
+    	if ($('#store_total_qty').attr('checked') == 'checked') {
+    		all = true;
+    	}
+    	buyerInventoryFactory.update_total_qty_for_items(all);
+    }
+
+    function changeSelectStore() {
+    	getInventoryItems();
+    	$('#id_tab_my_inventory').trigger('click');
+    }
+    
     function getInventoryItems() {
         var cache = false;
         if(Offline.state == 'down') {
             cache = true;
         }
-        buyerInventoryFactory.get_all(showInventory, cache);
+        var store = $('#select_buyer_store').val();
+        $('#store_total_qty').attr('checked', false);
+        buyerInventoryFactory.get_all(store, showInventory, cache);
     }
 
     function showInventory(list) {
@@ -386,17 +406,32 @@ function init(reconection) {
             ul_for_inserting.html('');
             ul_for_inserting.append(html_to_insert);
             $('.model-data').live('click', showDetail);
+
+            var store = $('#select_buyer_store').val();
+            buyerInventory.render_stores(store);
         }
     }
-
+    
     /* Analyzer */
+    function startAnalyzerInformation() {
+    	if (Offline.state == 'down') {
+    		return false;
+    	}
+    	stores = buyerInventoryFactory.get_stores();
+    	if (stores.length > 0) {
+    		for (var index in stores) {
+        		buyerInventoryFactory.get_analyzer_information(stores[index].id, function(data){}, false);
+        	}
+    	}
+    }
 
     function getAnalyzerInformation(type) {
     	var analyzer_cache = false;
     	if (Offline.state == 'down') {
     		analyzer_cache = true;
     	}
-    	analyzer.update(analyzer_cache, type);
+    	var store = $('#select_buyer_store').val();
+    	analyzer.update(store, analyzer_cache, type);
     }
     
     function processAnalyzerInformation(type) {
@@ -605,14 +640,14 @@ function init(reconection) {
             }
             $('#selectClient').append(html);
 
-            $('#selectClient-button > span > span > span').text(clientSelected.name);        
+            $('#selectClient-button > span > span > span').text(clientSelected.name);
             $.mobile.navigate("#pagina12");
         }
         else{
             alert('Chooce Someone!');
         }        
     }
-
+    
     function updateAfterCreateInvoice(clientSelected) {
     	for(var i in storageClients){
             var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
@@ -634,10 +669,20 @@ function init(reconection) {
         }
     }
 
+    function getTypeUpdate() {
+    	var type = $('#update_stock_by_status').attr('checked');
+    	if (type == 'checked') {
+    		return 2;
+    	}
+    	return 1;
+    }
+
     function sendProductsInvoice(event) {
         var self = $(this);
         event.preventDefault();
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+        var store = $('#select_buyer_store').val();
+        var type_update = getTypeUpdate();
         var data_client = [];
         var url = urls.send_invoice;
         for (var index in storageClients) {
@@ -653,7 +698,9 @@ function init(reconection) {
         var data = {
             rp_token: token,
             client: JSON.stringify(data_client),
-            dateOfSale: today
+            dateOfSale: today,
+            store: store,
+            type_update: type_update
         };
 
 		if (!invoice.are_valid_products(data_client[0].products)) {
@@ -719,7 +766,7 @@ function init(reconection) {
                             }
                         }
                         //cambiar sus detalles
-                        var products = JSON.parse(localStorage.getItem('buyerInventory'));
+                        var products = buyerInventoryFactory.get_current_list();
                         for(var j in products) {
 
                             if(productsToMigrate.indexOf(products[j].id) !== -1){
@@ -757,7 +804,7 @@ function init(reconection) {
                                 'products':[],
                                 'total':0
                             };
-                            var products = JSON.parse(localStorage.getItem('buyerInventory'));
+                            var products = buyerInventoryFactory.get_current_list();
                             for(var j in products){
 
                                 if(getArrayIndexProductsSelected().indexOf(products[j].id) !== -1){
@@ -828,7 +875,7 @@ function init(reconection) {
     function pageClientShow() { 
         $('.products_clients_add').html('');
         var html = "",
-            products = JSON.parse(localStorage.getItem('buyerInventory'));
+            products = buyerInventoryFactory.get_current_list();
         for(var i in products) {
             var _offline = "";
             if(products[i].offline != undefined){
@@ -921,7 +968,7 @@ function init(reconection) {
 
     function selectProduct(e) {
         e.preventDefault();
-        var products = JSON.parse(localStorage.getItem('buyerInventory')),
+        var products = buyerInventoryFactory.get_current_list(),
             clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
             productSelected,
             id = $(this).data('id');
@@ -1320,6 +1367,7 @@ function init(reconection) {
     }
 
     function pageMyProductsShow(){
+    	showMethodUpdate();
         saveClientStorage();
         $('#theDate').val(getDateMonthYear());
         var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products,
@@ -1345,6 +1393,17 @@ function init(reconection) {
         ul_for_my_products.append(html);
         ul_for_my_products.trigger('create');
         $( ".qtyInvoice" ).trigger('keyup');
+    }
+    
+    function showMethodUpdate() {
+    	var all_qty = $('#store_total_qty').attr('checked');
+    	if (all_qty == 'checked') {
+    		$('#update_stock_by_status').attr('checked', false);
+    		$('#update_stock_by_status').parent().show();
+    	} else {
+    		$('#update_stock_by_status').attr('checked', 'checked');
+    		$('#update_stock_by_status').parent().hide();
+    	}
     }
 
     function removeMyProduct() {

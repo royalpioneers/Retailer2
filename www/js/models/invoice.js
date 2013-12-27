@@ -1,10 +1,9 @@
-var InvoiceModel = function() {
+var InvoiceModel = function(buyerInventoryFactory) {
 	var model = this;
 	model.message = '';
-	model.id_products = 'buyerInventory';
-	
+
 	model.success_create = function(client_products) {
-		var products = JSON.parse(localStorage.getItem(model.id_products));
+		var products = buyerInventoryFactory.get_current_list();
 		for (var index1 in client_products) {
 			var product = client_products[index1];
 			for (var index in products) {
@@ -21,19 +20,41 @@ var InvoiceModel = function() {
 				}
 			}
 		}
-		localStorage.setItem(model.id_products, JSON.stringify(products));
+		buyerInventoryFactory.set_current_list(products);
 	};
 
 	model.are_valid_products = function(client_products) {
-		var products = JSON.parse(localStorage.getItem(model.id_products));
+		var products = buyerInventoryFactory.get_current_list();
 		for (var index1 in client_products) {
-			client_product = client_products[index1];
+			var client_product = client_products[index1];
 			for (var index in products) {
-				if (products[index].id == client_product.id) {
-					if (client_product.quantity == 0 || client_product.quantity > client_product.max) {
-						model.message = 'Invalid quantity for "' + client_product.model_name + '"';
-
+				var product = products[index];
+				if (product.id == client_product.id) {
+					if (client_product.quantity == 0) {
+						model.message = 'Invalid quantity, minimun 1 for "' + client_product.model_name + '"';
 						return false;
+					}
+					if (!isNaN(parseInt(client_product.variant_id)) && parseInt(client_product.variant_id) > 0) {
+						var found = false;
+						for (var index2 in product.variants) {
+							var variant = product.variants[index2];
+							if (variant.id == client_product.variant_id) {
+								if (client_product.quantity  > variant.quantity) {
+									model.message = 'Invalid quantity, max '+ variant.quantity +' for "' + client_product.model_name + '"';
+									return false;
+								}
+								found = true;
+							}
+						}
+						if (!found)  {
+							model.message = 'Invalid variant for "' + client_product.model_name + '"';
+							return false;
+						}
+					} else {/* no variant */
+						if (client_product.quantity > product.quantity) {
+							model.message = 'Invalid quantity, max ' + product.quantity + ' for "' + client_product.model_name + '"';
+							return false;
+						}
 					}
 				}
 			}

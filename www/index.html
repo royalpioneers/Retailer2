@@ -120,9 +120,15 @@
                 <a class="header_top_options btn_more_big" data-transition="slide" id="search-redirect" href="#search.html"><i class="icon-white icon-search"></i></a>
 			</div>
 			<div data-role="content" class="content_tab">
+				<div data-role="navbar">
+					<ul>
+						<li style="width: 75%"><select id="select_buyer_store" style="width: 70%"></select></li>
+						<li style="width: 25%"><input type="checkbox" id="store_total_qty" class="custom" style="width: 30%" /><label for="store_total_qty" style="line-height: 100%">All</label></li>
+					</ul>
+				</div>
 	            <div data-role="navbar" class="navbar">
 	                <ul>
-	                    <li><a href="#" class="ui-btn-active" data-tab-class="tab1">My Inventory</a></li>
+	                    <li><a href="#" id="id_tab_my_inventory" class="ui-btn-active" data-tab-class="tab1">My Inventory</a></li>
 	                    <li><a href="#" data-tab-class="tab2">Analyzer</a></li>
 	                </ul>
 	            </div>
@@ -360,6 +366,9 @@
                         <li data-icon="false"><a href="" id="goToProducts">+ Add Another Product</a></li>      
                     </ul>
                     <form id="formsendProductsInvoice">
+                    	<div>
+                    		<input type="checkbox" id="update_stock_by_status" /><label for="update_stock_by_status" >Update stock for priority status</label>
+                    	</div>
                         <a href="#pagina13" class="ui-bar-b options_sendProductsInvoice cancel_sendProductsInvoice">Cancel</a>
                         <a href="#pagina13" class="ui-bar-b options_sendProductsInvoice cancel_sendProductsInvoice" id="sendProductsInvoice" data-status="true">Sale</a>
                     </form>

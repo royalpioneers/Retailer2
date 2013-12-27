@@ -5,6 +5,7 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
 	model.class_btn_selected_variant = 'class_selected_variant';
 	model.id_selected_product_name = 'selected_product_name';
 	model.id_selected_product_variant_name = 'selected_product_variant_name';
+	model.id_stores = 'select_buyer_store';
 	model.origin = '';
 	model.origin_products = 1;
 	model.origin_invoice = 2;
@@ -28,7 +29,7 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
     
     model.inventory_has_variants = function (inventory_id) {
     	var product = buyerInventoryFactory.get_by_id(inventory_id);
-    	if (product.variants.length > 0) {
+    	if (product && product.variants.length > 0) {
     		return true;
     	}
     	return false;
@@ -196,5 +197,32 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
     	return false;
     };
 
+    /* STORE */
+    model.render_stores = function(store_id){
+    	stores = buyerInventoryFactory.get_stores();
+    	if (typeof(stores) == 'undefined' || stores.length < 1) {
+    		return false;
+    	}
+    	var field_select, index;
+		if (typeof(store_id) == 'undefined' || store_id == null) {
+			store_id = stores[0].id;
+		}
+		buyerInventoryFactory.set_current_store(store_id);
+		field_select = $('#'+model.id_stores);
+		field_select.html('');
+		if(field_select != undefined){
+			for (index in stores) {
+				var option = $('<option></option>');
+				option.attr('value', stores[index].id);
+				option.html('Store: '+stores[index].name);
+				if (stores[index].id == store_id) {
+					option.attr('selected', 'selected');
+				}
+				field_select.append(option);
+	        }
+			try {field_select.selectmenu('refresh', true);}catch(e){}
+		}
+	};
+	
     return model;
 };
