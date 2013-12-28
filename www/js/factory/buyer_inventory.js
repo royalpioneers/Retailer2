@@ -43,6 +43,7 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 	};
 	
 	factory.get_all = function(store, handler, cache) {
+
 		var list = JSON.parse(window.localStorage.getItem(factory.storage_id_inventory));
 		if ((factory.cache || cache) && list != null) {
 			return handler(factory.get_items_from_store(store, list));
@@ -82,7 +83,7 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 		if (typeof(stores) == 'undefined' ) {
 			stores = factory.get_stores();
 		}
-		if (typeof(store_id) == 'undefined' || store_id == null)  {
+		if ((typeof(store_id) == 'undefined' || store_id == null) && stores.length > 0)  {			
 			return stores[0].items_list;
 		} else {
 			store_id = parseInt(store_id);

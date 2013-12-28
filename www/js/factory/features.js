@@ -91,29 +91,29 @@ var FeatureFactory = function(urls, token) {
         });
     };
 
-    factory.getAllTheFeaturesByBuyer = function(){        
+    // factory.getAllTheFeaturesByBuyer = function(){        
           
-        $.ajax({
-            url: factory.urls.getAllTheFeaturesByBuyer,
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                rp_token: factory.token
-            },
-            beforeSend: function(){
-                loader();
-            },
-            success: function(data){    
-                debugger;                          
-                if (data.status){
-                    alert('Success!');
-                };
-            },
-            complete: function(){
-                try{$.mobile.loading("hide");}catch(e){}
-            }
-        });
-    };
+    //     $.ajax({
+    //         url: factory.urls.getAllTheFeaturesByBuyer,
+    //         type: 'POST',
+    //         dataType: 'json',
+    //         data: {
+    //             rp_token: factory.token
+    //         },
+    //         beforeSend: function(){
+    //             loader();
+    //         },
+    //         success: function(data){    
+    //             debugger;                          
+    //             if (data.status){
+    //                 alert('Success!');
+    //             };
+    //         },
+    //         complete: function(){
+    //             try{$.mobile.loading("hide");}catch(e){}
+    //         }
+    //     });
+    // };
 
     function loader(){
         try{

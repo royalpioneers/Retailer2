@@ -50,8 +50,8 @@ var urls = {
     'send_invoice': DOMAIN+'/mobile/buyer-inventory-create-sale/',
     'features': DOMAIN+'/mobile/__idModel__/available-features/',
     'valuesFeatures': DOMAIN+'/mobile/__idModel__/feature-values/__idFeature__/',
-    'saveProductModelVariant': DOMAIN+'/mobile/create/product-model-variant/',
-    'getAllTheFeaturesByBuyer' : DOMAIN+'/mobile/features-by-buyer/'
+    'saveProductModelVariant': DOMAIN+'/mobile/create/product-model-variant/'
+    //'getAllTheFeaturesByBuyer' : DOMAIN+'/mobile/features-by-buyer/'
 };
 
 var items_list = [], productsSelected = [], storageClients = [];
@@ -331,7 +331,7 @@ function init(reconection) {
         client.getDataAddressClient();
         startAnalyzerInformation();
         getInformationProduct();
-        featureFactory.getAllTheFeaturesByBuyer();
+        //featureFactory.getAllTheFeaturesByBuyer();
         $('#container-login').css('display','none');
         try{$.mobile.navigate("#pagina2");}catch(e){}
     }
@@ -1133,21 +1133,27 @@ function init(reconection) {
                 beforeSend: function(){
                     loading();
                 },
-                success: function(data){
-                    debugger;
+                success: function(data){                    
                     if(data.status.status == true){
-                        // nameProduct.val('');
-                        // nameVariant.val('');
-                        // quantity.val('');
-                        // wholeSalePrice.val('');
-                        // retailPrice.val('');
-                        // sku.val('');
-                        // costPrice.val('');
+                        debugger;
+                        $('#browser').val('');
+                        $('#name-variant').val('');
+                        $('#category-id').text('');
+                        $('#quantity').val('');
+                        $('#sku').val('');
+                        $('#cost-price').val('');
+                        $('#wholesale-price').val('');
+                        $('#retail-price').val('');
                         buyerInventoryFactory.store_inventory(data);
                         localStorage.setItem('productModelId', data.id);
                         uploadPhoto(data.id);                        
-                        alert('Success!');
-                        
+                        $('#featureName').text('');
+                        $('#values-features-list').html('');
+                        if(Offline.state == 'down'){
+                            alert("You can't create variants!");
+                            $.mobile.navigate("#pagina5");
+                        }
+                        else try{$.mobile.navigate("#pagina15");}catch(e){}                        
                     } else alert('an error occurred');
                 },
                 complete: function(){
@@ -1346,6 +1352,8 @@ function init(reconection) {
     /* Product Model Variant */
 
     function chooceFeatureValue(){
+        $(this).siblings().removeClass('active_option');
+        $(this).addClass('active_option');
         var idFeatureValue = $(this).data('id');
         localStorage.removeItem('idFeatureValue');
         localStorage.setItem('idFeatureValue', idFeatureValue);
@@ -1358,6 +1366,8 @@ function init(reconection) {
         var additionalCost = $('#additionalCost').val();
         var variantQuantity = $('#variantQuantity').val();        
         featureFactory.create_sub_variant(idProductModel, idFeature, idFeatureValue, additionalCost, variantQuantity);
+        $('#additionalCost').val('');
+        $('#variantQuantity').val('');    
     }
 
     /* Search */

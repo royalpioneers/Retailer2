@@ -186,6 +186,12 @@
     .tab2{
         overflow: hidden;
     }
+    .content_tab > div > ul{
+        margin-bottom: 0.5em;
+    }
+    #select_buyer_store-button {
+        padding-bottom: 0.45em !important;
+    }
     .total_units, .total_profit,.total_sales,#analyzer_most_popular {
         width: 49%; display: inline-block;
         font-family: metapro, Helvetica, Arial, sans-serif !important;
@@ -785,7 +791,6 @@ div.ui-input-text > input {
 }
 div[data-role='header']{
     padding: 10px 0 !important;
-    position: relative !important;
     overflow: hidden;
 }
 .header_top_options .ui-btn-inner{
@@ -927,7 +932,7 @@ div[data-role='header']{
     border-top: 1px solid #DADADA /*{c-bup-border}*/; background: #eee /*{c-bup-background-color}*/; font-weight: bold; color: #222 /*{c-bup-color}*/; background-image: -webkit-gradient(linear, left top, left bottom, from( #fff /*{c-bup-background-start}), to( #fff /*{c-bup-background-end}*/)); background-image: -ms-linear-gradient( #fff /*{c-bup-background-start}*/, #fff /*{c-bup-background-end}*/); background-image: -o-linear-gradient( #fff /*{c-bup-background-start}*/, #fff /*{c-bup-background-end}*/); background-image: linear-gradient( #fff /*{c-bup-background-start}, #fff /*{c-bup-background-end}*/);
     border-bottom: 1px solid snow;
 }
-#values-features-list > li > a:hover,#features:hover,#features-list > li > a:hover{
+#values-features-list > li > a:hover,#features:hover,#features-list > li > a:hover,.active_option > a{
     border: 1px solid #bbb /*{c-bhover-border}*/;
     background: #dfdfdf /*{c-bhover-background-color}*/;
     font-weight: bold;
