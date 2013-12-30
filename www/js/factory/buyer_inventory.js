@@ -58,15 +58,22 @@ var BuyerInventoryFactory = function(urls, token, cache) {
                 rp_token: factory.token
             },
 			dataType: 'json',
+			beforeSend: function(){
+				loader();	           	
+		   },
 			success: function(data) {
 				if (data.status == true) {
+					
                     window.localStorage.removeItem(factory.storage_id_inventory);
 					window.localStorage.setItem(factory.storage_id_inventory, JSON.stringify(data.stores));
 					handler(factory.get_items_from_store(store, data.stores));
 				} else {
 					return handler([]);
 				}
-			}
+			},
+			complete: function(){
+        	   try{$.mobile.loading("hide");}catch(e){}
+           }
 	    });
 	};
 	
@@ -165,12 +172,8 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 	                store: store
 	           },
 	           dataType: 'json',
-	           beforeSend: function beforeAjaxLoader(){
-			       try{$.mobile.loading("show", {
-			           textVisible: true,
-			           theme: 'c',
-			           textonly: false
-			       });}catch(e){}
+	           beforeSend: function(){
+					loader();	           	
 			   },
 	           success: function(data){
 	        	   var info = data.context['information'];
@@ -196,6 +199,14 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 		}
 		return JSON.parse(window.localStorage.getItem(data_time_key));
 	};
-		
+	
+	function loader(){
+		try{$.mobile.loading("show", {
+            textVisible: true,
+            theme: 'c',
+            textonly: false
+        });}catch(e){}
+	}
+
     return factory;
 };

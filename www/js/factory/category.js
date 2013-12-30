@@ -19,7 +19,11 @@ var CategoryFactory = function(urls, token) {
                 rp_token: factory.token
             },
             dataType: 'json',
+            beforeSend: function(){
+                loader();
+            },
             success: function(data) {
+                
                 if(data.status == true) {
                     window.localStorage.removeItem("productRelated");
                     window.localStorage.removeItem("categories");
@@ -29,7 +33,10 @@ var CategoryFactory = function(urls, token) {
                 } else {
 					return handler([], []);
 				}
-            }
+            },
+            complete: function(){
+               try{$.mobile.loading("hide");}catch(e){}
+           }
 	    });
     };
 
@@ -59,19 +66,15 @@ var CategoryFactory = function(urls, token) {
             },
             dataType: 'json',
             beforeSend: function(){
-                $.mobile.loading("show", {
-                    textVisible: true,
-                    theme: 'c',
-                    textonly: false
-                });
+                loader();
             },
             success: function (data) {
                 handler(data.categories, collapse);
 
             },
             complete: function(){
-                $.mobile.loading("hide");
-            }
+               try{$.mobile.loading("hide");}catch(e){}
+           }
         });
 	};
 
@@ -79,5 +82,14 @@ var CategoryFactory = function(urls, token) {
 		factory.token = token;
 	};
 
+    function loader(){
+        try{
+            $.mobile.loading("show", {
+                textVisible: true,
+                theme: 'c',
+                textonly: false
+            });
+        }catch(e){}
+    }
     return factory;
 };

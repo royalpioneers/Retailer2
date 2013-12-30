@@ -32,6 +32,9 @@
         font-family: metapro, Helvetica, Arial, sans-serif !important;
         font-size: 1.1em !important;
     }
+    ul {
+        list-style: none;
+    }
     .ui-btn-text{
         text-decoration: none !important;
         font-family: metapro, Helvetica, Arial, sans-serif !important;
@@ -183,6 +186,12 @@
     .tab2{
         overflow: hidden;
     }
+    .content_tab > div > ul{
+        margin-bottom: 0.5em;
+    }
+    #select_buyer_store-button {
+        padding-bottom: 0.45em !important;
+    }
     .total_units, .total_profit,.total_sales,#analyzer_most_popular {
         width: 49%; display: inline-block;
         font-family: metapro, Helvetica, Arial, sans-serif !important;
@@ -292,7 +301,29 @@
         background: url('http://royalpioneers.com/static/website/images/icon/blog.png');
     }
 /*page5*/
-    .inventory_detail_product ul{
+    .go_to_variants {
+        background: #08c;
+        padding: 25px 0;
+        display: block;
+        margin: 0 0 .5em 0;
+        color: white;
+        font-weight: bolder;
+        font-size: 23px !important;
+    }
+    .variants_by_product_model {
+        border-top: 3px solid rgb(189, 189, 189);
+        padding-top: 20px;
+        margin: 0;
+    }
+    .variants_by_product_model > li {
+        display: inline-table;
+        width: 50%;
+    }
+
+    .variants_by_product_model > li > ul > li {
+        text-align: left;
+    }
+    .inventory_detail_product > ul:first-child{
         list-style: none;
         margin: 0;
         margin-top: -3em;
@@ -760,7 +791,6 @@ div.ui-input-text > input {
 }
 div[data-role='header']{
     padding: 10px 0 !important;
-    position: relative !important;
     overflow: hidden;
 }
 .header_top_options .ui-btn-inner{
@@ -902,7 +932,7 @@ div[data-role='header']{
     border-top: 1px solid #DADADA /*{c-bup-border}*/; background: #eee /*{c-bup-background-color}*/; font-weight: bold; color: #222 /*{c-bup-color}*/; background-image: -webkit-gradient(linear, left top, left bottom, from( #fff /*{c-bup-background-start}), to( #fff /*{c-bup-background-end}*/)); background-image: -ms-linear-gradient( #fff /*{c-bup-background-start}*/, #fff /*{c-bup-background-end}*/); background-image: -o-linear-gradient( #fff /*{c-bup-background-start}*/, #fff /*{c-bup-background-end}*/); background-image: linear-gradient( #fff /*{c-bup-background-start}, #fff /*{c-bup-background-end}*/);
     border-bottom: 1px solid snow;
 }
-#values-features-list > li > a:hover,#features:hover,#features-list > li > a:hover{
+#values-features-list > li > a:hover,#features:hover,#features-list > li > a:hover,.active_option > a{
     border: 1px solid #bbb /*{c-bhover-border}*/;
     background: #dfdfdf /*{c-bhover-background-color}*/;
     font-weight: bold;
@@ -923,4 +953,7 @@ div[data-role='header']{
     width: 100%;}
 #pagina2 > div[data-role="header"],#pagina13 > div[data-role="header"]{
     position: fixed !important;
+}
+#left-panel {
+    position: fixed;
 }
