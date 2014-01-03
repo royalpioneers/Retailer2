@@ -116,8 +116,7 @@ function init(reconection) {
         $('.returnToSelectedProducts').live('click', goProduct);
         $('#select_buyer_store').bind('change', changeSelectStore);
         $('#store_total_qty').bind('change', changeInventoryQuantities);
-        
-        
+        $('#update_stock_by_status').parent().hide();
 
         /*Client offline*/        
         $('.disabled').parents('.ui-radio').bind('click', function(){;
@@ -670,6 +669,9 @@ function init(reconection) {
     }
 
     function getTypeUpdate() {
+    	if ($('#store_total_qty').attr('checked') != 'checked') {
+    		return 0;
+    	}
     	var type = $('#update_stock_by_status').attr('checked');
     	if (type == 'checked') {
     		return 2;
@@ -1409,10 +1411,10 @@ function init(reconection) {
     	var all_qty = $('#store_total_qty').attr('checked');
     	if (all_qty == 'checked') {
     		$('#update_stock_by_status').attr('checked', false);
-    		$('#update_stock_by_status').parent().show();
+    		/* $('#update_stock_by_status').parent().show(); */
     	} else {
     		$('#update_stock_by_status').attr('checked', 'checked');
-    		$('#update_stock_by_status').parent().hide();
+    		/* $('#update_stock_by_status').parent().hide(); */
     	}
     }
 

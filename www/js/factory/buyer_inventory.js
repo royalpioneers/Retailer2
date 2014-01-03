@@ -63,7 +63,6 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 		   },
 			success: function(data) {
 				if (data.status == true) {
-					
                     window.localStorage.removeItem(factory.storage_id_inventory);
 					window.localStorage.setItem(factory.storage_id_inventory, JSON.stringify(data.stores));
 					handler(factory.get_items_from_store(store, data.stores));

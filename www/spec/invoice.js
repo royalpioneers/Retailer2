@@ -20,53 +20,60 @@ describe('app', function() {
 	function clone(obj) {
 		return jQuery.extend(true, [], obj);
 	}
-		   
-	var data = [
-	    {
-	      "model_image": "/static/website/images/icon/default_product.png",
-	      "clients_discount": {},
-	      "quantity": 11,
-	      "max": 11,
-	      "id": 212,
-	      "wholesale_price": "500.00",
-	      "retail_price": "413.00",
-	      "model_name": "Product model default",
-	      "product_name": "Product default",
-	      "variants": [{'id': 2, 'quantity': '12', 'name': 'feature1', 'value': 'VAL1', 'additional_cost': '12'},
-              {'id': 3, 'quantity': '8', 'name': 'feature2', 'value': 'VAL2', 'additional_cost': '5.8'}],
-	    },
-	    {
-	      "model_image": "/static/website/images/icon/default_product.png",
-	      "clients_discount": {},
-	      "quantity": 30,
-	      "max": 30,
-	      "id": 217,
-	      "wholesale_price": "60.00",
-	      "retail_price": "48.00",
-	      "model_name": "mivariante",
-	      "product_name": "miproducto",
-	      "variants": [],
-	    },
-	    {
-	      "model_image": "/static/website/images/icon/default_product.png",
-	      "clients_discount": {},
-	      "quantity": 8,
-	      "max": 8,
-	      "id": 218,
-	      "wholesale_price": "123.00",
-	      "retail_price": "122.00",
-	      "model_name": "asdasd",
-	      "product_name": "asdasd",
-	      "variants": [{'id': 6, 'quantity': '10', 'name': 'feature1', 'value': 'VAL1', 'additional_cost': '15'}],
-	    }
-	  ];
+	
+	data = [
+		    {"id": 12,
+		     "name": 'store one',
+		     "items_list": [
+				    {
+				      "model_image": "/static/website/images/icon/default_product.png",
+				      "clients_discount": {},
+				      "quantity": 11,
+				      "max": 11,
+				      "id": 212,
+				      "wholesale_price": "500.00",
+				      "retail_price": "413.00",
+				      "model_name": "Product model default",
+				      "product_name": "Product default",
+				      "variants": [{'id': 2, 'quantity': '12', 'name': 'feature1', 'value': 'VAL1', 'additional_cost': '12'},
+			              {'id': 3, 'quantity': '8', 'name': 'feature2', 'value': 'VAL2', 'additional_cost': '5.8'}],
+				    },
+				    {
+				      "model_image": "/static/website/images/icon/default_product.png",
+				      "clients_discount": {},
+				      "quantity": 30,
+				      "max": 30,
+				      "id": 217,
+				      "wholesale_price": "60.00",
+				      "retail_price": "48.00",
+				      "model_name": "mivariante",
+				      "product_name": "miproducto",
+				      "variants": [],
+				    },
+				    {
+				      "model_image": "/static/website/images/icon/default_product.png",
+				      "clients_discount": {},
+				      "quantity": 8,
+				      "max": 8,
+				      "id": 218,
+				      "wholesale_price": "123.00",
+				      "retail_price": "122.00",
+				      "model_name": "asdasd",
+				      "product_name": "asdasd",
+				      "variants": [{'id': 6, 'quantity': '10', 'name': 'feature1', 'value': 'VAL1', 'additional_cost': '15'}],
+				    }
+	    ]}
+    ];
 	
     describe('create invoice', function() {
     	
         it('update items', function() {
         	var products = clone(data);
-        	var invoice = new InvoiceModel();
-        	var product_selected = products[0];
+        	window.localStorage.setItem('buyerInventory', JSON.stringify(products));
+        	var buyerInventoryFactory = new BuyerInventoryFactory([], '', false);
+        	buyerInventoryFactory.set_current_store(12);
+        	var invoice = new InvoiceModel(buyerInventoryFactory);
+        	var product_selected = products[0]['items_list'][0];
         	var exists = false;
         	localStorage.setItem(invoice.id_products, JSON.stringify(products));
         	product_selected.quantity = 9;
@@ -74,7 +81,8 @@ describe('app', function() {
         	/* ACTION */
         	invoice.success_create([product_selected]);
 
-        	var updated_products = JSON.parse(localStorage.getItem(invoice.id_products));
+        	var updated_products = buyerInventoryFactory.get_current_list();
+
         	for (index in updated_products) {
         		product = updated_products[index];
         		if (product.id == product_selected.id) {
@@ -87,8 +95,11 @@ describe('app', function() {
         
         it('invalid client products', function() {
         	var products = clone(data);
-        	var invoice = new InvoiceModel();
-        	var product_selected = products[0];
+        	window.localStorage.setItem('buyerInventory', JSON.stringify(products));
+        	var buyerInventoryFactory = new BuyerInventoryFactory([], '', false);
+        	buyerInventoryFactory.set_current_store(12);
+        	var invoice = new InvoiceModel(buyerInventoryFactory);
+        	var product_selected = products[0]['items_list'][0];
         	localStorage.setItem(invoice.id_products, JSON.stringify(products));
         	product_selected.quantity = 25;
         	
@@ -101,8 +112,11 @@ describe('app', function() {
         
         it('valid client products: equal', function() {
         	var products = clone(data);
-        	var invoice = new InvoiceModel();
-        	var product_selected = products[0];
+        	window.localStorage.setItem('buyerInventory', JSON.stringify(products));
+        	var buyerInventoryFactory = new BuyerInventoryFactory([], '', false);
+        	buyerInventoryFactory.set_current_store(12);
+        	var invoice = new InvoiceModel(buyerInventoryFactory);
+        	var product_selected = products[0]['items_list'][0];
         	localStorage.setItem(invoice.id_products, JSON.stringify(products));
         	product_selected.quantity = 11;
         	
@@ -115,8 +129,11 @@ describe('app', function() {
         
         it('valid client products: lower', function() {
         	var products = clone(data);
-        	var invoice = new InvoiceModel();
-        	var product_selected = products[0];
+        	window.localStorage.setItem('buyerInventory', JSON.stringify(products));
+        	var buyerInventoryFactory = new BuyerInventoryFactory([], '', false);
+        	buyerInventoryFactory.set_current_store(12);
+        	var invoice = new InvoiceModel(buyerInventoryFactory);
+        	var product_selected = products[0]['items_list'][0];
         	localStorage.setItem(invoice.id_products, JSON.stringify(products));
         	product_selected.quantity = 10;
         	
@@ -129,8 +146,11 @@ describe('app', function() {
         
         it('valid client products: zero', function() {
         	var products = clone(data);
-        	var invoice = new InvoiceModel();
-        	var product_selected = products[0];
+        	window.localStorage.setItem('buyerInventory', JSON.stringify(products));
+        	var buyerInventoryFactory = new BuyerInventoryFactory([], '', false);
+        	buyerInventoryFactory.set_current_store(12);
+        	var invoice = new InvoiceModel(buyerInventoryFactory);
+        	var product_selected = products[0]['items_list'][0];
         	localStorage.setItem(invoice.id_products, JSON.stringify(products));
         	product_selected.quantity = 0;
         	
@@ -143,18 +163,24 @@ describe('app', function() {
         
         it('update variants quantity', function() {
         	var products = clone(data);
-        	var invoice = new InvoiceModel();
-        	var product_selected = products[0];
+        	window.localStorage.setItem('buyerInventory', JSON.stringify(products));
+        	var buyerInventoryFactory = new BuyerInventoryFactory([], '', false);
+        	buyerInventoryFactory.set_current_store(12);
+        	var invoice = new InvoiceModel(buyerInventoryFactory);
+        	var product_selected = products[0]['items_list'][0];
         	var exists = false;
         	var variant_exists = false;
         	localStorage.setItem(invoice.id_products, JSON.stringify(products));
         	product_selected.quantity = 9;
         	product_selected.variant_id = 2;
-        	
+
         	/* ACTION */
         	invoice.success_create([product_selected]);
 
-        	var updated_products = JSON.parse(localStorage.getItem(invoice.id_products));
+        	buyerInventoryFactory.update_total_qty_for_items(true);
+        	buyerInventoryFactory.update_total_qty_for_items(false);
+
+        	var updated_products = buyerInventoryFactory.get_current_list();
         	for (index in updated_products) {
         		var product = updated_products[index];
         		if (product.id == product_selected.id) {
