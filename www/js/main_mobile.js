@@ -647,7 +647,7 @@ function init(reconection) {
         }        
     }
     
-    function updateAfterCreateInvoice(clientSelected) {
+    function updateAfterCreateInvoice(clientSelected, type_update) {
     	for(var i in storageClients){
             var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
             if(index !== -1){
@@ -658,7 +658,7 @@ function init(reconection) {
                     }
                 });
                 if(remove > -1) {
-                	invoice.success_create(clientSelected.products);
+                	invoice.success_create(clientSelected.products, type_update);
                     storageClients.splice(remove, 1);
                     clientSelected.products = [];
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
@@ -722,7 +722,7 @@ function init(reconection) {
                 success: function(data) {
                     self.data('status','true');
                     if (data.status == true) {
-                        updateAfterCreateInvoice(clientSelected);
+                        updateAfterCreateInvoice(clientSelected, type_update);
                     } else {
                         alert('an error occurred');
                         $.mobile.navigate("#pagina11");
@@ -735,7 +735,7 @@ function init(reconection) {
 
             if (Offline.state == 'down') {
                 self.data('status','true');
-                updateAfterCreateInvoice(clientSelected);
+                updateAfterCreateInvoice(clientSelected, type_update);
                 $.mobile.navigate("#pagina11");
             }
         }
