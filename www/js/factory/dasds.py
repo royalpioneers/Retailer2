@@ -7,4 +7,4 @@ def a(list_features):
                 list_features.append(element)
         return list_features
 
-print a(list_features)
+print a()

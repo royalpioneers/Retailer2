@@ -103,8 +103,7 @@ var FeatureFactory = function(urls, token) {
     //         beforeSend: function(){
     //             loader();
     //         },
-    //         success: function(data){    
-    //             debugger;                          
+    //         success: function(data){                            
     //             if (data.status){
     //                 alert('Success!');
     //             };
