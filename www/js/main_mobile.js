@@ -1138,14 +1138,6 @@ function init(reconection) {
                 },
                 success: function(data){                    
                     if(data.status.status == true){
-//                        $('#browser').val('');
-//                        $('#name-variant').val('');
-//                        $('#category-id').text('');
-//                        $('#quantity').val('');
-//                        $('#sku').val('');
-//                        $('#cost-price').val('');
-//                        $('#wholesale-price').val('');
-//                        $('#retail-price').val('');
                         buyerInventoryFactory.store_inventory(data);
                         localStorage.setItem('productModelId', data.id);
                         uploadPhoto(data.id);                        
