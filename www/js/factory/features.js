@@ -91,8 +91,7 @@ var FeatureFactory = function(urls, token) {
         });
     };
 
-    // factory.getAllTheFeaturesByBuyer = function(){        
-          
+    // factory.getAllTheFeaturesByBuyer = function(){
     //     $.ajax({
     //         url: factory.urls.getAllTheFeaturesByBuyer,
     //         type: 'POST',

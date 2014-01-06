@@ -140,10 +140,11 @@ function init(reconection) {
         var buyerInventoryFactory = new BuyerInventoryFactory(urls, token, window.localStorage.getItem("rp-cache"));
         var buyerInventory = new BuyerInventoryModel(categoryFactory, buyerInventoryFactory, clientFactory);
         buyerInventory.init();
-        
+
     /* INVOICE */
+
         var invoice = new InvoiceModel(buyerInventoryFactory);
-        
+
     /* ANALIZER */
         var analyzer = new AnalyzerModel(buyerInventoryFactory);
         analyzer.set_domain(DOMAIN);
@@ -1137,15 +1138,14 @@ function init(reconection) {
                 },
                 success: function(data){                    
                     if(data.status.status == true){
-                        debugger;
-                        $('#browser').val('');
-                        $('#name-variant').val('');
-                        $('#category-id').text('');
-                        $('#quantity').val('');
-                        $('#sku').val('');
-                        $('#cost-price').val('');
-                        $('#wholesale-price').val('');
-                        $('#retail-price').val('');
+//                        $('#browser').val('');
+//                        $('#name-variant').val('');
+//                        $('#category-id').text('');
+//                        $('#quantity').val('');
+//                        $('#sku').val('');
+//                        $('#cost-price').val('');
+//                        $('#wholesale-price').val('');
+//                        $('#retail-price').val('');
                         buyerInventoryFactory.store_inventory(data);
                         localStorage.setItem('productModelId', data.id);
                         uploadPhoto(data.id);                        
