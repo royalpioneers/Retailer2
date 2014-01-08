@@ -32,6 +32,7 @@ categories: contains categories and sub categories
 var DOMAIN = app.getDomain();
 
 var urls = {
+    'signup': DOMAIN + '/mobile/signup/',
     'login': DOMAIN+'/mobile/login_buyer/',
     'loginToken': DOMAIN+'/mobile/login_buyer_token/',
     'inventory': DOMAIN+'/mobile/inventory/',
@@ -67,6 +68,9 @@ function init(reconection) {
         //Login
         $("#log_in").live("click", loginAuth);
         $('#logout').live('click', logOut);
+
+        //Sign Up
+        $('#sign-up-btn').live('click', signUp);
 
         //Generic
         $(".navbar ul li").live("click", changeTab);
@@ -232,11 +236,45 @@ function init(reconection) {
                         token = data.token;
                         eventsAfterLogin();
                     } else {
-                        $('.overlay').fadeIn().children().addClass('effect_in_out');
+                        $('#login-error').fadeIn().children().addClass('effect_in_out');
                     }
                 },
                 complete: function(){
                     try{$.mobile.loading("hide");}catch(e){};
+                }
+            });
+        } else {
+            alert('Check your internet connection');
+        }
+    }
+
+    function signUp(e){
+        e.preventDefault();
+        if(Offline.state == 'up') {
+            var url = urls.signup;
+            $.ajax({
+                url: url,
+                data: {
+                    email: $('#email').val()
+                },
+                type: 'POST',
+                dataType: 'json',
+                beforeSend: function(){
+                    loading();
+                },
+                success: function (data) {
+                    if (data.status === 'OK') {
+                        window.localStorage.setItem("rp-token", data.token);
+                        token = data.token;
+                        eventsAfterLogin();
+                    } else {
+                        var error = $('#sign-up-error');
+                        error.find('p').text(data.message);
+                        error.fadeIn().children().addClass('effect_in_out');
+                    }
+                },
+                complete: function(){
+                    try{$.mobile.loading("hide");}catch(e){}
                 }
             });
         } else {
@@ -294,7 +332,7 @@ function init(reconection) {
                     }
                     else {
                         $('#container-login').css('display','inline');
-                        $('.overlay').fadeIn().children().addClass('effect_in_out');
+                        $('#login-error').fadeIn().children().addClass('effect_in_out');
                     }
                 },
                 complete: function(){
