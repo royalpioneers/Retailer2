@@ -1137,7 +1137,6 @@ function init(reconection) {
                 },
                 success: function(data){                    
                     if(data.status.status == true){
-                        debugger;
                         $('#browser').val('');
                         $('#name-variant').val('');
                         $('#category-id').text('');
