@@ -957,3 +957,12 @@ div[data-role='header']{
 #left-panel {
     position: fixed;
 }
+#email{
+    font-size: 150% !important;
+    font-weight: bolder;
+    font-family: metapro, Helvetica, Arial, sans-serif !important;
+    padding: 10px 0 !important;
+    background-color: #ffffff;
+    box-shadow: none !important;
+    border: 2px solid #bdc3c7 !important;
+}
