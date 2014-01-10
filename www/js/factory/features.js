@@ -91,8 +91,7 @@ var FeatureFactory = function(urls, token) {
         });
     };
 
-    // factory.getAllTheFeaturesByBuyer = function(){        
-          
+    // factory.getAllTheFeaturesByBuyer = function(){
     //     $.ajax({
     //         url: factory.urls.getAllTheFeaturesByBuyer,
     //         type: 'POST',
@@ -103,8 +102,7 @@ var FeatureFactory = function(urls, token) {
     //         beforeSend: function(){
     //             loader();
     //         },
-    //         success: function(data){    
-    //             debugger;                          
+    //         success: function(data){                            
     //             if (data.status){
     //                 alert('Success!');
     //             };

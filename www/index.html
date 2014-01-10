@@ -34,6 +34,7 @@
         <!--  Aplication -->
         <script type="text/javascript" src="js/offline.min.js"></script>
         <script type="text/javascript" src="js/plugins.js"></script>
+        <script type="text/javascript" src="js/factory/features.js"></script>
         <script type="text/javascript" src="js/main_mobile.js"></script>
        
                
@@ -56,7 +57,7 @@
         <!--HOME-->
         <div data-role="page" id="pagina1">
             <div id="container-login" style="display:none">
-                <div class="overlay">
+                <div class="overlay" id="login-error">
                     <div id="myModal" class="modal options_detail_product">
                         <div class="modal-body">
                             <a href="#" class="close_modal"><i class="icon-white icon-remove"></i></a>
@@ -109,6 +110,7 @@
                         <input class="input_login" type="password" placeholder="Password" id="password">
                         <input type="submit" class="btn" style="width: 100%;" id="log_in" value="Login">
                     </form>
+                    <a href="#pagina17" class="btn btn-info" data-transition="slide">Sign up</a>
                 </div>
             </div>
         </div>
@@ -117,7 +119,7 @@
 		<div data-role="page" id="pagina2" data-position="fixed">
 			<div data-role="header" data-id="head1" data-theme="a" data-position="fixed">
 				<a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
-				<h1>Royal Pioneers</h1>
+				<h1>RP</h1>
                 <a class="header_top_options btn_more_big" data-transition="slide" id="search-redirect" href="#search.html"><i class="icon-white icon-search"></i></a>
 			</div>
 			<div data-role="content" class="content_tab">
@@ -445,6 +447,32 @@
                 <ul data-role="listview" data-inset="true" data-theme="a" id="features-list">
                 </ul>                
             </div>
-        </div>                
+        </div>
+        <div data-role="page" id="pagina17" data-theme="a" style="background: url('images/a1.jpg') repeat;
+             background-size: cover; width: 100%; height: 100%">
+            <a href="#pagina1" class="btn btn-info" data-transition="slide">Log In</a>
+            <div class="row-fluid center_text_align" style="width: 66%;margin: 45% auto 25% auto;position: relative">
+                <form action="" id="sign-up-form">
+                    <input type="email" placeholder="email" id="email">
+                    <input type="submit" class="btn btn-info" style="width: 100%;" id="sign-up-btn" value="Sign Up">
+                </form>
+            </div>
+            <div id="sign-up-error" class="overlay">
+                <div id="sign-up-modal" class="modal options_detail_product ">
+                    <div class="modal-body">
+                        <a href="#" class="close_modal"><i class="icon-white icon-remove"></i></a>
+                        <ul class="options_detail">
+                            <li>
+                                <h3 style="color: #1b1b1b">Check the given email</h3>
+                                <p style="color: #1b1b1b">MESSAGE HERE</p>
+                            </li>
+                            <li>
+                                <a href="" class="btn btn_accept_option">Accept</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
 	</body>
 </html>
