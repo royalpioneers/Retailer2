@@ -301,11 +301,14 @@ function init(reconection) {
                     if (data.status === 'OK') {
                         window.localStorage.setItem("rp-token", data.token);
                         token = data.token;
-                        eventsAfterLogin();
+                        $('#sign-up-ok').fadeIn().children().addClass('effect_in_out');
+                        $('#sign-up-ok, .close_modal').live('click', function(){
+                            eventsAfterLogin();
+                        });
                     } else {
-                        var error = $('#sign-up-error');
-                        error.find('p').text(data.message);
-                        error.fadeIn().children().addClass('effect_in_out');
+                        var modal = $('#sign-up-error');
+                        modal.find('p').text(data.message);
+                        modal.fadeIn().children().addClass('effect_in_out');
                     }
                 },
                 complete: function(){
