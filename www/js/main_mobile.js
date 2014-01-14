@@ -59,13 +59,14 @@ var urls = {
 var items_list = [], productsSelected = [], storageClients = [];
 var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New Invoice', 'Stores' */
 		'tabMyAnalyzer': 'Sales Analyzer',
-		'pagina11': 'New Invoice', /* lista de usuarios, cno lo que no importaria los demas link spara invoice */
+		'pagina11': 'New Invoice', /* lista de usuarios, con lo que no importaria los demas link spara invoice */
 		'pagina9': 'New Invoice',  /* crear cliente */
 		'pagina12': 'New Invoice', /* pantalla de invoice */
 		'SelectMyStores': 'Stores', /* selecte de tiendas */
 		'tabMyInventory': 'Inventory', /* datos de inventario */
-		'search.html': 'Inventory', /* */
-		'pagina6': 'Inventory',
+		'search.html': 'Inventory', /* busqueda de productos */
+		'pagina6': 'Inventory', /* crear item */
+		'pagina5': 'Inventory', /* detalle de producto */
 		'pagina14': 'Inventory', /* pantalla de subvariantes */
 	}, last_resource_message = '';
 
