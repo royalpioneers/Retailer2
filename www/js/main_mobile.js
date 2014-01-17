@@ -139,9 +139,9 @@ function init(reconection) {
         $( window ).bind( "orientationchange", function( event ) {
         	  $( "#oooo" ).text( "This device is in " + event.orientation + " mode!" );
         });
-        $( '#cobtn' ).live( "click", function( event ) {
+        $( '#cobtn' ).bind( "click", function( event ) {
         	$( window ).orientationchange();
-        	console.log('mensae ok');
+        	console.log('cambio');
       });
 
 //      navigator.screenOrientation.set('portrait');
