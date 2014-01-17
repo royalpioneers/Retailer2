@@ -144,6 +144,7 @@ function init(reconection) {
         $( '#cobtn' ).bind( "click", function( event ) {
         	alert('antes');
         	try{
+        		window.orientation -= 90;
         		$( window ).orientationchange();
         		alert('cambio');
         	}catch(e){alert('error 1')}
