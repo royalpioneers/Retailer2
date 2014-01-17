@@ -138,17 +138,15 @@ function init(reconection) {
 
         $( window ).bind( "orientationchange", function( event ) {
         	  $( "#oooo" ).text( "This device is in " + event.orientation + " mode!" );
+        	  $(window).trigger("throttledresize")
         });
+        
         $( '#cobtn' ).bind( "click", function( event ) {
         	alert('antes');
         	try{
         		$( window ).orientationchange();
         		alert('cambio');
         	}catch(e){alert('error 1')}
-        	try{
-        		navigator.screenOrientation.set('portrait');
-        		alert('cambio navigator');
-        	}catch(e){alert('error 2')}
       });
 
 //      navigator.screenOrientation.set('portrait');
