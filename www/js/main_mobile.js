@@ -15,7 +15,6 @@ $(window).load(function() {
     setTimeout(function(){
         init();
     },1000);
-    
 });
 
 /*
@@ -135,26 +134,6 @@ function init(reconection) {
         $('#select_buyer_store').bind('change', changeSelectStore);
         $('#store_total_qty').bind('change', changeInventoryQuantities);
         $('#update_stock_by_status').parent().hide();
-
-        $( window ).bind( "orientationchange", function( event ) {
-        	  $( "#oooo" ).text( "This device is in " + event.orientation + " mode!" );
-        	  $(window).trigger("throttledresize")
-        });
-        
-        $( '#cobtn' ).bind( "click", function( event ) {
-        	alert('antes');
-        	try{
-        		window.orientation -= 90;
-        		$( window ).orientationchange();
-        		alert('cambio');
-        	}catch(e){alert('error 1')}
-      });
-
-//      navigator.screenOrientation.set('portrait');
-//      window.orientationchange();
-
-//      $( window ).orientationchange();
-//      $( window ).orientationchange();
       	
         $(document).live("pagebeforechange", function(e,ob) {
         	if(ob.toPage && (typeof ob.toPage==="string") && ob.toPage.indexOf('index.html') >= 0) {
@@ -213,7 +192,7 @@ function init(reconection) {
     //Automatic Login
 
     if(reconection == true){
-//        eventsAfterLogin();
+        eventsAfterLogin();
     }
 
     if(token != null) {
@@ -325,7 +304,7 @@ function init(reconection) {
                         token = data.token;
                         $('#sign-up-ok').fadeIn().children().addClass('effect_in_out');
                         $('#sign-up-ok, .close_modal').live('click', function(){
-//                            eventsAfterLogin();
+                            eventsAfterLogin();
                         });
                     } else {
                         var modal = $('#sign-up-error');
@@ -1663,18 +1642,18 @@ function init(reconection) {
             var ft = new FileTransfer();
             ft.upload(imageURL, encodeURI(urls.upload), win, fail, options);
         } else {
-//            eventsAfterLogin();
+            eventsAfterLogin();
         }
     }
 
     function win(r) {
-//        eventsAfterLogin();
+        eventsAfterLogin();
         imageURL = undefined;
         $.mobile.loading("hide");
     }
 
     function fail(error) {
-//        eventsAfterLogin();
+        eventsAfterLogin();
         alert("An error has occurred image not upload");
         imageURL = undefined;
         $.mobile.loading("hide");
