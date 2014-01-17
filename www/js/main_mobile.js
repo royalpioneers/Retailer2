@@ -15,6 +15,7 @@ $(window).load(function() {
     setTimeout(function(){
         init();
     },1000);
+    
 });
 
 /*
@@ -135,6 +136,20 @@ function init(reconection) {
         $('#store_total_qty').bind('change', changeInventoryQuantities);
         $('#update_stock_by_status').parent().hide();
 
+        $( window ).bind( "orientationchange", function( event ) {
+        	  $( "#oooo" ).text( "This device is in " + event.orientation + " mode!" );
+        });
+        $( '#cobtn' ).live( "click", function( event ) {
+        	$( window ).orientationchange();
+        	console.log('mensae ok');
+      });
+
+//      navigator.screenOrientation.set('portrait');
+//      window.orientationchange();
+
+//      $( window ).orientationchange();
+//      $( window ).orientationchange();
+      	
         $(document).live("pagebeforechange", function(e,ob) {
         	if(ob.toPage && (typeof ob.toPage==="string") && ob.toPage.indexOf('index.html') >= 0) {
                 hash_base =  ob.toPage.split('#');
@@ -192,7 +207,7 @@ function init(reconection) {
     //Automatic Login
 
     if(reconection == true){
-        eventsAfterLogin();
+//        eventsAfterLogin();
     }
 
     if(token != null) {
@@ -205,7 +220,7 @@ function init(reconection) {
     	$.mobile.selectmenu.prototype.options.nativeMenu = false;
     	$.mobile.buttonMarkup.hoverDelay = 0;
     }catch(e){}
-
+    
     function saveClientStorage(){
         if(localStorage.getItem('clientSelected')){            
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
@@ -304,7 +319,7 @@ function init(reconection) {
                         token = data.token;
                         $('#sign-up-ok').fadeIn().children().addClass('effect_in_out');
                         $('#sign-up-ok, .close_modal').live('click', function(){
-                            eventsAfterLogin();
+//                            eventsAfterLogin();
                         });
                     } else {
                         var modal = $('#sign-up-error');
@@ -1642,18 +1657,18 @@ function init(reconection) {
             var ft = new FileTransfer();
             ft.upload(imageURL, encodeURI(urls.upload), win, fail, options);
         } else {
-            eventsAfterLogin();
+//            eventsAfterLogin();
         }
     }
 
     function win(r) {
-        eventsAfterLogin();
+//        eventsAfterLogin();
         imageURL = undefined;
         $.mobile.loading("hide");
     }
 
     function fail(error) {
-        eventsAfterLogin();
+//        eventsAfterLogin();
         alert("An error has occurred image not upload");
         imageURL = undefined;
         $.mobile.loading("hide");
