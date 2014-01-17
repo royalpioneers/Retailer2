@@ -140,8 +140,15 @@ function init(reconection) {
         	  $( "#oooo" ).text( "This device is in " + event.orientation + " mode!" );
         });
         $( '#cobtn' ).bind( "click", function( event ) {
-        	$( window ).orientationchange();
-        	console.log('cambio');
+        	alert('antes');
+        	try{
+        		$( window ).orientationchange();
+        		alert('cambio');
+        	}catch(e){alert('error 1')}
+        	try{
+        		navigator.screenOrientation.set('portrait');
+        		alert('cambio navigator');
+        	}catch(e){alert('error 2')}
       });
 
 //      navigator.screenOrientation.set('portrait');
