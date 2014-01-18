@@ -134,7 +134,7 @@ function init(reconection) {
         $('#select_buyer_store').bind('change', changeSelectStore);
         $('#store_total_qty').bind('change', changeInventoryQuantities);
         $('#update_stock_by_status').parent().hide();
-
+      	
         $(document).live("pagebeforechange", function(e,ob) {
         	if(ob.toPage && (typeof ob.toPage==="string") && ob.toPage.indexOf('index.html') >= 0) {
                 hash_base =  ob.toPage.split('#');
@@ -205,7 +205,7 @@ function init(reconection) {
     	$.mobile.selectmenu.prototype.options.nativeMenu = false;
     	$.mobile.buttonMarkup.hoverDelay = 0;
     }catch(e){}
-
+    
     function saveClientStorage(){
         if(localStorage.getItem('clientSelected')){            
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
