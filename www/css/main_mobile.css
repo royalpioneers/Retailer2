@@ -140,9 +140,9 @@
         height: auto;
         min-height: 100%;
     }
-    #log_in{
+    #log_in, #sign-up-btn{
         font-family: metapro, Helvetica, Arial, sans-serif !important;
-       background: #48c9b0;
+        background: #48c9b0;
         color: white;
         border: none;
         text-shadow: none;
