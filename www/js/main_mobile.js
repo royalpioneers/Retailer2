@@ -32,6 +32,7 @@ categories: contains categories and sub categories
 var DOMAIN = app.getDomain();
 
 var urls = {
+    'signup': DOMAIN + '/mobile/signup/',
     'login': DOMAIN+'/mobile/login_buyer/',
     'loginToken': DOMAIN+'/mobile/login_buyer_token/',
     'inventory': DOMAIN+'/mobile/inventory/',
@@ -50,11 +51,24 @@ var urls = {
     'send_invoice': DOMAIN+'/mobile/buyer-inventory-create-sale/',
     'features': DOMAIN+'/mobile/__idModel__/available-features/',
     'valuesFeatures': DOMAIN+'/mobile/__idModel__/feature-values/__idFeature__/',
-    'saveProductModelVariant': DOMAIN+'/mobile/create/product-model-variant/'
+    'saveProductModelVariant': DOMAIN+'/mobile/create/product-model-variant/',
+    'permissions': DOMAIN+'/mobile/permissions/'
     //'getAllTheFeaturesByBuyer' : DOMAIN+'/mobile/features-by-buyer/'
 };
 
 var items_list = [], productsSelected = [], storageClients = [];
+var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New Invoice', 'Stores' */
+		'tabMyAnalyzer': 'Sales Analyzer',
+		'pagina11': 'New Invoice', /* lista de usuarios, con lo que no importaria los demas link spara invoice */
+		'pagina9': 'New Invoice',  /* crear cliente */
+		'pagina12': 'New Invoice', /* pantalla de invoice */
+		'SelectMyStores': 'Stores', /* selecte de tiendas */
+		'tabMyInventory': 'Inventory', /* datos de inventario */
+		'search.html': 'Marketplace', /* busqueda de productos en general */
+		'pagina6': 'Inventory', /* crear item */
+		'pagina5': 'Inventory', /* detalle de producto */
+		'pagina14': 'Inventory', /* pantalla de subvariantes */
+	}, last_resource_message = '';
 
 function init(reconection) {
 
@@ -67,6 +81,9 @@ function init(reconection) {
         //Login
         $("#log_in").live("click", loginAuth);
         $('#logout').live('click', logOut);
+
+        //Sign Up
+        $('#sign-up-btn').live('click', signUp);
 
         //Generic
         $(".navbar ul li").live("click", changeTab);
@@ -117,6 +134,25 @@ function init(reconection) {
         $('#select_buyer_store').bind('change', changeSelectStore);
         $('#store_total_qty').bind('change', changeInventoryQuantities);
         $('#update_stock_by_status').parent().hide();
+      	
+        $(document).live("pagebeforechange", function(e,ob) {
+        	if(ob.toPage && (typeof ob.toPage==="string") && ob.toPage.indexOf('index.html') >= 0) {
+                hash_base =  ob.toPage.split('#');
+                if (hash_base.length > 0) {
+                	hash = hash_base[1];
+                	if (!canAccessTo(hash, true)) {
+                		e.preventDefault();
+                		e.stopImmediatePropagation();
+                	}
+                	if (hash == 'pagina2' && typeof(permissionFactory) !== 'undefined') {
+                		/* load permissions */
+                		permissionFactory.set_token(token);
+                        permissionFactory.get_all(function(){});
+                        last_resource_message = '';
+                	}
+                }
+            }
+        });
 
         /*Client offline*/        
         $('.disabled').parents('.ui-radio').bind('click', function(){;
@@ -126,6 +162,10 @@ function init(reconection) {
             event.preventDefault();
         });
 
+    /* PERMISSION */
+        var permissionFactory = new PermissionFactory(urls, token, window.localStorage.getItem("rp-cache"));
+        var permissionModel = new PermissionModel(permissionFactory, resourceControl);
+        
     /* CLIENT */
         var countryFactory = new CountryFactory(urls, token, window.localStorage.getItem("rp-cache"));
         var stateFactory = new StateFactory(urls, token, window.localStorage.getItem("rp-cache"));
@@ -165,7 +205,7 @@ function init(reconection) {
     	$.mobile.selectmenu.prototype.options.nativeMenu = false;
     	$.mobile.buttonMarkup.hoverDelay = 0;
     }catch(e){}
-
+    
     function saveClientStorage(){
         if(localStorage.getItem('clientSelected')){            
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
@@ -232,11 +272,48 @@ function init(reconection) {
                         token = data.token;
                         eventsAfterLogin();
                     } else {
-                        $('.overlay').fadeIn().children().addClass('effect_in_out');
+                        $('#login-error').fadeIn().children().addClass('effect_in_out');
                     }
                 },
                 complete: function(){
                     try{$.mobile.loading("hide");}catch(e){};
+                }
+            });
+        } else {
+            alert('Check your internet connection');
+        }
+    }
+
+    function signUp(e){
+        e.preventDefault();
+        if(Offline.state == 'up') {
+            var url = urls.signup;
+            $.ajax({
+                url: url,
+                data: {
+                    email: $('#email').val()
+                },
+                type: 'POST',
+                dataType: 'json',
+                beforeSend: function(){
+                    loading();
+                },
+                success: function (data) {
+                    if (data.status === 'OK') {
+                        window.localStorage.setItem("rp-token", data.token);
+                        token = data.token;
+                        $('#sign-up-ok').fadeIn().children().addClass('effect_in_out');
+                        $('#sign-up-ok, .close_modal').live('click', function(){
+                            eventsAfterLogin();
+                        });
+                    } else {
+                        var modal = $('#sign-up-error');
+                        modal.find('p').text(data.message);
+                        modal.fadeIn().children().addClass('effect_in_out');
+                    }
+                },
+                complete: function(){
+                    try{$.mobile.loading("hide");}catch(e){}
                 }
             });
         } else {
@@ -294,7 +371,7 @@ function init(reconection) {
                     }
                     else {
                         $('#container-login').css('display','inline');
-                        $('.overlay').fadeIn().children().addClass('effect_in_out');
+                        $('#login-error').fadeIn().children().addClass('effect_in_out');
                     }
                 },
                 complete: function(){
@@ -315,7 +392,6 @@ function init(reconection) {
     }
 
     function eventsAfterLogin() {
-
         categoryFactory.set_token(token);
         featureFactory.set_token(token);
         buyerInventoryFactory.set_token(token);
@@ -323,7 +399,8 @@ function init(reconection) {
         stateFactory.set_token(token);
         cityFactory.set_token(token);
         clientFactory.set_token(token);
-
+        permissionFactory.set_token(token);
+        permissionFactory.get_all(function(){});
         client.start_countries_values();
         client.getDataAddressClient();
         getInventoryItems();
@@ -362,7 +439,7 @@ function init(reconection) {
     }
 
     function showInventory(list) {
-        if(list != undefined) {
+        if(list != undefined && canAccessTo('tabMyInventory', true)) {
             var items_list = list;
             var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
                         html_to_insert = '';
@@ -408,7 +485,12 @@ function init(reconection) {
             $('.model-data').live('click', showDetail);
 
             var store = $('#select_buyer_store').val();
-            buyerInventory.render_stores(store);
+            if (canAccessTo('SelectMyStores', true)) {
+            	buyerInventory.render_stores(store);
+            } else {
+            	$('#select_buyer_store').val(0);
+            	buyerInventory.clear_stores();
+            }
         }
     }
     
@@ -435,7 +517,11 @@ function init(reconection) {
     }
     
     function processAnalyzerInformation(type) {
-    	analyzer.show_graphic(type);
+    	if (canAccessTo('tabMyAnalyzer', true)) {
+    		analyzer.show_graphic(type);
+    	} else {
+    		analyzer.clear_data_graphic();
+    	}
     }
 
     /* Client */
@@ -1365,9 +1451,10 @@ function init(reconection) {
     }
 
     /* Search */
-
     function changeSearch() {
-        window.location.replace("search.html");
+    	if (canAccessTo('search.html', true)) {
+    		window.location.replace("search.html");
+    	}
     }
 
     function pageMyProductsShow(){
@@ -1574,6 +1661,17 @@ function init(reconection) {
 
     function completeAjaxLoader(){
     	try{$.mobile.loading("hide");}catch(e){}
+    }
+    
+    function canAccessTo(resource, show_default_message) {
+    	var access = permissionModel.can_access(resource);
+    	if (!access && show_default_message) {
+    		if (last_resource_message != resource) {
+    			alert("You don't have permission for this option.");
+//    			last_resource_message = resource;
+    		}
+    	}
+    	return access;
     }
 }
 

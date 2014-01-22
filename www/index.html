@@ -1,7 +1,7 @@
 <!doctype html>
 	<html lang="es">
 	<head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">  
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<title>RP Retailer</title>
 		<meta charset="UTF-8">
     
@@ -19,6 +19,9 @@
 	        app.initialize();
         </script>           
 
+        <!--  Permission -->
+        <script type="text/javascript" src="js/models/permission.js"></script>
+        <script type="text/javascript" src="js/factory/permission.js"></script>
         <!--  Client -->
         <script type="text/javascript" src="js/models/client.js"></script>
         <script type="text/javascript" src="js/models/invoice.js"></script>
@@ -31,6 +34,7 @@
         <script type="text/javascript" src="js/factory/category.js"></script>      
         <!-- Features -->
         <script type="text/javascript" src="js/factory/features.js"></script>
+        
         <!--  Aplication -->
         <script type="text/javascript" src="js/offline.min.js"></script>
         <script type="text/javascript" src="js/plugins.js"></script>
@@ -57,7 +61,7 @@
         <!--HOME-->
         <div data-role="page" id="pagina1">
             <div id="container-login" style="display:none">
-                <div class="overlay">
+                <div class="overlay" id="login-error">
                     <div id="myModal" class="modal options_detail_product">
                         <div class="modal-body">
                             <a href="#" class="close_modal"><i class="icon-white icon-remove"></i></a>
@@ -82,25 +86,25 @@
                     <!-- Carousel items -->
                     <div class="carousel-inner">
                         <div class="active item">
-                            <img src="images/a1.jpg" alt="" />
-                            <div class="carousel-caption">
+                            <img src="images/a6.jpg" alt="" />
+                            <!--<div class="carousel-caption">
                                 <h4>Intelligent Inventory.</h4>
                                 <p>Optimize Your Business by buying and managing optimal inventory levels. Connect To The Only Marketplace Who tailors your inventory, based on your sales.</p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <img src="images/a2.jpg" alt="" />
-                            <div class="carousel-caption">
-                                <h4>Real Time Information.</h4>
-                                <p>Manage your inventory by using real time info about quantities, prices, and costs avoiding wasting time in checking that info.</p>
-                            </div>
+                            </div>-->
                         </div>
                         <div class="item">
                             <img src="images/a3.jpg" alt="" />
-                            <div class="carousel-caption">
+                            <!--<div class="carousel-caption">
+                                <h4>Real Time Information.</h4>
+                                <p>Manage your inventory by using real time info about quantities, prices, and costs avoiding wasting time in checking that info.</p>
+                            </div>-->
+                        </div>
+                        <div class="item">
+                            <img src="images/a8.jpg" alt="" />
+                            <!--<div class="carousel-caption">
                                 <h4>Keep in Contact.</h4>
                                 <p>Create and maintain long term relationships with your stakeholders by using our database of manufacturers and clients.</p>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -110,6 +114,7 @@
                         <input class="input_login" type="password" placeholder="Password" id="password">
                         <input type="submit" class="btn" style="width: 100%;" id="log_in" value="Login">
                     </form>
+                    <a href="#pagina17" class="" data-transition="slide">Sign Up!</a>
                 </div>
             </div>
         </div>
@@ -446,6 +451,49 @@
                 <ul data-role="listview" data-inset="true" data-theme="a" id="features-list">
                 </ul>                
             </div>
-        </div>                
+        </div>
+        <div data-role="page" id="pagina17" data-theme="a" style="background: url('images/a6.jpg') repeat;
+             background-size: cover; width: 100%; height: 100%">            
+            <div class="row-fluid center_text_align" style="width: 66%;margin: 45% auto 25% auto;position: relative">
+                <form action="" id="sign-up-form">
+                    <input type="email" placeholder="email" id="email">
+                    <input type="submit" class="btn" style="width: 100%;" id="sign-up-btn" value="Sign Up">                    
+                </form>
+                <a href="#pagina1" class="" data-transition="slide">Log In</a>
+            </div>
+            <div id="sign-up-error" class="overlay">
+                <div id="sign-up-modal" class="modal options_detail_product">
+                    <div class="modal-body">
+                        <a href="#" class="close_modal"><i class="icon-white icon-remove"></i></a>
+                        <ul class="options_detail">
+                            <li>
+                                <h3 style="color: #1b1b1b">Check the given email</h3>
+                                <p style="color: #1b1b1b">MESSAGE HERE</p>
+                            </li>
+                            <li>
+                                <a href="" class="btn btn_accept_option">Accept</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div id="sign-up-ok" class="overlay">
+                <div id="sign-up-ok-modal" class="modal options_detail_product">
+                    <div class="modal-body">
+                        <a href="#" class="close_modal"><i class="icon-white icon-remove"></i></a>
+                        <ul class="options_detail">
+                            <li>
+                                <h3 style="color: #1b1b1b">Congratulations</h3>
+                                <p style="color: #1b1b1b">To purchase to manufacturers in our web application
+                                    you need to confirm your email account</p>
+                            </li>
+                            <li>
+                                <a href="" class="btn btn_accept_option">Accept</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
 	</body>
 </html>

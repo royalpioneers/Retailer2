@@ -227,5 +227,11 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
 		}
 	};
 	
+	model.clear_stores = function(store_id){
+    	field_select = $('#'+model.id_stores);
+		field_select.html('');
+    	try {field_select.selectmenu('refresh', true);}catch(e){}
+	};
+	
     return model;
 };
