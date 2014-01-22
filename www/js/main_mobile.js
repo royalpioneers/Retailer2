@@ -64,7 +64,7 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
 		'pagina12': 'New Invoice', /* pantalla de invoice */
 		'SelectMyStores': 'Stores', /* selecte de tiendas */
 		'tabMyInventory': 'Inventory', /* datos de inventario */
-		'search.html': 'Inventory', /* busqueda de productos */
+		'search.html': 'Marketplace', /* busqueda de productos en general */
 		'pagina6': 'Inventory', /* crear item */
 		'pagina5': 'Inventory', /* detalle de producto */
 		'pagina14': 'Inventory', /* pantalla de subvariantes */
