@@ -5,7 +5,7 @@ $(function() {
     $('#search-redirect').live('click', loadCategories);
     $('#search').live('click', search);
     $('#back-index').live('click', changeIndex);
-
+    $('#form_search_without_category').live('submit', formSearch_WithoutCategory);
     loadCategories();
 
     function changeIndex() {
@@ -37,10 +37,22 @@ $(function() {
         });
     }
 
-    function search(){
-        var category = $(this).data('id'),
-            text = $('#seach-text').val();
+    function formSearch_WithoutCategory(){        
+        localStorage.searchWithoutCategory = true;
+        search();
+    }
 
+    function search(){
+        var text = $('#seach-text').val(),
+            category;
+        if(localStorage.searchWithoutCategory){
+            category = 0;
+            localStorage.searchWithoutCategory = false;
+        }
+        else{
+            category = $(this).data('id');
+        }
+        
         var url = DOMAIN + '/mobile/search/';
         $.ajax({
             url: url,

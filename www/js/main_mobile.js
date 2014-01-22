@@ -1249,7 +1249,7 @@ function init(reconection) {
                                   <li>\
                                       <img src="'+image+'"/>\
                                   </li>\
-                                  <li class="inventory_detail_product_features">\
+                                  <li class="inventory_deutail_product_features">\
                                      <ul>\
                                          <li><b>Product: </b>'+productName+'</li>\
                                          <li><b>Variant: </b>'+modelName+'</li>\
