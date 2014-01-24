@@ -1356,7 +1356,7 @@ function init(reconection) {
             
             $(pre_html).insertBefore(variants_by_product_model);
         }
-        
+        debugger;
         for(var i in variants){
             html += '<li data-variant-id="'+variants[i].id+'">\
                         <ul>\
@@ -1367,6 +1367,7 @@ function init(reconection) {
                         </ul>\
                     </li>';
         }
+        debugger;
         variants_by_product_model.empty();
         variants_by_product_model.append(html);        
     }
