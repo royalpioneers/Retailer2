@@ -1453,9 +1453,9 @@ function init(reconection) {
 
     /* Search */
     function changeSearch() {
-    	if (canAccessTo('search.html', true)) {
-    		window.location.replace("search.html");
-    	}
+    	// if (canAccessTo('../search/search.html', true)) {
+    	// 	window.location.replace("../search/search.html");
+    	// }
     }
 
     function pageMyProductsShow(){

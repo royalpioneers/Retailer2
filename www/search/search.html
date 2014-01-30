@@ -1,0 +1,72 @@
+<meta charset="utf-8">
+        <link rel="stylesheet" href="css/movies-app.css">
+<!--SEARCH-->
+	<div data-role="page" id="pagina1">
+		<div data-role="header" data-id="head1" data-theme="a">
+			<a class="header_top_options btn_more_big" href="index.html" id="back-index"><i class="icon-white icon-arrow-left"></i></a>
+			<h1>Search</h1>
+		</div>
+		<div data-role="content">
+            <form id="form_search_without_category">
+                <input type="text" name="name" id="seach-text" value=""  placeholder="Search Product"/>
+                <legend>Filter categories:</legend>
+                <ul data-role="listview" data-inset="true" data-filter="true" id="categories-list" data-filter-placeholder="Filter categories"></ul>
+            </form>   
+        </div>
+	</div>
+	<div data-role="page" id="pagina2" data-position="fixed">
+		<div data-role="header" data-id="head1" data-theme="a">
+			<a class="header_top_options" id="#pagina1" href="#pagina1">
+                <i class="icon-white icon-arrow-left"></i>
+            </a>
+			<h1>Royal Pioneers</h1>
+		</div>
+		<div data-role="content">
+            <div class="swiper-slide">
+                <div class="inner tab1">
+                    <ul id="result-search">
+                        <li>
+                            <img src="http://royalpioneers.com/media/categories/images/7453391012_d05aa9c04d.jpg">
+                       </li>
+                    </ul>
+                </div>
+            </div>
+        </div><!-- /content -->		
+	</div>	
+
+	<!-- Start page choose buyer product group -->
+    <div data-role="page" id="product-group-list-page">
+        <div data-role="header"  data-id="head1" data-theme="a">
+        	<a class="header_top_options btn_more_big" href="#pagina2" data-transition="slide">
+				<i class="icon-white icon-arrow-left"></i>
+			</a>                    
+        </div>
+        <div data-role="content">
+            <section class="ui-field-contain">
+                <legend>Choose product group:</legend>
+                <ul data-role="listview" id="list_groups" data-filter-placeholder="Search Clients..." data-inset="true" data-filter="true"></ul>
+            </section>            
+            <footer>
+                <a data-role="button" href="#product-group-form-page" class="btn_more_big ui-bar-a"><i class="icon-white icon-plus"></i></a>
+            </footer>
+        </div>
+    </div>
+    <!-- End page 4 -->
+
+    <!-- Start Product group page -->
+    <div id="product-group-form-page" data-role="page">
+    	<div data-role="header" data-id="head1" data-theme="a">
+    		<a class="header_top_options btn_more_big" href="#product-group-list-page" data-transition="slide" >
+				<i class="icon-white icon-arrow-left"></i>
+			</a>
+    	</div>
+    	<div data-role="content">
+            <section class="ui-field-contain">
+                <legend>Create new group:</legend>
+				<input type="text" name="name" id="form-group-name" placeholder="Product group name" data-clear-btn="true"/>
+            </section>
+            <footer>
+                <a data-role="button" href="" class="btn_more_big ui-bar-a" id="form-add-group">Save</a>
+            </footer>
+    	</div>
+    </div>        
