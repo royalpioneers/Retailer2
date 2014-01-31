@@ -204,10 +204,10 @@
                         <a class="btn_more_big" href="../#pagina6" id="create-product" data-transition="slide" >Create Item</a>
                     </li>
                     <li data-icon="arrow-r">
-                        <a class="btn_more_big" href="../#pagina9" id="btn_go_to_client_form" data-transition="slide">Create Client</a>
+                        <a class="btn_more_big" href="./newClient.html" id="btn_go_to_client_form" data-transition="slide">Create Client</a>
                     </li>
                     <li data-icon="arrow-r">
-                        <a class="btn_more_big" href="../invoice/invoice.html" id="new_invoice" data-transition="slide">New Invoice</a>
+                        <a class="btn_more_big" href="./invoice/invoice.html" id="new_invoice" data-transition="slide">New Invoice</a>
                     </li>
                     <li data-role="list-divider"></li>
                     <li data-icon="back" id="logout">
@@ -330,100 +330,13 @@
             </div>
         </div>
 
-        <!--ADD CLIENT-->
-        <div data-role="page" id="pagina9" data-fullscreen="true">
-            <div data-role="header" data-theme="a">
-                <a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
-                <h1>Add New Client</h1>
-            </div>
-            <div data-role="content">
-                <form action="" class="form_new_client">
-                	<select placeholder="CompanyType" name="company_type" data-native-menu="false"></select>
-                    <input type="text" placeholder="Name" name="name">
-                    <input type="email" placeholder="Email" name="email">
-                    <select placeholder="Country" name="country" data-native-menu="false"></select>
-                    <select placeholder="State" name="state" data-native-menu="false"></select>
-                    <div id="id_city_autocomplete">
-	                    <ul placeholder="Test" data-filter="true" data-role="listview"
-	                    	data-filter-placeholder="Search city..." data-inset="true"  data-filter-reveal="true">
-	                    </ul>
-                    </div>
-                    <input type="text" placeholder="Address" name="address">
-                    <input type="submit" class="ui-bar-a btn_more_big" id="add_new_client" data-theme="a" value="Save">
-                </form>
-                <a data-rel="back" href="#" id="return_from_add_new_client" class="hiden"></a>
-            </div>
-            <!-- Panel -->
-            <div data-role="panel" id="left-panel" data-theme="a">
-                <ul data-role="listview">
-                    <li data-role="list-divider"></li> 
-                    <li data-icon="home">
-                        <a class="btn_more_big" href="../#pagina2" data-transition="slide">Home</a>
-                    </li>
-                    <br/>
-                    <li data-role="list-divider"></li>
-                    <br/>
-                    <li data-icon="arrow-r">
-                        <a class="btn_more_big" href="../#pagina6" id="create-product" data-transition="slide" >Create Item</a>
-                    </li>
-                    <li data-icon="arrow-r">
-                        <a class="btn_more_big" href="../#pagina9" id="btn_go_to_client_form" data-transition="slide">Create Client</a>
-                    </li>
-                    <li data-icon="arrow-r">
-                        <a class="btn_more_big" href="../invoice/invoice.html" id="new_invoice" data-transition="slide">New Invoice</a>
-                    </li>
-                    <li data-role="list-divider"></li>
-                    <li data-icon="back" id="logout">
-                        <a class="btn_more_big" href="#pagina1">Log Out</a>
-                    </li>
-                </ul>        
-            </div><!-- /Panel -->
-        </div>
-        
-        <div id="id_template_option_city" style="display: none">
-        	<li data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c" class="ui-btn ui-btn-up-c ui-btn-icon-right ui-li-has-arrow ui-li ui-first-child ui-screen-hidden">
-        		<div class="ui-btn-inner ui-li">
-	               <div class="ui-btn-text">
-	                   <a href="#" class="ui-link-inherit class_item_city" data-value="__id__">__name__</a>
-	               </div>
-	               <span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>
-	           </div>
-	       </li>    
-        </div>
+       
 
 
 		<!-- MANDATORY FOR GRAPHIC -->
         <div id="content_init_graphic" style="visibility: hidden;"></div>        
 
-        <div data-role="page" id="pagina15" data-theme="b">
-            <div data-role="header">
-                <a class="btn_more_big" href="#pagina6" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
-                <h1>SubVariants</h1>
-            </div>            
-            <div data-role="content">                                            
-                <form>                                                                 
-                    <a href="#pagina16" id="features" data-trasition="slide" data-icon="arrow-r" data-iconpos="right">Feature: <span id="featureName"></span></a>        
-                    <br>         
-                    <ul data-role="listview" data-theme="c" id="values-features-list">
-                    </ul>
-                    <input type="number" placeholder="Additional Cost" id="additionalCost" required>
-                    <input type="number" placeholder="Variant Quantity" min="1" id="variantQuantity" required>                    
-                    <a href="" data-role="button" id="createSubVariant" data-theme="a">Save</a>
-                </form>
-            </div>
-        </div> 
-
-        <!--FEATURES-->
-        <div data-role="page" id="pagina16" data-theme="a">
-            <div data-role="header">
-                <a class="btn_more_big" href="#pagina15" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
-                <h1>Features</h1>
-            </div>
-            <div data-role="content">
-                <ul data-role="listview" data-inset="true" data-theme="a" id="features-list">
-                </ul>                
-            </div>
-        </div>
+        
 
         <div data-role="page" id="pagina17" data-theme="a" style="background: url('images/a6.jpg') repeat;background-size: cover; width: 100%; height: 100%">            
             <div class="row-fluid center_text_align" style="width: 66%;margin: 45% auto 25% auto;position: relative">

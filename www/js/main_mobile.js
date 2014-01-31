@@ -58,17 +58,17 @@ var urls = {
 
 var items_list = [], productsSelected = [], storageClients = [];
 var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New Invoice', 'Stores' */
-		'tabMyAnalyzer': 'Sales Analyzer',
-		'pagina11': 'New Invoice', /* lista de usuarios, con lo que no importaria los demas link spara invoice */
-		'pagina9': 'New Invoice',  /* crear cliente */
-		'pagina12': 'New Invoice', /* pantalla de invoice */
-		'SelectMyStores': 'Stores', /* selecte de tiendas */
-		'tabMyInventory': 'Inventory', /* datos de inventario */
-		'search.html': 'Marketplace', /* busqueda de productos en general */
-		'pagina6': 'Inventory', /* crear item */
-		'pagina5': 'Inventory', /* detalle de producto */
-		'pagina14': 'Inventory', /* pantalla de subvariantes */
-	}, last_resource_message = '';
+        'tabMyAnalyzer': 'Sales Analyzer',
+        'pagina11': 'New Invoice', /* lista de usuarios, con lo que no importaria los demas link spara invoice */
+        'pagina9': 'New Invoice',  /* crear cliente */
+        'pagina12': 'New Invoice', /* pantalla de invoice */
+        'SelectMyStores': 'Stores', /* selecte de tiendas */
+        'tabMyInventory': 'Inventory', /* datos de inventario */
+        'search.html': 'Marketplace', /* busqueda de productos en general */
+        'pagina6': 'Inventory', /* crear item */
+        'pagina5': 'Inventory', /* detalle de producto */
+        'pagina14': 'Inventory', /* pantalla de subvariantes */
+    }, last_resource_message = '';
 
 function init(reconection) {
 
@@ -138,22 +138,22 @@ function init(reconection) {
         $('#select_buyer_store').bind('change', changeSelectStore);
         $('#store_total_qty').bind('change', changeInventoryQuantities);
         $('#update_stock_by_status').parent().hide();
-      	
+        
         $(document).live("pagebeforechange", function(e,ob) {
-        	if(ob.toPage && (typeof ob.toPage==="string") && ob.toPage.indexOf('index.html') >= 0) {
+            if(ob.toPage && (typeof ob.toPage==="string") && ob.toPage.indexOf('index.html') >= 0) {
                 hash_base =  ob.toPage.split('#');
                 if (hash_base.length > 0) {
-                	hash = hash_base[1];
-                	if (!canAccessTo(hash, true)) {
-                		e.preventDefault();
-                		e.stopImmediatePropagation();
-                	}
-                	if (hash == 'pagina2' && typeof(permissionFactory) !== 'undefined') {
-                		/* load permissions */
-                		permissionFactory.set_token(token);
+                    hash = hash_base[1];
+                    if (!canAccessTo(hash, true)) {
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+                    }
+                    if (hash == 'pagina2' && typeof(permissionFactory) !== 'undefined') {
+                        /* load permissions */
+                        permissionFactory.set_token(token);
                         permissionFactory.get_all(function(){});
                         last_resource_message = '';
-                	}
+                    }
                 }
             }
         });
@@ -206,8 +206,8 @@ function init(reconection) {
     }
 
     try{
-    	$.mobile.selectmenu.prototype.options.nativeMenu = false;
-    	$.mobile.buttonMarkup.hoverDelay = 0;
+        $.mobile.selectmenu.prototype.options.nativeMenu = false;
+        $.mobile.buttonMarkup.hoverDelay = 0;
     }catch(e){}
     
     function saveClientStorage(){
@@ -246,8 +246,8 @@ function init(reconection) {
     }
     
     function getDiscount(product) {
-    	var discount = buyerInventory.get_discount_id_by_client_selected(product);
-    	return discount;
+        var discount = buyerInventory.get_discount_id_by_client_selected(product);
+        return discount;
     }
 
     /* Authenticate */
@@ -419,16 +419,16 @@ function init(reconection) {
     /* Buyer Inventory */
 
     function changeInventoryQuantities() {
-    	var all = false;
-    	if ($('#store_total_qty').attr('checked') == 'checked') {
-    		all = true;
-    	}
-    	buyerInventoryFactory.update_total_qty_for_items(all);
+        var all = false;
+        if ($('#store_total_qty').attr('checked') == 'checked') {
+            all = true;
+        }
+        buyerInventoryFactory.update_total_qty_for_items(all);
     }
 
     function changeSelectStore() {
-    	getInventoryItems();
-    	$('#id_tab_my_inventory').trigger('click');
+        getInventoryItems();
+        $('#id_tab_my_inventory').trigger('click');
     }
     
     function getInventoryItems() {
@@ -490,56 +490,56 @@ function init(reconection) {
 
             var store = $('#select_buyer_store').val();
             if (canAccessTo('SelectMyStores', true)) {
-            	buyerInventory.render_stores(store);
+                buyerInventory.render_stores(store);
             } else {
-            	$('#select_buyer_store').val(0);
-            	buyerInventory.clear_stores();
+                $('#select_buyer_store').val(0);
+                buyerInventory.clear_stores();
             }
         }
     }
     
     /* Analyzer */
     function startAnalyzerInformation() {
-    	if (Offline.state == 'down') {
-    		return false;
-    	}
-    	stores = buyerInventoryFactory.get_stores();
-    	if (stores.length > 0) {
-    		for (var index in stores) {
-        		buyerInventoryFactory.get_analyzer_information(stores[index].id, function(data){}, false);
-        	}
-    	}
+        if (Offline.state == 'down') {
+            return false;
+        }
+        stores = buyerInventoryFactory.get_stores();
+        if (stores.length > 0) {
+            for (var index in stores) {
+                buyerInventoryFactory.get_analyzer_information(stores[index].id, function(data){}, false);
+            }
+        }
     }
 
     function getAnalyzerInformation(type) {
-    	var analyzer_cache = false;
-    	if (Offline.state == 'down') {
-    		analyzer_cache = true;
-    	}
-    	var store = $('#select_buyer_store').val();
-    	analyzer.update(store, analyzer_cache, type);
+        var analyzer_cache = false;
+        if (Offline.state == 'down') {
+            analyzer_cache = true;
+        }
+        var store = $('#select_buyer_store').val();
+        analyzer.update(store, analyzer_cache, type);
     }
     
     function processAnalyzerInformation(type) {
-    	if (canAccessTo('tabMyAnalyzer', true)) {
-    		analyzer.show_graphic(type);
-    	} else {
-    		analyzer.clear_data_graphic();
-    	}
+        if (canAccessTo('tabMyAnalyzer', true)) {
+            analyzer.show_graphic(type);
+        } else {
+            analyzer.clear_data_graphic();
+        }
     }
 
     /* Client */
 
     function getClientById(id) {
 
-    	/* from local storage */
-    	for (var index in storageClients) {
-    		var client = storageClients[index];
-    		if (client.id == id) {
-    			return client;
-    		}
-    	}
-    	return false;
+        /* from local storage */
+        for (var index in storageClients) {
+            var client = storageClients[index];
+            if (client.id == id) {
+                return client;
+            }
+        }
+        return false;
     }
 
     // function listClients() {
@@ -739,7 +739,7 @@ function init(reconection) {
     }
     
     function updateAfterCreateInvoice(clientSelected, type_update) {
-    	for(var i in storageClients){
+        for(var i in storageClients){
             var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
             if(index !== -1){
                 var remove = -1;
@@ -749,7 +749,7 @@ function init(reconection) {
                     }
                 });
                 if(remove > -1) {
-                	invoice.success_create(clientSelected.products, type_update);
+                    invoice.success_create(clientSelected.products, type_update);
                     storageClients.splice(remove, 1);
                     clientSelected.products = [];
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
@@ -760,14 +760,14 @@ function init(reconection) {
     }
 
     function getTypeUpdate() {
-    	if ($('#store_total_qty').attr('checked') != 'checked') {
-    		return 0;
-    	}
-    	var type = $('#update_stock_by_status').attr('checked');
-    	if (type == 'checked') {
-    		return 2;
-    	}
-    	return 1;
+        if ($('#store_total_qty').attr('checked') != 'checked') {
+            return 0;
+        }
+        var type = $('#update_stock_by_status').attr('checked');
+        if (type == 'checked') {
+            return 2;
+        }
+        return 1;
     }
 
     function sendProductsInvoice(event) {
@@ -779,10 +779,10 @@ function init(reconection) {
         var data_client = [];
         var url = urls.send_invoice;
         for (var index in storageClients) {
-    		if (storageClients[index].id == clientSelected.id) {
-    			data_client[0] = storageClients[index];
-	        	break;
-	        }
+            if (storageClients[index].id == clientSelected.id) {
+                data_client[0] = storageClients[index];
+                break;
+            }
         }
         var today = new Date();
             // Today eg: '2013-12-15'
@@ -796,9 +796,9 @@ function init(reconection) {
             type_update: type_update
         };
 
-		if (!invoice.are_valid_products(data_client[0].products)) {
-        	alert(invoice.get_message());
-        	return false;
+        if (!invoice.are_valid_products(data_client[0].products)) {
+            alert(invoice.get_message());
+            return false;
         }
         if(self.data('status')=="true" || self.data('status') == true){
             self.data('status','false');
@@ -936,7 +936,7 @@ function init(reconection) {
         if(newSelection == 'tab1'){
             prevSelection = 'tab2';
         } else {
-        	getAnalyzerInformation(1);
+            getAnalyzerInformation(1);
         }
         $("."+prevSelection).addClass("ui-screen-hidden");
         $("."+newSelection).removeClass("ui-screen-hidden");
@@ -1071,10 +1071,10 @@ function init(reconection) {
             if(!$(this).data('selected')){
                 //Add Products to LocalStorage
                 if(products[i].id === id){
-                	if (buyerInventory.inventory_has_variants(id)) {
-                		buyerInventory.go_to_sub_variant_view(id);
-                		break;
-                	}
+                    if (buyerInventory.inventory_has_variants(id)) {
+                        buyerInventory.go_to_sub_variant_view(id);
+                        break;
+                    }
                     productSelected = {
                         'id': products[i].id,
                         'product_name': products[i].product_name,
@@ -1123,10 +1123,10 @@ function init(reconection) {
                 }
             //Remove Products to LocalStorage
             } else {
-            	if (buyerInventory.inventory_has_variants(id)) {
-            		buyerInventory.go_to_sub_variant_view(id);
-            		break;
-            	}
+                if (buyerInventory.inventory_has_variants(id)) {
+                    buyerInventory.go_to_sub_variant_view(id);
+                    break;
+                }
                 var remove = -1;
                 $.each(clientSelected.products, function(x, value){
                     if(value.id == id){                                                
@@ -1458,13 +1458,13 @@ function init(reconection) {
 
     /* Search */
     function changeSearch() {
-    	// if (canAccessTo('../search/search.html', true)) {
-    	// 	window.location.replace("../search/search.html");
-    	// }
+        // if (canAccessTo('../search/search.html', true)) {
+        //  window.location.replace("../search/search.html");
+        // }
     }
 
     function pageMyProductsShow(){
-    	showMethodUpdate();
+        showMethodUpdate();
         saveClientStorage();
         $('#theDate').val(getDateMonthYear());
         var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products,
@@ -1472,9 +1472,9 @@ function init(reconection) {
         ul_for_my_products.html('');
         var html = '';
         for(var i in myProducts){
-        	var variant_id = '0';
+            var variant_id = '0';
             if (!isNaN(parseInt(myProducts[i].variant_id))) {
-            	variant_id = myProducts[i].variant_id;
+                variant_id = myProducts[i].variant_id;
             }
             html += '<li class="without_radious" data-id="'+myProducts[i].id+'", data-variant="'+variant_id+'">\
                         <a href="">\
@@ -1493,14 +1493,14 @@ function init(reconection) {
     }
     
     function showMethodUpdate() {
-    	var all_qty = $('#store_total_qty').attr('checked');
-    	if (all_qty == 'checked') {
-    		$('#update_stock_by_status').attr('checked', false);
-    		/* $('#update_stock_by_status').parent().show(); */
-    	} else {
-    		$('#update_stock_by_status').attr('checked', 'checked');
-    		/* $('#update_stock_by_status').parent().hide(); */
-    	}
+        var all_qty = $('#store_total_qty').attr('checked');
+        if (all_qty == 'checked') {
+            $('#update_stock_by_status').attr('checked', false);
+            /* $('#update_stock_by_status').parent().show(); */
+        } else {
+            $('#update_stock_by_status').attr('checked', 'checked');
+            /* $('#update_stock_by_status').parent().hide(); */
+        }
     }
 
     function removeMyProduct() {
@@ -1511,10 +1511,10 @@ function init(reconection) {
         remove = -1;
 
         $.each(clientSelected.products, function(i, value){
-        	var value_variant = 0;
-        	if (!isNaN(parseInt(value.variant_id))) {
-        		value_variant = parseInt(value.variant_id);
-        	}
+            var value_variant = 0;
+            if (!isNaN(parseInt(value.variant_id))) {
+                value_variant = parseInt(value.variant_id);
+            }
             if(value.id == id && value_variant == variant_id){
                 remove = i;
             }
@@ -1547,16 +1547,16 @@ function init(reconection) {
             self = $(this);
 
         if (isNaN(parseInt(quantity))) {
-        	quantity = 0;
+            quantity = 0;
         } else {
-        	quantity = parseInt(quantity);
+            quantity = parseInt(quantity);
         }
         
         $.each(myProducts, function(i, value){
-        	var value_variant = 0;
-        	if (!isNaN(parseInt(value.variant_id))) {
-        		value_variant = parseInt(value.variant_id);
-        	}
+            var value_variant = 0;
+            if (!isNaN(parseInt(value.variant_id))) {
+                value_variant = parseInt(value.variant_id);
+            }
             if(value.id == idProduct && value_variant == idVariant) {
                 if(quantity >=0){
                     value.quantity = quantity;
@@ -1666,18 +1666,18 @@ function init(reconection) {
     }
 
     function completeAjaxLoader(){
-    	try{$.mobile.loading("hide");}catch(e){}
+        try{$.mobile.loading("hide");}catch(e){}
     }
     
     function canAccessTo(resource, show_default_message) {
-    	var access = permissionModel.can_access(resource);
-    	if (!access && show_default_message) {
-    		if (last_resource_message != resource) {
-    			alert("You don't have permission for this option.");
-//    			last_resource_message = resource;
-    		}
-    	}
-    	return access;
+        var access = permissionModel.can_access(resource);
+        if (!access && show_default_message) {
+            if (last_resource_message != resource) {
+                alert("You don't have permission for this option.");
+//              last_resource_message = resource;
+            }
+        }
+        return access;
     }
 }
 
