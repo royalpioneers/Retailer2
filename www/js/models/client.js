@@ -183,10 +183,12 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 			return false;
 		}
 		params.email = form.email.value;
-		if (params.email.length < 7 || params.email.indexOf('@') == -1 || params.email.indexOf('.') == -1) {
-			model.messages[model.messages.length] = 'Invalid email';
-			return false;
-		}
+		if(params.email != ''){
+			if (params.email.length < 7 || params.email.indexOf('@') == -1 || params.email.indexOf('.') == -1) {
+				model.messages[model.messages.length] = 'Invalid email';
+				return false;
+			}
+		}		
 		params.city = model.city_selected;
 		if (params.city < 1) {
 			model.messages[model.messages.length] = 'Invalid city';
@@ -228,17 +230,17 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	};
 
 	model.set_client_to_list = function(client) {
-				
-		var item_template = $('#'+model.id_item_template).html();
-		item_template = item_template.replace(/__name__/g, client.name);
-		item_template = item_template.replace(/__id__/g, client.id);
-		item_template = item_template.replace(/__image__/g, client.image);
-		if(Offline.state === 'down'){
-			item_template = item_template.replace(/__clientOffline__/g, 'disabled');	
-		}
+		console.log('Created!');
+		// var item_template = $('#'+model.id_item_template).html();
+		// item_template = item_template.replace(/__name__/g, client.name);
+		// item_template = item_template.replace(/__id__/g, client.id);
+		// item_template = item_template.replace(/__image__/g, client.image);
+		// if(Offline.state === 'down'){
+		// 	item_template = item_template.replace(/__clientOffline__/g, 'disabled');	
+		// }
 		
-        $('#'+model.id_client_list).append(item_template);
-        $('#'+model.id_client_list).trigger('create');
+  //       $('#'+model.id_client_list).append(item_template);
+  //       $('#'+model.id_client_list).trigger('create');
 	};
 
 	model.refresh_list = function() {

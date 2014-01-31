@@ -48,51 +48,19 @@
         <div class="overlay" id="group-data">
             <div id="myModal" class="modal options_detail_product">
                 <div class="modal-body">
-                    <a href="#" class="close_modal"><i class="icon-white icon-remove"></i></a>
-                    <form>                         
-                         <label for="text-7">Create New Group</label>
-                         <input type="text" data-clear-btn="true" name="text-7" id="text-7" value="" placeholder="Add">
-                     </form>
+                    <a href="#" class="close_modal"><i class="icon-remove"></i></a>
+                    <section class="grid-group-option">
+                        <div class="gruid-group-a">
+                            <input type="text" data-clear-btn="true" name="form-group-name" id="form-group-name" value="" placeholder="Create New Group">
+                        </div>
+                        <div class="gruid-group-b">
+                            <a data-role="button" href="#" class="btn_more_big ui-bar-a" id="form-add-group">+</a>
+                        </div>
+                    </section>
                      <ul data-role="listview" id="groupList">
                      </ul>
                 </div>
             </div>
         </div>
 	</div>	
-
-	<!-- Start page choose buyer product group -->
-    <div data-role="page" id="product-group-list-page">
-        <div data-role="header"  data-id="head1" data-theme="a">
-        	<a class="header_top_options btn_more_big" href="#pagina2" data-transition="slide">
-				<i class="icon-white icon-arrow-left"></i>
-			</a>                    
-        </div>
-        <div data-role="content">
-            <section class="ui-field-contain">
-                <legend>Choose product group:</legend>
-                <ul data-role="listview" id="list_groups" data-filter-placeholder="Search Clients..." data-inset="true" data-filter="true"></ul>
-            </section>            
-            <footer>
-                <a data-role="button" href="#product-group-form-page" class="btn_more_big ui-bar-a"><i class="icon-white icon-plus"></i></a>
-            </footer>
-        </div>
-    </div>
-    <!-- End page 4 -->
-
-    <!-- Start Product group page -->
-    <div id="product-group-form-page" data-role="page">
-    	<div data-role="header" data-id="head1" data-theme="a">
-    		<a class="header_top_options btn_more_big" href="#product-group-list-page" data-transition="slide" >
-				<i class="icon-white icon-arrow-left"></i>
-			</a>
-    	</div>
-    	<div data-role="content">
-            <section class="ui-field-contain">
-                <legend>Create new group:</legend>
-				<input type="text" name="name" id="form-group-name" placeholder="Product group name" data-clear-btn="true"/>
-            </section>
-            <footer>
-                <a data-role="button" href="" class="btn_more_big ui-bar-a" id="form-add-group">Save</a>
-            </footer>
-    	</div>
-    </div>        
+         
