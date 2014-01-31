@@ -230,7 +230,6 @@ function init(reconection) {
     function loading(){
         try{
             $.mobile.loading("show", {
-                textVisible: true,
                 theme: 'c',
                 textonly: false
             });
@@ -448,7 +447,10 @@ function init(reconection) {
                 if(model.offline == true){
                     var _offline='offline';
                 }
-
+                
+                if(model.variants){
+                    localStorage.dataVariants = JSON.stringify(model.variants);    
+                }                
                 if (Offline.state == 'down') {
                         html_to_insert += '<li class="'+_offline+'">\
                                      <a href="#pagina5"\
@@ -457,7 +459,6 @@ function init(reconection) {
                                          data-product-name="'+model.product_name+'"\
                                          data-retail-price="'+model.retail_price+'"\
                                          data-quantity="'+model.quantity+'"\
-                                         data-variants="'+model.variants+'"\
                                          data-is-not-system="'+model.is_created_by_buyer+'"\
                                          class="'+_offline+'"\
                                          >\
@@ -472,7 +473,6 @@ function init(reconection) {
                                          data-product-name="'+model.product_name+'"\
                                          data-retail-price="'+model.retail_price+'"\
                                          data-quantity="'+model.quantity+'"\
-                                         data-variants='+JSON.stringify(model.variants)+'\
                                          data-is-not-system="'+model.is_created_by_buyer+'"\
                                          >\
                                          <img src="'+DOMAIN+model.model_image+'"/>\
@@ -1321,6 +1321,7 @@ function init(reconection) {
     }
 
     function showDetail() {
+        
         var content = $('#pagina5').find('.inventory_detail_product'),
             $this = $(this),
             html = '', variants_by_product_model='', pre_html='',
@@ -1329,7 +1330,7 @@ function init(reconection) {
             quantity = $this.data('quantity'),
             retailPrice = $this.data('retailPrice'),
             image = $this.find('img').attr('src'),
-            variants = $this.data('variants'),
+            variants = JSON.parse(localStorage.dataVariants),
             isNotSystem = $this.data('is-not-system'),
             html_to_insert = '<ul>\
                                   <li>\
@@ -1337,10 +1338,10 @@ function init(reconection) {
                                   </li>\
                                   <li class="inventory_deutail_product_features">\
                                      <ul>\
-                                         <li><b>Product: </b>'+productName+'</li>\
-                                         <li><b>Variant: </b>'+modelName+'</li>\
-                                         <li><b>Quantity: </b>'+quantity+' </li>\
-                                         <li><b>Quantity: </b>'+isNotSystem+' </li>\
+                                         <li><b>Product: </b><span>'+productName+'</span></li>\
+                                         <li><b>Variant: </b><span>'+modelName+'</span></li>\
+                                         <li><b>Quantity: </b><span>'+quantity+' </span></li>\
+                                         <li><b>No System: </b><span>'+isNotSystem+' </span></li>\
                                       </ul>\
                                   </li>\
                               </ul>\
@@ -1348,26 +1349,26 @@ function init(reconection) {
                               <ul class="variants_by_product_model">\
                               </ul>';
         content.empty();
+        
         content.append(html_to_insert);
         variants_by_product_model = $('.variants_by_product_model');
         
         if(isNotSystem){
-            pre_html = '<a href="#pagina6" class="go_to_variants" data-theme="a" data-role="button">Go to Variants</a>';
-            
+            pre_html = '<a href="#pagina6" class="go_to_variants" data-theme="a" data-role="button">Go to Variants</a>';            
             $(pre_html).insertBefore(variants_by_product_model);
         }
-        debugger;
+        
         for(var i in variants){
-            html += '<li data-variant-id="'+variants[i].id+'">\
+            html += '<li class="data-variants" data-variant-id="'+variants[i].id+'">\
                         <ul>\
-                            <li><b>Name: </b>"'+variants[i].name+'"</li>\
-                            <li><b>Quantity: </b>"'+variants[i].quantity+'"</li>\
-                            <li><b>Additional Cost: </b>"'+variants[i].additional_cost+'"</li>\
-                            <li><b>Value: </b>"'+variants[i].value+'"</li>\
+                            <li><b>Name: </b><span>"'+variants[i].name+'"</span></li>\
+                            <li><b>Quantity: </b><span>"'+variants[i].quantity+'"</span></li>\
+                            <li><b>Additional Cost: </b><span>"'+variants[i].additional_cost+'"</span></li>\
+                            <li><b>Value: </b><span>"'+variants[i].value+'"</span></li>\
                         </ul>\
                     </li>';
         }
-        debugger;
+        
         variants_by_product_model.empty();
         variants_by_product_model.append(html);        
     }
@@ -1603,7 +1604,7 @@ function init(reconection) {
     function showOverlay() {
         $('.username').focus();
         $(this).fadeOut().children().removeClass('effect_in_out');
-    }
+    }    
 
     /* PHOTO */
 
@@ -1715,3 +1716,202 @@ Offline.options = {
       // offline.min.js.
       game: false
     };
+/*search*/
+    var imageDefault = 'http://royalpioneers.com/static/website/images/icon/default_product.png';    
+    $('.search').live('click', loadSearch);
+    $(document).on('pageshow', '.refinedSearch', function() {
+        var url = DOMAIN + '/mobile/search/';
+        var data =  {rp_token: window.localStorage.getItem("rp-token"),category: 0,text: ''};
+        factorySearch.methodAjax(url, data, setDataSearch);    
+    });
+    $("input[data-type='search']").live('keyup', function() {        
+        if($(this).val() == ''){
+            $('#result-search').html('');
+        }
+    });
+    function loadCategories () {
+        var url = DOMAIN + '/mobile/category/';
+        var data = {rp_token: window.localStorage.getItem("rp-token")};            
+        factorySearch.methodAjax(url, data, setDataCategories);        
+    }
+
+    function setDataCategories (data) {   
+         
+        var container = $('#pagina1 #right-panel').find('ul');
+        container.html('');
+        container.append('<li data-icon="delete"><a href="#" data-rel="close" onclick="closePanel()">Close</a></li>');
+        container.append('<li data-role="list-divider">Categories</li>');
+        data = data.categories;
+        for(var i in data){
+            container.append('<li><a class="search" onclick="closePanel()" data-id="'+data[i].id+'" href="#">'+data[i].name+'</a></li>');
+        }
+        
+        container.listview('refresh');
+        
+    }   
+    function closePanel () {
+        $( "#right-panel" ).panel( "close" );
+    }
+    function loadSearch () {
+        
+        var url = DOMAIN + '/mobile/search/';
+        var data =  {rp_token: window.localStorage.getItem("rp-token"),category: $(this).data('id'),text: $("input[data-type='search']").val()};
+        factorySearch.methodAjax(url, data, setDataSearch);
+    }
+
+    function setDataSearch (data) {       
+         
+        $('#result-search').html('');
+        $.each(data.result, function(i, value) {
+            $.each(value.models, function(ind, model) {
+                if(model.photo.length > 0){
+                    $('#result-search').append('<li><a class="add-to-group-btn" data-id="'+model.id+'" href="#"><small>'+model.name+'</small><img src="'+DOMAIN+model.photo[0].thumb+'"></a></li>');
+                } else {
+                    $('#result-search').append('<li><a class="add-to-group-btn" data-id="'+model.id+'" href="#"><small>'+model.name+'</small><img src="'+imageDefault+'"></a></li>');
+                }
+            });
+        });
+        $('#result-search').listview('refresh');
+         
+    }
+
+    var factorySearch = {
+        methodAjax: function(url, data, handler) {
+                                    
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                dataType: 'json',
+                beforeSend: function(){factorySearch.loader();},
+                success: function(data) {
+                    
+                    handler(data);                    
+                },
+               complete: function(){factorySearch.hideLoader();}
+            });
+        },
+        loader: function(){
+            try{$.mobile.loading("show", {
+                textVisible: true,
+                theme: 'c',
+                textonly: false
+            });}catch(e){}
+        },
+        hideLoader: function () {
+            try{$.mobile.loading("hide");}catch(e){}
+        }
+    };
+
+    /*group*/
+
+    var productModelId = undefined;
+
+    // choose product group view
+
+    function chooseProductGroup (url, data, handler) {        
+        $.ajax({
+            method: 'GET',
+            url: url,
+            dataType: 'json',
+            data: data,
+            beforeSend: function(){},
+            success: function (data) {
+                handler(data);
+            },
+           complete: function(){}
+        })
+    }
+
+    $('.add-to-group-btn').live('click', function (e) {debugger;
+        e.preventDefault();
+        $('#group-data').fadeIn().children().addClass('effect_in_out');
+        var url = DOMAIN + '/mobile/product-groups/';
+        var data = {rp_token: window.localStorage.getItem("rp-token")};   
+        localStorage.productModelId = $(this).data('id');
+        chooseProductGroup(url, data, showGroups);
+    });
+
+    function showGroups (data) {
+        debugger;
+        var list = $('#groupList');
+        var html_to_insert = '';
+        if (data.status === 'success') {debugger;
+            var groups = data.groups;
+            list.html('');            
+            for(var i in groups){
+                list.append('<li><a href="#" data-id="' + groups[i].id + '" class="group-for-choose">' + groups[i].name + '</a></li>');
+            }
+            list.listview('refresh');
+        }
+        debugger;
+    }
+
+    // When make a click in group name, this is saved and the user will be redirected to previous page
+
+    function groupForChoose (e) {
+        e.preventDefault();
+        var $this = $(this);
+        var url = DOMAIN + '/mobile/add-product-to-group/';
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                productModelId: productModelId,
+                groupId: $this.data('id'),
+                rp_token: window.localStorage['rp-token']
+            },
+            dataType: 'json',
+            beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
+            success: function (data) {
+                if (data.status === 'success') {
+                    productModelId = undefined;
+                    $('#list_groups').trigger('create');
+                    $.mobile.navigate("#pagina2");
+                } else {
+                    alert(data.status);
+                }
+            },
+           complete: function(){
+                $.mobile.loading("hide");
+           }
+        });
+    }
+
+    $('.group-for-choose').on('click', groupForChoose);
+
+    $('#form-add-group').on('click', function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        $.ajax({
+            url: DOMAIN + '/mobile/product-group-create/',
+            type: 'POST',
+            data: {
+                name: $('#form-group-name').val(),
+                rp_token: window.localStorage['rp-token']
+            },
+            dataType: 'json',
+            beforeSend: function(){
+                $.mobile.loading("show", {
+                    textVisible: true,
+                    theme: 'c',
+                    textonly: false
+                });
+            },
+            success: function (data) {
+                if (data.status === 'success') {
+                    var callback_url = '#product-group-list-page';
+                    chooseProductGroup(callback_url);
+                }
+            },
+           complete: function(){
+                $.mobile.loading("hide");
+           }
+        });
+    });

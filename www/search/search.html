@@ -1,37 +1,63 @@
 <meta charset="utf-8">
-        <link rel="stylesheet" href="css/movies-app.css">
 <!--SEARCH-->
-	<div data-role="page" id="pagina1">
+
+	<div data-role="page" id="pagina1" class="refinedSearch" data-position="fixed">
 		<div data-role="header" data-id="head1" data-theme="a">
-			<a class="header_top_options btn_more_big" href="index.html" id="back-index"><i class="icon-white icon-arrow-left"></i></a>
-			<h1>Search</h1>
-		</div>
-		<div data-role="content">
-            <form id="form_search_without_category">
-                <input type="text" name="name" id="seach-text" value=""  placeholder="Search Product"/>
-                <legend>Filter categories:</legend>
-                <ul data-role="listview" data-inset="true" data-filter="true" id="categories-list" data-filter-placeholder="Filter categories"></ul>
-            </form>   
-        </div>
-	</div>
-	<div data-role="page" id="pagina2" data-position="fixed">
-		<div data-role="header" data-id="head1" data-theme="a">
-			<a class="header_top_options" id="#pagina1" href="#pagina1">
-                <i class="icon-white icon-arrow-left"></i>
-            </a>
-			<h1>Royal Pioneers</h1>
+			<a href="#left-panel" class="header_top_options btn_more_big"><i class="icon-white icon-align-justify"></i></a>
+			<h1>Market Place</h1>
+            <a href="#right-panel" onClick="loadCategories()" class="header_top_options btn_more_big"><i class="icon-white icon-align-justify"></i></a>
 		</div>
 		<div data-role="content">
             <div class="swiper-slide">
                 <div class="inner tab1">
-                    <ul id="result-search">
-                        <li>
-                            <img src="http://royalpioneers.com/media/categories/images/7453391012_d05aa9c04d.jpg">
-                       </li>
+                    <ul id="result-search" data-role="listview" data-filter="true" data-filter-placeholder="Search...">
                     </ul>
                 </div>
             </div>
         </div><!-- /content -->		
+        <!-- Panel -->
+        <div data-role="panel" id="left-panel" data-theme="a">
+            <ul data-role="listview">
+                <li data-role="list-divider"></li> 
+                <li data-icon="home">
+                    <a class="btn_more_big" href="../#pagina2" data-transition="slide">Home</a>
+                </li>
+                <br/>
+                <li data-role="list-divider"></li>
+                <br/>
+                <li data-icon="arrow-r">
+                    <a class="btn_more_big" href="../#pagina6" id="create-product" data-transition="slide" >Create Item</a>
+                </li>
+                <li data-icon="arrow-r">
+                    <a class="btn_more_big" href="../#pagina9" id="btn_go_to_client_form" data-transition="slide">Create Client</a>
+                </li>
+                <li data-icon="arrow-r">
+                    <a class="btn_more_big" href="../invoice/invoice.html" id="new_invoice" data-transition="slide">New Invoice</a>
+                </li>
+                <li data-role="list-divider"></li>
+                <li data-icon="back" id="logout">
+                    <a class="btn_more_big" href="#pagina1">Log Out</a>
+                </li>
+            </ul>        
+        </div><!-- /Panel -->
+
+        <div data-role="panel" id="right-panel" data-display="overlay" data-position="right" data-theme="c">
+            <ul data-role="listview" data-theme="d" data-icon="false"></ul>
+        </div><!-- /panel -->
+
+        <div class="overlay" id="group-data">
+            <div id="myModal" class="modal options_detail_product">
+                <div class="modal-body">
+                    <a href="#" class="close_modal"><i class="icon-white icon-remove"></i></a>
+                    <form>                         
+                         <label for="text-7">Create New Group</label>
+                         <input type="text" data-clear-btn="true" name="text-7" id="text-7" value="" placeholder="Add">
+                     </form>
+                     <ul data-role="listview" id="groupList">
+                     </ul>
+                </div>
+            </div>
+        </div>
 	</div>	
 
 	<!-- Start page choose buyer product group -->

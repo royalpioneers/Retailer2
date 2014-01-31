@@ -9,7 +9,9 @@
     
 		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">    
         <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.3.1.css">
+
         <link rel="stylesheet" href="css/main_mobile.css">        
+        <!-- <link rel="stylesheet" type="text/css" href="css/jquery.mobile.flatui.css"> -->
         <link rel="stylesheet" href="css/offline-theme-dark.css">
 
         <!-- Main js -->
@@ -45,9 +47,8 @@
         
         <!--  Aplication -->
         <script type="text/javascript" src="js/offline.min.js"></script>
-        <script type="text/javascript" src="js/plugins.js"></script>
+        <!-- // <script type="text/javascript" src="js/plugins.js"></script> -->
         <script type="text/javascript" src="js/main_mobile.js"></script>
-        <script src="js/search.js"></script>
         <script src="js/group.js"></script>
                
 
@@ -65,7 +66,6 @@
 		<script class="include" type="text/javascript" src="js/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
 		<script class="include" type="text/javascript" src="js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"></script>
 		<script class="include" type="text/javascript" src="js/jqplot/plugins/jqplot.pointLabels.min.js"></script>
-
 	</head>
 	<body>
         <!--HOME-->
@@ -133,14 +133,19 @@
 		<div data-role="page" id="pagina2" data-position="fixed">
 			<div data-role="header" data-id="head1" data-theme="a" data-position="fixed">
 				<a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
-				<h1>RP</h1>
-                <a class="header_top_options btn_more_big" data-transition="slide" id="search-redirect" href="search/search.html"><i class="icon-white icon-search"></i></a>
+				<h1>Royal Pioneers</h1>
+                <a class="header_top_options btn_more_big" data-transition="slide" id="search-redirect" href="../search/search.html"><i class="icon-white icon-search"></i></a>
 			</div>
 			<div data-role="content" class="content_tab">
 				<div data-role="navbar">
 					<ul>
-						<li style="width: 75%"><select id="select_buyer_store" style="width: 70%"></select></li>
-						<li style="width: 25%"><input type="checkbox" id="store_total_qty" class="custom" style="width: 30%" /><label for="store_total_qty" style="line-height: 100%">All</label></li>
+						<li style="width: 75%">
+                            <select id="select_buyer_store"></select>
+                        </li>
+						<li style="width: 25%">
+                            <input type="checkbox" id="store_total_qty" class="custom"/>
+                            <label for="store_total_qty">All</label>
+                        </li>
 					</ul>
 				</div>
 	            <div data-role="navbar" class="navbar">
@@ -187,21 +192,31 @@
 	                </div>
 	            </div>
 	        </div><!-- /content -->
+
+            <!-- Panel -->
             <div data-role="panel" id="left-panel" data-theme="a">
-                    <ul data-role="listview">
-                        <li data-role="list-divider"></li>
-                        <li data-icon="plus">
-                            <a class="btn_more_big" href="#pagina6" data-transition="slide" id="create-product">Create Item</a>
-                        </li>
-                        <li data-icon="plus">
-                            <a class="btn_more_big" href="#pagina11" id="new_invoice" data-transition="slide">New Invoice</a>
-                        </li>
-                        <li data-role="list-divider"></li>
-                        <li data-icon="back" id="logout">
-                            <a class="btn_more_big" href="#pagina1">Log Out</a>
-                        </li>
-                    </ul>        
-                </div><!-- /panel -->
+                <ul data-role="listview">
+                    <li data-role="list-divider">Menu</li> 
+                    <li data-icon="home">
+                        <a class="btn_more_big" href="../#pagina2" data-transition="slide">Home</a>
+                    </li>
+                    <li data-role="list-divider"></li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../#pagina6" id="create-product" data-transition="slide" >Create Item</a>
+                    </li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../#pagina9" id="btn_go_to_client_form" data-transition="slide">Create Client</a>
+                    </li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../invoice/invoice.html" id="new_invoice" data-transition="slide">New Invoice</a>
+                    </li>
+                    <li data-role="list-divider"></li>
+                    <li data-icon="back" id="logout">
+                        <a class="btn_more_big" href="#pagina1">Log Out</a>
+                    </li>
+                </ul>        
+            </div><!-- /Panel -->
+
 		</div>
 
 		<!--PRODUCT INVENTORY-->
@@ -218,7 +233,7 @@
         <!--CREATE ITEM-->
         <div data-role="page" id="pagina6">
             <div data-role="header" data-theme="a">
-                <a href="#pagina2" class="btn_more_big" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
+                <a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
                 <h1>Create Item</h1>
             </div>
             <div data-role="content">
@@ -243,6 +258,32 @@
                     <a href="" data-role="button" id="create_item" data-theme="a" data-status="true">Save</a>
                 </form>
             </div>
+            <!-- Panel -->
+            <div data-role="panel" id="left-panel" data-theme="a">
+                <ul data-role="listview">
+                    <li data-role="list-divider"></li> 
+                    <li data-icon="home">
+                        <a class="btn_more_big" href="../#pagina2" data-transition="slide">Home</a>
+                    </li>
+                    <br/>
+                    <li data-role="list-divider"></li>
+                    <br/>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../#pagina6" id="create-product" data-transition="slide" >Create Item</a>
+                    </li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../#pagina9" id="btn_go_to_client_form" data-transition="slide">Create Client</a>
+                    </li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../invoice/invoice.html" id="new_invoice" data-transition="slide">New Invoice</a>
+                    </li>
+                    <li data-role="list-divider"></li>
+                    <li data-icon="back" id="logout">
+                        <a class="btn_more_big" href="#pagina1">Log Out</a>
+                    </li>
+                </ul>        
+            </div><!-- /Panel -->
+
         </div>
 
         <!--CATEGORY CREATE PRODUCT-->
@@ -293,7 +334,7 @@
         <!--ADD CLIENT-->
         <div data-role="page" id="pagina9" data-fullscreen="true">
             <div data-role="header" data-theme="a">
-                <a class="btn_more_big" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
+                <a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
                 <h1>Add New Client</h1>
             </div>
             <div data-role="content">
@@ -313,7 +354,31 @@
                 </form>
                 <a data-rel="back" href="#" id="return_from_add_new_client" class="hiden"></a>
             </div>
-            <a href="#pagina12"></a>
+            <!-- Panel -->
+            <div data-role="panel" id="left-panel" data-theme="a">
+                <ul data-role="listview">
+                    <li data-role="list-divider"></li> 
+                    <li data-icon="home">
+                        <a class="btn_more_big" href="../#pagina2" data-transition="slide">Home</a>
+                    </li>
+                    <br/>
+                    <li data-role="list-divider"></li>
+                    <br/>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../#pagina6" id="create-product" data-transition="slide" >Create Item</a>
+                    </li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../#pagina9" id="btn_go_to_client_form" data-transition="slide">Create Client</a>
+                    </li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../invoice/invoice.html" id="new_invoice" data-transition="slide">New Invoice</a>
+                    </li>
+                    <li data-role="list-divider"></li>
+                    <li data-icon="back" id="logout">
+                        <a class="btn_more_big" href="#pagina1">Log Out</a>
+                    </li>
+                </ul>        
+            </div><!-- /Panel -->
         </div>
         
         <div id="id_template_option_city" style="display: none">
@@ -327,6 +392,9 @@
 	       </li>    
         </div>
 
+
+
+
         <!--Client-->
         <div data-role="page" id="pagina10" data-fullscreen="true">
             <div data-role="header" data-theme="a">
@@ -337,75 +405,7 @@
             </div>
         </div>
 
-        <!--Invoice-->
-        <div data-role="page" id="pagina11" data-fullscreen="true">
-            <div data-role="header" data-theme="a">
-                <a class="btn_more_big kill_storage" href="#pagina2" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
-                <h1>Invoice</h1>
-            </div>
-            <div data-role="content">
-                <div class="header_client">
-                	<h2>Client</h2>	
-                    <a id="btn_go_to_client_form" href="#pagina9" data-transition="slide" class="ui-bar-a"><i class="icon-plus icon-white"></i></a>
-                </div>
-                <ul data-role="listview" data-filter="true" id="list_clients" data-filter-placeholder="Search Clients..." data-inset="true">
-                </ul>
-            </div>
-        </div>
 
-        <!--List CLIENTES-->
-        <div id="id_client_templates" style="display: none">
-        	<div id="id_client_template">
-        		<input type="radio" name="radio-choice-1" id="radio-choice-__id__" data-id="__id__" value="choice-__id__"/>
-        		<label for="radio-choice-__id__" data-corners="false" class="labelRadioButton __clientOffline__">
-        			<img src="__image__" class="image_client"/>__name__
-        		</label>
-        	</div>
-        </div>
-
-        <div data-role="page" id="pagina12" data-fullscreen="true">
-            <div data-role="header" data-theme="a">
-                <a class="btn_more_big cleanClientSelected" id="back_page" data-fullscreen="true" href="#pagina11"><i class="icon-white icon-arrow-left"></i></a>
-                <select name="select-choice-1" id="selectClient">
-                </select>
-            </div>
-            <div data-role="content">
-                <aside>
-                    <div class="header_client header_invoice">
-                        <span class="invoice_header_item">Items</span>
-                        <ul>
-                            <li>Quantity</li>
-                            <li>Price</li>
-                            <li>Subtotal</li>
-                        </ul>
-                    </div>
-                    <ul data-role="listview" id="myProducts" data-inset="true" data-icon="false" style="overflow-x: hidden;">                        
-                    </ul>
-                    <ul data-role="listview" data-corners="false" data-inset="true">
-                        <li><span class="total_invoice">Total: <b class="see_total_from_invoice"></b></span></li>
-                        <li data-icon="false"><a href="" id="goToProducts">+ Add Another Product</a></li>      
-                    </ul>
-                    <form id="formsendProductsInvoice">
-                    	<div>
-                    		<input type="checkbox" id="update_stock_by_status" /><label for="update_stock_by_status" >Update stock for priority status</label>
-                    	</div>
-                        <a href="#pagina13" class="ui-bar-b options_sendProductsInvoice cancel_sendProductsInvoice">Cancel</a>
-                        <a href="#pagina13" class="ui-bar-b options_sendProductsInvoice cancel_sendProductsInvoice" id="sendProductsInvoice" data-status="true">Sale</a>
-                    </form>
-                </aside>
-            </div>
-        </div>
-        
-        <!--Buy client's products-->
-        <div data-role="page" id="pagina13">
-            <div data-role="header" data-theme="a" data-position="fixed">
-                <a href="#pagina11" class="btn_more_big" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
-                <h2 class="total_price_title"><a href="" class="see_more_products_clients saveClientStorage" data-transition="slide">0</a></h2>
-            </div>
-            <div data-role="content">
-                <ul class="products_clients_add" data-role="listview" data-filter="true"></ul>
-            </div>
-        </div>        
 
 		<!-- MANDATORY FOR GRAPHIC -->
         <div id="content_init_graphic" style="visibility: hidden;"></div>
