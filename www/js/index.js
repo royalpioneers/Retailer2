@@ -1,8 +1,8 @@
 
 var app = {
     getDomain: function() {
-        // return "http://roypi.com";
-        return "http://localhost:8002";
+        return "http://roypi.com";
+        // return "http://localhost:8002";
     },
     initialize: function() {
         this.bindEvents();
