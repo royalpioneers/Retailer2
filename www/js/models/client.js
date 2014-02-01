@@ -59,14 +59,14 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		return false;
 	};
 	
-	model.start_form_values = function(cache){
+	model.start_form_values = function(cache){debugger;
 		model.clear_form(5);
 		model.start_countries_values(cache);
 		model.start_company_type_values(cache);
 		
 	};
 	
-	model.start_countries_values = function(cache){
+	model.start_countries_values = function(cache){debugger;
 		/* countries */
 		model.countryFactory.get_all(function(countries){
 			if (model.get_form_field('country') !== undefined) {
@@ -82,7 +82,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	};
 		
 	model.start_company_type_values = function(cache) {
-		/* items */
+		/* items */debugger;
 		model.clientFactory.get_company_types(function(items) {
 			//3
 			var form = model.get_form_field('company_type');

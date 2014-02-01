@@ -1,0 +1,99 @@
+<!--CREATE ITEM-->
+<div data-role="page" id="pagina6">
+    <div data-role="header" data-theme="a">
+        <a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
+        <h1>Create Item</h1>
+    </div>
+    <div data-role="content">
+        <form>
+            <div class="photo-product">
+                <img src="images/default_product.png" id="image-camera">
+                <a href="" data-role="button" id="edit-image" data-theme="a">Take a Photo</a>
+            </div>
+            <ul data-role="listview" data-inset="true" class="create_item_list">
+                <li>
+                    <input list="browsers" name="browser" placeholder="Name Product" autofocus="true" id="browser" required />
+                    <datalist id="browsers"></datalist>
+                </li>
+                <li>
+                    <input type="text" placeholder="Name Variant" id="name-variant" required/>
+                </li>
+                <li data-icon="arrow-r"><a href="#pagina7" data-trasition="slide">Category: <span id="category-name"></span><span id="category-id"></span></a></li>
+                <li data-icon="arrow-r"><a href="#pagina8" data-trasition="slide">Price: <span id="price-value"></span></a></li>
+                <li><input type="text" placeholder="SKU" id="sku" required></li>
+                <li><input type="number" placeholder="Quantity" min="1" id="quantity" required></li>
+            </ul>
+            <a href="" data-role="button" id="create_item" data-theme="a" data-status="true">Save</a>
+        </form>
+    </div>
+    <!-- Panel -->
+    <div data-role="panel" id="left-panel" data-display="overlay" data-theme="b">
+        <ul data-role="listview">
+            <li data-role="list-divider">Menu</li> 
+            <li data-icon="home">
+                <a class="btn_more_big" href="../#pagina2" data-transition="slide">Home</a>
+            </li>
+            <li data-role="list-divider"></li>
+            <li data-icon="arrow-r">
+                <a class="btn_more_big" href="../newProduct.html" id="create-product" data-transition="slide" >Create Item</a>
+            </li>
+            <li data-icon="arrow-r">
+                <a class="btn_more_big" href="../newClient.html" id="btn_go_to_client_form" data-transition="slide">Create Client</a>
+            </li>
+            <li data-icon="arrow-r">
+                <a class="btn_more_big" href="../invoice/invoice.html" id="new_invoice" data-transition="slide">New Invoice</a>
+            </li>
+            <li data-role="list-divider"></li>
+            <li data-icon="back" id="logout">
+                <a class="btn_more_big" href="#pagina1">Log Out</a>
+            </li>
+        </ul>        
+    </div><!-- /Panel -->
+
+
+</div>
+
+<!--CATEGORY CREATE PRODUCT-->
+<div data-role="page" id="pagina7" data-theme="a">
+    <div data-role="header" data-position="fixed">
+        <a class="btn_more_big" href="#pagina6" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
+        <h1>Category</h1>
+    </div>
+    <div data-role="content">
+        <ul data-role="listview" data-inset="true" data-theme="a" class="categories_create_product" id="categories-list">
+        </ul>
+    </div>
+</div>
+
+<!--PRICE CREATE PRODUCT-->
+<div data-role="page" id="pagina8" data-theme="a">
+    <div data-role="header">
+        <a class="btn_more_big" data-transition="slide" href="#pagina6"><i class="icon-white icon-arrow-left"></i></a>
+        <h1>Prices</h1>
+    </div>
+    <div data-role="content">
+        <ul data-theme="a" class="price_create_product">
+            <li>
+                <ul>
+                    <li>
+                        <input type="number" placeholder="Cost Price" id="cost-price">
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <ul>
+                    <li>
+                        <input type="number" placeholder="Wholesale Price" id="wholesale-price">
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <ul>
+                    <li>
+                        <input type="number" placeholder="Retail Price" id="retail-price">
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

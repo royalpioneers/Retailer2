@@ -3,7 +3,7 @@ $(window).load(function() {
         if (Offline.state === 'up') {
 
             if(window.localStorage.getItem("rp-cache") == true || window.localStorage.getItem("rp-cache") == "true" ){
-                init(true);
+                // init(true);
             }
             window.localStorage.setItem("rp-cache", false);
             Offline.check();
@@ -13,7 +13,7 @@ $(window).load(function() {
     };
     setInterval(run, 5000);
     setTimeout(function(){
-        init();
+        // init();
     },1000);
 });
 
@@ -70,7 +70,7 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
         'pagina14': 'Inventory', /* pantalla de subvariantes */
     }, last_resource_message = '';
 
-function init(reconection) {
+
 
     var imageURL = undefined,
         cache=false,
@@ -174,9 +174,12 @@ function init(reconection) {
         var countryFactory = new CountryFactory(urls, token, window.localStorage.getItem("rp-cache"));
         var stateFactory = new StateFactory(urls, token, window.localStorage.getItem("rp-cache"));
         var cityFactory = new CityFactory(urls, token, window.localStorage.getItem("rp-cache"));
+        debugger;
         var clientFactory = new ClientFactory(urls, token, window.localStorage.getItem("rp-cache"));
         var client = new ClientModel(countryFactory, stateFactory, cityFactory, clientFactory);
+        debugger;
         client.init(window.localStorage.getItem("rp-cache")); /* start list */
+        debugger;
 
     /* PRODUCTS */        
         var categoryFactory = new CategoryFactory(urls, token);
@@ -195,9 +198,9 @@ function init(reconection) {
 
     //Automatic Login
 
-    if(reconection == true){
-        eventsAfterLogin();
-    }
+    // if(reconection == true){
+    //     eventsAfterLogin();
+    // }
 
     if(token != null) {
         authToken();
@@ -404,6 +407,7 @@ function init(reconection) {
         clientFactory.set_token(token);
         permissionFactory.set_token(token);
         permissionFactory.get_all(function(){});
+        debugger;
         client.start_countries_values();
         client.getDataAddressClient();
         getInventoryItems();
@@ -542,164 +546,164 @@ function init(reconection) {
         return false;
     }
 
-    // function listClients() {
-    //     var url = urls.clients_list;
-    //     var clients_name_id = [];
-    //     if(Offline.state == 'up') {
-    //         $.ajax({
-    //            url: url,
-    //            type: 'POST',
-    //            data: {
-    //                 rp_token: token
-    //            },
-    //            dataType: 'json',
-    //            beforeSend: function(){
-    //                 loading();
-    //            },
-    //            success: function(data){
-    //                 $('#pagina11').find('#list_clients').html('');
-    //                 var ul_for_list_clients = $('#pagina11').find('#list_clients'),
-    //                     html_to_insert = '';
-    //                     items_list = data.items_list;
+    function listClients() {
+        var url = urls.clients_list;
+        var clients_name_id = [];
+        if(Offline.state == 'up') {
+            $.ajax({
+               url: url,
+               type: 'POST',
+               data: {
+                    rp_token: token
+               },
+               dataType: 'json',
+               beforeSend: function(){
+                    loading();
+               },
+               success: function(data){
+                    $('#pagina11').find('#list_clients').html('');
+                    var ul_for_list_clients = $('#pagina11').find('#list_clients'),
+                        html_to_insert = '';
+                        items_list = data.items_list;
 
-    //                 for(var client in items_list){
-    //                    html_to_insert += '<input type="radio" name="radio-choice-1" id="radio-choice-'+items_list[client].id+'" data-id="'+items_list[client].id+'"value="choice-'+items_list[client].id+'"/>\
-    //                                     <label\
-    //                                         for="radio-choice-'+items_list[client].id+'"\
-    //                                         data-corners="false" class="labelRadioButton"\
-    //                                         >\
-    //                                         <img src="'+DOMAIN+items_list[client].image+'" class="image_client"/>'+items_list[client].name+'\
-    //                                     </label>';
-    //                 };
+                    for(var client in items_list){
+                       html_to_insert += '<input type="radio" name="radio-choice-1" id="radio-choice-'+items_list[client].id+'" data-id="'+items_list[client].id+'"value="choice-'+items_list[client].id+'"/>\
+                                        <label\
+                                            for="radio-choice-'+items_list[client].id+'"\
+                                            data-corners="false" class="labelRadioButton"\
+                                            >\
+                                            <img src="'+DOMAIN+items_list[client].image+'" class="image_client"/>'+items_list[client].name+'\
+                                        </label>';
+                    };
 
-    //                 ul_for_list_clients.append(html_to_insert);
-    //                 $('#list_clients').trigger('create');
-    //                 $(":radio").unbind("change");
-    //                 $(":radio").bind("change", function(){
-    //                     if(localStorage.getItem('clientSelected')){
-    //                         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-    //                         //validar si esta repetido
-    //                         var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-    //                         if(index !== -1){
+                    ul_for_list_clients.append(html_to_insert);
+                    $('#list_clients').trigger('create');
+                    $(":radio").unbind("change");
+                    $(":radio").bind("change", function(){
+                        if(localStorage.getItem('clientSelected')){
+                            var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+                            //validar si esta repetido
+                            var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+                            if(index !== -1){
 
-    //                             storageClients[index] = clientSelected;
-    //                         }
-    //                     }
-    //                     var self = $(this);
-    //                     for(var client in items_list){
-    //                         if(items_list[client].id === self.data('id')){
-    //                             if(storageClients != ''){
+                                storageClients[index] = clientSelected;
+                            }
+                        }
+                        var self = $(this);
+                        for(var client in items_list){
+                            if(items_list[client].id === self.data('id')){
+                                if(storageClients != ''){
 
-    //                                 var result = false;
-    //                                 /* get client from storage */
-    //                                 var client_exists = getClientById(items_list[client].id);
-    //                                 if (client_exists) {
+                                    var result = false;
+                                    /* get client from storage */
+                                    var client_exists = getClientById(items_list[client].id);
+                                    if (client_exists) {
 
-    //                                     localStorage.setItem("clientSelected", JSON.stringify(client_exists));
-    //                                     clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-    //                                     try{$.mobile.navigate("#pagina12");}catch(e){}
-    //                                     result = true;
-    //                                 } else {
-    //                                     result = false;
-    //                                 }
-    //                                 if(result == false) {
-    //                                     var clientSelected = createNewClient(items_list[client]);
-    //                                 }
-    //                             } else {
-    //                                 var clientSelected = createNewClient(items_list[client]);
-    //                             }
-    //                         }
-    //                     }
-    //                     //pintar select con las lista de clientes de la pagina 12
-    //                     $('#selectClient').html('');
-    //                     var html ='';
-    //                     for(var i in items_list){
-    //                         html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';
-    //                     }
-    //                     $('#selectClient').append(html);
-    //                     $('#selectClient-button > span > span > span').text(clientSelected.name);
-    //                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
-    //                     if(clientSelected.products == ''){
-    //                         try{$.mobile.navigate("#pagina13");}catch(e){}
-    //                     }
-    //                 });
-    //                 localStorage.setItem("allClients", JSON.stringify(items_list));
-    //             },
-    //             complete: function(){
-    //                 completeAjaxLoader();
-    //             }
-    //         });
-    //     }
-    //     else{
-    //         items_list = JSON.parse(localStorage.getItem('allClients'));
-    //                 $('#pagina11').find('#list_clients').html('');
-    //                 var ul_for_list_clients = $('#pagina11').find('#list_clients'),
-    //                     html_to_insert = '';
+                                        localStorage.setItem("clientSelected", JSON.stringify(client_exists));
+                                        clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+                                        try{$.mobile.navigate("#pagina12");}catch(e){}
+                                        result = true;
+                                    } else {
+                                        result = false;
+                                    }
+                                    if(result == false) {
+                                        var clientSelected = createNewClient(items_list[client]);
+                                    }
+                                } else {
+                                    var clientSelected = createNewClient(items_list[client]);
+                                }
+                            }
+                        }
+                        //pintar select con las lista de clientes de la pagina 12
+                        $('#selectClient').html('');
+                        var html ='';
+                        for(var i in items_list){
+                            html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';
+                        }
+                        $('#selectClient').append(html);
+                        $('#selectClient-button > span > span > span').text(clientSelected.name);
+                        localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+                        if(clientSelected.products == ''){
+                            try{$.mobile.navigate("#pagina13");}catch(e){}
+                        }
+                    });
+                    localStorage.setItem("allClients", JSON.stringify(items_list));
+                },
+                complete: function(){
+                    completeAjaxLoader();
+                }
+            });
+        }
+        else{
+            items_list = JSON.parse(localStorage.getItem('allClients'));
+                    $('#pagina11').find('#list_clients').html('');
+                    var ul_for_list_clients = $('#pagina11').find('#list_clients'),
+                        html_to_insert = '';
 
-    //                 for(var client in items_list){
-    //                    html_to_insert += '<input type="radio" name="radio-choice-1" id="radio-choice-'+items_list[client].id+'" data-id="'+items_list[client].id+'"value="choice-'+items_list[client].id+'"/>\
-    //                                     <label\
-    //                                         for="radio-choice-'+items_list[client].id+'"\
-    //                                         data-corners="false" class="labelRadioButton"\
-    //                                         >\
-    //                                         <img src="'+DOMAIN+items_list[client].image+'" class="image_client"/>'+items_list[client].name+'\
-    //                                     </label>';
-    //                 };
+                    for(var client in items_list){
+                       html_to_insert += '<input type="radio" name="radio-choice-1" id="radio-choice-'+items_list[client].id+'" data-id="'+items_list[client].id+'"value="choice-'+items_list[client].id+'"/>\
+                                        <label\
+                                            for="radio-choice-'+items_list[client].id+'"\
+                                            data-corners="false" class="labelRadioButton"\
+                                            >\
+                                            <img src="'+DOMAIN+items_list[client].image+'" class="image_client"/>'+items_list[client].name+'\
+                                        </label>';
+                    };
 
-    //                 ul_for_list_clients.append(html_to_insert);
-    //                 $('#list_clients').trigger('create');
-    //                 $(":radio").unbind("change");
-    //                 $(":radio").bind("change", function(){
-    //                     if(localStorage.getItem('clientSelected')){
-    //                         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-    //                         //validar si esta repetido
-    //                         var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-    //                         if(index !== -1){
+                    ul_for_list_clients.append(html_to_insert);
+                    $('#list_clients').trigger('create');
+                    $(":radio").unbind("change");
+                    $(":radio").bind("change", function(){
+                        if(localStorage.getItem('clientSelected')){
+                            var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+                            //validar si esta repetido
+                            var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+                            if(index !== -1){
 
-    //                             storageClients[index] = clientSelected;
-    //                         }
-    //                     }
-    //                     var self = $(this);
-    //                     for(var client in items_list){
-    //                         if(items_list[client].id === self.data('id')){
-    //                             if(storageClients != ''){
+                                storageClients[index] = clientSelected;
+                            }
+                        }
+                        var self = $(this);
+                        for(var client in items_list){
+                            if(items_list[client].id === self.data('id')){
+                                if(storageClients != ''){
 
-    //                                 var result = false;
-    //                                 /* get client from storage */
-    //                                 var client_exists = getClientById(items_list[client].id);
-    //                                 if (client_exists) {
+                                    var result = false;
+                                    /* get client from storage */
+                                    var client_exists = getClientById(items_list[client].id);
+                                    if (client_exists) {
 
-    //                                     localStorage.setItem("clientSelected", JSON.stringify(client_exists));
-    //                                     clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-    //                                     try{$.mobile.navigate("#pagina12");}catch(e){}
-    //                                     result = true;
-    //                                 } else {
-    //                                     result = false;
-    //                                 }
-    //                                 if(result == false) {
-    //                                     var clientSelected = createNewClient(items_list[client]);
-    //                                 }
-    //                             } else {
-    //                                 var clientSelected = createNewClient(items_list[client]);
-    //                             }
-    //                         }
-    //                     }
-    //                     //pintar select con las lista de clientes de la pagina 12
-    //                     $('#selectClient').html('');
-    //                     var html ='';
-    //                     for(var i in items_list){
-    //                         html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';
-    //                     }
-    //                     $('#selectClient').append(html);
-    //                     $('#selectClient-button > span > span > span').text(clientSelected.name);
-    //                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
-    //                     if(clientSelected.products == ''){
-    //                         try{$.mobile.navigate("#pagina13");}catch(e){}
-    //                     }
-    //                 });
-    //                 localStorage.setItem("allClients", JSON.stringify(items_list));
-    //     }
-    // }
+                                        localStorage.setItem("clientSelected", JSON.stringify(client_exists));
+                                        clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+                                        try{$.mobile.navigate("#pagina12");}catch(e){}
+                                        result = true;
+                                    } else {
+                                        result = false;
+                                    }
+                                    if(result == false) {
+                                        var clientSelected = createNewClient(items_list[client]);
+                                    }
+                                } else {
+                                    var clientSelected = createNewClient(items_list[client]);
+                                }
+                            }
+                        }
+                        //pintar select con las lista de clientes de la pagina 12
+                        $('#selectClient').html('');
+                        var html ='';
+                        for(var i in items_list){
+                            html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';
+                        }
+                        $('#selectClient').append(html);
+                        $('#selectClient-button > span > span > span').text(clientSelected.name);
+                        localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+                        if(clientSelected.products == ''){
+                            try{$.mobile.navigate("#pagina13");}catch(e){}
+                        }
+                    });
+                    localStorage.setItem("allClients", JSON.stringify(items_list));
+        }
+    }
 
     function createNewClient(client) {
         var clientSelected = {
@@ -1679,7 +1683,7 @@ function init(reconection) {
         }
         return access;
     }
-}
+
 
 // storageClients = [
         //     {
