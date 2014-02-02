@@ -43,7 +43,10 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 	};
 	
 	factory.get_all = function(store, handler, cache) {
-
+		value = window.localStorage.getItem(factory.storage_id_inventory);
+		if (value == 'undefined') {
+			window.localStorage.removeItem(factory.storage_id_inventory);
+		}
 		var list = JSON.parse(window.localStorage.getItem(factory.storage_id_inventory));
 		if ((factory.cache || cache) && list != null) {
 			return handler(factory.get_items_from_store(store, list));
@@ -60,7 +63,6 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 		   },
 			success: function(data) {
 				if (data.status == true) {
-					
                     window.localStorage.removeItem(factory.storage_id_inventory);
 					window.localStorage.setItem(factory.storage_id_inventory, JSON.stringify(data.stores));
 					handler(factory.get_items_from_store(store, data.stores));
@@ -76,14 +78,18 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 	
 	factory.get_stores = function() {
 		/* call after "factory.get_all" method */
-		return JSON.parse(window.localStorage.getItem(factory.storage_id_inventory));
+		stores = JSON.parse(window.localStorage.getItem(factory.storage_id_inventory));
+		if (typeof(stores) == 'undefined' || stores == null) {
+			stores = [];
+		}
+		return stores;
 	};
 	
 	factory.get_items_from_store = function(store_id, stores) {
-		if (typeof(stores) == 'undefined' ) {
+		if (typeof(stores) == 'undefined') {
 			stores = factory.get_stores();
 		}
-		if ((typeof(store_id) == 'undefined' || store_id == null) && stores.length > 0)  {			
+		if ((typeof(store_id) == 'undefined' || store_id == null) && stores.length > 0)  {
 			return stores[0].items_list;
 		} else {
 			store_id = parseInt(store_id);

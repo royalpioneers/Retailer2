@@ -174,6 +174,16 @@ var AnalyzerModel = function(buyerInventoryFactory) {
     		$('#' + model.id_div_source_graphic).append($('#' + model.prefix_jqplot + 3));
     	}
     };
+
+    model.clear_data_graphic = function() {
+    	$('#pagina2').find('.tab2').find('#analyzer_total_sales').html('');
+        $('#pagina2').find('.tab2').find('#analyzer_total_units').html('');
+        $('#pagina2').find('.tab2').find('#analyzer_total_profit').html('');
+        
+        $('#pagina2').find('.tab2').find('#most_popular_img').html('');
+        $('#pagina2').find('.tab2').find('#most_popular_name').html('');
+        $('#pagina2').find('.tab2').find('#most_popular_sold').html('');
+    };
     
     model.create_graphic = function(data, type) {
         var s1 = [];

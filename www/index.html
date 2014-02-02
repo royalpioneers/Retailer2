@@ -1,46 +1,61 @@
 <!doctype html>
 	<html lang="es">
 	<head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">  
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<title>RP Retailer</title>
 		<meta charset="UTF-8">
+
+        <!-- Main css -->
     
 		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">    
         <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.3.1.css">
+
         <link rel="stylesheet" href="css/main_mobile.css">        
+        <!-- <link rel="stylesheet" type="text/css" href="css/jquery.mobile.flatui.css"> -->
         <link rel="stylesheet" href="css/offline-theme-dark.css">
+
+        <!-- Main js -->
+
         <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
-        <script src="js/jquerymobile/jquery.mobile-1.3.2.min.js" type="text/javascript"></script>
+        <script type="text/javascript" src="js/jquerymobile/jquery.mobile-1.3.2.min.js"></script>
         <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
         <script type="text/javascript" src="cordova.js"></script>		
         <script type="text/javascript" src="js/index.js"></script>
+        
         <script type="text/javascript">
-            app.initialize();
-        </script>      
+	        app.initialize();
+        </script>           
+
+        <!--  Permission -->
+        <script type="text/javascript" src="js/models/permission.js"></script>
+        <script type="text/javascript" src="js/factory/permission.js"></script>
 
         <!--  Client -->
         <script type="text/javascript" src="js/models/client.js"></script>
         <script type="text/javascript" src="js/models/invoice.js"></script>
         <script type="text/javascript" src="js/models/buyer_inventory.js"></script>
         <script type="text/javascript" src="js/models/analyzer.js"></script>
+
         <script type="text/javascript" src="js/factory/client.js"></script>
         <script type="text/javascript" src="js/factory/address.js"></script>
+
         <!--  Product -->
         <script type="text/javascript" src="js/factory/buyer_inventory.js"></script>
         <script type="text/javascript" src="js/factory/category.js"></script>      
         <!-- Features -->
         <script type="text/javascript" src="js/factory/features.js"></script>
+        
         <!--  Aplication -->
         <script type="text/javascript" src="js/offline.min.js"></script>
-        <script type="text/javascript" src="js/plugins.js"></script>
+        <script type="text/javascript" src="js/plugin_animation_my_cart.js"></script>
         <script type="text/javascript" src="js/main_mobile.js"></script>
-       
                
 
         <!--  GRAPHIC JPLOT -->
     	<link class="include" rel="stylesheet" type="text/css" href="js/jqplot/jquery.jqplot.min.css" />
 		<link type="text/css" rel="stylesheet" href="js/jqplot/syntaxhighlighter/styles/shCoreDefault.min.css" />
 		<link type="text/css" rel="stylesheet" href="js/jqplot/syntaxhighlighter/styles/shThemejqPlot.min.css" />
+
 		<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="js/jqplot/excanvas.js"></script><![endif]-->
 		<script class="include" type="text/javascript" src="js/jqplot/jquery.jqplot.min.js"></script>
 		<script type="text/javascript" src="js/jqplot/syntaxhighlighter/scripts/shCore.min.js"></script>
@@ -49,13 +64,13 @@
 		<script class="include" type="text/javascript" src="js/jqplot/plugins/jqplot.barRenderer.min.js"></script>
 		<script class="include" type="text/javascript" src="js/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
 		<script class="include" type="text/javascript" src="js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"></script>
-		<script class="include" type="text/javascript" src="js/jqplot/plugins/jqplot.pointLabels.min.js"></script>        
+		<script class="include" type="text/javascript" src="js/jqplot/plugins/jqplot.pointLabels.min.js"></script>
 	</head>
 	<body>
         <!--HOME-->
         <div data-role="page" id="pagina1">
-            <div id="container-login" style="display:none">
-                <div class="overlay">
+            <div id="container-login">
+                <div class="overlay" id="login-error">
                     <div id="myModal" class="modal options_detail_product">
                         <div class="modal-body">
                             <a href="#" class="close_modal"><i class="icon-white icon-remove"></i></a>
@@ -80,25 +95,25 @@
                     <!-- Carousel items -->
                     <div class="carousel-inner">
                         <div class="active item">
-                            <img src="images/a1.jpg" alt="" />
-                            <div class="carousel-caption">
+                            <img src="images/a6.jpg" alt="" />
+                            <!--<div class="carousel-caption">
                                 <h4>Intelligent Inventory.</h4>
                                 <p>Optimize Your Business by buying and managing optimal inventory levels. Connect To The Only Marketplace Who tailors your inventory, based on your sales.</p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <img src="images/a2.jpg" alt="" />
-                            <div class="carousel-caption">
-                                <h4>Real Time Information.</h4>
-                                <p>Manage your inventory by using real time info about quantities, prices, and costs avoiding wasting time in checking that info.</p>
-                            </div>
+                            </div>-->
                         </div>
                         <div class="item">
                             <img src="images/a3.jpg" alt="" />
-                            <div class="carousel-caption">
+                            <!--<div class="carousel-caption">
+                                <h4>Real Time Information.</h4>
+                                <p>Manage your inventory by using real time info about quantities, prices, and costs avoiding wasting time in checking that info.</p>
+                            </div>-->
+                        </div>
+                        <div class="item">
+                            <img src="images/a8.jpg" alt="" />
+                            <!--<div class="carousel-caption">
                                 <h4>Keep in Contact.</h4>
                                 <p>Create and maintain long term relationships with your stakeholders by using our database of manufacturers and clients.</p>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -106,8 +121,9 @@
                     <form action="" id="form_login_app">
                         <input class="input_login" type="email" placeholder="Username" id="username">
                         <input class="input_login" type="password" placeholder="Password" id="password">
+                        <a href="#pagina17" class="" data-transition="slide">New User? Sign Up!</a>
                         <input type="submit" class="btn" style="width: 100%;" id="log_in" value="Login">
-                    </form>
+                    </form>                    
                 </div>
             </div>
         </div>
@@ -117,13 +133,18 @@
 			<div data-role="header" data-id="head1" data-theme="a" data-position="fixed">
 				<a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
 				<h1>Royal Pioneers</h1>
-                <a class="header_top_options btn_more_big" data-transition="slide" id="search-redirect" href="#search.html"><i class="icon-white icon-search"></i></a>
+                <a class="header_top_options btn_more_big" data-transition="slide" id="search-redirect" href="./search/search.html"><i class="icon-white icon-search"></i></a>
 			</div>
 			<div data-role="content" class="content_tab">
 				<div data-role="navbar">
 					<ul>
-						<li style="width: 75%"><select id="select_buyer_store" style="width: 70%"></select></li>
-						<li style="width: 25%"><input type="checkbox" id="store_total_qty" class="custom" style="width: 30%" /><label for="store_total_qty" style="line-height: 100%">All</label></li>
+						<li style="width: 75%">
+                            <select id="select_buyer_store"></select>
+                        </li>
+						<li style="width: 25%">
+                            <input type="checkbox" id="store_total_qty" class="custom"/>
+                            <label for="store_total_qty">All</label>
+                        </li>
 					</ul>
 				</div>
 	            <div data-role="navbar" class="navbar">
@@ -170,21 +191,31 @@
 	                </div>
 	            </div>
 	        </div><!-- /content -->
-            <div data-role="panel" id="left-panel" data-theme="a">
-                    <ul data-role="listview">
-                        <li data-role="list-divider"></li>
-                        <li data-icon="plus">
-                            <a class="btn_more_big" href="#pagina6" data-transition="slide" id="create-product">Create Item</a>
-                        </li>
-                        <li data-icon="plus">
-                            <a class="btn_more_big" href="#pagina11" id="new_invoice" data-transition="slide">New Invoice</a>
-                        </li>
-                        <li data-role="list-divider"></li>
-                        <li data-icon="back" id="logout">
-                            <a class="btn_more_big" href="#pagina1">Log Out</a>
-                        </li>
-                    </ul>        
-                </div><!-- /panel -->
+
+            <!-- Panel -->
+            <div data-role="panel" id="left-panel" data-display="overlay" data-theme="b">
+                <ul data-role="listview">
+                    <li data-role="list-divider">Menu</li> 
+                    <li data-icon="home">
+                        <a class="btn_more_big" href="../#pagina2" data-transition="slide">Home</a>
+                    </li>
+                    <li data-role="list-divider"></li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="./newProduct.html" id="create-product" data-transition="slide" >Create Item</a>
+                    </li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="./newClient.html" id="btn_go_to_client_form" data-transition="slide">Create Client</a>
+                    </li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="./invoice/invoice.html" id="new_invoice" data-transition="slide">New Invoice</a>
+                    </li>
+                    <li data-role="list-divider"></li>
+                    <li data-icon="back" id="logout">
+                        <a class="btn_more_big" href="#pagina1">Log Out</a>
+                    </li>
+                </ul>        
+            </div><!-- /Panel -->
+
 		</div>
 
 		<!--PRODUCT INVENTORY-->
@@ -198,252 +229,51 @@
 	        </div>
 		</div>
 
-        <!--CREATE ITEM-->
-        <div data-role="page" id="pagina6">
-            <div data-role="header" data-theme="a">
-                <a href="#pagina2" class="btn_more_big" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
-                <h1>Create Item</h1>
-            </div>
-            <div data-role="content">
-                <form>
-                    <div class="photo-product">
-                        <img src="images/default_product.png" id="image-camera">
-                        <a href="" data-role="button" id="edit-image" data-theme="a">Take a Photo</a>
-                    </div>
-                    <ul data-role="listview" data-inset="true" class="create_item_list">
-                        <li>
-                            <input list="browsers" name="browser" placeholder="Name Product" autofocus="true" id="browser" required />
-                            <datalist id="browsers"></datalist>
-                        </li>
-                        <li>
-                            <input type="text" placeholder="Name Variant" id="name-variant" required/>
-                        </li>
-                        <li data-icon="arrow-r"><a href="#pagina7" data-trasition="slide">Category: <span id="category-name"></span><span id="category-id"></span></a></li>
-                        <li data-icon="arrow-r"><a href="#pagina8" data-trasition="slide">Price: <span id="price-value"></span></a></li>
-                        <li><input type="text" placeholder="SKU" id="sku" required></li>
-                        <li><input type="number" placeholder="Quantity" min="1" id="quantity" required></li>
-                    </ul>
-                    <a href="" data-role="button" id="create_item" data-theme="a" data-status="true">Save</a>
-                </form>
-            </div>
-        </div>
-
-        <!--CATEGORY CREATE PRODUCT-->
-        <div data-role="page" id="pagina7" data-theme="a">
-            <div data-role="header" data-position="fixed">
-                <a class="btn_more_big" href="#pagina6" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
-                <h1>Category</h1>
-            </div>
-            <div data-role="content">
-                <ul data-role="listview" data-inset="true" data-theme="a" class="categories_create_product" id="categories-list">
-                </ul>
-            </div>
-        </div>
-
-        <!--PRICE CREATE PRODUCT-->
-        <div data-role="page" id="pagina8" data-theme="a">
-            <div data-role="header">
-                <a class="btn_more_big" data-transition="slide" href="#pagina6"><i class="icon-white icon-arrow-left"></i></a>
-                <h1>Prices</h1>
-            </div>
-            <div data-role="content">
-                <ul data-theme="a" class="price_create_product">
-                    <li>
-                        <ul>
-                            <li>
-                                <input type="number" placeholder="Cost Price" id="cost-price">
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <ul>
-                            <li>
-                                <input type="number" placeholder="Wholesale Price" id="wholesale-price">
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <ul>
-                            <li>
-                                <input type="number" placeholder="Retail Price" id="retail-price">
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!--ADD CLIENT-->
-        <div data-role="page" id="pagina9" data-fullscreen="true">
-            <div data-role="header" data-theme="a">
-                <a class="btn_more_big" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
-                <h1>Add New Client</h1>
-            </div>
-            <div data-role="content">
-                <form action="" class="form_new_client">
-                	<select placeholder="CompanyType" name="company_type" data-native-menu="false"></select>
-                    <input type="text" placeholder="Name" name="name">
-                    <input type="email" placeholder="Email" name="email">
-                    <select placeholder="Country" name="country" data-native-menu="false"></select>
-                    <select placeholder="State" name="state" data-native-menu="false"></select>
-                    <div id="id_city_autocomplete">
-	                    <ul placeholder="Test" data-filter="true" data-role="listview"
-	                    	data-filter-placeholder="Search city..." data-inset="true"  data-filter-reveal="true">
-	                    </ul>
-                    </div>
-                    <input type="text" placeholder="Address" name="address">
-                    <input type="submit" class="ui-bar-a btn_more_big" id="add_new_client" data-theme="a" value="Save">
-                </form>
-                <a data-rel="back" href="#" id="return_from_add_new_client" class="hiden"></a>
-            </div>
-            <a href="#pagina12"></a>
-        </div>
-        
-        <div id="id_template_option_city" style="display: none">
-        	<li data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c" class="ui-btn ui-btn-up-c ui-btn-icon-right ui-li-has-arrow ui-li ui-first-child ui-screen-hidden">
-        		<div class="ui-btn-inner ui-li">
-	               <div class="ui-btn-text">
-	                   <a href="#" class="ui-link-inherit class_item_city" data-value="__id__">__name__</a>
-	               </div>
-	               <span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>
-	           </div>
-	       </li>    
-        </div>
-
-        <!--Client-->
-        <div data-role="page" id="pagina10" data-fullscreen="true">
-            <div data-role="header" data-theme="a">
-                <a class="btn_more_big" data-rel="back" href="#"><i class="icon-white icon-arrow-left"></i></a>
-                <h2>Clients</h2>
-            </div>
-            <div data-role="content">
-            </div>
-        </div>
-        <!--Invoice-->
-        <div data-role="page" id="pagina11" data-fullscreen="true">
-            <div data-role="header" data-theme="a">
-                <a class="btn_more_big kill_storage" href="#pagina2" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
-                <h1>Invoice</h1>
-            </div>
-            <div data-role="content">
-                <div class="header_client">
-                	<h2>Client</h2>	
-                    <a id="btn_go_to_client_form" href="#pagina9" data-transition="slide" class="ui-bar-a"><i class="icon-plus icon-white"></i></a>
-                </div>
-                <ul data-role="listview" data-filter="true" id="list_clients" data-filter-placeholder="Search Clients..." data-inset="true">
-                </ul>
-            </div>
-        </div>
-        <div id="id_client_templates" style="display: none">
-        	<div id="id_client_template">
-        		<input type="radio" name="radio-choice-1" id="radio-choice-__id__" data-id="__id__" value="choice-__id__"/>
-        		<label for="radio-choice-__id__" data-corners="false" class="labelRadioButton __clientOffline__">
-        			<img src="__image__" class="image_client"/>__name__
-        		</label>
-        	</div>
-        </div>
-
-        <div data-role="page" id="pagina12" data-fullscreen="true">
-            <div data-role="header" data-theme="a">
-                <a class="btn_more_big cleanClientSelected" id="back_page" data-fullscreen="true" href="#pagina11"><i class="icon-white icon-arrow-left"></i></a>
-                <select name="select-choice-1" id="selectClient">
-                </select>
-            </div>
-            <div data-role="content">
-                <aside>
-                    <div class="header_client header_invoice">
-                        <span class="invoice_header_item">Items</span>
-                        <ul>
-                            <li>Quantity</li>
-                            <li>Price</li>
-                            <li>Subtotal</li>
-                        </ul>
-                    </div>
-                    <ul data-role="listview" id="myProducts" data-inset="true" data-icon="false" style="overflow-x: hidden;">                        
-                    </ul>
-                    <ul data-role="listview" data-corners="false" data-inset="true">
-                        <li><span class="total_invoice">Total: <b class="see_total_from_invoice"></b></span></li>
-                        <li data-icon="false"><a href="" id="goToProducts">+ Add Another Product</a></li>      
-                    </ul>
-                    <form id="formsendProductsInvoice">
-                    	<div>
-                    		<input type="checkbox" id="update_stock_by_status" /><label for="update_stock_by_status" >Update stock for priority status</label>
-                    	</div>
-                        <a href="#pagina13" class="ui-bar-b options_sendProductsInvoice cancel_sendProductsInvoice">Cancel</a>
-                        <a href="#pagina13" class="ui-bar-b options_sendProductsInvoice cancel_sendProductsInvoice" id="sendProductsInvoice" data-status="true">Sale</a>
-                    </form>
-                </aside>
-            </div>
-        </div>
-        <!--Buy client's products-->
-        <div data-role="page" id="pagina13">
-            <div data-role="header" data-theme="a" data-position="fixed">
-                <a href="#pagina11" class="btn_more_big" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
-                <h2 class="total_price_title"><a href="" class="see_more_products_clients saveClientStorage" data-transition="slide">0</a></h2>
-            </div>
-            <div data-role="content">
-                <ul class="products_clients_add" data-role="listview" data-filter="true"></ul>
-            </div>
-        </div>        
-
 		<!-- MANDATORY FOR GRAPHIC -->
-        <div id="content_init_graphic" style="visibility: hidden;"></div>
+        <div id="content_init_graphic" style="visibility: hidden;"></div>        
+
         
-        <!-- PRODUCT VARIANT: SUB-VARIANT -->
-        <div data-role="page" id="pagina14" data-theme="b">
-            <div data-role="header">
-                <a class="btn_more_big returnToSelectedProducts" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
-                <h1>Invoice</h1>
-            </div>
-            
-            <div data-role="content">
-                <div class="header_client">
-                	<span id="selected_product_name"></span><br />
-                	<span id="selected_product_variant_name"></span><br />
-                	<span class="separator_sub_variant">Sub variants list</span><br />
-                	<ul>
-                		<li>name</li>
-                		<li>price</li>
-                	</ul>
-                </div>
-                
-                <ul data-role="listview" data-inset="true" data-theme="a" id="id_selected_product_variants_list">
-                </ul>
-            </div>
-        </div>        
-        <div id="id_template_option_variant" style="display: none">
-       		<input type="checkbox" name="radio-choice-__id__" id="radio-choice-__id__"  __checked__
-       		data-id="__id__" data-parent="__parent__" value="choice-__id__" class="class_selected_variant"/>
-       		<label for="radio-choice-__id__" data-corners="false" class="labelRadioButton label_sub_variant">
-                <span class="label_sub_variant_name">__name__</span>: <span class="label_sub_variant_price"> __price__</span></label>
-        </div>
-        <div data-role="page" id="pagina15" data-theme="b">
-            <div data-role="header">
-                <a class="btn_more_big" href="#pagina6" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
-                <h1>SubVariants</h1>
-            </div>            
-            <div data-role="content">                                            
-                <form>                                                                 
-                    <a href="#pagina16" id="features" data-trasition="slide" data-icon="arrow-r" data-iconpos="right">Feature: <span id="featureName"></span></a>        
-                    <br>         
-                    <ul data-role="listview" data-theme="c" id="values-features-list">
-                    </ul>
-                    <input type="number" placeholder="Additional Cost" id="additionalCost" required>
-                    <input type="number" placeholder="Variant Quantity" min="1" id="variantQuantity" required>                    
-                    <a href="" data-role="button" id="createSubVariant" data-theme="a">Save</a>
+        <div data-role="page" id="pagina17" data-theme="a" style="background: url('images/a6.jpg') repeat;background-size: cover; width: 100%; height: 100%">            
+            <div class="row-fluid center_text_align" style="width: 66%;margin: 45% auto 25% auto;position: relative">
+                <form action="" id="sign-up-form">
+                    <input type="email" placeholder="email" id="email">
+                    <a href="#pagina1" class="" data-transition="slide">Already a User? Log In!</a>                    
+                    <input type="submit" class="btn" style="width: 100%;" id="sign-up-btn" value="Sign Up">                    
                 </form>
             </div>
-        </div> 
-        <!--FEATURES-->
-        <div data-role="page" id="pagina16" data-theme="a">
-            <div data-role="header">
-                <a class="btn_more_big" href="#pagina15" data-transition="slide"><i class="icon-white icon-arrow-left"></i></a>
-                <h1>Features</h1>
+            <div id="sign-up-error" class="overlay">
+                <div id="sign-up-modal" class="modal options_detail_product">
+                    <div class="modal-body">
+                        <a href="#" class="close_modal"><i class="icon-white icon-remove"></i></a>
+                        <ul class="options_detail">
+                            <li>
+                                <h3 style="color: #1b1b1b">Check the given email</h3>
+                                <p style="color: #1b1b1b">MESSAGE HERE</p>
+                            </li>
+                            <li>
+                                <a href="" class="btn btn_accept_option">Accept</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div data-role="content">
-                <ul data-role="listview" data-inset="true" data-theme="a" id="features-list">
-                </ul>                
+            <div id="sign-up-ok" class="overlay">
+                <div id="sign-up-ok-modal" class="modal options_detail_product">
+                    <div class="modal-body">
+                        <a href="#" class="close_modal"><i class="icon-white icon-remove"></i></a>
+                        <ul class="options_detail">
+                            <li>
+                                <h3 style="color: #1b1b1b">Congratulations</h3>
+                                <p style="color: #1b1b1b">To purchase to manufacturers in our web application
+                                    you need to confirm your email account</p>
+                            </li>
+                            <li>
+                                <a href="" class="btn btn_accept_option">Accept</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </div>                
+        </div>
 	</body>
 </html>

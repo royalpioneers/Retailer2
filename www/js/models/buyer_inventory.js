@@ -199,8 +199,13 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
 
     /* STORE */
     model.render_stores = function(store_id){
+    	field_select = $('#'+model.id_stores);
+		field_select.html('');
+    	try {field_select.selectmenu('refresh', true);}catch(e){}
+    	
     	stores = buyerInventoryFactory.get_stores();
     	if (typeof(stores) == 'undefined' || stores.length < 1) {
+    		try {field_select.selectmenu('refresh', true);}catch(e){}
     		return false;
     	}
     	var field_select, index;
@@ -208,8 +213,6 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
 			store_id = stores[0].id;
 		}
 		buyerInventoryFactory.set_current_store(store_id);
-		field_select = $('#'+model.id_stores);
-		field_select.html('');
 		if(field_select != undefined){
 			for (index in stores) {
 				var option = $('<option></option>');
@@ -222,6 +225,12 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
 	        }
 			try {field_select.selectmenu('refresh', true);}catch(e){}
 		}
+	};
+	
+	model.clear_stores = function(store_id){
+    	field_select = $('#'+model.id_stores);
+		field_select.html('');
+    	try {field_select.selectmenu('refresh', true);}catch(e){}
 	};
 	
     return model;
