@@ -1273,7 +1273,7 @@ function init(reconection) {
         }
     }
 
-    function getInformationProduct() {
+    function getInformationProduct() {debugger;
         var cache = false;
         if(Offline.state == 'down') {
             cache = true;
