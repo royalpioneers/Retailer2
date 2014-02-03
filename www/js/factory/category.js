@@ -12,7 +12,7 @@ var CategoryFactory = function(urls, token) {
         var catData = JSON.parse(window.localStorage.getItem('categories'));
         if ((factory.cache || cache) && catData != '' && prdData != '') {
 		    return handler(prdData, catData);
-		}debugger;
+		}
         $.ajax({
             url: factory.urls.productInformation,
             type: 'POST',
@@ -24,7 +24,7 @@ var CategoryFactory = function(urls, token) {
                 loader();
             },
             success: function(data) {                
-                if(data.status == true) {debugger;
+                if(data.status == true) {
                     window.localStorage.removeItem("productRelated");
                     window.localStorage.removeItem("categories");
                     window.localStorage.setItem('productRelated', JSON.stringify(data.products));

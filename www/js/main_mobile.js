@@ -496,7 +496,7 @@ function init(reconection) {
             $('.model-data').live('click', showDetail);
 
             var store = $('#select_buyer_store').val();
-            debugger;
+            
             if (canAccessTo('SelectMyStores', true)) {
                 buyerInventory.render_stores(store);
             } else {
@@ -974,11 +974,11 @@ function init(reconection) {
     }
 
     function showProductsInventoryToInvoice() { 
-        debugger;
+        
         $('.products_clients_add').html('');
         var html = "",
             products = buyerInventoryFactory.get_current_list();
-        for(var i in products) {debugger;
+        for(var i in products) {
             var _offline = "";
             if(products[i].offline != undefined){
                 _offline = "offline";
@@ -1001,14 +1001,14 @@ function init(reconection) {
                     </a>\
                 </li>';
             }
-            debugger;
+            
         }
         $('.products_clients_add').append(html);
         $('.products_clients_add').trigger('create');
         var a = '<a href="#" class="overlay_product"></a>';
         $(a).insertAfter('.myProductSelected');
         $('.see_more_products_clients').text(getCurrentTotal());
-        debugger;
+        
     }
     
     function getClientSelected() {
@@ -1217,9 +1217,9 @@ function init(reconection) {
             costPrice = $('#cost-price').val(),
             wholeSalePrice = $('#wholesale-price').val(),
             retailPrice = $('#retail-price').val();
-            debugger;
+            
         if(nameProduct != '' && categoryId!='' && costPrice!=''){
-            var url = urls.saveProduct;debugger;
+            var url = urls.saveProduct;
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -1238,7 +1238,7 @@ function init(reconection) {
                 beforeSend: function(){
                     loading();
                 },
-                success: function(data){  debugger;                  
+                success: function(data){                    
                     if(data.status.status == true){
                         buyerInventoryFactory.store_inventory(data);
                         localStorage.setItem('productModelId', data.id);
@@ -1252,7 +1252,7 @@ function init(reconection) {
                         else try{$.mobile.navigate("#pagina15");}catch(e){}                        
                     } else alert('an error occurred');
                 },
-                complete: function(){debugger;
+                complete: function(){
                     completeAjaxLoader();
                 }
             });
@@ -1273,18 +1273,18 @@ function init(reconection) {
         }
     }
 
-    function getInformationProduct() {debugger;
+    function getInformationProduct() {
         var cache = false;
         if(Offline.state == 'down') {
             cache = true;
-        }debugger;
+        }
         categoryFactory.get_main_category(showInformation, cache);
     }
 
     function showInformation(products, categories){
         /*
         Event before press Create Products
-         */debugger;
+         */
         showProductRelated(products);
         showMainCategories(categories);
     }
@@ -1292,7 +1292,7 @@ function init(reconection) {
     function showProductRelated(products){
         /*
         Show products related in input name product
-         */debugger;
+         */
         $.each(products, function(i, value) {
             $('#browsers').append('<option data-id="'+value.id+'" value="'+value.name+'">');
         });
@@ -1312,7 +1312,7 @@ function init(reconection) {
     }
 
     function getCompleteInformation(event) {
-        debugger;
+        
         var productName = $(this).val();
         var productId = 0;
         $.each($('#browsers option'), function(i, value){

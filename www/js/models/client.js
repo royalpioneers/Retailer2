@@ -275,7 +275,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	};
 	
 	model.charge_cities = function(e) {
-		debugger;
+		
 		e.preventDefault();
 		var state_id = $(this).find('a').data('id');
 		$('#loadStates').fadeOut().children().removeClass('effect_in_out');

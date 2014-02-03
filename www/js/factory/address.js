@@ -6,11 +6,11 @@ var CountryFactory = function(urls, token, cache) {
 	factory.token = token;
 	factory.id_countries = 'id_countries';
 	
-	factory.get_all = function(handler, cache) {debugger;
+	factory.get_all = function(handler, cache) {
 		var list = JSON.parse(window.localStorage.getItem(factory.id_countries));
 		if ((factory.cache || cache) && list != null) {
 			return handler(list);
-		} debugger;
+		} 
 		
 		$.ajax({
 			url: factory.urls.countries,
@@ -20,8 +20,8 @@ var CountryFactory = function(urls, token, cache) {
 			beforeSend: function(){
                 loader();
             },
-			success: function(data){debugger;
-				if (data.status == 'ok') {debugger;
+			success: function(data){
+				if (data.status == 'ok') {
 					window.localStorage.setItem(factory.id_countries, JSON.stringify(data.list));
 					handler(data.list);
 				} else {
@@ -29,7 +29,7 @@ var CountryFactory = function(urls, token, cache) {
 				}
 			},
 			error: function(err){
-				debugger;
+				
 			},
 			complete: function(){
 				try{$.mobile.loading("hide");}catch(e){}

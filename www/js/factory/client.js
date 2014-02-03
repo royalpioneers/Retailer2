@@ -8,12 +8,12 @@ var ClientFactory = function(urls, token, cache) {
 	factory.storage_id_client_selected = 'clientSelected';
 	
 	factory.get_all = function(handler, cache) {
-		debugger;
+		
         var client_list = JSON.parse(window.localStorage.getItem(factory.id_client_list));
 		if ((factory.cache || cache) && client_list != null) {
 			return handler(client_list);
 		}
-		debugger;
+		
 		$.ajax({
 			url: factory.urls.client_list,
 			type: 'POST',
@@ -22,12 +22,12 @@ var ClientFactory = function(urls, token, cache) {
 			beforeSend: function(){
                 factory.loader();
             },
-			success: function(data){debugger;
-				if (data.status == 'ok') {debugger;
+			success: function(data){
+				if (data.status == 'ok') {
 					window.localStorage.setItem(factory.id_client_list, JSON.stringify(data.list));
 					handler(data.list);
 				} else {
-					handler([]);debugger;
+					handler([]);
 				}
 			},
            complete: function(){
@@ -73,11 +73,11 @@ var ClientFactory = function(urls, token, cache) {
 	
 	factory.get_company_types = function(handler, cache){
         //2
-        debugger;
+        
 		var types_list = JSON.parse(window.localStorage.getItem(factory.id_company_types));
 		if (cache && types_list != null) {
 			return handler(types_list);
-		}debugger;
+		}
 		
 		$.ajax({
 			url: factory.urls.client_company_types,
@@ -87,16 +87,16 @@ var ClientFactory = function(urls, token, cache) {
 			beforeSend: function(){
                 factory.loader();
             },
-			success: function(data){debugger;
-				if (data.status == 'ok') {debugger;
+			success: function(data){
+				if (data.status == 'ok') {
 					window.localStorage.setItem(factory.id_company_types, JSON.stringify(data.list));
 					handler(data.list);
 				} else {
-					handler([]);debugger;
+					handler([]);
 				}
 			},
 			error: function(err){
-				debugger;
+				
 			},
            complete: function(){
                 try{$.mobile.loading("hide");}catch(e){}
