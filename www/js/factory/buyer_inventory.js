@@ -47,7 +47,7 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 		if (value == 'undefined') {
 			window.localStorage.removeItem(factory.storage_id_inventory);
 		}
-		var list = JSON.parse(window.localStorage.getItem(factory.storage_id_inventory));
+		var list = JSON.parse(window.localStorage.getItem(factory.storage_id_inventory));debugger;
 		if ((factory.cache || cache) && list != null) {
 			return handler(factory.get_items_from_store(store, list));
 		}
@@ -61,8 +61,8 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 			beforeSend: function(){
 				loader();	           	
 		   },
-			success: function(data) {
-				if (data.status == true) {
+			success: function(data) {debugger;
+				if (data.status == true) {debugger;
                     window.localStorage.removeItem(factory.storage_id_inventory);
 					window.localStorage.setItem(factory.storage_id_inventory, JSON.stringify(data.stores));
 					handler(factory.get_items_from_store(store, data.stores));
@@ -103,7 +103,7 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 		return [];
 	};
 	
-	factory.get_current_list = function() {
+	factory.get_current_list = function() {debugger;
 		return factory.get_items_from_store(factory.current_store);
 	};
 	

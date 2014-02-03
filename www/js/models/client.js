@@ -28,7 +28,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		
 		if(!(model.get_form_field('country') === undefined)){
 			model.get_form_field('country').live("change", model.charge_states);
-			model.get_form_field('state').live("change", model.charge_cities);
+			$('#stateList li').live('click', model.charge_cities);
 			$('.'+model.class_item_city).live('click', model.set_city_selected);	
 			//$.mobile.listview.prototype.options.filterCallback = model.filter_cities;
 		}				
@@ -59,14 +59,14 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		return false;
 	};
 	
-	model.start_form_values = function(cache){debugger;
+	model.start_form_values = function(cache){
 		model.clear_form(5);
 		model.start_countries_values(cache);
 		model.start_company_type_values(cache);
 		
 	};
 	
-	model.start_countries_values = function(cache){debugger;
+	model.start_countries_values = function(cache){
 		/* countries */
 		model.countryFactory.get_all(function(countries){
 			if (model.get_form_field('country') !== undefined) {
@@ -82,7 +82,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	};
 		
 	model.start_company_type_values = function(cache) {
-		/* items */debugger;
+		/* items */
 		model.clientFactory.get_company_types(function(items) {
 			//3
 			var form = model.get_form_field('company_type');
@@ -256,23 +256,29 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		e.preventDefault();
 		var country_id = model.get_form_field('country').find('option:selected').attr('value');
 		model.render_states(country_id);
+		$('#loadStates').fadeIn().children().addClass('effect_in_out');
 	};
 	
 	model.render_states = function(country_id) {
 		model.stateFactory.get_by_country(country_id, function(states){
-			model.clear_form(2);
-			model.render_field_form('state', {id:'', name:'Select'});
+			//model.clear_form(2);
+			var html = '', ul = $('#stateList');
+			ul.html('');
+			ul.append('<li data-role="list-divider">Select State</li>');
 			for (var index in states) {
 				state = states[index];
-				model.render_field_form('state', state);
+				html += '<li><a href="" data-id="'+state.id+'">'+state.name+'</a></li>'
 			}
-			try{model.get_form_field('state').selectmenu('refresh', true);}catch(e){}
+			ul.append(html);
+			try{ul.listview('refresh', true);}catch(e){}
 		});
 	};
 	
 	model.charge_cities = function(e) {
+		debugger;
 		e.preventDefault();
-		var state_id = model.get_form_field('state').find('option:selected').attr('value');
+		var state_id = $(this).find('a').data('id');
+		$('#loadStates').fadeOut().children().removeClass('effect_in_out');
 		model.render_cities(state_id);
 	};
 	
@@ -304,11 +310,11 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 			}
 		}
 		if (lvl > 1) {
-			var select = model.get_form_field('state');
-			if (select) {
-				select.html('');
-				try {select.selectmenu('refresh', true);}catch(e){}
-			}
+			// var select = model.get_form_field('state');
+			// if (select) {
+			// 	select.html('');
+			// 	try {select.selectmenu('refresh', true);}catch(e){}
+			// }
 		}
 		if (lvl > 2) {
 			model.start_countries_values(window.localStorage.getItem("rp-cache"));

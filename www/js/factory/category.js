@@ -7,6 +7,7 @@ var CategoryFactory = function(urls, token) {
 
 
 	factory.get_main_category = function(handler, cache) {
+        debugger;
         var prdData = JSON.parse(window.localStorage.getItem('productRelated'));
         var catData = JSON.parse(window.localStorage.getItem('categories'));
         if ((factory.cache || cache) && catData != '' && prdData != '') {
@@ -24,7 +25,7 @@ var CategoryFactory = function(urls, token) {
             },
             success: function(data) {
                 
-                if(data.status == true) {
+                if(data.status == true) {debugger;
                     window.localStorage.removeItem("productRelated");
                     window.localStorage.removeItem("categories");
                     window.localStorage.setItem('productRelated', JSON.stringify(data.products));

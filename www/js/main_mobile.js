@@ -3,7 +3,7 @@ $(window).load(function() {
         if (Offline.state === 'up') {
 
             if(window.localStorage.getItem("rp-cache") == true || window.localStorage.getItem("rp-cache") == "true" ){
-                // init(true);
+                init(true);
             }
             window.localStorage.setItem("rp-cache", false);
             Offline.check();
@@ -13,7 +13,7 @@ $(window).load(function() {
     };
     setInterval(run, 5000);
     setTimeout(function(){
-        // init();
+        init();
     },1000);
 });
 
@@ -70,7 +70,7 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
         'pagina14': 'Inventory', /* pantalla de subvariantes */
     }, last_resource_message = '';
 
-
+function init(reconection) {
 
     var imageURL = undefined,
         cache=false,
@@ -105,7 +105,7 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
         $('#values-features-list > li').live('click', chooceFeatureValue);
 
         //Analyzer
-        $("#browser").live('input', getCompleteInformation);
+        $("#browser").live('keyup', getCompleteInformation);
         $('.close_modal').live('click', showOverlay);
         $('#graphic_month').live('click',function(){processAnalyzerInformation(1);});
         $('#graphic_week').live('click',function(){processAnalyzerInformation(2);});
@@ -117,9 +117,8 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
         // $('#new_invoice').live('click', listClients);
       
         $( "#pagina12" ).live( "pageshow", showProductsInventoryToInvoice);
-
-
-
+    
+        $(document).live('pagebeforeshow', '#pagina9', pagina9Go);
         $('#goToInvoice').live('click', showInvoice);
         $('.productSelected').live('click', selectProduct);
         $('#goToProducts').live('click', goProduct);
@@ -171,15 +170,21 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
         var permissionModel = new PermissionModel(permissionFactory, resourceControl);
         
     /* CLIENT */
+
         var countryFactory = new CountryFactory(urls, token, window.localStorage.getItem("rp-cache"));
         var stateFactory = new StateFactory(urls, token, window.localStorage.getItem("rp-cache"));
         var cityFactory = new CityFactory(urls, token, window.localStorage.getItem("rp-cache"));
-        debugger;
+        
         var clientFactory = new ClientFactory(urls, token, window.localStorage.getItem("rp-cache"));
-        var client = new ClientModel(countryFactory, stateFactory, cityFactory, clientFactory);
-        debugger;
-        client.init(window.localStorage.getItem("rp-cache")); /* start list */
-        debugger;
+
+        function pagina9Go(){
+            var client = new ClientModel(countryFactory, stateFactory, cityFactory, clientFactory);
+            
+            client.init(window.localStorage.getItem("rp-cache")); /* start list */
+            client.start_countries_values();
+            client.getDataAddressClient();
+            
+        }
 
     /* PRODUCTS */        
         var categoryFactory = new CategoryFactory(urls, token);
@@ -198,9 +203,9 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
 
     //Automatic Login
 
-    // if(reconection == true){
-    //     eventsAfterLogin();
-    // }
+    if(reconection == true){
+        eventsAfterLogin();
+    }
 
     if(token != null) {
         authToken();
@@ -255,7 +260,7 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
 
     /* Authenticate */
 
-    function loginAuth(event) {debugger;
+    function loginAuth(event) {
         event.preventDefault();
         if(Offline.state == 'up') {
             var url = urls.login;
@@ -272,12 +277,12 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
                 beforeSend: function(){
                     loading();
                 },
-                success: function (data) {debugger;
-                    if (data.status === 'OK') {debugger;
+                success: function (data) {
+                    if (data.status === 'OK') {
                         window.localStorage.setItem("rp-token", data.token);
                         token = data.token;
                         eventsAfterLogin();
-                    } else {debugger;
+                    } else {
                         $('#login-error').fadeIn().children().addClass('effect_in_out');
                     }
                 },
@@ -407,12 +412,10 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
         clientFactory.set_token(token);
         permissionFactory.set_token(token);
         permissionFactory.get_all(function(){});
-        debugger;
-        client.start_countries_values();
-        client.getDataAddressClient();
+        
+        
         getInventoryItems();
         // listClients();
-        client.getDataAddressClient();
         startAnalyzerInformation();
         getInformationProduct();
         //featureFactory.getAllTheFeaturesByBuyer();
@@ -493,6 +496,7 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
             $('.model-data').live('click', showDetail);
 
             var store = $('#select_buyer_store').val();
+            debugger;
             if (canAccessTo('SelectMyStores', true)) {
                 buyerInventory.render_stores(store);
             } else {
@@ -546,164 +550,164 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
         return false;
     }
 
-    function listClients() {
-        var url = urls.clients_list;
-        var clients_name_id = [];
-        if(Offline.state == 'up') {
-            $.ajax({
-               url: url,
-               type: 'POST',
-               data: {
-                    rp_token: token
-               },
-               dataType: 'json',
-               beforeSend: function(){
-                    loading();
-               },
-               success: function(data){
-                    $('#pagina11').find('#list_clients').html('');
-                    var ul_for_list_clients = $('#pagina11').find('#list_clients'),
-                        html_to_insert = '';
-                        items_list = data.items_list;
+    // function listClients() {
+    //     var url = urls.clients_list;
+    //     var clients_name_id = [];
+    //     if(Offline.state == 'up') {
+    //         $.ajax({
+    //            url: url,
+    //            type: 'POST',
+    //            data: {
+    //                 rp_token: token
+    //            },
+    //            dataType: 'json',
+    //            beforeSend: function(){
+    //                 loading();
+    //            },
+    //            success: function(data){
+    //                 $('#pagina11').find('#list_clients').html('');
+    //                 var ul_for_list_clients = $('#pagina11').find('#list_clients'),
+    //                     html_to_insert = '';
+    //                     items_list = data.items_list;
 
-                    for(var client in items_list){
-                       html_to_insert += '<input type="radio" name="radio-choice-1" id="radio-choice-'+items_list[client].id+'" data-id="'+items_list[client].id+'"value="choice-'+items_list[client].id+'"/>\
-                                        <label\
-                                            for="radio-choice-'+items_list[client].id+'"\
-                                            data-corners="false" class="labelRadioButton"\
-                                            >\
-                                            <img src="'+DOMAIN+items_list[client].image+'" class="image_client"/>'+items_list[client].name+'\
-                                        </label>';
-                    };
+    //                 for(var client in items_list){
+    //                    html_to_insert += '<input type="radio" name="radio-choice-1" id="radio-choice-'+items_list[client].id+'" data-id="'+items_list[client].id+'"value="choice-'+items_list[client].id+'"/>\
+    //                                     <label\
+    //                                         for="radio-choice-'+items_list[client].id+'"\
+    //                                         data-corners="false" class="labelRadioButton"\
+    //                                         >\
+    //                                         <img src="'+DOMAIN+items_list[client].image+'" class="image_client"/>'+items_list[client].name+'\
+    //                                     </label>';
+    //                 };
 
-                    ul_for_list_clients.append(html_to_insert);
-                    $('#list_clients').trigger('create');
-                    $(":radio").unbind("change");
-                    $(":radio").bind("change", function(){
-                        if(localStorage.getItem('clientSelected')){
-                            var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-                            //validar si esta repetido
-                            var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-                            if(index !== -1){
+    //                 ul_for_list_clients.append(html_to_insert);
+    //                 $('#list_clients').trigger('create');
+    //                 $(":radio").unbind("change");
+    //                 $(":radio").bind("change", function(){
+    //                     if(localStorage.getItem('clientSelected')){
+    //                         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+    //                         //validar si esta repetido
+    //                         var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+    //                         if(index !== -1){
 
-                                storageClients[index] = clientSelected;
-                            }
-                        }
-                        var self = $(this);
-                        for(var client in items_list){
-                            if(items_list[client].id === self.data('id')){
-                                if(storageClients != ''){
+    //                             storageClients[index] = clientSelected;
+    //                         }
+    //                     }
+    //                     var self = $(this);
+    //                     for(var client in items_list){
+    //                         if(items_list[client].id === self.data('id')){
+    //                             if(storageClients != ''){
 
-                                    var result = false;
-                                    /* get client from storage */
-                                    var client_exists = getClientById(items_list[client].id);
-                                    if (client_exists) {
+    //                                 var result = false;
+    //                                 /* get client from storage */
+    //                                 var client_exists = getClientById(items_list[client].id);
+    //                                 if (client_exists) {
 
-                                        localStorage.setItem("clientSelected", JSON.stringify(client_exists));
-                                        clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-                                        try{$.mobile.navigate("#pagina12");}catch(e){}
-                                        result = true;
-                                    } else {
-                                        result = false;
-                                    }
-                                    if(result == false) {
-                                        var clientSelected = createNewClient(items_list[client]);
-                                    }
-                                } else {
-                                    var clientSelected = createNewClient(items_list[client]);
-                                }
-                            }
-                        }
-                        //pintar select con las lista de clientes de la pagina 12
-                        $('#selectClient').html('');
-                        var html ='';
-                        for(var i in items_list){
-                            html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';
-                        }
-                        $('#selectClient').append(html);
-                        $('#selectClient-button > span > span > span').text(clientSelected.name);
-                        localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
-                        if(clientSelected.products == ''){
-                            try{$.mobile.navigate("#pagina13");}catch(e){}
-                        }
-                    });
-                    localStorage.setItem("allClients", JSON.stringify(items_list));
-                },
-                complete: function(){
-                    completeAjaxLoader();
-                }
-            });
-        }
-        else{
-            items_list = JSON.parse(localStorage.getItem('allClients'));
-                    $('#pagina11').find('#list_clients').html('');
-                    var ul_for_list_clients = $('#pagina11').find('#list_clients'),
-                        html_to_insert = '';
+    //                                     localStorage.setItem("clientSelected", JSON.stringify(client_exists));
+    //                                     clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+    //                                     try{$.mobile.navigate("#pagina12");}catch(e){}
+    //                                     result = true;
+    //                                 } else {
+    //                                     result = false;
+    //                                 }
+    //                                 if(result == false) {
+    //                                     var clientSelected = createNewClient(items_list[client]);
+    //                                 }
+    //                             } else {
+    //                                 var clientSelected = createNewClient(items_list[client]);
+    //                             }
+    //                         }
+    //                     }
+    //                     //pintar select con las lista de clientes de la pagina 12
+    //                     $('#selectClient').html('');
+    //                     var html ='';
+    //                     for(var i in items_list){
+    //                         html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';
+    //                     }
+    //                     $('#selectClient').append(html);
+    //                     $('#selectClient-button > span > span > span').text(clientSelected.name);
+    //                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+    //                     if(clientSelected.products == ''){
+    //                         try{$.mobile.navigate("#pagina13");}catch(e){}
+    //                     }
+    //                 });
+    //                 localStorage.setItem("allClients", JSON.stringify(items_list));
+    //             },
+    //             complete: function(){
+    //                 completeAjaxLoader();
+    //             }
+    //         });
+    //     }
+    //     else{
+    //         items_list = JSON.parse(localStorage.getItem('allClients'));
+    //                 $('#pagina11').find('#list_clients').html('');
+    //                 var ul_for_list_clients = $('#pagina11').find('#list_clients'),
+    //                     html_to_insert = '';
 
-                    for(var client in items_list){
-                       html_to_insert += '<input type="radio" name="radio-choice-1" id="radio-choice-'+items_list[client].id+'" data-id="'+items_list[client].id+'"value="choice-'+items_list[client].id+'"/>\
-                                        <label\
-                                            for="radio-choice-'+items_list[client].id+'"\
-                                            data-corners="false" class="labelRadioButton"\
-                                            >\
-                                            <img src="'+DOMAIN+items_list[client].image+'" class="image_client"/>'+items_list[client].name+'\
-                                        </label>';
-                    };
+    //                 for(var client in items_list){
+    //                    html_to_insert += '<input type="radio" name="radio-choice-1" id="radio-choice-'+items_list[client].id+'" data-id="'+items_list[client].id+'"value="choice-'+items_list[client].id+'"/>\
+    //                                     <label\
+    //                                         for="radio-choice-'+items_list[client].id+'"\
+    //                                         data-corners="false" class="labelRadioButton"\
+    //                                         >\
+    //                                         <img src="'+DOMAIN+items_list[client].image+'" class="image_client"/>'+items_list[client].name+'\
+    //                                     </label>';
+    //                 };
 
-                    ul_for_list_clients.append(html_to_insert);
-                    $('#list_clients').trigger('create');
-                    $(":radio").unbind("change");
-                    $(":radio").bind("change", function(){
-                        if(localStorage.getItem('clientSelected')){
-                            var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-                            //validar si esta repetido
-                            var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-                            if(index !== -1){
+    //                 ul_for_list_clients.append(html_to_insert);
+    //                 $('#list_clients').trigger('create');
+    //                 $(":radio").unbind("change");
+    //                 $(":radio").bind("change", function(){
+    //                     if(localStorage.getItem('clientSelected')){
+    //                         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+    //                         //validar si esta repetido
+    //                         var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
+    //                         if(index !== -1){
 
-                                storageClients[index] = clientSelected;
-                            }
-                        }
-                        var self = $(this);
-                        for(var client in items_list){
-                            if(items_list[client].id === self.data('id')){
-                                if(storageClients != ''){
+    //                             storageClients[index] = clientSelected;
+    //                         }
+    //                     }
+    //                     var self = $(this);
+    //                     for(var client in items_list){
+    //                         if(items_list[client].id === self.data('id')){
+    //                             if(storageClients != ''){
 
-                                    var result = false;
-                                    /* get client from storage */
-                                    var client_exists = getClientById(items_list[client].id);
-                                    if (client_exists) {
+    //                                 var result = false;
+    //                                 /* get client from storage */
+    //                                 var client_exists = getClientById(items_list[client].id);
+    //                                 if (client_exists) {
 
-                                        localStorage.setItem("clientSelected", JSON.stringify(client_exists));
-                                        clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-                                        try{$.mobile.navigate("#pagina12");}catch(e){}
-                                        result = true;
-                                    } else {
-                                        result = false;
-                                    }
-                                    if(result == false) {
-                                        var clientSelected = createNewClient(items_list[client]);
-                                    }
-                                } else {
-                                    var clientSelected = createNewClient(items_list[client]);
-                                }
-                            }
-                        }
-                        //pintar select con las lista de clientes de la pagina 12
-                        $('#selectClient').html('');
-                        var html ='';
-                        for(var i in items_list){
-                            html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';
-                        }
-                        $('#selectClient').append(html);
-                        $('#selectClient-button > span > span > span').text(clientSelected.name);
-                        localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
-                        if(clientSelected.products == ''){
-                            try{$.mobile.navigate("#pagina13");}catch(e){}
-                        }
-                    });
-                    localStorage.setItem("allClients", JSON.stringify(items_list));
-        }
-    }
+    //                                     localStorage.setItem("clientSelected", JSON.stringify(client_exists));
+    //                                     clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
+    //                                     try{$.mobile.navigate("#pagina12");}catch(e){}
+    //                                     result = true;
+    //                                 } else {
+    //                                     result = false;
+    //                                 }
+    //                                 if(result == false) {
+    //                                     var clientSelected = createNewClient(items_list[client]);
+    //                                 }
+    //                             } else {
+    //                                 var clientSelected = createNewClient(items_list[client]);
+    //                             }
+    //                         }
+    //                     }
+    //                     //pintar select con las lista de clientes de la pagina 12
+    //                     $('#selectClient').html('');
+    //                     var html ='';
+    //                     for(var i in items_list){
+    //                         html +='<option value="'+items_list[i].id+'">'+items_list[i].name+'</option>';
+    //                     }
+    //                     $('#selectClient').append(html);
+    //                     $('#selectClient-button > span > span > span').text(clientSelected.name);
+    //                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+    //                     if(clientSelected.products == ''){
+    //                         try{$.mobile.navigate("#pagina13");}catch(e){}
+    //                     }
+    //                 });
+    //                 localStorage.setItem("allClients", JSON.stringify(items_list));
+    //     }
+    // }
 
     function createNewClient(client) {
         var clientSelected = {
@@ -970,10 +974,11 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
     }
 
     function showProductsInventoryToInvoice() { 
+        debugger;
         $('.products_clients_add').html('');
         var html = "",
             products = buyerInventoryFactory.get_current_list();
-        for(var i in products) {
+        for(var i in products) {debugger;
             var _offline = "";
             if(products[i].offline != undefined){
                 _offline = "offline";
@@ -996,12 +1001,14 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
                     </a>\
                 </li>';
             }
+            debugger;
         }
         $('.products_clients_add').append(html);
         $('.products_clients_add').trigger('create');
         var a = '<a href="#" class="overlay_product"></a>';
         $(a).insertAfter('.myProductSelected');
         $('.see_more_products_clients').text(getCurrentTotal());
+        debugger;
     }
     
     function getClientSelected() {
@@ -1210,8 +1217,9 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
             costPrice = $('#cost-price').val(),
             wholeSalePrice = $('#wholesale-price').val(),
             retailPrice = $('#retail-price').val();
+            debugger;
         if(nameProduct != '' && categoryId!='' && costPrice!=''){
-            var url = urls.saveProduct;
+            var url = urls.saveProduct;debugger;
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -1230,7 +1238,7 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
                 beforeSend: function(){
                     loading();
                 },
-                success: function(data){                    
+                success: function(data){  debugger;                  
                     if(data.status.status == true){
                         buyerInventoryFactory.store_inventory(data);
                         localStorage.setItem('productModelId', data.id);
@@ -1244,7 +1252,7 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
                         else try{$.mobile.navigate("#pagina15");}catch(e){}                        
                     } else alert('an error occurred');
                 },
-                complete: function(){
+                complete: function(){debugger;
                     completeAjaxLoader();
                 }
             });
@@ -1269,14 +1277,14 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
         var cache = false;
         if(Offline.state == 'down') {
             cache = true;
-        }
+        }debugger;
         categoryFactory.get_main_category(showInformation, cache);
     }
 
     function showInformation(products, categories){
         /*
         Event before press Create Products
-         */
+         */debugger;
         showProductRelated(products);
         showMainCategories(categories);
     }
@@ -1284,7 +1292,7 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
     function showProductRelated(products){
         /*
         Show products related in input name product
-         */
+         */debugger;
         $.each(products, function(i, value) {
             $('#browsers').append('<option data-id="'+value.id+'" value="'+value.name+'">');
         });
@@ -1304,6 +1312,7 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
     }
 
     function getCompleteInformation(event) {
+        debugger;
         var productName = $(this).val();
         var productId = 0;
         $.each($('#browsers option'), function(i, value){
@@ -1316,7 +1325,7 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
         var information = localStorage.getItem('productRelated');
         information = JSON.parse(information);
 
-        if(information != undefined){
+        if(information != undefined && information != ''){
             $.each(information.products, function(i, value) {
                 if(productId == value.id){
                     $('#category-name').text(value.category_name);
@@ -1362,7 +1371,7 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
         variants_by_product_model = $('.variants_by_product_model');
         
         if(isNotSystem){
-            pre_html = '<a href="#pagina6" class="go_to_variants" data-theme="a" data-role="button">Go to Variants</a>';            
+            pre_html = '<a href="#pagina6" class="go_to_variants" data-transition="flow" data-theme="a" data-role="button">Go to Variants</a>';            
             $(pre_html).insertBefore(variants_by_product_model);
         }
         
@@ -1683,7 +1692,7 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
         }
         return access;
     }
-
+}
 
 // storageClients = [
         //     {
@@ -1799,7 +1808,7 @@ Offline.options = {
         var url = DOMAIN + '/mobile/product-groups/';
         var data = {rp_token: window.localStorage.getItem("rp-token")};   
         localStorage.productModelId = $(this).data('id');
-        debugger;
+        
         var method = 'GET';   
         factorySearchAndGroup.methodAjax(url, data, showGroups, method);
     });
@@ -1820,7 +1829,7 @@ Offline.options = {
     // When make a click in group name, this is saved and the user will be redirected to previous page
     
     $('.group-for-choose').live('click', function(){
-        debugger;
+        
         $('.close_modal.ui-link').trigger('click');
         var url = DOMAIN + '/mobile/add-product-to-group/';
         var data = {productModelId: localStorage.productModelId, groupId: $(this).data('id'), rp_token: window.localStorage.getItem("rp-token")};                
@@ -1829,7 +1838,7 @@ Offline.options = {
     });
 
     function afterToChoose(data){
-        debugger;
+        
         if (data.status === 'success') {
             console.log('Saved!');
             
@@ -1852,7 +1861,7 @@ Offline.options = {
         var text = $('#form-group-name');                
         var url = DOMAIN + '/mobile/product-group-create/';
         var data = {name: text.val(), rp_token: window.localStorage.getItem("rp-token")};        
-        var method = 'POST';   debugger;
+        var method = 'POST';   
         if(text.val() != ''){
             factorySearchAndGroup.methodAjax(url, data, afterToCreate, method);
         }else{
@@ -1863,10 +1872,10 @@ Offline.options = {
     }
 
     function afterToCreate(data){
-        if (data.status === 'success') {debugger;
+        if (data.status === 'success') {
             var url = DOMAIN + '/mobile/product-groups/';
             var data = {rp_token: window.localStorage.getItem("rp-token")};
-            debugger;
+            
             var method = 'GET';   
             factorySearchAndGroup.methodAjax(url, data, showGroups, method);
             console.log('Created!');
@@ -1883,7 +1892,7 @@ Offline.options = {
                 dataType: 'json',
                 beforeSend: function(){factorySearchAndGroup.loader();},
                 success: function(data) {
-                    debugger;
+                    
                     handler(data);                    
                 },
                complete: function(){factorySearchAndGroup.hideLoader();}
@@ -1900,6 +1909,10 @@ Offline.options = {
         }
     };
 
-    $('.close_modal.ui-link').live('click', function(){
+    $('.close_modal.ui-link, .btn.btn_accept_option.ui-link').live('click', function(){
         $('#group-data').fadeOut().children().removeClass('effect_in_out');
+        $('#login-error').fadeOut().children().removeClass('effect_in_out');
+        $('#sign-up-ok').fadeOut().children().removeClass('effect_in_out');
+        $('#sign-up-error').fadeOut().children().removeClass('effect_in_out');
+        $('#loadStates').fadeOut().children().removeClass('effect_in_out');
     });
