@@ -47,7 +47,7 @@ var FeatureFactory = function(urls, token) {
             },
             success: function (data) {                     
                 if(data.status == true) {     
-                    alert('Success!');      
+                    // alert('Success!');      
                     handler(data.values_features);
                 } else {
                     return handler([], []);
@@ -82,8 +82,16 @@ var FeatureFactory = function(urls, token) {
             success: function(data){              
                 if (data.status){
                     alert('Success!');
+                    $('#browser').val(''),
+                    $('#name-variant').val(''),
+                    $('#category-id').text(''),
+                    $('#quantity').val(''),
+                    $('#sku').val(''),
+                    $('#cost-price').val(''),
+                    $('#wholesale-price').val(''),
+                    $('#retail-price').val('');
                 };
-                try{$.mobile.navigate("#pagina11");}catch(e){}
+                try{$.mobile.navigate("../#pagina6");}catch(e){}
             },
             complete: function(){
                 try{$.mobile.loading("hide");}catch(e){}

@@ -17,10 +17,10 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
 	};
 	
     model.go_to_sub_variant_view = function(inventory_id) {
-    	model.origin = model.origin_products;
+    	model.origin = model.origin_products;debugger;
     	if (model.inventory_has_variants(inventory_id)) {
-    		var product = buyerInventoryFactory.get_by_id(inventory_id);
-    		model.render_variant_list(product);
+    		var product = buyerInventoryFactory.get_by_id(inventory_id);debugger;
+    		model.render_variant_list(product);debugger;
     		$.mobile.navigate("#pagina14");
     	} else {
     		model.render_variant_list();
@@ -35,11 +35,11 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
     	return false;
     };
 
-    model.render_variant_list = function(product) {
+    model.render_variant_list = function(product) {debugger;
     	$('#'+model.id_selected_product_name).html(product.product_name);
     	$('#'+model.id_selected_product_variant_name).html(product.model_name);
     	$('#'+model.id_variants_list).html('');
-    	if (typeof(product.id) !== 'undefined') {
+    	if (typeof(product.id) !== 'undefined') {debugger;
     		for (var index in product.variants) {
     			var checked = model.is_inventory_in_current_select_variant(product.id, product.variants[index].id);
         		model.set_variant_to_list(product.variants[index], product, checked);
@@ -51,7 +51,7 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
 	model.set_variant_to_list = function(variant, inventory, checked) {
 		var template = $('#'+model.id_template_variant).html();
 		var price = model.calculate_price_by_client_selected(inventory, variant.id);
-
+        debugger;
     	template = template.replace(/__id__/g, variant.id);
     	template = template.replace(/__parent__/g, inventory.id);
     	template = template.replace(/__name__/g, variant.name + ' ' + variant.value);
@@ -67,12 +67,12 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
         model.refresh_variants_list();
 	};
 
-	model.refresh_variants_list = function() {
+	model.refresh_variants_list = function() {debugger;
 		$('#'+model.id_variants_list).trigger('create');
 		model.related_event_variant();
 	};
 	
-	model.related_event_variant = function() {
+	model.related_event_variant = function() {debugger;
 		$('.'+model.class_btn_selected_variant).unbind("click");
 		$('.'+model.class_btn_selected_variant).bind("click", function(event){
 			model.chose_variant($(this));

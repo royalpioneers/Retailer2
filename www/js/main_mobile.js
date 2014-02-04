@@ -116,7 +116,10 @@ function init(reconection) {
         $('.offline').live('click', msgOffline);
         // $('#new_invoice').live('click', listClients);
       
-        $( "#pagina12" ).live( "pageshow", showProductsInventoryToInvoice);
+        $( "#pagina12" ).live( "pagebeforeshow", showProductsInventoryToInvoice);
+        $( "#pagina2" ).live( "pageinit", function(){debugger;
+            $('#select_buyer_store-listbox > ul > li').data('option-indextrigger', '0').trigger('click');
+        });
     
         $(document).live('pagebeforeshow', '#pagina9', pagina9Go);
         $('#goToInvoice').live('click', showInvoice);
@@ -412,8 +415,6 @@ function init(reconection) {
         clientFactory.set_token(token);
         permissionFactory.set_token(token);
         permissionFactory.get_all(function(){});
-        
-        
         getInventoryItems();
         // listClients();
         startAnalyzerInformation();
@@ -974,7 +975,7 @@ function init(reconection) {
     }
 
     function showProductsInventoryToInvoice() { 
-        
+        debugger;
         $('.products_clients_add').html('');
         var html = "",
             products = buyerInventoryFactory.get_current_list();
@@ -983,8 +984,8 @@ function init(reconection) {
             if(products[i].offline != undefined){
                 _offline = "offline";
             }
-
-            if(getArrayIndexProductsSelected().indexOf(products[i].id) !== -1 || buyerInventory.is_inventory_in_current_select_variant(products[i].id)) {
+            debugger;
+            if(getArrayIndexProductsSelected().indexOf(products[i].id) !== -1) {debugger;
                 html += '<li class="myProductSelected">\
                     <a href="#" data-role="button" class="productSelected '+_offline+' " data-id="'+products[i].id+'" data-selected="true">\
                         <img src="'+DOMAIN+products[i].model_image+'">\
@@ -992,7 +993,7 @@ function init(reconection) {
                     </a>\
                 </li>';
             }
-            else{
+            else{debugger;
                 
                 html += '<li>\
                     <a href="#" data-role="button" class="productSelected" data-id="'+products[i].id+'" data-selected="false">\
@@ -1001,7 +1002,7 @@ function init(reconection) {
                     </a>\
                 </li>';
             }
-            
+            debugger;
         }
         $('.products_clients_add').append(html);
         $('.products_clients_add').trigger('create');
@@ -1073,8 +1074,7 @@ function init(reconection) {
     function selectProduct(e) {
         e.preventDefault();
         var products = buyerInventoryFactory.get_current_list(),
-            clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
-            productSelected,
+            //clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
             id = $(this).data('id');
         var li = $(this).parent('li');
         
@@ -1096,8 +1096,9 @@ function init(reconection) {
                         'model_image': products[i].model_image,
                         'discount': getDiscount(products[i])
                     };
-                    clientSelected.products.push(productSelected);
-                    localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+                    products.push(productSelected);
+                    //localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+                    localStorage.setItem("productSelected", JSON.stringify(productSelected));
                     $(this).data('selected', true);
                     $(li).addClass("myProductSelected");
 
@@ -1133,32 +1134,33 @@ function init(reconection) {
                     break;
                 }
             //Remove Products to LocalStorage
-            } else {
-                if (buyerInventory.inventory_has_variants(id)) {
-                    buyerInventory.go_to_sub_variant_view(id);
-                    break;
-                }
-                var remove = -1;
-                $.each(clientSelected.products, function(x, value){
-                    if(value.id == id){                                                
-                        remove = x;
-                    }
-                });
-                if(remove > -1) {
-                    clientSelected.products.splice(remove, 1);
-                    localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
-                    $(this).data('selected',false);
-                    $(li).removeClass("myProductSelected");
-                    $('.see_more_products_clients').text(getCurrentTotal());                    
-                    break;
-                }
-            }
+             } 
+            //else {
+            //     if (buyerInventory.inventory_has_variants(id)) {
+            //         buyerInventory.go_to_sub_variant_view(id);
+            //         break;
+            //     }
+            //     var remove = -1;
+            //     $.each(clientSelected.products, function(x, value){
+            //         if(value.id == id){                                                
+            //             remove = x;
+            //         }
+            //     });
+            //     if(remove > -1) {
+            //         clientSelected.products.splice(remove, 1);
+            //         localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
+            //         $(this).data('selected',false);
+            //         $(li).removeClass("myProductSelected");
+            //         $('.see_more_products_clients').text(getCurrentTotal());                    
+            //         break;
+            //     }
+            // }
         }
     }
 
     function getCurrentTotal(){
         var totalPrice = 0;
-        if(localStorage.getItem('clientSelected')){
+        if(localStorage.getItem('productSelected')){
             var products = JSON.parse(localStorage.getItem('clientSelected')).products;
             for(var i in products){
                 totalPrice += parseFloat(products[i].price); 
@@ -1238,7 +1240,7 @@ function init(reconection) {
                 beforeSend: function(){
                     loading();
                 },
-                success: function(data){                    
+                success: function(data){                  
                     if(data.status.status == true){
                         buyerInventoryFactory.store_inventory(data);
                         localStorage.setItem('productModelId', data.id);
@@ -1273,7 +1275,7 @@ function init(reconection) {
         }
     }
 
-    function getInformationProduct() {
+    function getInformationProduct() {debugger;
         var cache = false;
         if(Offline.state == 'down') {
             cache = true;
@@ -1284,7 +1286,7 @@ function init(reconection) {
     function showInformation(products, categories){
         /*
         Event before press Create Products
-         */
+         */debugger;
         showProductRelated(products);
         showMainCategories(categories);
     }
@@ -1292,8 +1294,16 @@ function init(reconection) {
     function showProductRelated(products){
         /*
         Show products related in input name product
-         */
-        $.each(products, function(i, value) {
+         */debugger;
+         var inds = [];
+         for(ind in products){
+            var product = products[ind];
+            if(inds.indexOf(product.name) == -1){
+                inds.push(product);
+            }
+         }
+        $('#browsers').html('');
+        $.each(inds, function(i, value) {
             $('#browsers').append('<option data-id="'+value.id+'" value="'+value.name+'">');
         });
     }
@@ -1371,7 +1381,7 @@ function init(reconection) {
         variants_by_product_model = $('.variants_by_product_model');
         
         if(isNotSystem){
-            pre_html = '<a href="#pagina6" class="go_to_variants" data-transition="flow" data-theme="a" data-role="button">Go to Variants</a>';            
+            pre_html = '<a href="#pagina6" class="go_to_variants" data-transition="flow">Go to Variants</a>';            
             $(pre_html).insertBefore(variants_by_product_model);
         }
         

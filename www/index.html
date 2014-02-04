@@ -244,35 +244,35 @@
 
 
 
-<!--CREATE ITEM-->
-<div data-role="page" id="pagina6">
-    <div data-role="header" data-theme="a" data-position="fixed">
-        <a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
-        <h1>Create Item</h1>
-    </div>
-    <div data-role="content">
-        <form>
-            <div class="photo-product">
-                <img src="images/default_product.png" id="image-camera">
-                <a href="" data-role="button" id="edit-image" data-theme="a">Take a Photo</a>
+        <!--CREATE ITEM-->
+        <div data-role="page" id="pagina6">
+            <div data-role="header" data-theme="a" data-position="fixed">
+                <a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
+                <h1>Create Item</h1>
             </div>
-            <ul data-role="listview" data-inset="true" class="create_item_list">
-                <li>
-                    <input list="browsers" name="browser" placeholder="Name Product" autofocus="true" id="browser" required />
-                    <datalist id="browsers"></datalist>
-                </li>
-                <li>
-                    <input type="text" placeholder="Name Variant" id="name-variant" required/>
-                </li>
-                <li data-icon="arrow-r"><a href="#pagina7" data-trasition="flip">Category: <span id="category-name"></span><span id="category-id"></span></a></li>
-                <li data-icon="arrow-r"><a href="#pagina8" data-trasition="flip">Price: <span id="price-value"></span></a></li>
-                <li><input type="text" placeholder="SKU" id="sku" required></li>
-                <li><input type="number" placeholder="Quantity" min="1" id="quantity" required></li>
-            </ul>
-            <a href="" data-role="button" id="create_item" data-theme="a" data-status="true">Save</a>
-        </form>
-    </div>
-    <!-- Panel -->
+            <div data-role="content">
+                <form>
+                    <div class="photo-product">
+                        <img src="images/default_product.png" id="image-camera">
+                        <a href="" data-role="button" id="edit-image" data-theme="a">Take a Photo</a>
+                    </div>
+                    <ul data-role="listview" data-inset="true" class="create_item_list">
+                        <li>
+                            <input list="browsers" name="browser" placeholder="Name Product" autofocus="true" id="browser" required />
+                            <datalist id="browsers"></datalist>
+                        </li>
+                        <li>
+                            <input type="text" placeholder="Name Variant" id="name-variant" required/>
+                        </li>
+                        <li data-icon="arrow-r"><a href="#pagina7" data-trasition="flip">Category: <span id="category-name"></span><span id="category-id"></span></a></li>
+                        <li data-icon="arrow-r"><a href="#pagina8" data-trasition="flip">Price: <span id="price-value"></span></a></li>
+                        <li><input type="text" placeholder="SKU" id="sku" required></li>
+                        <li><input type="number" placeholder="Quantity" min="1" id="quantity" required></li>
+                    </ul>
+                    <a href="" data-role="button" id="create_item" data-theme="a" data-status="true">Save</a>
+                </form>
+            </div>
+            <!-- Panel -->
             <div data-role="panel" id="left-panel" data-display="overlay" data-theme="b">
                 <ul data-role="listview">
                     <li data-role="list-divider">Menu</li> 
@@ -287,7 +287,7 @@
                         <a class="btn_more_big" href="./newClient.html" id="btn_go_to_client_form" data-transition="flow">Create Client</a>
                     </li>
                     <li data-icon="arrow-r">
-                        <a class="btn_more_big" href="./invoice/invoice.html" id="new_invoice" data-transition="flow">New Invoice</a>
+                        <a class="btn_more_big" href="../invoice/invoice.html" id="new_invoice" data-transition="flow">New Invoice</a>
                     </li>
                     <li data-role="list-divider"></li>
                     <li data-icon="back" id="logout">
@@ -295,7 +295,7 @@
                     </li>
                 </ul>        
             </div><!-- /Panel -->
-</div>
+        </div>
         <!--CATEGORY CREATE PRODUCT-->
         <div data-role="page" id="pagina7" data-theme="a">
             <div data-role="header" data-position="fixed">
@@ -341,49 +341,48 @@
             </div>
         </div>
 
-    <div data-role="page" id="pagina15" data-theme="b">
-        <div data-role="header" data-position="fixed">
-            <a class="btn_more_big" data-transition="flow"  href="../newProduct.html"><i class="icon-white icon-arrow-left"></i></a>
-            <h1>SubVariants</h1>
-        </div>            
-        <div data-role="content">                                            
-            <form>                                                                 
-                <a href="#pagina16" id="features" data-trasition="slide" data-icon="arrow-r" data-iconpos="right">Feature: <span id="featureName"></span></a>        
-                <br>         
-                <ul data-role="listview" data-filter='true' data-theme="c" id="values-features-list">
-                </ul>
-                <input type="number" placeholder="Additional Cost" id="additionalCost" required>
-                <input type="number" placeholder="Variant Quantity" min="1" id="variantQuantity" required>                    
-                <a href="" data-role="button" id="createSubVariant" data-theme="a">Save</a>
-            </form>
-        </div>
-    </div> 
+        <div data-role="page" id="pagina15" data-theme="b">
+            <div data-role="header" data-position="fixed">
+                <a class="btn_more_big" data-transition="flow"  href="../#pagina6"><i class="icon-white icon-arrow-left"></i></a>
+                <h1>SubVariants</h1>
+            </div>            
+            <div data-role="content">                                            
+                <form>                                                                 
+                    <a href="#pagina16" id="features" data-trasition="slide" data-icon="arrow-r" data-iconpos="right">Feature: <span id="featureName"></span></a>        
+                    <br>         
+                    <ul data-role="listview" data-filter='true' data-theme="c" id="values-features-list">
+                    </ul>
+                    <input type="number" placeholder="Additional Cost" id="additionalCost" required>
+                    <input type="number" placeholder="Variant Quantity" min="1" id="variantQuantity" required>                    
+                    <a href="" data-role="button" id="createSubVariant" data-theme="a">Save</a>
+                </form>
+            </div>
+        </div> 
 
-    <!--FEATURES-->
-    <div data-role="page" id="pagina16" data-theme="a">
-        <div data-role="header" data-position="fixed">
-            <!-- <a class="btn_more_big" href="#pagina15" data-transition="flow"><i class="icon-white icon-arrow-left"></i></a> -->
-            <h1>Features</h1>
+        <!--FEATURES-->
+        <div data-role="page" id="pagina16" data-theme="a">
+            <div data-role="header" data-position="fixed">
+                <!-- <a class="btn_more_big" href="#pagina15" data-transition="flow"><i class="icon-white icon-arrow-left"></i></a> -->
+                <h1>Features</h1>
+            </div>
+            <div data-role="content">
+                <ul data-role="listview" data-filter='true' data-inset="true" data-theme="a" id="features-list">
+                </ul>                
+            </div>
         </div>
-        <div data-role="content">
-            <ul data-role="listview" data-filter='true' data-inset="true" data-theme="a" id="features-list">
-            </ul>                
-        </div>
-    </div>
 
 
 		<!-- MANDATORY FOR GRAPHIC -->
-        <div id="content_init_graphic" style="visibility: hidden;"></div>        
-
-        
-        <div data-role="page" id="pagina17" data-theme="a" style="background: url('images/a6.jpg') repeat;background-size: cover; width: 100%; height: 100%">            
-            <div class="row-fluid center_text_align" style="width: 66%;margin: 45% auto 25% auto;position: relative">
+        <div id="content_init_graphic" style="visibility: hidden;"></div>
+        <div data-role="page" id="pagina17" data-theme="a">            
+            <div class="row-fluid center_text_align">
                 <form action="" id="sign-up-form">
                     <input type="email" placeholder="email" id="email">
                     <a href="#pagina1" class="" data-transition="flow">Already a User? Log In!</a>                    
                     <input type="submit" class="btn" style="width: 100%;" id="sign-up-btn" value="Sign Up">                    
                 </form>
             </div>
+
             <div id="sign-up-error" class="overlay">
                 <div id="myModal" class="modal options_detail_product">
                     <div class="modal-body">
@@ -400,6 +399,7 @@
                     </div>
                 </div>
             </div>
+
             <div id="sign-up-ok" class="overlay">
                 <div id="myModal" class="modal options_detail_product">
                     <div class="modal-body">

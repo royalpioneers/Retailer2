@@ -12,7 +12,7 @@ var CategoryFactory = function(urls, token) {
         var catData = JSON.parse(window.localStorage.getItem('categories'));
         if ((factory.cache || cache) && catData != '' && prdData != '') {
 		    return handler(prdData, catData);
-		}
+		}debugger;
         $.ajax({
             url: factory.urls.productInformation,
             type: 'POST',
@@ -23,7 +23,7 @@ var CategoryFactory = function(urls, token) {
             beforeSend: function(){
                 loader();
             },
-            success: function(data) {                
+            success: function(data) {     debugger;           
                 if(data.status == true) {
                     window.localStorage.removeItem("productRelated");
                     window.localStorage.removeItem("categories");
