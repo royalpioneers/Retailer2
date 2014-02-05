@@ -21,7 +21,10 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
     	if (model.inventory_has_variants(inventory_id)) {
     		var product = buyerInventoryFactory.get_by_id(inventory_id);debugger;
     		model.render_variant_list(product);debugger;
-    		$.mobile.navigate("#pagina14");
+    		$.mobile.navigate("#pagina14", {
+                transition: "flow",
+                reverse: true
+            });
     	} else {
     		model.render_variant_list();
     	}
@@ -79,7 +82,7 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
 		});
 	};
     
-    model.chose_variant = function(obj) {
+    model.chose_variant = function(obj) {debugger;
     	var variant_id = obj.data('id');
     	var inventory = buyerInventoryFactory.get_by_id(obj.data('parent'));
     	var updated = false;

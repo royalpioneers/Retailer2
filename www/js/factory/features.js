@@ -91,7 +91,10 @@ var FeatureFactory = function(urls, token) {
                     $('#wholesale-price').val(''),
                     $('#retail-price').val('');
                 };
-                try{$.mobile.navigate("../#pagina6");}catch(e){}
+                try{$.mobile.navigate("../#pagina6", {
+                    transition: "flow",
+                    reverse: true
+                });}catch(e){}
             },
             complete: function(){
                 try{$.mobile.loading("hide");}catch(e){}

@@ -1084,3 +1084,6 @@ div[data-role='header']{
 #pagina17 > .center_text_align{
     width: 66%;margin: 45% auto 25% auto;position: relative
 }
+    #form_login_app{
+        display: none;
+    }

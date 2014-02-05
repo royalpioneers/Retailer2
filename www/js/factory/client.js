@@ -109,8 +109,8 @@ var ClientFactory = function(urls, token, cache) {
 	};
 	
 	factory.get_client_selected = function() {
-		// var clientSelected = JSON.parse(localStorage.getItem(factory.storage_id_client_selected));
-		return [];
+		var clientSelected = JSON.parse(localStorage.getItem(factory.storage_id_client_selected));
+		return clientSelected;
 	};
 
 	factory.set_client_selected = function(client) {

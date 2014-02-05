@@ -47,7 +47,7 @@
             </label>
           </div>
         </div>
-        
+
         <!--Buy client's products-->
         <div data-role="page" id="pagina12">
             <div data-role="header" data-theme="a" data-position="fixed">
@@ -63,7 +63,7 @@
             <!-- Panel -->
             <div data-role="panel" id="left-panel" data-display="overlay" data-theme="b">
                 <ul data-role="listview">
-                    <li data-role="list-divider">Menu</li> 
+                    <li data-role="list-divider">Menu</li>
                     <li data-icon="home">
                         <a class="btn_more_big" href="../#pagina2" data-transition="flow">Home</a>
                     </li>
@@ -83,7 +83,7 @@
                     </li>
                 </ul>        
             </div><!-- /Panel -->
-        </div>      
+        </div>
 
 
         <div data-role="page" id="pagina13" data-fullscreen="true">
@@ -103,11 +103,11 @@
                             <li>Subtotal</li>
                         </ul>
                     </div>
-                    <ul data-role="listview" id="myProducts" data-inset="true" data-icon="false" style="overflow-x: hidden;">                        
+                    <ul data-role="listview" id="myProducts" data-inset="true" data-icon="false" style="overflow-x: hidden;">
                     </ul>
                     <ul data-role="listview" data-corners="false" data-inset="true">
                         <li><span class="total_invoice">Total: <b class="see_total_from_invoice"></b></span></li>
-                        <li data-icon="false"><a href="" id="goToProducts">+ Add Another Product</a></li>      
+                        <li data-icon="false"><a href="" id="goToProducts">+ Add Another Product</a></li>
                     </ul>
                     <form id="formsendProductsInvoice">
                       <div>
@@ -121,7 +121,7 @@
             <!-- Panel -->
             <div data-role="panel" id="left-panel" data-display="overlay" data-theme="b">
                 <ul data-role="listview">
-                    <li data-role="list-divider">Menu</li> 
+                    <li data-role="list-divider">Menu</li>
                     <li data-icon="home">
                         <a class="btn_more_big" href="../#pagina2" data-transition="flow">Home</a>
                     </li>
@@ -163,21 +163,21 @@
             </div>
         </div>
 
-        
+
         <div id="id_template_option_variant" style="display: none">
             <input type="checkbox" name="radio-choice-__id__" id="radio-choice-__id__"  __checked__
             data-id="__id__" data-parent="__parent__" value="choice-__id__" class="class_selected_variant"/>
             <label for="radio-choice-__id__" data-corners="false" class="labelRadioButton label_sub_variant">
                 <span class="label_sub_variant_name">__name__</span>: <span class="label_sub_variant_price"> __price__</span></label>
         </div>
-        
+
         <!-- PRODUCT VARIANT: SUB-VARIANT -->
 <!--         <div data-role="page" id="pagina14" data-theme="b">
             <div data-role="header">
                 <a class="btn_more_big returnToSelectedProducts" data-transition="flow"><i class="icon-white icon-arrow-left"></i></a>
                 <h1>Invoice</h1>
             </div>
-            
+
             <div data-role="content">
                 <div class="header_client">
                     <span id="selected_product_name"></span><br />
@@ -188,7 +188,7 @@
                         <li>price</li>
                     </ul>
                 </div>
-                
-                
+
+
             </div>
-        </div>   -->  
+        </div>   -->
