@@ -917,7 +917,7 @@ function init(reconection) {
             //traigo los productos y id de clientSelected
             var productsClientSelected = JSON.parse(localStorage.getItem('clientSelected')).products;
             var idClientSelected = JSON.parse(localStorage.getItem('clientSelected')).id;
-
+            debugger;
             if(storageClients){
                 for(var i in storageClients){
                     //si ya tiene productos
@@ -946,7 +946,8 @@ function init(reconection) {
                                     'quantity': products[j].quantity,
                                     'price': calculatePrice(products[j]),
                                     'model_image': products[j].model_image,
-                                    'discount': getDiscount(products[j])
+                                    'discount': getDiscount(products[j]),
+
                                 };
                                 //agregar al nuevo
                                 storageClients[i].products.push(productSelected);
@@ -1122,6 +1123,23 @@ function init(reconection) {
         }
         return arrayIndexs;
     }
+
+//    function getArrayIndexVariantsSelected(){
+//        /* return indexs of client selected */
+//        var arrayIndexs = [];
+//        var clientSelected = getClientSelected();
+//        for(var i in storageClients){
+//            if (storageClients && storageClients[i].id == clientSelected.id) {
+//                for(var j in storageClients[i].products){
+//                    //for(){
+//                        arrayIndexs.push(storageClients[i].products[j].variant_id);
+//                    //}
+//                }
+//            }
+//        }
+//        return arrayIndexs;
+//    }
+
 
     function getArrayIndexClientsSelected(){
         var arrayIndexs = [];
