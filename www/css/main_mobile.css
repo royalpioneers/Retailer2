@@ -710,15 +710,13 @@
         float: right;
     }
     /*pagina12*/
-    .without_radious .ui-li-aside {
-        width: 15%;
-        text-align: center;
-        display: inline-block;
+    .without_radious > a > div > span {
+        width: 90%;
+        text-align: left;
+        display: block;
         float: none;
-        padding-top: 5px;
-        height: 3em;
-        margin: 0;
-        max-width: 16%;
+        margin: 1em;
+        max-width: 90%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -759,18 +757,26 @@
     z-index: 2;
     height: 100%;
 }*/
-    .without_radious img {
-        width: 23em;
-        height: 17em;
-        position: relative !important;
-        max-width: 3em !important;
-        max-height: 3em !important;
-        margin-top: -37px;
+    .hide-option-form-invoice{
+        display: none !important;
+    }
+    .without_radious > .ui-link img {
+        width: 20%;
         float: none !important;
+        position: relative !important;
+        display: inline-block !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        top: 0;
+        vertical-align: top;
+        margin-top: 0.5em;
+        padding-bottom: 0.5em;
+    }
+    .without_radious > .ui-link {
+        display: block;
+    }
+    .without_radious > .ui-link > div{
         display: inline-block;
-        left: 0 !important;
-        margin-right: 0px !important;
-        margin-left: 15px !important;
     }
     .removeProduct {
         float: right; margin-right: 14px; 
@@ -847,17 +853,56 @@ div[data-role='header']{
  border: none;
 }
 #pagina12 .ui-select {
-    width: 83%;
-    margin-left: 2%;
+    width: 80%;
     display: inline-block;
+    float: right;
+    right: 4%;
 }
 .cleanClientSelected{
     position: relative !important;
 }
+    .total {
+        width: 100%;
+        display: inline-block;
+        background: rgba(255, 255, 255, 1);
+        position: relative;
+        margin: 1em 0 -3em 0;
+        padding: 0.5em 0;
+        font-size: 19px;
+        text-align: center;
+        border-top: 1px solid;
+    }
+    .total::before {
+        content: '$';
+        color: black;
+        margin-right: 5px;
+        font-size: 25px;
+    }
 #pagina12 .ui-select .ui-btn-inner {
-    padding: 1.3em;
-    padding-bottom: 2em;
+    padding: 1.4em;
 }
+    #selectClient-button {
+        margin: 0;
+        border: none;
+    }
+    #pagina13 .overlay .header_client {
+        display: block;
+        background: transparent;
+        border: none;
+    }
+    #pagina13 #myModal {
+        top: 25%;
+    }
+    #selectClient-menu > li {
+        background: white;
+        border: 1px solid rgb(214, 214, 214);
+    }
+    #selectClient-menu > li a {
+        color: rgba(92, 83, 83, 0.77);
+    }
+    #selectClient-menu > li a_focus {
+        color: black;
+    }
 #username {
     font-size: 150% !important;
     font-weight: bolder;

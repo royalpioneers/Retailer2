@@ -21,10 +21,12 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
     	if (model.inventory_has_variants(inventory_id)) {
     		var product = buyerInventoryFactory.get_by_id(inventory_id);debugger;
     		model.render_variant_list(product);debugger;
-    		$.mobile.navigate("#pagina14", {
-                transition: "flow",
-                reverse: true
-            });
+//    		$.mobile.navigate("#pagina14", {
+//                transition: "flow",
+//                reverse: true
+//            });
+            $('#group-data').show();
+            $('#group-data').fadeIn().children().addClass('effect_in_out');
     	} else {
     		model.render_variant_list();
     	}
@@ -89,6 +91,7 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
     	var add = obj.attr('checked');
     	model.current_inventory = inventory.id;
 
+        localStorage.activeAnimation = $('#'+model.id_variants_list).find(':checked').length > 0?true:false;
     	/* recorre y agrega , si existe actualiza */
     	var client = clientFactory.get_client_selected();
     	if (add) {

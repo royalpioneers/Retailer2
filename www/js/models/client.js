@@ -142,7 +142,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 					/* model.apply_event_select(); 
 					model.refresh_list(); */
 					model.clear_form(5);
-					$.mobile.navigate("#pagina11", {
+					$.mobile.navigate("../#pagina2", {
                         transition: "flow",
                         reverse: true
                     });
@@ -164,7 +164,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 				localStorage.setItem("allClients", JSON.stringify(allClients));
 				model.set_client_to_list(newClientOffline);		
 		        model.clear_form(5);
-				$.mobile.navigate("#pagina11", {
+				$.mobile.navigate("../#pagina2", {
                     transition: "flow",
                     reverse: true
                 });
