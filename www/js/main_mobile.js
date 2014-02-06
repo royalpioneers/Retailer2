@@ -606,25 +606,25 @@ function init(reconection) {
                              }
                          }
                          var self, idSelf;debugger;
-//                         if(localStorage.clientSelected != undefined){
-//                             if(JSON.parse(localStorage.clientSelected).id != $(this).data('id')){
-//                                 self = JSON.parse(localStorage.clientSelected);
-//                                 idSelf = JSON.parse(localStorage.clientSelected).id;
-//                             }
-//                             else{
-//                                 self = $(this);
-//                                 idSelf = $(this).data('id');
-//                             }
-//
-//                         }
-//                         else{
-//                             self = $(this);
-//                             idSelf = $(this).data('id');
-//                         }
+                         if(localStorage.clientSelected != undefined){
+                             if(JSON.parse(localStorage.clientSelected).id != $(this).data('id')){
+                                 self = JSON.parse(localStorage.clientSelected);
+                                 idSelf = JSON.parse(localStorage.clientSelected).id;
+                             }
+                             else{
+                                 self = $(this);
+                                 idSelf = $(this).data('id');
+                             }
+
+                         }
+                         else{
+                             self = $(this);
+                             idSelf = $(this).data('id');
+                         }
 
                          debugger;
                          for(var client in items_list){
-                             if(items_list[client].id == $(this).data('id')){
+                             if(items_list[client].id == idSelf){
                                  if(storageClients != ''){
 
                                      var result = false;
@@ -702,24 +702,24 @@ function init(reconection) {
                                  storageClients[index] = clientSelected;
                              }
                          }
-//                         var self, idSelf;debugger;
-//                         if(localStorage.clientSelected != undefined){
-//                             if(JSON.parse(localStorage.clientSelected).id != $(this).data('id')){
-//                                 self = JSON.parse(localStorage.clientSelected);
-//                                 idSelf = JSON.parse(localStorage.clientSelected).id;
-//                             }
-//                             else{
-//                                 self = $(this);
-//                                 idSelf = $(this).data('id');
-//                             }
-//
-//                         }
-//                         else{
-//                             self = $(this);
-//                             idSelf = $(this).data('id');
-//                         }
+                         var self, idSelf;debugger;
+                         if(localStorage.clientSelected != undefined){
+                             if(JSON.parse(localStorage.clientSelected).id != $(this).data('id')){
+                                 self = JSON.parse(localStorage.clientSelected);
+                                 idSelf = JSON.parse(localStorage.clientSelected).id;
+                             }
+                             else{
+                                 self = $(this);
+                                 idSelf = $(this).data('id');
+                             }
+
+                         }
+                         else{
+                             self = $(this);
+                             idSelf = $(this).data('id');
+                         }
                          for(var client in items_list){
-                             if(items_list[client].id == $(this).data('id')){
+                             if(items_list[client].id == idSelf){
                                  if(storageClients != ''){
 
                                      var result = false;
@@ -976,19 +976,27 @@ function init(reconection) {
                             };
                             var products = buyerInventoryFactory.get_current_list();
                             for(var j in products){
+                                debugger;
+                                var data = getArrayIndexVariantsSelected();
+                                for(var d in data){
+                                    var _product = data[d].product;
+                                    var _variant = data[d].variant;
+                                    for(var v in products[j].variants){
+                                        if(_product == products[j].id && _variant == products[j].variants[v].id){
+                                            productSelected = {
+                                                'id': products[j].id,
+                                                'product_name': products[j].product_name,
+                                                'model_name': products[j].model_name,
+                                                'quantity': products[j].quantity,
+                                                'price': buyerInventory.calculate_price_by_client_selected(products[j], products[j].variants[v].id),
+                                                'model_image': products[j].model_image,
+                                                'discount': getDiscount(products[j]),
+                                                'variant_id': products[j].variants[v].id
+                                            };
 
-                                if(getArrayIndexProductsSelected().indexOf(products[j].id) !== -1){
-                                    productSelected = {
-                                        'id': products[j].id,
-                                        'product_name': products[j].product_name,
-                                        'model_name': products[j].model_name,
-                                        'quantity': products[j].quantity,
-                                        'price': calculatePrice(products[j]),
-                                        'model_image': products[j].model_image,
-                                        'discount': getDiscount(products[j])
-                                    };
-
-                                    clientSelected.products.push(productSelected);
+                                            clientSelected.products.push(productSelected);
+                                        }
+                                    }
                                 }
                             }
                             localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
@@ -1124,21 +1132,23 @@ function init(reconection) {
         return arrayIndexs;
     }
 
-//    function getArrayIndexVariantsSelected(){
-//        /* return indexs of client selected */
-//        var arrayIndexs = [];
-//        var clientSelected = getClientSelected();
-//        for(var i in storageClients){
-//            if (storageClients && storageClients[i].id == clientSelected.id) {
-//                for(var j in storageClients[i].products){
-//                    //for(){
-//                        arrayIndexs.push(storageClients[i].products[j].variant_id);
-//                    //}
-//                }
-//            }
-//        }
-//        return arrayIndexs;
-//    }
+    function getArrayIndexVariantsSelected(){
+    /* return indexs of client selected */
+        var arrayIndexs = [];
+        var clientSelected = getClientSelected();
+        for(var i in storageClients){
+            if (storageClients && storageClients[i].id == clientSelected.id) {
+                for(var j in storageClients[i].products){
+                    var data = {
+                        product : storageClients[i].products[j].id,
+                        variant: storageClients[i].products[j].variant_id
+                    }
+                    arrayIndexs.push(data);
+                }
+            }
+        }
+        return arrayIndexs;
+    }
 
 
     function getArrayIndexClientsSelected(){
@@ -1947,13 +1957,13 @@ Offline.options = {
 
     // choose product group view    
 
-    $('.add-to-group-btn').live('click', function (e) {
-        e.preventDefault();
-        $('#group-data').fadeIn().children().addClass('effect_in_out');
+    $('.add-to-group-btn').live('tap', function (e) {
+        e.preventDefault();debugger;
+        $('#group-data-search').fadeIn().children().addClass('effect_in_out');
         var url = DOMAIN + '/mobile/product-groups/';
         var data = {rp_token: window.localStorage.getItem("rp-token")};   
         localStorage.productModelId = $(this).data('id');
-        
+        $('#group-data-search').show();
         var method = 'GET';   
         factorySearchAndGroup.methodAjax(url, data, showGroups, method);
     });
@@ -1973,7 +1983,7 @@ Offline.options = {
 
     // When make a click in group name, this is saved and the user will be redirected to previous page
     
-    $('.group-for-choose').live('click', function(){
+    $('.group-for-choose').live('tap', function(){
         
         $('.close_modal.ui-link').trigger('click');
         var url = DOMAIN + '/mobile/add-product-to-group/';
@@ -2053,4 +2063,11 @@ Offline.options = {
             try{$.mobile.loading("hide");}catch(e){}
         }
     };
+$('.close_modal.ui-link, .btn.btn_accept_option.ui-link').live('click', function(){debugger;
+    $('#group-data-search').fadeOut().children().removeClass('effect_in_out');
+    $('#login-error').fadeOut().children().removeClass('effect_in_out');
+    $('#sign-up-ok').fadeOut().children().removeClass('effect_in_out');
+    $('#sign-up-error').fadeOut().children().removeClass('effect_in_out');
+    $('#loadStates').fadeOut().children().removeClass('effect_in_out');
+});
 

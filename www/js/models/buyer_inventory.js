@@ -143,7 +143,7 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
             'price': model.calculate_price_by_client_selected(product, variant_id),
             'model_image': product.model_image,
             'discount': model.get_discount_id_by_client_selected(product),
-            'variant_id': variant_id,
+            'variant_id': variant_id
         };
     	return productSelected;
     };

@@ -711,12 +711,12 @@
     }
     /*pagina12*/
     .without_radious > a > div > span {
-        width: 90%;
+        width: 100%;
         text-align: left;
         display: block;
         float: none;
         margin: 1em;
-        max-width: 90%;
+        max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -776,6 +776,7 @@
     }
     .without_radious > .ui-link > div{
         display: inline-block;
+        width: 70%;
     }
     .removeProduct {
         float: right; margin-right: 14px; 
@@ -956,11 +957,11 @@ div[data-role='header']{
 }
 #selected_product_variant_name {
     font-size: 19px;
-    display: block;
+    display: none;
 }
 .separator_sub_variant{
     display: block;
-    line-height: 0 0;
+    line-height: 0;
     margin-bottom: -13px;
     font-size: 15px;
     color: rgb(173, 56, 56);
