@@ -792,6 +792,9 @@
         }
     }
     @media (min-width:320px) and (max-width:480px){
+        div[data-role='header'] h1{
+            font-size: 1em !important;
+        }
         .without_radious img{
             display: none !important; 
         }
