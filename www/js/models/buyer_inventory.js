@@ -17,10 +17,10 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
 	};
 	
     model.go_to_sub_variant_view = function(inventory_id) {
-    	model.origin = model.origin_products;debugger;
+    	model.origin = model.origin_products;
     	if (model.inventory_has_variants(inventory_id)) {
-    		var product = buyerInventoryFactory.get_by_id(inventory_id);debugger;
-    		model.render_variant_list(product);debugger;
+    		var product = buyerInventoryFactory.get_by_id(inventory_id);
+    		model.render_variant_list(product);
 //    		$.mobile.navigate("#pagina14", {
 //                transition: "flow",
 //                reverse: true
@@ -40,11 +40,11 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
     	return false;
     };
 
-    model.render_variant_list = function(product) {debugger;
+    model.render_variant_list = function(product) {
     	$('#'+model.id_selected_product_name).html(product.product_name);
     	$('#'+model.id_selected_product_variant_name).html(product.model_name);
     	$('#'+model.id_variants_list).html('');
-    	if (typeof(product.id) !== 'undefined') {debugger;
+    	if (typeof(product.id) !== 'undefined') {
     		for (var index in product.variants) {
     			var checked = model.is_inventory_in_current_select_variant(product.id, product.variants[index].id);
         		model.set_variant_to_list(product.variants[index], product, checked);
@@ -56,7 +56,7 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
 	model.set_variant_to_list = function(variant, inventory, checked) {
 		var template = $('#'+model.id_template_variant).html();
 		var price = model.calculate_price_by_client_selected(inventory, variant.id);
-        debugger;
+        
     	template = template.replace(/__id__/g, variant.id);
     	template = template.replace(/__parent__/g, inventory.id);
     	template = template.replace(/__name__/g, variant.name + ' ' + variant.value);
@@ -72,12 +72,12 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
         model.refresh_variants_list();
 	};
 
-	model.refresh_variants_list = function() {debugger;
+	model.refresh_variants_list = function() {
 		$('#'+model.id_variants_list).trigger('create');
 		model.related_event_variant();
 	};
 	
-	model.related_event_variant = function() {debugger;
+	model.related_event_variant = function() {
 		$('.'+model.class_btn_selected_variant).unbind("click");
 		$('.'+model.class_btn_selected_variant).bind("click", function(event){
 			model.chose_variant($(this));
@@ -85,13 +85,13 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
 	};
     
     model.chose_variant = function(obj) {debugger;
+        localStorage.activeAnimation = true;
     	var variant_id = obj.data('id');
     	var inventory = buyerInventoryFactory.get_by_id(obj.data('parent'));
     	var updated = false;
     	var add = obj.attr('checked');
     	model.current_inventory = inventory.id;
 
-        localStorage.activeAnimation = $('#'+model.id_variants_list).find(':checked').length > 0?true:false;
     	/* recorre y agrega , si existe actualiza */
     	var client = clientFactory.get_client_selected();
     	if (add) {
@@ -117,6 +117,7 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
 	    	client.products = valids;
     	}
     	clientFactory.set_client_selected(client);
+        localStorage.activeAnimation = $('#'+model.id_variants_list).find(':checked').length > 0?true:false;
     };
     
     model.get_variant_from_product = function(product, variant_id) {

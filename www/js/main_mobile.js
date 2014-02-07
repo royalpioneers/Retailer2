@@ -79,65 +79,82 @@ function init(reconection) {
     //Events
 
         //Login
-        $("#log_in").live("click", loginAuth);
-        $('#logout').live('click', logOut);
+        $("#log_in").live("tap", loginAuth);
+        $('#logout').live('tap', logOut);
         //Sign Up
-        $('#sign-up-btn').live('click', signUp);
+        $('#sign-up-btn').live('tap', signUp);
 
         //Generic
-        $(".navbar ul li").live("click", changeTab);
+        $(".navbar ul li").live("tap", changeTab);
         //$('.carousel').carousel({interval: 2000});
 
         //Create product
-        $('.categories_create_product').find('a').live('click', createProduct);
-        $('#create-product').live("click", getInformationProduct);
-        $('#create_item').live("click", saveProduct);
+        $('.categories_create_product').find('a').live('tap', createProduct);
+        $('#create-product').live("tap", getInformationProduct);
+        $('#create_item').live("tap", saveProduct);
         $('.option-expand').live('expand', setCategory);
-        $('#edit-image').live('click', takePicture);
+        $('#edit-image').live('tap', takePicture);
 
         //features
-        $('#features').live( "click", getFeatures);
-        $('.feature_option').live('click', getValuesFeatures);
+        $('#features').live( "tap", getFeatures);
+        $('.feature_option').live('tap', getValuesFeatures);
 
         //product model variant
-        $('#createSubVariant').live('click', saveProductModelVariant);
-        $('#values-features-list > li').live('click', chooceFeatureValue);
+        $('#createSubVariant').live('tap', saveProductModelVariant);
+        $('#values-features-list > li').live('tap', chooceFeatureValue);
 
         //Analyzer
         $("#browser").live('keyup', getCompleteInformation);
-        $('.close_modal').live('click', showOverlay);
-        $('#graphic_month').live('click',function(){processAnalyzerInformation(1);});
-        $('#graphic_week').live('click',function(){processAnalyzerInformation(2);});
-        $('#graphic_day').live('click',function(){processAnalyzerInformation(3);});
-        $('.card').live('click',function(){$(this).addClass('moved');});
+        $('.close_modal').live('tap', showOverlay);
+        $('#graphic_month').live('tap',function(){processAnalyzerInformation(1);});
+        $('#graphic_week').live('tap',function(){processAnalyzerInformation(2);});
+        $('#graphic_day').live('tap',function(){processAnalyzerInformation(3);});
+        $('.card').live('tap',function(){$(this).addClass('moved');});
 
         //Invoice
-        $('.offline').live('click', msgOffline);
-        $('#new_invoice').live('click', listClients);
+        $('.offline').live('tap', msgOffline);
+        $('#new_invoice').live('tap', listClients);
+        $('.without_radious > a').live('tap', calculateQuantity);
+        $('.form-input-quantity-invoice').live('input', calculateByType);
+        $('.operation-minus').live('tap', calculateByOperationMinus);
+        $('.operation-plus').live('tap', calculateByOperationPlus);
 
 
         $( "#pagina12" ).live( "pageshow", pageMyProductsShow);
         $( "#pagina13" ).live( "pageshow", pageClientShow);
 
-        $( "#pagina2" ).live( "pageinit", function(){
-            $('#select_buyer_store-listbox > ul > li').data('option-indextrigger', '0').trigger('click');
+        $( "#pagina2" ).live( "pageshow", function(){debugger;
+            $('#select_buyer_store-listbox > ul > li').data('option-indextrigger', '0').eq(1).find('a').trigger('click');
         });
-    
+        $( ".cleanProduct" ).live('tap', function(){
+            $('#browser').val(''),
+            $('#name-variant').val(''),
+            $('#category-id').text(''),
+            $('#quantity').val(''),
+            $('#sku').val(''),
+            $('#cost-price').val(''),
+            $('#wholesale-price').val(''),
+            $('#retail-price').val('');
+            $('#values-features-list').html('');
+            $('#featureName').html('');
+            $('#category-name').html('');
+        });
         $(document).live('pagebeforeshow', '#pagina9', pagina9Go);
-        $('#goToInvoice').live('click', showInvoice);
-        $('.productSelected').live('click', selectProduct);
-        $('#goToProducts').live('click', goProduct);
-        $('.saveClientStorage').live('click', saveClientStorage);
-        $('.removeProduct').live('click', removeMyProduct);
+        $('#goToInvoice').live('tap', showInvoice);
+        $('.productSelected').live('tap', selectProduct);
+        $('#goToProducts').live('tap', goProduct);
+        $('.saveClientStorage').live('tap', saveClientStorage);
+        $('.removeProduct').live('tap', removeMyProduct);
+        $('.removeProductInvoiceModal').live('tap', removeProductInvoiceModal);
         $( ".qtyInvoice" ).live('keyup', updateMyProduct);
-        $('#sendProductsInvoice').live('click', sendProductsInvoice);
-        $('.cancel_sendProductsInvoice').live('click', goProduct);
-        $('.cleanClientSelected').live('click', cleanClientSelected);
-        $('#search-redirect').live('click', changeSearch);
-        $('#back_page').live('click', redirectToPage);
-        $('#selectClient-menu').find('li').live('click', moveToOtherClient);
-        $('.kill_storage').live('click', killStorage);
-        $('.returnToSelectedProducts').live('click', goProduct);
+        $('#sendProductsInvoice').live('tap', sendProductsInvoice);
+        $('.cancel_sendProductsInvoice').live('tap', goProduct);
+        $('.cleanClientSelected').live('tap', cleanClientSelected);
+        $('#search-redirect').live('tap', changeSearch);
+        $('#back_page').live('tap', redirectToPage);
+        $('#selectClient-menu').find('li').live('tap', moveToOtherClient);
+        $('.kill_storage').live('tap', killStorage);
+        $('.returnToSelectedProducts').live('tap', goProduct);
         $('#select_buyer_store').bind('change', changeSelectStore);
         $('#store_total_qty').bind('change', changeInventoryQuantities);
         $('#update_stock_by_status').parent().hide();
@@ -162,10 +179,10 @@ function init(reconection) {
         });
 
         /*Client offline*/        
-        $('.disabled').parents('.ui-radio').bind('click', function(){;
+        $('.disabled').parents('.ui-radio').bind('tap', function(){;
             alert('Check Your Connection!');
         });
-        $('#undefined-menu a').live('click', function(event){            
+        $('#undefined-menu a').live('tap', function(event){            
             event.preventDefault();
         });
 
@@ -228,7 +245,7 @@ function init(reconection) {
         if(localStorage.getItem('clientSelected')){            
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));        
             if(clientSelected.products == ''){
-                cleanClientSelected();debugger;
+                cleanClientSelected();
             }
             else if(clientSelected.products != ''){                
                 //validar si esta repetido
@@ -239,7 +256,7 @@ function init(reconection) {
                 else{                    
                     storageClients.push(clientSelected);
                 }
-            }debugger;
+            }
         }
     }
 
@@ -318,7 +335,7 @@ function init(reconection) {
                         window.localStorage.setItem("rp-token", data.token);
                         token = data.token;
                         $('#sign-up-ok').fadeIn().children().addClass('effect_in_out');
-                        $('#sign-up-ok, .close_modal').live('click', function(){
+                        $('#sign-up-ok, .close_modal').live('tap', function(){
                             eventsAfterLogin();
                         });
                     } else {
@@ -424,9 +441,9 @@ function init(reconection) {
         permissionFactory.set_token(token);
         permissionFactory.get_all(function(){});
         getInventoryItems();
-        //listClients();
+        listClients();
         startAnalyzerInformation();
-        //getInformationProduct();
+        getInformationProduct();
         //featureFactory.getAllTheFeaturesByBuyer();
         $('#container-login').css('display','none');
         try{$.mobile.navigate("#pagina2", {
@@ -447,7 +464,7 @@ function init(reconection) {
 
     function changeSelectStore() {
         getInventoryItems();
-        $('#id_tab_my_inventory').trigger('click');
+        $('#id_tab_my_inventory').trigger('tap');
     }
     
     function getInventoryItems() {
@@ -505,7 +522,7 @@ function init(reconection) {
             });
             ul_for_inserting.html('');
             ul_for_inserting.append(html_to_insert);
-            $('.model-data').live('click', showDetail);
+            $('.model-data').live('tap', showDetail);
 
             var store = $('#select_buyer_store').val();
             
@@ -595,7 +612,7 @@ function init(reconection) {
                      ul_for_list_clients.append(html_to_insert);
                      $('#list_clients').trigger('create');
                      $(":radio").unbind("change");
-                     $(":radio").bind("change", function(){debugger;
+                     $(":radio").bind("change", function(){
                          if(localStorage.getItem('clientSelected')){
                              var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
                              //validar si esta repetido
@@ -605,7 +622,7 @@ function init(reconection) {
                                  storageClients[index] = clientSelected;
                              }
                          }
-                         var self, idSelf;debugger;
+                         var self, idSelf;
                          if(localStorage.clientSelected != undefined){
                              if(JSON.parse(localStorage.clientSelected).id != $(this).data('id')){
                                  self = JSON.parse(localStorage.clientSelected);
@@ -622,7 +639,7 @@ function init(reconection) {
                              idSelf = $(this).data('id');
                          }
 
-                         debugger;
+                         
                          for(var client in items_list){
                              if(items_list[client].id == idSelf){
                                  if(storageClients != ''){
@@ -702,7 +719,7 @@ function init(reconection) {
                                  storageClients[index] = clientSelected;
                              }
                          }
-                         var self, idSelf;debugger;
+                         var self, idSelf;
                          if(localStorage.clientSelected != undefined){
                              if(JSON.parse(localStorage.clientSelected).id != $(this).data('id')){
                                  self = JSON.parse(localStorage.clientSelected);
@@ -746,7 +763,7 @@ function init(reconection) {
                              }
                          }
                          //pintar select con las lista de clientes de la pagina 12
-                         debugger;
+                         
                          $('#selectClient').html('');
                          var html ='';
                          for(var i in items_list){
@@ -765,6 +782,60 @@ function init(reconection) {
                      localStorage.setItem("allClients", JSON.stringify(items_list));
          }
     }
+
+    function calculateQuantity(){
+        $('#invoice-data').show();debugger;
+        $('#invoice-data').fadeIn().children().addClass('effect_in_out');
+        localStorage.quantityInovice =  $(this).data('quantity');
+        localStorage.position = $(this).data('item-invoice');
+
+        $('.form-input-quantity-invoice').text(localStorage.quantityInovice);
+    }
+
+    function calculateByType(){
+        debugger;
+        var position = localStorage.position;
+        var text = $('.form-input-quantity-invoice').text();
+        localStorage.quantityInovice = text;
+        $('.without_radious a[data-item-invoice="'+position+'"] .qtyInvoice').val(text);
+        $('.without_radious a[data-item-invoice="'+position+'"]').data('quantity',text);
+        $( ".qtyInvoice" ).trigger('keyup');
+    }
+
+    function calculateByOperationMinus(){debugger;
+        localStorage.typeOperation = '-';
+        calculateByOperation();
+    }
+
+    function calculateByOperationPlus(){debugger;
+        localStorage.typeOperation = '+';
+        calculateByOperation();
+    }
+
+    function calculateByOperation(){debugger;
+        var text = parseInt(localStorage.quantityInovice);
+        var position = localStorage.position;
+        $('.form-input-quantity-invoice').text(text);
+        if(localStorage.typeOperation == '+')text ++;
+        else text--;
+
+        localStorage.quantityInovice = text;
+        $('.form-input-quantity-invoice').text(text);
+        $('.without_radious a[data-item-invoice="'+position+'"] .qtyInvoice').val(text);
+        $('.without_radious a[data-item-invoice="'+position+'"]').data('quantity',text);
+        $( ".qtyInvoice" ).trigger('keyup');
+    }
+
+    function removeProductInvoiceModal(){
+        debugger;
+        var position = localStorage.position;
+        $('.without_radious a[data-item-invoice="'+position+'"] .removeProduct').trigger('tap');
+        if($('.without_radious').length <= 0){
+            $('.see_total_from_invoice').text('0');
+        }
+        $('#invoice-data').fadeOut().children().removeClass('effect_in_out');
+    }
+
     function createNewClient(client) {
         var clientSelected = {
             'id': client.id,
@@ -794,7 +865,7 @@ function init(reconection) {
             }
             $('#selectClient').append(html);
 
-            $('#selectClient-button > span > span > span').text(clientSelected.name);debugger;
+            $('#selectClient-button > span > span > span').text(clientSelected.name);
 //            $.mobile.navigate("#pagina13", {
 //                transition: "flow",
 //                reverse: true
@@ -884,7 +955,7 @@ function init(reconection) {
                     self.data('status','true');
                     if (data.status == true) {
                         updateAfterCreateInvoice(clientSelected, type_update);
-                    } else {debugger;
+                    } else {
                         alert('an error occurred');
 //                        $.mobile.navigate("#pagina12", {
 //                            transition: "flow",
@@ -898,7 +969,7 @@ function init(reconection) {
             });
 
             if (Offline.state == 'down') {
-                self.data('status','true');debugger;
+                self.data('status','true');
                 updateAfterCreateInvoice(clientSelected, type_update);
                 $.mobile.navigate("#pagina13", {
                     transition: "flow",
@@ -917,7 +988,7 @@ function init(reconection) {
             //traigo los productos y id de clientSelected
             var productsClientSelected = JSON.parse(localStorage.getItem('clientSelected')).products;
             var idClientSelected = JSON.parse(localStorage.getItem('clientSelected')).id;
-            debugger;
+            
             if(storageClients){
                 for(var i in storageClients){
                     //si ya tiene productos
@@ -976,7 +1047,7 @@ function init(reconection) {
                             };
                             var products = buyerInventoryFactory.get_current_list();
                             for(var j in products){
-                                debugger;
+                                
                                 var data = getArrayIndexVariantsSelected();
                                 for(var d in data){
                                     var _product = data[d].product;
@@ -1049,9 +1120,9 @@ function init(reconection) {
         //pageClientShow();
     }
 
-    function pageClientShow() {debugger;
+    function pageClientShow() {
         var cant = $('#list_clients > div').eq(0).find('input:radio').length;
-        if(cant != 0){debugger;
+        if(cant != 0){
 //            if(){
                 listClients();
                 $('#list_clients > div').eq(0).find('input:radio').trigger('change');
@@ -1095,7 +1166,7 @@ function init(reconection) {
                 reverse: true
             });}catch(e){}
         }
-        debugger;
+        
 
     }
     
@@ -1108,7 +1179,7 @@ function init(reconection) {
                 clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
             }           
         }
-        else{debugger;
+        else{
             $.mobile.navigate("#pagina13", {
                 transition: "flow",
                 reverse: true
@@ -1160,15 +1231,15 @@ function init(reconection) {
     }
 
     function goProduct() {
-        if(localStorage.getItem('clientSelected')){debugger;
+        if(localStorage.getItem('clientSelected')){
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
             //validar si esta repetido
             var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
-            if(index !== -1){debugger;
+            if(index !== -1){
                 storageClients[index] = clientSelected;
             }
 
-            if(localStorage.getItem('clientSelected')){debugger;
+            if(localStorage.getItem('clientSelected')){
                 $.mobile.navigate("#pagina13", {
                     transition: "flow",
                     reverse: true
@@ -1183,7 +1254,7 @@ function init(reconection) {
         }
     }
 
-    function selectProduct(e) {debugger;
+    function selectProduct(e) {
         e.preventDefault();
         var products = buyerInventoryFactory.get_current_list(),
             clientSelected = JSON.parse(localStorage.getItem('clientSelected')),
@@ -1263,7 +1334,7 @@ function init(reconection) {
     function setCategory(event) {
         $('#category-id').text($(this).data('id'));
         var text_category = $(this).children('h3').text();
-        text_category = text_category.replace("click to collapse contents", "");
+        text_category = text_category.replace("tap to collapse contents", "");
         $('#category-name').text(text_category);
          if(Offline.state == 'down') {
             return false;
@@ -1364,7 +1435,7 @@ function init(reconection) {
         }
     }
 
-    function getInformationProduct() {debugger;
+    function getInformationProduct() {
         var cache = false;
         if(Offline.state == 'down') {
             cache = true;
@@ -1375,7 +1446,7 @@ function init(reconection) {
     function showInformation(products, categories){
         /*
         Event before press Create Products
-         */debugger;
+         */
         showProductRelated(products);
         showMainCategories(categories);
     }
@@ -1383,7 +1454,7 @@ function init(reconection) {
     function showProductRelated(products){
         /*
         Show products related in input name product
-         */debugger;
+         */
          var inds = [];
          for(ind in products){
             var product = products[ind];
@@ -1592,7 +1663,7 @@ function init(reconection) {
                 variant_id = myProducts[i].variant_id;
             }
             html += '<li class="without_radious" data-id="'+myProducts[i].id+'", data-variant="'+variant_id+'">\
-                        <a href="">\
+                        <a href="" data-item-invoice="'+i+'" data-quantity="'+ myProducts[i].quantity+'">\
                             <img src="'+DOMAIN+myProducts[i].model_image+'" class="ui-li-icon">\
                             <div><span class="ui-li-aside">'+myProducts[i].model_name+'</span>\
                             <input type="text" class="hide-option-form-invoice qtyInvoice" placeholder="0" value="'+myProducts[i].quantity+'">\
@@ -1655,7 +1726,7 @@ function init(reconection) {
         pageMyProductsShow();
     }
 
-    function updateMyProduct(){
+    function updateMyProduct(){debugger;
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var myProducts = clientSelected.products,
             idProduct = $(this).parents('.without_radious').data('id'),
@@ -1797,15 +1868,16 @@ function init(reconection) {
         return access;
     }
 
-    $('.close_modal.ui-link, .btn.btn_accept_option.ui-link').live('click', function(){debugger;
+    $('.close_modal.ui-link, .btn.btn_accept_option.ui-link').live('tap', function(){
         $('#group-data').fadeOut().children().removeClass('effect_in_out');
         $('#login-error').fadeOut().children().removeClass('effect_in_out');
         $('#sign-up-ok').fadeOut().children().removeClass('effect_in_out');
         $('#sign-up-error').fadeOut().children().removeClass('effect_in_out');
         $('#loadStates').fadeOut().children().removeClass('effect_in_out');
+        $('#invoice-data').fadeOut().children().removeClass('effect_in_out');
         var id = parseInt(localStorage.currentProductSelected);
         var $this = $('.productSelected[data-id= '+id+']');
-        if(localStorage.activeAnimation == 'true'){debugger;
+        if(localStorage.activeAnimation == 'true'){
             setTimeout(function(){
                 $this.data('selected', true);
                 $this.parent('li').addClass("myProductSelected");
@@ -1837,14 +1909,10 @@ function init(reconection) {
                 }, 8000);
                 //end animation
                 //show prices
-                debugger;
+                
                 $('.see_more_products_clients').text(getCurrentTotal());
-                localStorage.activeAnimation = false;
+               localStorage.activeAnimation = false;
             }, 500);
-        }
-        else{
-            $this.data('selected', false);
-            $this.parent('li').removeClass("myProductSelected");
         }
     });
 }
@@ -1894,7 +1962,7 @@ Offline.options = {
     search
 */
     var imageDefault = 'http://royalpioneers.com/static/website/images/icon/default_product.png';    
-    $('.search').live('click', loadSearch);
+    $('.search').live('tap', loadSearch);
     $(document).on('pageshow', '.refinedSearch', function() {
         var url = DOMAIN + '/mobile/search/';
         var data =  {rp_token: window.localStorage.getItem("rp-token"), category: 0,text: ''};
@@ -1916,7 +1984,7 @@ Offline.options = {
     function setDataCategories (data) {            
         var container = $('#pagina1 #right-panel').find('ul');
         container.html('');
-        container.append('<li data-icon="delete"><a href="#" data-rel="close" onclick="closePanel()">Close</a></li>');
+        container.append('<li data-icon="delete"><a href="#" data-rel="close" ontap="closePanel()">Close</a></li>');
         container.append('<li data-role="list-divider">Categories</li>');
         data = data.categories;
         for(var i in data){
@@ -1958,7 +2026,7 @@ Offline.options = {
     // choose product group view    
 
     $('.add-to-group-btn').live('tap', function (e) {
-        e.preventDefault();debugger;
+        e.preventDefault();
         $('#group-data-search').fadeIn().children().addClass('effect_in_out');
         var url = DOMAIN + '/mobile/product-groups/';
         var data = {rp_token: window.localStorage.getItem("rp-token")};   
@@ -1985,7 +2053,7 @@ Offline.options = {
     
     $('.group-for-choose').live('tap', function(){
         
-        $('.close_modal.ui-link').trigger('click');
+        $('.close_modal.ui-link').trigger('tap');
         var url = DOMAIN + '/mobile/add-product-to-group/';
         var data = {productModelId: localStorage.productModelId, groupId: $(this).data('id'), rp_token: window.localStorage.getItem("rp-token")};                
         var method = 'POST';   
@@ -2003,7 +2071,7 @@ Offline.options = {
     }
 
     $('#form-group-name').live('keydown', validateEnterKey);
-    $('#form-add-group').live('click', createGroup);
+    $('#form-add-group').live('tap', createGroup);
 
     function validateEnterKey (e) {
         if(e.keyCode == 13){
@@ -2063,11 +2131,6 @@ Offline.options = {
             try{$.mobile.loading("hide");}catch(e){}
         }
     };
-$('.close_modal.ui-link, .btn.btn_accept_option.ui-link').live('click', function(){debugger;
+$('.close_modal.ui-link, .btn.btn_accept_option.ui-link').live('tap', function(){
     $('#group-data-search').fadeOut().children().removeClass('effect_in_out');
-    $('#login-error').fadeOut().children().removeClass('effect_in_out');
-    $('#sign-up-ok').fadeOut().children().removeClass('effect_in_out');
-    $('#sign-up-error').fadeOut().children().removeClass('effect_in_out');
-    $('#loadStates').fadeOut().children().removeClass('effect_in_out');
 });
-

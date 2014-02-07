@@ -660,6 +660,7 @@
     }
     /*general*/
     .without_radious{
+        background: white;
         border-radius: 0 !important;
         height: auto;
         padding-top: 1em;
@@ -1064,7 +1065,7 @@ div[data-role='header']{
     max-height: 100%;
 }
 .refinedSearch #myModal, #loadStates #myModal{
-    top: 15% !important;
+    top: 20% !important;
 }
 
 /*group*/
@@ -1129,6 +1130,63 @@ div[data-role='header']{
 #pagina17 > .center_text_align{
     width: 66%;margin: 45% auto 25% auto;position: relative
 }
-    #form_login_app{
-        display: none;
+#form_login_app{
+    display: none;
+}
+.ui-loader-default{
+    opacity: 1 !important;
+}
+
+    #invoice-data > #myModal {
+        top: 35%;
+    }
+
+/**invoice*/
+    .grid-group-option.group-operation {
+        border: 1px solid rgba(128, 128, 128, 0.5);
+        margin: 2em auto;
+        /* text-align: center; */
+        border-radius: 5px;
+        display: block;
+        margin-bottom: 1em;
+        width: 90%;
+    }
+    .removeProductInvoiceModal.ui-link {
+        background: rgb(253, 253, 253);
+        float: none;
+        padding: 30px 20px;
+        border: 1px solid rgba(128, 128, 128, 0.5);
+        display: block;
+        width: 80%;
+        border-radius: 5px;
+        margin: 0 auto;
+        /* box-shadow: 1px 1px 4px rgba(119, 118, 118, 0.66); */
+        color: rgb(61, 53, 53) !important;
+    }
+    .operation-minus.ui-link, .operation-plus.ui-link {
+        display: inline-block;
+        padding: 0.7em 0;
+        font-size: 60px !important;
+        width: 28%;
+        line-height: 0;
+        color: black !important;
+        font-weight: normal;
+        vertical-align: middle;
+    }
+    .form-input-quantity-invoice {
+        display: inline-block;
+        width: 40%;
+        height: 100%;
+        font-size: 25px;
+    }
+    .operation-minus.ui-link {
+        border-right: 1px solid rgba(128, 128, 128, 0.5);
+    }
+    .operation-plus.ui-link {
+        border-left: 1px solid rgba(128, 128, 128, 0.5);
+    }
+    .see_total_from_invoice::before {
+        content: '$';
+        margin-left: 10px;
+        margin-right: 5px;
     }

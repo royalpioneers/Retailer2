@@ -96,24 +96,12 @@
                     <div class="carousel-inner">
                         <div class="active item">
                             <img src="images/a6.jpg" alt="" />
-                            <!--<div class="carousel-caption">
-                                <h4>Intelligent Inventory.</h4>
-                                <p>Optimize Your Business by buying and managing optimal inventory levels. Connect To The Only Marketplace Who tailors your inventory, based on your sales.</p>
-                            </div>-->
                         </div>
                         <div class="item">
                             <img src="images/a3.jpg" alt="" />
-                            <!--<div class="carousel-caption">
-                                <h4>Real Time Information.</h4>
-                                <p>Manage your inventory by using real time info about quantities, prices, and costs avoiding wasting time in checking that info.</p>
-                            </div>-->
                         </div>
                         <div class="item">
                             <img src="images/a8.jpg" alt="" />
-                            <!--<div class="carousel-caption">
-                                <h4>Keep in Contact.</h4>
-                                <p>Create and maintain long term relationships with your stakeholders by using our database of manufacturers and clients.</p>
-                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -211,7 +199,7 @@
                     </li>
                     <li data-role="list-divider"></li>
                     <li data-icon="back" id="logout">
-                        <a class="btn_more_big" href="#pagina1" data-transition="flow">Log Out</a>
+                        <a class="btn_more_big" href="../#pagina1" data-transition="flow">Log Out</a>
                     </li>
                 </ul>        
             </div><!-- /Panel -->
@@ -291,7 +279,7 @@
                     </li>
                     <li data-role="list-divider"></li>
                     <li data-icon="back" id="logout">
-                        <a class="btn_more_big" href="#pagina1" data-transition="flow">Log Out</a>
+                        <a class="btn_more_big" href="../#pagina1" data-transition="flow">Log Out</a>
                     </li>
                 </ul>        
                     </div><!-- /Panel -->
@@ -310,7 +298,7 @@
 
         <!--PRICE CREATE PRODUCT-->
         <div data-role="page" id="pagina8" data-theme="a">
-            <div data-role="header">
+            <div data-role="header" data-position="fixed">
                 <a class="btn_more_big" data-transition="flow" data-rel='back' href="#"><i class="icon-white icon-arrow-left"></i></a>
                 <h1>Prices</h1>
             </div>
@@ -347,8 +335,8 @@
 
 
         <!--Invoice-->
-        <div data-role="page" id="pagina11" data-fullscreen="true">
-            <div data-role="header" data-theme="a">
+        <div data-role="page" id="pagina11">
+            <div data-role="header" data-theme="a" data-position="fixed">
                 <a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
                 <h1>Invoice</h1>
             </div>
@@ -394,26 +382,20 @@
             </div>
         </div>
 
-        <div data-role="page" id="pagina12" data-fullscreen="true">
-            <div data-role="header" data-theme="a">
+        <div data-role="page" id="pagina12">
+            <div data-role="header" data-theme="a" data-position="fixed">
                 <a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
-                <!--<a class="btn_more_big cleanClientSelected" id="back_page" data-fullscreen="true" href="#pagina11"><i class="icon-white icon-arrow-left"></i></a>-->
                 <select name="select-choice-1" id="selectClient"></select>
             </div>
             <div data-role="content">
                 <aside>
                     <div class="header_client header_invoice">
                         <span class="invoice_header_item">Items</span>
-                        <ul>
-                            <li>Quantity</li>
-                            <li>Price</li>
-                            <li>Subtotal</li>
-                        </ul>
+                        <span class="total_invoice">Total: <b class="see_total_from_invoice"></b></span>
                     </div>
                     <ul data-role="listview" id="myProducts" data-inset="true" data-icon="false" style="overflow-x: hidden;">
                     </ul>
                     <ul data-role="listview" data-corners="false" data-inset="true">
-                        <li><span class="total_invoice">Total: <b class="see_total_from_invoice"></b></span></li>
                         <li data-icon="false"><a href="" id="goToProducts">+ Add Another Product</a></li>
                     </ul>
                     <form id="formsendProductsInvoice">
@@ -425,6 +407,21 @@
                     </form>
                 </aside>
             </div>
+
+            <div class="overlay" id="invoice-data">
+                <div id="myModal" class="modal options_detail_product">
+                    <div class="modal-body">
+                        <a href="#" class="close_modal"><i class="icon-remove"></i></a>
+                        <section class="grid-group-option group-operation">
+                                <a href="" class="operation-minus">-</a>
+                                <span class="form-input-quantity-invoice" contenteditable="true">0</span>
+                                <a href="" class="operation-plus">+</a>
+                        </section>
+                        <a href="" class="removeProductInvoiceModal">Remove Item</a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Panel -->
             <div data-role="panel" id="left-panel" data-display="overlay" data-theme="b">
                 <ul data-role="listview">
@@ -517,33 +514,11 @@
             <label for="radio-choice-__id__" data-corners="false" class="labelRadioButton label_sub_variant">
                 <span class="label_sub_variant_name">__name__</span>: <span class="label_sub_variant_price"> __price__</span></label>
         </div>
-        <!-- PRODUCT VARIANT: SUB-VARIANT -->
-        <!--<div data-role="page" id="pagina14" data-theme="b">-->
-            <!--<div data-role="header">-->
-                <!--<a class="btn_more_big returnToSelectedProducts" data-transition="flow"><i class="icon-white icon-arrow-left"></i></a>-->
-             <!--<h1>Invoice</h1>-->
-            <!--</div>-->
-
-            <!--<div data-role="content">-->
-                 <!--<div class="header_client">-->
-                     <!--<span id="selected_product_name"></span><br />-->
-                     <!--<span id="selected_product_variant_name"></span><br />-->
-                     <!--<span class="separator_sub_variant">Sub variants list</span><br />-->
-                     <!--<ul>-->
-                         <!--<li>name</li>-->
-                         <!--<li>price</li>-->
-                     <!--</ul>-->
-                 <!--</div>-->
-                 <!--<ul data-role="listview" data-inset="true" data-theme="a" id="id_selected_product_variants_list"></ul>-->
-            <!--</div>-->
-        <!--</div>-->
-
-
 
 
         <div data-role="page" id="pagina15" data-theme="b">
             <div data-role="header" data-position="fixed">
-                <a class="btn_more_big" data-transition="flow"  href="../#pagina6"><i class="icon-white icon-arrow-left"></i></a>
+                <a class="btn_more_big cleanProduct" data-transition="flow"  href="../#pagina6"><i class="icon-white icon-arrow-left"></i></a>
                 <h1>SubVariants</h1>
             </div>            
             <div data-role="content">                                            

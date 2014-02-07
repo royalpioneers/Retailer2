@@ -90,6 +90,8 @@ var FeatureFactory = function(urls, token) {
                     $('#cost-price').val(''),
                     $('#wholesale-price').val(''),
                     $('#retail-price').val('');
+                    $('#values-features-list').html('');
+                    $('#featureName').html('');
                 };
             },
             complete: function(){

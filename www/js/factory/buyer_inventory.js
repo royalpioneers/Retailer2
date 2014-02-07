@@ -85,7 +85,7 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 		return stores;
 	};
 	
-	factory.get_items_from_store = function(store_id, stores) {debugger;
+	factory.get_items_from_store = function(store_id, stores) {
 		if (typeof(stores) == 'undefined') {
 			stores = factory.get_stores();
 		}
@@ -103,7 +103,7 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 		return [];
 	};
 	
-	factory.get_current_list = function() {debugger;
+	factory.get_current_list = function() {
 		return factory.get_items_from_store(factory.current_store);
 	};
 	
