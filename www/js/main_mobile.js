@@ -2003,13 +2003,13 @@ Offline.options = {
 */
     var imageDefault = 'http://royalpioneers.com/static/website/images/icon/default_product.png';    
     $('.search').live('click', loadSearch);
-    $(document).on('pageshow', '.refinedSearch', function() {
+    $(document).on('pageshow', '.refinedSearch', function(){
         var url = DOMAIN + '/mobile/search/';
         var data =  {rp_token: window.localStorage.getItem("rp-token"), category: 0,text: ''};
         var method = 'POST';
         factorySearchAndGroup.methodAjax(url, data, setDataSearch, method);    
     });
-    $("input[data-type='search']").live('keyup', function() {        
+    $("input[data-type='search']").live('keyup', function(){
         if($(this).val() == ''){
             $('#result-search').html('');
         }
