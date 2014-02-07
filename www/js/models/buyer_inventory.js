@@ -84,7 +84,7 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
 		});
 	};
     
-    model.chose_variant = function(obj) {debugger;
+    model.chose_variant = function(obj) {
         localStorage.activeAnimation = true;
     	var variant_id = obj.data('id');
     	var inventory = buyerInventoryFactory.get_by_id(obj.data('parent'));

@@ -109,8 +109,8 @@
                     <form action="" id="form_login_app">
                         <input class="input_login" type="email" placeholder="Username" id="username">
                         <input class="input_login" type="password" placeholder="Password" id="password">
-                        <a href="#pagina17" class="" data-transition="flow">New User? Sign Up!</a>
                         <input type="submit" class="btn" style="width: 100%;" id="log_in" value="Login">
+                        <a href="#pagina17" class="" data-transition="flow">New User? Sign Up!</a>
                     </form>                    
                 </div>
             </div>
@@ -245,14 +245,21 @@
                         <a href="" data-role="button" id="edit-image" data-theme="a">Take a Photo</a>
                     </div>
                     <ul data-role="listview" data-inset="true" class="create_item_list">
-                        <li>
-                            <input list="browsers" name="browser" placeholder="Name Product" autofocus="true" id="browser" required />
-                            <datalist id="browsers"></datalist>
-                        </li>
+
+                       <li>
+                           <div class="id_product_name_autocomplete">
+                               <ul placeholder="Test" data-filter="true" data-role="listview" data-filter-placeholder="Search Product Model..." data-inset="true"  data-filter-reveal="true" id="browsers"></ul>
+                           </div>
+                       </li>
+
+                        <!--<li>-->
+                            <!--<input list="browsers" name="browser" placeholder="Name Product" autofocus="true" id="browser" required />-->
+                            <!--<datalist id="browsers"></datalist>-->
+                        <!--</li>-->
                         <li>
                             <input type="text" placeholder="Name Variant" id="name-variant" required/>
                         </li>
-                        <li data-icon="arrow-r"><a href="#pagina7" data-trasition="flip">Category: <span id="category-name"></span><span id="category-id"></span></a></li>
+                        <li data-icon="arrow-r" id="categoryCreateItem"><a href="#pagina7" data-trasition="flip">Category: <span id="category-name"></span><span id="category-id"></span></a></li>
                         <li data-icon="arrow-r"><a href="#pagina8" data-trasition="flip">Price: <span id="price-value"></span></a></li>
                         <li><input type="text" placeholder="SKU" id="sku" required></li>
                         <li><input type="number" placeholder="Quantity" min="1" id="quantity" required></li>
@@ -553,8 +560,8 @@
             <div class="row-fluid center_text_align">
                 <form action="" id="sign-up-form">
                     <input type="email" placeholder="email" id="email">
-                    <a href="#pagina1" class="" data-transition="flow">Already a User? Log In!</a>                    
-                    <input type="submit" class="btn" style="width: 100%;" id="sign-up-btn" value="Sign Up">                    
+                    <input type="submit" class="btn" style="width: 100%;" id="sign-up-btn" value="Sign Up">
+                    <a href="#pagina1" class="" data-transition="flow">Already a User? Log In!</a>
                 </form>
             </div>
 

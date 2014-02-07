@@ -158,6 +158,7 @@
         padding: 7%;
         font-size: 27px;
         font-weight: bolder;
+        margin-bottom: 1em;
     }
     article[data-theme='flat_blue']{
         background: #415b76;
@@ -422,7 +423,7 @@
         font-weight: bolder;
         font-size: 20px;
     }
-    .create_item_list > div,.create_item_list input{
+    .create_item_list div,.create_item_list input{
         background: white !important;
     }
     /*pagina9*/
@@ -736,7 +737,6 @@
     /*pagina 13*/
     .total_price_title{
         overflow: visible !important;
-        text-overflow: initial !important;
     }
     #selectClient-button .ui-btn-inner {
     color: white;
@@ -904,9 +904,6 @@ div[data-role='header']{
     #selectClient-menu > li a {
         color: rgba(92, 83, 83, 0.77);
     }
-    #selectClient-menu > li a_focus {
-        color: black;
-    }
 #username {
     font-size: 150% !important;
     font-weight: bolder;
@@ -1019,8 +1016,8 @@ div[data-role='header']{
     background-image: -o-linear-gradient( #0093EA /*{c-bhover-background-start}*/, #0093EA /*{c-bhover-background-end}*/);
     background-image: linear-gradient( #0093EA /*{c-bhover-background-start}*/, #0093EA /*{c-bhover-background-end}*/);
 }
-.active_option{
-
+a:hover{
+    color: black !important;
 }
 #createSubVariant > .ui-btn-inner {
     padding: 7%; font-size: 2em !important;
@@ -1200,4 +1197,7 @@ div[data-role='header']{
     }
 #group-data .modal-body, #group-data-search .modal-body{
     max-height: 20em;
+}
+    #browsers{
+    display: none;
 }
