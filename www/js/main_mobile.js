@@ -1017,8 +1017,7 @@ function init(reconection) {
                                     'quantity': products[j].quantity,
                                     'price': calculatePrice(products[j]),
                                     'model_image': products[j].model_image,
-                                    'discount': getDiscount(products[j]),
-
+                                    'discount': getDiscount(products[j])
                                 };
                                 //agregar al nuevo
                                 storageClients[i].products.push(productSelected);
