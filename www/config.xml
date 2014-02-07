@@ -18,7 +18,7 @@
     <access origin="*" />
     <preference name="fullscreen" value="false" />
     <preference name="webviewbounce" value="true" />
-
+    <preference name="orientation" value="portrait"/>
     <feature name="File">
         <param name="android-package" value="org.apache.cordova.FileUtils" />
     </feature>
