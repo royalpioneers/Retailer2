@@ -21,6 +21,7 @@
         text-shadow: 1px 1px 0px black;
         margin: .6em 25% 0.8em !important;
         font-size: 1.8em !important;
+        max-width: 50%;
         margin-bottom: 0 !important;
     }
     b{
@@ -525,8 +526,8 @@
         width: 100%;
         margin: 0 auto;
         display: block;
-        font-size: 2em;
-        padding: 2% 0;
+        font-size: 25px;
+        padding: 7% 0;
     }
     .products_clients_add {
         list-style: none;
@@ -716,11 +717,13 @@
         text-align: left;
         display: block;
         float: none;
+        font-family: sans-serif !important;
         margin: 1em;
-        max-width: 100%;
+        max-width: 90%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        color: rgba(68, 65, 65, 0.81);
     }
     .without_radious .ui-li-aside i {
     display: block;
@@ -892,7 +895,7 @@ div[data-role='header']{
         border: none;
     }
     #pagina13 #myModal {
-        top: 25%;
+        top: 35%;
     }
     #selectClient-menu > li {
         background: white;
@@ -966,12 +969,6 @@ div[data-role='header']{
     margin-bottom: -13px;
     font-size: 15px;
     color: rgb(173, 56, 56);
-    text-transform: uppercase;
-}
-.invoice_header_item{
-    font-size: 30px;
-    display: block;
-    padding: 6% 0 2% 0;
     text-transform: uppercase;
 }
 .header_invoice > ul{
@@ -1065,7 +1062,7 @@ div[data-role='header']{
     max-height: 100%;
 }
 .refinedSearch #myModal, #loadStates #myModal{
-    top: 20% !important;
+    top: 25% !important;
 }
 
 /*group*/
@@ -1078,7 +1075,7 @@ div[data-role='header']{
 .grid-group-option{
     width: 100%;
     text-align: center;
-    margin: 1em 0;
+    margin: 1.5em 0;
 }
 .grid-group-option > div{
     display: inline-block;
@@ -1144,7 +1141,7 @@ div[data-role='header']{
 /**invoice*/
     .grid-group-option.group-operation {
         border: 1px solid rgba(128, 128, 128, 0.5);
-        margin: 2em auto;
+        margin: 0 auto;
         /* text-align: center; */
         border-radius: 5px;
         display: block;
@@ -1190,3 +1187,17 @@ div[data-role='header']{
         margin-left: 10px;
         margin-right: 5px;
     }
+    .close_modal.ui-link {
+        text-align: right;
+        padding-bottom: 0.5em;
+        display: block !important;
+        color: black !important;
+        font-family: monospace !important;
+        font-size: 28px !important;
+    }
+    #pagina12 .close_modal.ui-link {
+        position: relative !important;
+    }
+#group-data .modal-body, #group-data-search .modal-body{
+    max-height: 20em;
+}

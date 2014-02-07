@@ -73,7 +73,7 @@
                 <div class="overlay" id="login-error">
                     <div id="myModal" class="modal options_detail_product">
                         <div class="modal-body">
-                            <a href="#" class="close_modal"><i class="icon-remove"></i></a>
+                            <a href="#" class="close_modal">x</a>
                             <ul class="options_detail">
                                 <li>
                                     <h3>Check Password</h3>
@@ -233,32 +233,30 @@
 
 
         <!--CREATE ITEM-->
-        <div data-role="page" id="pagina6">
+        <div data-role="page" id="pagina6" data-fullscreen="false">
             <div data-role="header" data-theme="a" data-position="fixed">
                 <a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
                 <h1>Create Item</h1>
             </div>
             <div data-role="content">
-                <form>
-                    <div class="photo-product">
-                        <img src="images/default_product.png" id="image-camera">
-                        <a href="" data-role="button" id="edit-image" data-theme="a">Take a Photo</a>
-                    </div>
-                    <ul data-role="listview" data-inset="true" class="create_item_list">
-                        <li>
-                            <input list="browsers" name="browser" placeholder="Name Product" autofocus="true" id="browser" required />
-                            <datalist id="browsers"></datalist>
-                        </li>
-                        <li>
-                            <input type="text" placeholder="Name Variant" id="name-variant" required/>
-                        </li>
-                        <li data-icon="arrow-r"><a href="#pagina7" data-trasition="flip">Category: <span id="category-name"></span><span id="category-id"></span></a></li>
-                        <li data-icon="arrow-r"><a href="#pagina8" data-trasition="flip">Price: <span id="price-value"></span></a></li>
-                        <li><input type="text" placeholder="SKU" id="sku" required></li>
-                        <li><input type="number" placeholder="Quantity" min="1" id="quantity" required></li>
-                    </ul>
-                    <a href="" data-role="button" id="create_item" data-theme="a" data-status="true">Save</a>
-                </form>
+                <div class="photo-product">
+                    <img src="images/default_product.png" id="image-camera">
+                    <a href="" data-role="button" id="edit-image" data-theme="a">Take a Photo</a>
+                </div>
+                <ul data-role="listview" data-inset="true" class="create_item_list">
+                    <li>
+                        <input list="browsers" name="browser" placeholder="Name Product" autofocus="true" id="browser" required />
+                        <datalist id="browsers"></datalist>
+                    </li>
+                    <li>
+                        <input type="text" placeholder="Name Variant" id="name-variant" required/>
+                    </li>
+                    <li data-icon="arrow-r"><a href="#pagina7" data-trasition="flip">Category: <span id="category-name"></span><span id="category-id"></span></a></li>
+                    <li data-icon="arrow-r"><a href="#pagina8" data-trasition="flip">Price: <span id="price-value"></span></a></li>
+                    <li><input type="text" placeholder="SKU" id="sku" required></li>
+                    <li><input type="number" placeholder="Quantity" min="1" id="quantity" required></li>
+                </ul>
+                <a href="" data-role="button" id="create_item" data-theme="a" data-status="true">Save</a>
             </div>
             <!-- Panel -->
             <div data-role="panel" id="left-panel" data-display="overlay" data-theme="b">
@@ -335,7 +333,7 @@
 
 
         <!--Invoice-->
-        <div data-role="page" id="pagina11">
+        <div data-role="page" id="pagina11" data-fullscreen="true">
             <div data-role="header" data-theme="a" data-position="fixed">
                 <a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
                 <h1>Invoice</h1>
@@ -390,7 +388,6 @@
             <div data-role="content">
                 <aside>
                     <div class="header_client header_invoice">
-                        <span class="invoice_header_item">Items</span>
                         <span class="total_invoice">Total: <b class="see_total_from_invoice"></b></span>
                     </div>
                     <ul data-role="listview" id="myProducts" data-inset="true" data-icon="false" style="overflow-x: hidden;">
@@ -411,7 +408,7 @@
             <div class="overlay" id="invoice-data">
                 <div id="myModal" class="modal options_detail_product">
                     <div class="modal-body">
-                        <a href="#" class="close_modal"><i class="icon-remove"></i></a>
+                        <a href="#" class="close_modal">x</a>
                         <section class="grid-group-option group-operation">
                                 <a href="" class="operation-minus">-</a>
                                 <span class="form-input-quantity-invoice" contenteditable="true">0</span>
@@ -488,7 +485,7 @@
             <div class="overlay" id="group-data">
                 <div id="myModal" class="modal options_detail_product">
                     <div class="modal-body">
-                        <a href="#" class="close_modal"><i class="icon-remove"></i></a>
+                        <a href="#" class="close_modal">x</a>
                         <section class="grid-group-option">
                             <div class="header_client">
                                 <!--<span id="selected_product_name"></span><br />-->
@@ -561,7 +558,7 @@
             <div id="sign-up-error" class="overlay">
                 <div id="myModal" class="modal options_detail_product">
                     <div class="modal-body">
-                        <a href="#" class="close_modal"><i class="icon-white icon-remove"></i></a>
+                        <a href="#" class="close_modal">x</a>
                         <ul class="options_detail">
                             <li>
                                 <h3 style="color: #1b1b1b">Check the given email</h3>
@@ -578,7 +575,7 @@
             <div id="sign-up-ok" class="overlay">
                 <div id="myModal" class="modal options_detail_product">
                     <div class="modal-body">
-                        <a href="#" class="close_modal"><i class="icon-white icon-remove"></i></a>
+                        <a href="#" class="close_modal">x</a>
                         <ul class="options_detail">
                             <li>
                                 <h3 style="color: #1b1b1b">Congratulations</h3>

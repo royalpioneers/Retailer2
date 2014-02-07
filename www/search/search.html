@@ -5,14 +5,12 @@
 		<div data-role="header" data-id="head1" data-theme="a" data-position="fixed">
 			<a href="#left-panel" class="header_top_options btn_more_big"><i class="icon-white icon-align-justify"></i></a>
 			<h1>Market Place</h1>
-            <a href="#right-panel" onClick="loadCategories()" class="header_top_options btn_more_big"><i class="icon-white icon-align-justify"></i></a>
+            <a href="#right-panel" onClick="loadCategories()" class="header_top_options btn_more_big"><i class="icon-white icon-arrow-right"></i></a>
 		</div>
 		<div data-role="content">
-            <div class="swiper-slide">
-                <div class="inner tab1">
-                    <ul id="result-search" data-role="listview" data-filter="true" data-filter-placeholder="Search...">
-                    </ul>
-                </div>
+            <div class="inner tab1">
+                <ul id="result-search" data-role="listview" data-filter="true" data-filter-placeholder="Search...">
+                </ul>
             </div>
         </div><!-- /content -->
         <!-- Panel -->
@@ -46,7 +44,7 @@
         <div class="overlay" id="group-data-search">
             <div id="myModal" class="modal options_detail_product">
                 <div class="modal-body">
-                    <a href="#" class="close_modal"><i class="icon-remove"></i></a>
+                    <a href="#" class="close_modal">x</a>
                     <section class="grid-group-option">
                         <div class="gruid-group-a">
                             <input type="text" data-clear-btn="true" name="form-group-name" id="form-group-name" value="" placeholder="Create New Group">

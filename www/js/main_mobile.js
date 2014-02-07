@@ -93,7 +93,7 @@ function init(reconection) {
         $('#create-product').live("tap", getInformationProduct);
         $('#create_item').live("tap", saveProduct);
         $('.option-expand').live('expand', setCategory);
-        $('#edit-image').live('tap', takePicture);
+        $('#edit-image').live('click', takePicture);
 
         //features
         $('#features').live( "tap", getFeatures);
@@ -1156,8 +1156,8 @@ function init(reconection) {
             }
             $('.products_clients_add').append(html);
             $('.products_clients_add').trigger('create');
-            var a = '<a href="#" class="overlay_product"></a>';
-            $(a).insertAfter('.myProductSelected');
+//            var a = '<a href="#" class="overlay_product"></a>';
+//            $(a).insertAfter('.myProductSelected');
             $('.see_more_products_clients').text(getCurrentTotal());
         }else if(cant ==0){
             alert('You dont have Client! \n Create a Client!');
@@ -1800,7 +1800,7 @@ function init(reconection) {
 
     /* PHOTO */
 
-    function takePicture(event) {
+    function takePicture(event) {debugger;
         event.preventDefault();
         navigator.camera.getPicture(onSuccess, onFail, {
             quality: 50,
@@ -1984,7 +1984,7 @@ Offline.options = {
     function setDataCategories (data) {            
         var container = $('#pagina1 #right-panel').find('ul');
         container.html('');
-        container.append('<li data-icon="delete"><a href="#" data-rel="close" ontap="closePanel()">Close</a></li>');
+        container.append('<li data-icon="delete"><a href="#" data-rel="close" onClick="closePanel()">Close</a></li>');
         container.append('<li data-role="list-divider">Categories</li>');
         data = data.categories;
         for(var i in data){
