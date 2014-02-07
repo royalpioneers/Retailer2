@@ -1386,16 +1386,18 @@ function init(reconection) {
     }
 
     function saveProduct() {
-
         var nameVariant = $('#name-variant').val(),
             categoryId = $('#category-id').text(),
             quantity = $('#quantity').val(),
             sku = $('#sku').val(),
             costPrice = $('#cost-price').val(),
             wholeSalePrice = $('#wholesale-price').val(),
-            retailPrice = $('#retail-price').val();
+            retailPrice = $('#retail-price').val(),
+            name_product = '';
         var data;
         if(localStorage.createdByProductSystem == 'true'){
+            categoryId = 'tempCategoryName';
+            name_product = localStorage.productIdToCreateItem;
             data = {
                 id_product: localStorage.productIdToCreateItem,
                 name_product: localStorage.productNameToCreateItem,
@@ -1408,8 +1410,9 @@ function init(reconection) {
                 rp_token: token
             };
         }else{
+            name_product = $('.id_product_name_autocomplete form div input').val();
             data = {
-                name_product: $('.id_product_name_autocomplete input[type="text"]').val(),
+                name_product: $('.id_product_name_autocomplete form div input').val(),
                 name_variant: nameVariant,
                 category_id: categoryId,
                 quantity : quantity,
@@ -1421,8 +1424,7 @@ function init(reconection) {
             };
         }
 
-
-        if(nameProduct != '' && categoryId!='' && costPrice!=''){
+        if(name_product != '' && categoryId!='' && costPrice!=''){
             var url = urls.saveProduct;
             $.ajax({
                 url: url,
@@ -1432,7 +1434,7 @@ function init(reconection) {
                 beforeSend: function(){
                     loading();
                 },
-                success: function(data){                  
+                success: function(data){
                     if(data.status.status == true){
                         localStorage.productIdToCreateItem = '';
                         localStorage.productNameToCreateItem = '';
@@ -1454,6 +1456,8 @@ function init(reconection) {
                             reverse: true
                         });}catch(e){}
                     } else alert('an error occurred');
+                },
+                error: function(err){
                 },
                 complete: function(){
                     completeAjaxLoader();
