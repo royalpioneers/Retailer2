@@ -1,7 +1,6 @@
 $(window).load(function() {
     var run = function(){
         if (Offline.state === 'up') {
-
             if(window.localStorage.getItem("rp-cache") == true || window.localStorage.getItem("rp-cache") == "true" ){
                 init(true);
             }
@@ -13,7 +12,7 @@ $(window).load(function() {
     };
     setInterval(run, 5000);
     setTimeout(function(){
-        init();
+        init(true);
     },1000);
 });
 
@@ -71,7 +70,7 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
     }, last_resource_message = '';
 
 function init(reconection) {
-
+debugger;
     var imageURL = undefined,
         cache=false,
         token = window.localStorage.getItem("rp-token");
@@ -183,9 +182,9 @@ function init(reconection) {
         $('.disabled').parents('.ui-radio').bind('click', function(){;
             alert('Check Your Connection!');
         });
-        $('#undefined-menu a').live('click', function(event){            
-            event.preventDefault();
-        });
+//        $('#undefined-menu a').live('click', function(event){
+//            event.preventDefault();
+//        });
 
     /* PERMISSION */
         var permissionFactory = new PermissionFactory(urls, token, window.localStorage.getItem("rp-cache"));
@@ -225,7 +224,7 @@ function init(reconection) {
 
     //Automatic Login
 
-    if(reconection == true){
+    if(reconection == 'true'){
         eventsAfterLogin();
     }
 
