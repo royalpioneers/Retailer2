@@ -1,6 +1,7 @@
 $(window).load(function() {
     var run = function(){
         if (Offline.state === 'up') {
+
             if(window.localStorage.getItem("rp-cache") == true || window.localStorage.getItem("rp-cache") == "true" ){
                 init(true);
             }
@@ -12,7 +13,7 @@ $(window).load(function() {
     };
     setInterval(run, 5000);
     setTimeout(function(){
-        init(true);
+        init();
     },1000);
 });
 
@@ -70,7 +71,7 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
     }, last_resource_message = '';
 
 function init(reconection) {
-debugger;
+
     var imageURL = undefined,
         cache=false,
         token = window.localStorage.getItem("rp-token");
@@ -182,9 +183,9 @@ debugger;
         $('.disabled').parents('.ui-radio').bind('click', function(){;
             alert('Check Your Connection!');
         });
-//        $('#undefined-menu a').live('click', function(event){
-//            event.preventDefault();
-//        });
+        $('#undefined-menu a').live('click', function(event){
+            event.preventDefault();
+        });
 
     /* PERMISSION */
         var permissionFactory = new PermissionFactory(urls, token, window.localStorage.getItem("rp-cache"));
@@ -224,7 +225,7 @@ debugger;
 
     //Automatic Login
 
-    if(reconection == 'true'){
+    if(reconection == true){
         eventsAfterLogin();
     }
 
@@ -2002,18 +2003,18 @@ Offline.options = {
 */
     var imageDefault = 'http://royalpioneers.com/static/website/images/icon/default_product.png';    
     $('.search').live('click', loadSearch);
-    $(document).on('pageshow', '.refinedSearch', function(){
+    $(document).on('pageshow', '.refinedSearch', function() {
         var url = DOMAIN + '/mobile/search/';
         var data =  {rp_token: window.localStorage.getItem("rp-token"), category: 0,text: ''};
         var method = 'POST';
         factorySearchAndGroup.methodAjax(url, data, setDataSearch, method);    
     });
-    $("input[data-type='search']").live('keyup', function(){
+    $("input[data-type='search']").live('keyup', function() {
         if($(this).val() == ''){
             $('#result-search').html('');
         }
     });
-    function loadCategories () {
+    function loadCategories (){
         var url = DOMAIN + '/mobile/category/';
         var data = {rp_token: window.localStorage.getItem("rp-token")};     
         var method = 'POST';       
@@ -2021,7 +2022,7 @@ Offline.options = {
     }
 
     function setDataCategories (data) {            
-        var container = $('#pagina1 #right-panel').find('ul');
+        var container = $('#pagina50 #right-panel').find('ul');
         container.html('');
         container.append('<li data-icon="delete"><a href="#" data-rel="close" onClick="closePanel()">Close</a></li>');
         container.append('<li data-role="list-divider">Categories</li>');
