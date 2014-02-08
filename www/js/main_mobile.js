@@ -125,7 +125,7 @@ function init(reconection) {
         $( "#pagina13" ).live( "pageshow", pageClientShow);
 
         $( "#pagina2" ).live( "pageshow", function(){
-            $('#select_buyer_store-listbox > ul > li').data('option-indextrigger', '0').eq(1).find('a').trigger('click');
+            $('#select_buyer_store-listbox > ul > li').data('option-indextrigger', '0').eq(0).find('a').trigger('click');
         });
         $( ".cleanProduct" ).live('click', function(){
             $('#browser').val(''),
@@ -139,6 +139,7 @@ function init(reconection) {
             $('#values-features-list').html('');
             $('#featureName').html('');
             $('#category-name').html('');
+            $('.id_product_name_autocomplete form div input').val('');
         });
         $(document).live('pagebeforeshow', '#pagina9', pagina9Go);
         $('#goToInvoice').live('tap', showInvoice);
@@ -262,12 +263,10 @@ function init(reconection) {
     }
 
     function loading(){
-        try{
-            $.mobile.loading("show", {
-                theme: 'c',
-                textonly: false
-            });
-        }catch(e){}
+        try{$.mobile.loading("show", {
+            theme: 'c',
+            textonly: false
+        });}catch(e){}
     }
 
     function calculatePrice(product) {
