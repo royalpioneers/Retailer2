@@ -150,7 +150,7 @@ function init(reconection) {
         $('.removeProductInvoiceModal').live('click', removeProductInvoiceModal);
         $( ".qtyInvoice" ).live('keyup', updateMyProduct);
         $('#sendProductsInvoice').live('click', sendProductsInvoice);
-        $('.cancel_sendProductsInvoice').live('click', goProduct);
+        $('.cancel_sendProductsInvoice').live('click', setClient);
         $('.cleanClientSelected').live('click', cleanClientSelected);
         $('#search-redirect').live('click', changeSearch);
         $('#back_page').live('click', redirectToPage);
@@ -579,6 +579,9 @@ function init(reconection) {
         return false;
     }
 
+    function setClient(){
+        JSON.parse(localStorage.getItem('clientSelected')).products = '';
+    }
     function listClients() {
          var url = urls.clients_list;
          var clients_name_id = [];
