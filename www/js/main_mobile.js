@@ -124,9 +124,7 @@ function init(reconection) {
         $( "#pagina12" ).live( "pageshow", pageMyProductsShow);
         $( "#pagina13" ).live( "pageshow", pageClientShow);
 
-        $( "#pagina2" ).live( "pageshow", function(){
-            $('#select_buyer_store-listbox > ul > li').data('option-indextrigger', '0').eq(0).find('a').trigger('click');
-        });
+
         $( ".cleanProduct" ).live('click', function(){
             $('#browser').val(''),
             $('#name-variant').val(''),
@@ -160,7 +158,11 @@ function init(reconection) {
         $('#select_buyer_store').bind('change', changeSelectStore);
         $('#store_total_qty').bind('change', changeInventoryQuantities);
         $('#update_stock_by_status').parent().hide();
-        
+        $(document).live('pageshow', '#pagina2', function(){
+            debugger;
+            $('#select_buyer_store-listbox > ul > li').data('option-indextrigger', '0').eq(0).find('a').trigger('click');
+            getInventoryItems();
+        });
         $(document).live("pagebeforechange", function(e,ob) {
             if(ob.toPage && (typeof ob.toPage==="string") && ob.toPage.indexOf('index.html') >= 0) {
                 hash_base =  ob.toPage.split('#');
@@ -440,7 +442,6 @@ function init(reconection) {
         clientFactory.set_token(token);
         permissionFactory.set_token(token);
         permissionFactory.get_all(function(){});
-        getInventoryItems();
         listClients();
         startAnalyzerInformation();
         getInformationProduct();
@@ -463,7 +464,7 @@ function init(reconection) {
     }
 
     function changeSelectStore() {
-        getInventoryItems();
+        getInventoryItems();debugger;
         $('#id_tab_my_inventory').trigger('click');
     }
     
@@ -473,6 +474,7 @@ function init(reconection) {
             cache = true;
         }
         var store = $('#select_buyer_store').val();
+        debugger;
         $('#store_total_qty').attr('checked', false);
         buyerInventoryFactory.get_all(store, showInventory, cache);
     }
@@ -895,6 +897,7 @@ function init(reconection) {
                     clientSelected.products = [];
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                 }
+                alert('Success Invoice!');
 //                $.mobile.navigate("#pagina12", {
 //                    transition: "flow",
 //                    reverse: true
