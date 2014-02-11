@@ -4,3 +4,7 @@
 .settings/
 www/js/local_setting.js
 .gitignore~
+merges/
+platforms/
+plugins/
+out/
