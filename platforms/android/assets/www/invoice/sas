@@ -1,0 +1,194 @@
+<meta charset="utf-8">
+
+        <!--Invoice-->
+         <div data-role="page" id="pagina11" data-fullscreen="true">
+            <div data-role="header" data-theme="a">
+                <a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
+                <h1>Invoice</h1>
+            </div>
+            <div data-role="content">
+                <div class="header_client">
+                  <h2>Client</h2>
+                </div>
+                <ul data-role="listview" data-filter="true" id="list_clients" data-filter-placeholder="Search Clients..." data-inset="true">
+                </ul>
+            </div>
+             <div data-role="panel" id="left-panel" data-theme="a">
+                <ul data-role="listview">
+                    <li data-role="list-divider"></li>
+                    <li data-icon="home">
+                        <a class="btn_more_big" href="../#pagina2" data-transition="flow">Home</a>
+                    </li>
+                    <br/>
+                    <li data-role="list-divider"></li>
+                    <br/>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../#pagina6" id="create-product" data-transition="flow" >Create Item</a>
+                    </li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../#pagina9" id="btn_go_to_client_form" data-transition="flow">Create Client</a>
+                    </li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../invoice/invoice.html" id="new_invoice" data-transition="flow">New Invoice</a>
+                    </li>
+                    <li data-role="list-divider"></li>
+                    <li data-icon="back" id="logout">
+                        <a class="btn_more_big" href="#pagina1">Log Out</a>
+                    </li>
+                </ul>         
+             </div>
+        </div>
+
+         <div id="id_client_templates" style="display: none">
+          <div id="id_client_template">
+            <input type="radio" name="radio-choice-1" id="radio-choice-__id__" data-id="__id__" value="choice-__id__"/>
+            <label for="radio-choice-__id__" data-corners="false" class="labelRadioButton __clientOffline__">
+              <img src="__image__" class="image_client"/>__name__
+            </label>
+          </div>
+        </div>
+
+        <!--Buy client's products-->
+        <div data-role="page" id="pagina12">
+            <div data-role="header" data-theme="a" data-position="fixed">
+                <!-- <a href="#pagina11" class="btn_more_big" data-transition="flow"><i class="icon-white icon-arrow-left"></i></a> -->
+                <a class="header_top_options btn_more_big" href="#left-panel" data-transition="flow">
+                    <i class="icon-white icon-align-justify"></i>
+                </a>
+                <h2 class="total_price_title"><a href="" class="see_more_products_clients saveClientStorage">0</a></h2>
+            </div>
+            <div data-role="content">
+                <ul class="products_clients_add" data-role="listview" data-filter="true"></ul>
+            </div>
+            <!-- Panel -->
+            <div data-role="panel" id="left-panel" data-display="overlay" data-theme="b">
+                <ul data-role="listview">
+                    <li data-role="list-divider">Menu</li>
+                    <li data-icon="home">
+                        <a class="btn_more_big" href="../#pagina2" data-transition="flow">Home</a>
+                    </li>
+                    <li data-role="list-divider"></li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../#pagina6" id="create-product" data-transition="flow" >Create Item</a>
+                    </li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../newClient.html" id="btn_go_to_client_form" data-transition="flow">Create Client</a>
+                    </li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../invoice/invoice.html" id="new_invoice" data-transition="flow">New Invoice</a>
+                    </li>
+                    <li data-role="list-divider"></li>
+                    <li data-icon="back" id="logout">
+                        <a class="btn_more_big" href="#pagina1">Log Out</a>
+                    </li>
+                </ul>        
+            </div><!-- /Panel -->
+        </div>
+
+
+        <div data-role="page" id="pagina13" data-fullscreen="true">
+            <div data-role="header" data-theme="a">
+                <a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
+                <a class="btn_more_big cleanClientSelected" id="back_page" data-fullscreen="true" href="#pagina11"><i class="icon-white icon-arrow-left"></i></a>
+                <select name="select-choice-1" id="selectClient">
+                </select>
+            </div>
+            <div data-role="content">
+                <aside>
+                    <div class="header_client header_invoice">
+                        <span class="invoice_header_item">Items</span>
+                        <ul>
+                            <li>Quantity</li>
+                            <li>Price</li>
+                            <li>Subtotal</li>
+                        </ul>
+                    </div>
+                    <ul data-role="listview" id="myProducts" data-inset="true" data-icon="false" style="overflow-x: hidden;">
+                    </ul>
+                    <ul data-role="listview" data-corners="false" data-inset="true">
+                        <li><span class="total_invoice">Total: <b class="see_total_from_invoice"></b></span></li>
+                        <li data-icon="false"><a href="" id="goToProducts">+ Add Another Product</a></li>
+                    </ul>
+                    <form id="formsendProductsInvoice">
+                      <div>
+                        <input type="checkbox" id="update_stock_by_status" /><label for="update_stock_by_status" >Update stock for priority status</label>
+                      </div>
+                        <a href="#pagina13" class="ui-bar-b options_sendProductsInvoice cancel_sendProductsInvoice">Cancel</a>
+                        <a href="#pagina13" class="ui-bar-b options_sendProductsInvoice cancel_sendProductsInvoice" id="sendProductsInvoice" data-status="true">Sale</a>
+                    </form>
+                </aside>
+            </div>
+            <!-- Panel -->
+            <div data-role="panel" id="left-panel" data-display="overlay" data-theme="b">
+                <ul data-role="listview">
+                    <li data-role="list-divider">Menu</li>
+                    <li data-icon="home">
+                        <a class="btn_more_big" href="../#pagina2" data-transition="flow">Home</a>
+                    </li>
+                    <li data-role="list-divider"></li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../#pagina6" id="create-product" data-transition="flow" >Create Item</a>
+                    </li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../newClient.html" id="btn_go_to_client_form" data-transition="flow">Create Client</a>
+                    </li>
+                    <li data-icon="arrow-r">
+                        <a class="btn_more_big" href="../invoice/invoice.html" id="new_invoice" data-transition="flow">New Invoice</a>
+                    </li>
+                    <li data-role="list-divider"></li>
+                    <li data-icon="back" id="logout">
+                        <a class="btn_more_big" href="#pagina1">Log Out</a>
+                    </li>
+                </ul>        
+            </div><!-- /Panel -->
+
+            <!-- PRODUCT VARIANT: SUB-VARIANT -->
+            <div class="overlay" id="group-data">
+                <div id="myModal" class="modal options_detail_product">
+                    <div class="modal-body">
+                        <a href="#" class="close_modal"><i class="icon-remove"></i></a>
+                        <section class="grid-group-option">
+                            <div class="header_client">
+                                <span class="separator_sub_variant">Sub variants list</span><br />
+                                <ul>
+                                    <li>name</li>
+                                    <li>price</li>
+                                </ul>
+                            </div>
+                        </section>
+                        <ul data-role="listview" data-inset="true" data-theme="a" id="id_selected_product_variants_list">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="id_template_option_variant" style="display: none">
+            <input type="checkbox" name="radio-choice-__id__" id="radio-choice-__id__"  __checked__
+            data-id="__id__" data-parent="__parent__" value="choice-__id__" class="class_selected_variant"/>
+            <label for="radio-choice-__id__" data-corners="false" class="labelRadioButton label_sub_variant">
+                <span class="label_sub_variant_name">__name__</span>: <span class="label_sub_variant_price"> __price__</span></label>
+        </div>
+
+        <!-- PRODUCT VARIANT: SUB-VARIANT -->
+<!--         <div data-role="page" id="pagina14" data-theme="b">
+            <div data-role="header">
+                <a class="btn_more_big returnToSelectedProducts" data-transition="flow"><i class="icon-white icon-arrow-left"></i></a>
+                <h1>Invoice</h1>
+            </div>
+
+            <div data-role="content">
+                <div class="header_client">
+                    <span id="selected_product_name"></span><br />
+                    <span id="selected_product_variant_name"></span><br />
+                    <span class="separator_sub_variant">Sub variants list</span><br />
+                    <ul>
+                        <li>name</li>
+                        <li>price</li>
+                    </ul>
+                </div>
+
+
+            </div>
+        </div>   -->

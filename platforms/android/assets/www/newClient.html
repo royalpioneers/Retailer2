@@ -1,0 +1,55 @@
+ <!--ADD CLIENT-->
+<div data-role="page" id="pagina9" data-fullscreen="false">
+    <div data-role="header" data-theme="a" data-position="fixed">
+        <a class="header_top_options btn_more_big" href="#left-panel"><i class="icon-white icon-align-justify"></i></a>
+        <h1>Add New Client</h1>
+    </div>
+    <div data-role="content">
+        <form action="" class="form_new_client">
+        	<select placeholder="CompanyType" name="company_type" data-native-menu="false"></select>
+            <input type="text" placeholder="Name" name="name">
+            <input type="email" placeholder="Email" name="email">
+            <select placeholder="Country" name="country" data-native-menu="false"></select>
+            <select placeholder="State" name="state" data-native-menu="false"></select>
+            <div id="id_city_autocomplete">
+                <ul placeholder="Test" data-filter="true" data-role="listview"
+                	data-filter-placeholder="Search city..." data-inset="true"  data-filter-reveal="true">
+                </ul>
+            </div>
+            <input type="text" placeholder="Address" name="address">
+            <input type="submit" class="ui-bar-a btn_more_big" id="add_new_client" data-theme="a" value="Save">
+        </form>
+        <a data-rel="back" href="#" id="return_from_add_new_client" class="hiden"></a>
+    </div>
+    <!-- Panel -->
+    <div data-role="panel" id="left-panel" data-display="overlay" data-theme="b">
+        <ul data-role="listview">
+            <li data-role="list-divider">Menu</li>
+            <li data-icon="home">
+                <a class="btn_more_big" href="../#pagina2" data-transition="flow">Home</a>
+            </li>
+            <li data-role="list-divider"></li>
+            <li data-icon="arrow-r">
+                <a class="btn_more_big" href="../#pagina6" id="create-product" data-transition="flow" >Create Item</a>
+            </li>
+            <li data-icon="arrow-r">
+                <a class="btn_more_big" href="./newClient.html" id="btn_go_to_client_form" data-transition="flow">Create Client</a>
+            </li>
+            <li data-icon="arrow-r">
+                <a class="btn_more_big" href="../#pagina13" id="new_invoice" data-transition="flow">New Invoice</a>
+            </li>
+            <li data-role="list-divider"></li>
+            <li data-icon="back" id="logout">
+                <a class="btn_more_big" href="#pagina1" data-transition="flow">Log Out</a>
+            </li>
+        </ul>        
+            </div><!-- /Panel -->
+    <div class="overlay" id="loadStates">
+        <div id="myModal" class="modal options_detail_product">
+            <div class="modal-body">
+                <a href="#" class="close_modal"><i class="icon-remove"></i></a>
+                <ul data-role="listview" id="stateList"></ul>
+            </div>
+        </div>
+    </div>
+</div>
