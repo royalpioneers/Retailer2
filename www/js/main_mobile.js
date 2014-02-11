@@ -1846,6 +1846,7 @@ function init(reconection) {
     /* PHOTO */
 
     function takePicture(event) {
+        alert('Hello 2');
         event.preventDefault();
         navigator.camera.getPicture(onSuccess, onFail, {
             quality: 50,
