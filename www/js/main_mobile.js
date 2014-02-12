@@ -81,7 +81,7 @@ function init(reconection) {
 
         //Login
         $("#log_in").live("click", loginAuth);
-        $('#logout').live('click', logOut);
+        $('#logout a').live('click', logOut);
         //Sign Up
         $('#sign-up-btn').live('click', signUp);
 
@@ -165,10 +165,9 @@ function init(reconection) {
 
         $('#pagina2').live('pageshow', function(){
             debugger;
-            setTimeout(function(){
+            if(localStorage.rp-cache != false){
                 $('#select_buyer_store-listbox > ul > li').data('option-indextrigger', '0').eq(0).find('a').trigger('click');
-
-            }, 1000);
+            }
 
         });
         $(document).live("pagebeforechange", function(e,ob) {
@@ -389,6 +388,7 @@ function init(reconection) {
         $('#password').val('');
         $('#username').val('');
         $('#username').focus();
+        localStorage.clear();
     }
 
     function authToken() {
