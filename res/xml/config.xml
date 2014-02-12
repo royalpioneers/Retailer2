@@ -1,2 +1,0 @@
-<plugin name="Camera" value="org.apache.cordova.CameraLauncher" />
-<plugin name="Camera" value="CDVCamera" />
