@@ -30,5 +30,7 @@
 <feature name="Camera">
     <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
 </feature>
+<plugin name="Camera" value="org.apache.cordova.CameraLauncher" />
+<plugin name="Camera" value="CDVCamera" />
 
 </widget>
