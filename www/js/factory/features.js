@@ -94,7 +94,11 @@ var FeatureFactory = function(urls, token) {
                     $('#values-features-list').html('');
                     $('#featureName').html('');
                     $('#featureValueName').text('');
-                };
+                    $('#additionalCost').val('');
+                    $('#variantQuantity').val('');
+                }else{
+                    alert('fail!');
+                }
             },
             complete: function(){
                 try{$.mobile.loading("hide");}catch(e){}

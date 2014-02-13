@@ -1701,8 +1701,6 @@ function init(reconection) {
         var additionalCost = $('#additionalCost').val();
         var variantQuantity = $('#variantQuantity').val();        
         featureFactory.create_sub_variant(idProductModel, idFeature, idFeatureValue, additionalCost, variantQuantity);
-        $('#additionalCost').val('');
-        $('#variantQuantity').val('');
     }
 
     /* Search */

@@ -1205,3 +1205,13 @@ a:hover{
     #browsers{
     display: none;
 }
+    .ui-btn.ui-btn-icon-right.ui-li-has-arrow.ui-li.ui-btn-up-b{
+        background: white !important;
+    }
+    .ui-btn.ui-btn-icon-right.ui-li-has-arrow.ui-li.ui-btn-up-b .btn_more_big.ui-link-inherit {
+        color: black;
+    }
+    .ui-btn.ui-btn-icon-right.ui-li-has-arrow.ui-li.ui-btn-hover-b.ui-btn-down-b {
+        background: white !important;
+        color: black;
+    }
