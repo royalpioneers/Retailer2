@@ -21,7 +21,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	model.city_selected = 0;
 	
 	model.init = function(cache) {
-		$("#"+model.id_btn_go_to_form).live("click", function(event){
+		$("."+model.id_btn_go_to_form).live("click", function(event){
 			model.start_form_values(cache);
 		});
 		$("#"+model.add_new_client).live("click", function(e){
@@ -208,12 +208,12 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	};
 	
 	model.success_create = function() {
-		debugger;
+		
 		// $('#'+model.id_btn_return).trigger('click');
 	};
 	
 	model.show = function(messages) {
-        debugger;
+        
         console.log(messages);
 		var str = '';
 		for (var message in messages) {

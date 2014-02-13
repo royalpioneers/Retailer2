@@ -46,12 +46,12 @@ var ClientFactory = function(urls, token, cache) {
 			beforeSend: function(){
                 factory.loader();
             },
-			success: function(data){debugger;
-				if (data.status == 'ok') {debugger;
+			success: function(data){
+				if (data.status == 'ok') {
 					data.client.name = params.name;
 					data.client.image = DOMAIN+'/static/img/designer_default_photo.jpg';
 					data.client.type = params.company_type;
-					factory.store_client(data.client);debugger;
+					factory.store_client(data.client);
 					handler(true, data.client);
 				} else {
 					handler(false, data.messages);
@@ -63,7 +63,7 @@ var ClientFactory = function(urls, token, cache) {
 	    });
 	};
 	
-	factory.store_client = function(client){debugger;
+	factory.store_client = function(client){
 		if(window.localStorage.getItem(factory.id_client_list)){
 			var client_list = JSON.parse(window.localStorage.getItem(factory.id_client_list));
 			client_list[client_list.length] = client;

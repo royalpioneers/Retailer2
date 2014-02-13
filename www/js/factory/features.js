@@ -63,7 +63,8 @@ var FeatureFactory = function(urls, token) {
 		factory.token = token;
 	};
 
-    factory.create_sub_variant = function(idProductModel, idFeature, idFeatureValue, additionalCost, variantQuantity){        
+    factory.create_sub_variant = function(idProductModel, idFeature, idFeatureValue, additionalCost, variantQuantity){
+
         $.ajax({
             url: factory.urls.saveProductModelVariant,
             type: 'POST',
@@ -92,6 +93,7 @@ var FeatureFactory = function(urls, token) {
                     $('#retail-price').val('');
                     $('#values-features-list').html('');
                     $('#featureName').html('');
+                    $('#featureValueName').text('');
                 };
             },
             complete: function(){

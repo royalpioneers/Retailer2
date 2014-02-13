@@ -81,7 +81,7 @@ function init(reconection) {
 
         //Login
         $("#log_in").live("click", loginAuth);
-        $('#logout a').live('click', logOut);
+        $('.logout a').live('click', logOut);
         //Sign Up
         $('#sign-up-btn').live('click', signUp);
 
@@ -91,7 +91,7 @@ function init(reconection) {
 
         //Create product
         $('.categories_create_product').find('a').live('click', createProduct);
-        $('#create-product').live("click", getInformationProduct);
+        $('.create-product').live("click", getInformationProduct);
         $('#create_item').live("click", saveProduct);
         $('.option-expand').live('expand', setCategory);
         $('#edit-image').live('click', takePicture);
@@ -103,11 +103,11 @@ function init(reconection) {
 
         //product model variant
         $('#createSubVariant').live('click', saveProductModelVariant);
-        $('#values-features-list > li').live('click', chooceFeatureValue);
+        $('#values-features-list > li').live('click', chooseFeatureValue);
 
         //Analyzer
         $("#browsers a").live('click', getCompleteInformation);
-        $('.close_modal').live('tap', showOverlay);
+        $('.close_modal').live('click', showOverlay);
         $('#graphic_month').live('click',function(){processAnalyzerInformation(1);});
         $('#graphic_week').live('click',function(){processAnalyzerInformation(2);});
         $('#graphic_day').live('click',function(){processAnalyzerInformation(3);});
@@ -115,7 +115,7 @@ function init(reconection) {
 
         //Invoice
         $('.offline').live('click', msgOffline);
-        $('#new_invoice').live('click', listClients);
+        $('.new_invoice').live('click', listClients);
         $('.without_radious > a').live('click', calculateQuantity);
         $('.form-input-quantity-invoice').live('input', calculateByType);
         $('.operation-minus').live('tap', calculateByOperationMinus);
@@ -164,7 +164,7 @@ function init(reconection) {
 
 
         $('#pagina2').live('pageshow', function(){
-            debugger;
+            
             if(localStorage.rp-cache != false){
                 $('#select_buyer_store-listbox > ul > li').data('option-indextrigger', '0').eq(0).find('a').trigger('click');
             }
@@ -344,7 +344,7 @@ function init(reconection) {
                         window.localStorage.setItem("rp-token", data.token);
                         token = data.token;
                         $('#sign-up-ok').fadeIn().children().addClass('effect_in_out');
-                        $('#sign-up-ok, .close_modal').live('tap', function(){
+                        $('#sign-up-ok, .close_modal').live('click', function(){
                             eventsAfterLogin();
                         });
                     } else {
@@ -473,7 +473,7 @@ function init(reconection) {
     }
 
     function changeSelectStore() {
-        getInventoryItems();debugger;
+        getInventoryItems();
         $('#id_tab_my_inventory').trigger('click');
     }
     
@@ -483,7 +483,7 @@ function init(reconection) {
             cache = true;
         }
         var store = $('#select_buyer_store').val();
-        debugger;
+        
         $('#store_total_qty').attr('checked', false);
         buyerInventoryFactory.get_all(store, showInventory, cache);
     }
@@ -506,6 +506,7 @@ function init(reconection) {
                         html_to_insert += '<li class="'+_offline+'">\
                                      <a href="#pagina5" data-transition="flow"\
                                          class="model-data"\
+                                         data-id="'+model.model_id+'"\
                                          data-model-name="'+model.model_name+'"\
                                          data-product-name="'+model.product_name+'"\
                                          data-retail-price="'+model.retail_price+'"\
@@ -520,6 +521,7 @@ function init(reconection) {
                     html_to_insert += '<li>\
                                      <a href="#pagina5" data-transition="flow"\
                                          class="model-data"\
+                                         data-id="'+model.model_id+'"\
                                          data-model-name="'+model.model_name+'"\
                                          data-product-name="'+model.product_name+'"\
                                          data-retail-price="'+model.retail_price+'"\
@@ -908,10 +910,10 @@ function init(reconection) {
                 }
                 alert('Success Invoice!');
                 pageClientShow();
-//                $.mobile.navigate("#pagina12", {
-//                    transition: "flow",
-//                    reverse: true
-//                });
+                $.mobile.navigate("#pagina12", {
+                    transition: "flow",
+                    reverse: true
+                });
             }
         }
     }
@@ -953,7 +955,7 @@ function init(reconection) {
             type_update: type_update
         };
 
-        if (!invoice.are_valid_products(data_client[0].products)) {
+        if (data_client[0] != undefined && !invoice.are_valid_products(data_client[0].products)) {
             alert(invoice.get_message());
             return false;
         }
@@ -1534,7 +1536,7 @@ function init(reconection) {
             localStorage.productsSystem += ', '+value.name;
         });
         list.append(html);
-        list.listview('refresh');
+        list.trigger('create');
     }
 
     function showMainCategories(categories){
@@ -1568,6 +1570,7 @@ function init(reconection) {
             $this = $(this),
             html = '', variants_by_product_model='', pre_html='',
             modelName = $this.data('modelName'),
+            productModelId = $this.data('id');
             productName = $this.data('productName'),
             quantity = $this.data('quantity'),
             retailPrice = $this.data('retailPrice'),
@@ -1596,8 +1599,10 @@ function init(reconection) {
         variants_by_product_model = $('.variants_by_product_model');
         
         if(isNotSystem){
-            pre_html = '<a href="#pagina6" class="go_to_variants" data-transition="flow">Go to Variants</a>';            
+            pre_html = '<a href="#pagina15" class="go_to_variants" data-transition="flow">Go to Variants</a>';
             $(pre_html).insertBefore(variants_by_product_model);
+            //set option to go create variants
+            localStorage.setItem('productModelId', productModelId);
         }
         
         for(var i in variants){
@@ -1612,13 +1617,14 @@ function init(reconection) {
         }
         
         variants_by_product_model.empty();
-        variants_by_product_model.append(html);        
+        variants_by_product_model.append(html);
+
     }
 
     
     /* Features */
     function getFeatures(){
-        
+        $('#features-modal').fadeIn().children().addClass('effect_in_out');
         var idProductModel = JSON.parse(localStorage.getItem('productModelId'));
         var cache = false;
         if(Offline.state == 'down') {
@@ -1636,18 +1642,16 @@ function init(reconection) {
             html += '<li class="feature_option" data-id="'+features[i].id+'"><a href="#">' + features[i].name+ '</a></li>';
         }
         $('#features-list').append(html);
-        setTimeout(function(){
-             $('#features-list').trigger('create');  
-        }, 2000);                          
+        $('#features-list').trigger('create');
     }
 
     
     /* Values Features */
-    function getValuesFeatures(){        
+    function getValuesFeatures(){
+        $('#features-modal').fadeOut().children().removeClass('effect_in_out');
         var idFeature = $(this).data('id');
         localStorage.removeItem('idFeature');
         localStorage.setItem('idFeature', idFeature);
-
         var idProductModel = JSON.parse(localStorage.getItem('productModelId'));
         var featureName = $(this).text();
         var cache = false;
@@ -1671,17 +1675,21 @@ function init(reconection) {
             html += '<li data-theme="a" data-id="'+valuesFeatures[i].id+'"><a href="#">' +valuesFeatures[i].name+ '</a></li>'; 
         }
         $('#values-features-list').append(html);
-        setTimeout(function(){
-             $('#values-features-list').trigger('create');
-        }, 2000);             
+        $('#values-features-list').trigger('create');
     }
-
+    $('#features-values').live('click', showFeaturesValueModal);
+    function showFeaturesValueModal(){
+        $('#features-values-modal').fadeIn().children().addClass('effect_in_out');
+    }
     /* Product Model Variant */
 
-    function chooceFeatureValue(){
+    function chooseFeatureValue(){
+        $('#features-values-modal').fadeOut().children().removeClass('effect_in_out');
         $(this).siblings().removeClass('active_option');
         $(this).addClass('active_option');
         var idFeatureValue = $(this).data('id');
+        var featureValueName = $(this).text();
+        $('#featureValueName').text(featureValueName);
         localStorage.removeItem('idFeatureValue');
         localStorage.setItem('idFeatureValue', idFeatureValue);
     }
@@ -1694,7 +1702,7 @@ function init(reconection) {
         var variantQuantity = $('#variantQuantity').val();        
         featureFactory.create_sub_variant(idProductModel, idFeature, idFeatureValue, additionalCost, variantQuantity);
         $('#additionalCost').val('');
-        $('#variantQuantity').val('');    
+        $('#variantQuantity').val('');
     }
 
     /* Search */
@@ -1923,7 +1931,9 @@ function init(reconection) {
         return access;
     }
 
-    $('.close_modal.ui-link, .btn.btn_accept_option.ui-link').live('tap', function(){
+    $('.close_modal').live('click', function(){
+        $('#features-values-modal').fadeOut().children().removeClass('effect_in_out');
+        $('#features-modal').fadeOut().children().removeClass('effect_in_out');
         $('#group-data').fadeOut().children().removeClass('effect_in_out');
         $('#login-error').fadeOut().children().removeClass('effect_in_out');
         $('#sign-up-ok').fadeOut().children().removeClass('effect_in_out');
@@ -2012,14 +2022,18 @@ Offline.options = {
       game: false
     };
 
-
+$( document ).on( "mobileinit", function() {
+    //apply overrides here
+    $.mobile.transitionFallbacks.slideout = "flow";
+    $.mobile.defaultTransitionHandler = "flow";
+});
 /*
     search
 */
     var imageDefault = 'http://royalpioneers.com/static/website/images/icon/default_product.png';    
     $('.search').live('click', loadSearch);
 
-    $(document).on('pageshow', '#pagina50', function() {debugger;
+    $(document).on('pageshow', '#pagina50', function() {
         var url = DOMAIN + '/mobile/search/';
         var data =  {rp_token: window.localStorage.getItem("rp-token"), category: 1,text: ''};
         var method = 'POST';
@@ -2060,7 +2074,7 @@ Offline.options = {
     }
 
     function setDataSearch (data) {
-        debugger;
+        
         $('#result-search').html('');
         $.each(data.result, function(i, value) {
             $.each(value.models, function(ind, model) {
@@ -2111,7 +2125,7 @@ Offline.options = {
     
     $('.group-for-choose').live('click', function(){
         
-        $('.close_modal.ui-link').trigger('tap');
+        $('.close_modal.ui-link').trigger('click');
         var url = DOMAIN + '/mobile/add-product-to-group/';
         var data = {productModelId: localStorage.productModelId, groupId: $(this).data('id'), rp_token: window.localStorage.getItem("rp-token")};                
         var method = 'POST';   
@@ -2173,7 +2187,7 @@ Offline.options = {
                 dataType: 'json',
                 beforeSend: function(){factorySearchAndGroup.loader();},
                 success: function(data) {
-                    debugger;
+                    
                     handler(data);                    
                 },
                complete: function(){factorySearchAndGroup.hideLoader();}
@@ -2189,6 +2203,6 @@ Offline.options = {
             try{$.mobile.loading("hide");}catch(e){}
         }
     };
-$('.close_modal.ui-link, .btn.btn_accept_option.ui-link').live('tap', function(){
+$('.close_modal.ui-link, .btn.btn_accept_option.ui-link').live('click', function(){
     $('#group-data-search').fadeOut().children().removeClass('effect_in_out');
 });

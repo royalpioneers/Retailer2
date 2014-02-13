@@ -66,7 +66,7 @@
         bottom: 0;
         right: 0;
         display: none;
-        z-index: 10;
+        z-index: 9999;
     }
     #myCarousel {
         position: absolute;
@@ -87,8 +87,8 @@
         -moz-transform: scale(1) !important;
         transform: scale(1) !important;
     }
-    #myModal {
-        background: transparent;
+    .myModal {
+        background: rgb(250, 250, 250);
         color: #2c3e50 !important;
         width: 80%;
         margin: 0 auto;
@@ -103,6 +103,8 @@
         transition: all .3s ease-in-out;
         -webkit-transition: all .3s ease-in-out;
         -moz-transition: all .3s ease-in-out;
+        margin-top: 4em;
+        border-radius: 5px;
     }
     .carousel-caption {
         background: none;
@@ -896,7 +898,7 @@ div[data-role='header']{
         background: transparent;
         border: none;
     }
-    #pagina13 #myModal {
+    #pagina13 .myModal {
         top: 35%;
     }
     #selectClient-menu > li {
@@ -987,7 +989,7 @@ div[data-role='header']{
     border: none;
 }
 
-#features {
+#features, #features-values {
     display: block;
     border-radius: 3px;
     text-align: center;
@@ -1060,7 +1062,7 @@ a:hover{
     margin: 0;
     max-height: 100%;
 }
-.refinedSearch #myModal, #loadStates #myModal{
+.refinedSearch .myModal, #loadStates .myModal{
     top: 25% !important;
 }
 
@@ -1093,7 +1095,7 @@ a:hover{
     font-size: 50px !important;
 }
 /*create client*/
-.form_new_client .ui-select:nth-child(5){
+#form_new_client .ui-select:nth-child(5){
     display: none !important;
 }
 #stateList {
@@ -1101,8 +1103,8 @@ a:hover{
 }
 /*create item*/
 #values-features-list {
-    max-height: 10em;
-    overflow: scroll;
+    max-height: 15em;
+    overflow-y: scroll;
 }
 /*buyer invnetory detail*/
 .go_to_variants {
