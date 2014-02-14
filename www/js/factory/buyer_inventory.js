@@ -14,37 +14,6 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 		factory.current_store = store_id;
 	};
 
-	/* DEPRECATED */
-	factory.update_total_qty_for_items = function(all) {
-		store_list = window.localStorage.getItem(factory.storage_id_inventory);
-		if (!store_list) {
-			return false;
-		}
-		store_list = JSON.parse(store_list);
-		if (all) {
-			for (var i in store_list) {
-				for (var j in store_list[i].items_list) {
-					store_list[i].items_list[j].quantity_sin = store_list[i].items_list[j].quantity; 
-					store_list[i].items_list[j].quantity = store_list[i].items_list[j].quantity_all;
-					for (var k in store_list[i].items_list[j].variants) {
-						store_list[i].items_list[j].variants[k].quantity_sin = store_list[i].items_list[j].variants[k].quantity;
-						store_list[i].items_list[j].variants[k].quantity = store_list[i].items_list[j].variants[k].quantity_all;
-					}
-				}
-			}
-		} else {
-			for (var i in store_list) {
-				for (var j in store_list[i].items_list) {
-					store_list[i].items_list[j].quantity = store_list[i].items_list[j].quantity_sin;
-					for (var k in store_list[i].items_list[j].variants) {
-						store_list[i].items_list[j].variants[k].quantity = store_list[i].items_list[j].variants[k].quantity_sin;
-					}
-				}
-			}
-		}
-		window.localStorage.setItem(factory.storage_id_inventory, JSON.stringify(store_list));
-	};
-	
 	factory.update_items_into_store = function(all) {
 		if (all) {
 			factory.show_all_products = true;
