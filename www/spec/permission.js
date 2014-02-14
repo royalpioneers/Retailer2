@@ -1,8 +1,5 @@
 describe('app', function() {
 	
-	function clone(obj) {
-		return jQuery.extend(true, [], obj);
-	}
 	var resourceControl = {
 		'tabMyInventory': 'Inventory',
 		'tabMyAnalyzer': 'Sales Analyzer',
@@ -32,7 +29,7 @@ describe('app', function() {
 	];
 
     describe('permission', function() {
-    	var data = clone(permissions);
+    	var data = simple_clone(permissions);
     	var permissionFactory = new PermissionFactory([], '', true);
     	window.localStorage.setItem(permissionFactory.id_store_permissions, JSON.stringify(data));
     	

@@ -1,9 +1,5 @@
 describe('app', function() {
 	
-	function clone(obj) {
-		return jQuery.extend(true, [], obj);
-	}
-	
 	var data = [
 		    {"id": 12,
 		     "name": 'store one',
@@ -87,7 +83,7 @@ describe('app', function() {
   		};
 	
     describe('chose variant', function() {
-    	var products = clone(data);
+    	var products = simple_clone(data);
     	var product_selected = products[0]['items_list'][0];
 		var categoryFactory = new CategoryFactory();
 		window.localStorage.setItem('buyerInventory', JSON.stringify(products));

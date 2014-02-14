@@ -5,7 +5,9 @@ var PermissionFactory = function(urls, token, cache) {
 	factory.urls = urls;
 	factory.token = token;
 	factory.id_store_permissions = 'id_store_permissions';
-	
+	factory.microsecond_sleep = 2000;
+	factory.last_request = new Date().getTime()-factory.microsecond_sleep;
+
 	factory.get_all = function(handler, cache) {
 		if (typeof(cache) == 'undefined') {
 			cache = window.eval(factory.cache);
@@ -14,6 +16,10 @@ var PermissionFactory = function(urls, token, cache) {
 		if ((cache) && list != null) {
 			return handler(list);
 		}
+		if (factory.token == null || typeof(factory.token) == 'undefined' || new Date()<factory.last_request) {
+			return handler([]);
+		}
+		factory.last_request = factory.microsecond_sleep+new Date().getTime();
 		$.ajax({
 			url: factory.urls.permissions,
 			type: 'POST',
