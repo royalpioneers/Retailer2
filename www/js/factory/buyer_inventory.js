@@ -123,8 +123,9 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 		if(window.localStorage.getItem(factory.storage_id_inventory)){
 			store_list = JSON.parse(window.localStorage.getItem(factory.storage_id_inventory));
 			for (var index in store_list) {
-				if (factory.current_store == store_list[index].id) {
+				if (store_list[index].default) {
 					store_list[index].items_list.push(inventory);
+                    break;
 				}
 			}
 			window.localStorage.setItem(factory.storage_id_inventory, JSON.stringify(store_list));
