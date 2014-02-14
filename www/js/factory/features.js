@@ -47,7 +47,7 @@ var FeatureFactory = function(urls, token) {
             },
             success: function (data) {                     
                 if(data.status == true) {     
-                    alert('Success!');      
+                    // alert('Success!');      
                     handler(data.values_features);
                 } else {
                     return handler([], []);
@@ -63,7 +63,8 @@ var FeatureFactory = function(urls, token) {
 		factory.token = token;
 	};
 
-    factory.create_sub_variant = function(idProductModel, idFeature, idFeatureValue, additionalCost, variantQuantity){        
+    factory.create_sub_variant = function(idProductModel, idFeature, idFeatureValue, additionalCost, variantQuantity){
+
         $.ajax({
             url: factory.urls.saveProductModelVariant,
             type: 'POST',
@@ -82,8 +83,22 @@ var FeatureFactory = function(urls, token) {
             success: function(data){              
                 if (data.status){
                     alert('Success!');
-                };
-                try{$.mobile.navigate("#pagina11");}catch(e){}
+                    $('#browser').val(''),
+                    $('#name-variant').val(''),
+                    $('#category-id').text(''),
+                    $('#quantity').val(''),
+                    $('#sku').val(''),
+                    $('#cost-price').val(''),
+                    $('#wholesale-price').val(''),
+                    $('#retail-price').val('');
+                    $('#values-features-list').html('');
+                    $('#featureName').html('');
+                    $('#featureValueName').text('');
+                    $('#additionalCost').val('');
+                    $('#variantQuantity').val('');
+                }else{
+                    alert('fail!');
+                }
             },
             complete: function(){
                 try{$.mobile.loading("hide");}catch(e){}

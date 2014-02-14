@@ -28,6 +28,9 @@ var CountryFactory = function(urls, token, cache) {
 					return handler([]);
 				}
 			},
+			error: function(err){
+				
+			},
 			complete: function(){
 				try{$.mobile.loading("hide");}catch(e){}
 			}

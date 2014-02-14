@@ -1,13 +1,13 @@
 var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFactory) {
 	var model= this;
 	model.messages = [];
+    model.add_new_client = 'add_new_client';
 	model.id_city_autocomplete = 'id_city_autocomplete';
 	model.id_template_option_city = 'id_template_option_city';
 	model.id_client_list = 'list_clients';
 	model.id_template_option_city = 'id_template_option_city';
 	model.id_item_template = 'id_client_template';
 	model.id_btn_return = 'return_from_add_new_client';
-	model.id_btn_create = 'add_new_client';
 	model.id_page_new_client = 'pagina9';
 	model.id_client_selected = 'clientSelected';
 	model.class_item_city = 'class_item_city';
@@ -21,14 +21,25 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	model.city_selected = 0;
 	
 	model.init = function(cache) {
-		$("#"+model.id_btn_go_to_form).live("click", function(event){
+		$("."+model.id_btn_go_to_form).live("click", function(event){
 			model.start_form_values(cache);
 		});
-		$("#"+model.id_btn_create).live("click", model.create);
+		$("#"+model.add_new_client).live("click", function(e){
+            e.preventDefault();
+            model.messages = [];
+            var form = $('#'+model.id_page_new_client).find('form')[0];
+            var params = model.get_form_params(form);
+            if (!params) {
+                model.show(model.messages);
+            } else {
+                model.clientFactory.create(params, afterClientVerified);
+            }
+            return false;
+        });
 		
 		if(!(model.get_form_field('country') === undefined)){
 			model.get_form_field('country').live("change", model.charge_states);
-			model.get_form_field('state').live("change", model.charge_cities);
+			$('#stateList li').live('click', model.charge_cities);
 			$('.'+model.class_item_city).live('click', model.set_city_selected);	
 			//$.mobile.listview.prototype.options.filterCallback = model.filter_cities;
 		}				
@@ -122,49 +133,47 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
             field_select.append(option);
         }
 	};
-	
-	model.create = function(e){
-		e.preventDefault();
-		model.messages = [];
-		var form = $('#'+model.id_page_new_client).find('form')[0];
-		var params = model.get_form_params(form);
-		if (!params) {
-			model.show(model.messages);
-		} else {
-			model.clientFactory.create(params, function(data, errors){
-				if (data === false) {
-					model.messages[model.messages.length] = errors;
-					model.show(model.messages);
-				} else {
-					model.set_client_to_list(data);
-					
-					/* TODO: uncomment when code pass to client */
-					/* model.apply_event_select(); 
-					model.refresh_list(); */
-					model.clear_form(5);
-					$.mobile.navigate("#pagina11");
-					/* model.success_create(); */
-				}
-			});
-			
-			//create a client storage
-			if(Offline.state === 'down'){
-				
-				var allClients = JSON.parse(localStorage.getItem('allClients'));
-				var newClientOffline = {
-					id: 0,
-					name: params.name, 
-					image: "images/designer_default_photo.jpg", 
-					type: params.company_type
-				};
-				allClients.push(newClientOffline);
-				localStorage.setItem("allClients", JSON.stringify(allClients));
-				model.set_client_to_list(newClientOffline);		
-		        model.clear_form(5);
-				$.mobile.navigate("#pagina11");
-	        }
-		}
-	}
+
+
+    function afterClientVerified (data, msm){
+        if (data === false) {
+            model.messages[model.messages.length] = msm;
+            model.show(model.messages);
+        } else {
+            model.set_client_to_list(msm);
+            /* TODO: uncomment when code pass to client */
+            /* model.apply_event_select();
+             model.refresh_list(); */
+            model.clear_form(5);
+            $.mobile.navigate("../#pagina2", {
+                transition: "flow",
+                reverse: true
+            });
+            localStorage.city_selected = 0;
+            /* model.success_create(); */
+        }
+
+        //create a client storage
+        if(Offline.state === 'down'){
+
+            var allClients = JSON.parse(localStorage.getItem('allClients'));
+            var newClientOffline = {
+                id: 0,
+                name: params.name,
+                image: "images/designer_default_photo.jpg",
+                type: params.company_type
+            };
+            allClients.push(newClientOffline);
+            localStorage.setItem("allClients", JSON.stringify(allClients));
+            model.set_client_to_list(newClientOffline);
+            model.clear_form(5);
+            $.mobile.navigate("../#pagina2", {
+                transition: "flow",
+                reverse: true
+            });
+        }
+    }
+
 	model.get_form_params = function(form) {
 		params = {};
 		params.company_type = form.company_type.value;
@@ -183,11 +192,13 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 			return false;
 		}
 		params.email = form.email.value;
-		if (params.email.length < 7 || params.email.indexOf('@') == -1 || params.email.indexOf('.') == -1) {
-			model.messages[model.messages.length] = 'Invalid email';
-			return false;
+		if(params.email != ''){
+			if (params.email.length < 7 || params.email.indexOf('@') == -1 || params.email.indexOf('.') == -1) {
+				model.messages[model.messages.length] = 'Invalid email';
+				return false;
+			}
 		}
-		params.city = model.city_selected;
+		params.city = localStorage.city_selected;
 		if (params.city < 1) {
 			model.messages[model.messages.length] = 'Invalid city';
 			return false;
@@ -197,15 +208,17 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	};
 	
 	model.success_create = function() {
-		$('#'+model.id_btn_return).trigger('click');
+		
+		// $('#'+model.id_btn_return).trigger('click');
 	};
 	
 	model.show = function(messages) {
+        
+        console.log(messages);
 		var str = '';
 		for (var message in messages) {
-			var message = messages[message];
-			str += message + '\n';
-		}
+			str += messages[message] + '\n';
+		}return false;
 		alert(str);
 	};
 		
@@ -228,17 +241,17 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	};
 
 	model.set_client_to_list = function(client) {
-				
+		console.log('Created!');
 		var item_template = $('#'+model.id_item_template).html();
 		item_template = item_template.replace(/__name__/g, client.name);
 		item_template = item_template.replace(/__id__/g, client.id);
 		item_template = item_template.replace(/__image__/g, client.image);
 		if(Offline.state === 'down'){
-			item_template = item_template.replace(/__clientOffline__/g, 'disabled');	
+			item_template = item_template.replace(/__clientOffline__/g, 'disabled');
 		}
 		
-        $('#'+model.id_client_list).append(item_template);
-        $('#'+model.id_client_list).trigger('create');
+         $('#'+model.id_client_list).append(item_template);
+         $('#'+model.id_client_list).trigger('create');
 	};
 
 	model.refresh_list = function() {
@@ -254,23 +267,29 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		e.preventDefault();
 		var country_id = model.get_form_field('country').find('option:selected').attr('value');
 		model.render_states(country_id);
+		$('#loadStates').fadeIn().children().addClass('effect_in_out');
 	};
 	
 	model.render_states = function(country_id) {
 		model.stateFactory.get_by_country(country_id, function(states){
-			model.clear_form(2);
-			model.render_field_form('state', {id:'', name:'Select'});
+			//model.clear_form(2);
+			var html = '', ul = $('#stateList');
+			ul.html('');
+			ul.append('<li data-role="list-divider">Select State</li>');
 			for (var index in states) {
 				state = states[index];
-				model.render_field_form('state', state);
+				html += '<li><a href="" data-id="'+state.id+'">'+state.name+'</a></li>'
 			}
-			try{model.get_form_field('state').selectmenu('refresh', true);}catch(e){}
+			ul.append(html);
+			try{ul.listview('refresh', true);}catch(e){}
 		});
 	};
 	
 	model.charge_cities = function(e) {
+		
 		e.preventDefault();
-		var state_id = model.get_form_field('state').find('option:selected').attr('value');
+		var state_id = $(this).find('a').data('id');
+		$('#loadStates').fadeOut().children().removeClass('effect_in_out');
 		model.render_cities(state_id);
 	};
 	
@@ -302,11 +321,11 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 			}
 		}
 		if (lvl > 1) {
-			var select = model.get_form_field('state');
-			if (select) {
-				select.html('');
-				try {select.selectmenu('refresh', true);}catch(e){}
-			}
+			// var select = model.get_form_field('state');
+			// if (select) {
+			// 	select.html('');
+			// 	try {select.selectmenu('refresh', true);}catch(e){}
+			// }
 		}
 		if (lvl > 2) {
 			model.start_countries_values(window.localStorage.getItem("rp-cache"));
@@ -336,6 +355,8 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	
 	model.set_city_selected = function(e){
 		model.city_selected = $(e.target).attr('data-value');
+        localStorage.city_selected = model.city_selected;
+        console.log(model.city_selected + ' - ' + $(e.target).text());
 		city_name = $(e.target).html();
 		$('#'+model.id_city_autocomplete).find('imput')[0];
 		$('#'+model.id_city_autocomplete).find('div input')[0].value = city_name;

@@ -8,10 +8,12 @@ var ClientFactory = function(urls, token, cache) {
 	factory.storage_id_client_selected = 'clientSelected';
 	
 	factory.get_all = function(handler, cache) {
+		
         var client_list = JSON.parse(window.localStorage.getItem(factory.id_client_list));
 		if ((factory.cache || cache) && client_list != null) {
 			return handler(client_list);
 		}
+		
 		$.ajax({
 			url: factory.urls.client_list,
 			type: 'POST',
@@ -50,7 +52,7 @@ var ClientFactory = function(urls, token, cache) {
 					data.client.image = DOMAIN+'/static/img/designer_default_photo.jpg';
 					data.client.type = params.company_type;
 					factory.store_client(data.client);
-					handler(data.client);
+					handler(true, data.client);
 				} else {
 					handler(false, data.messages);
 				}
@@ -71,6 +73,7 @@ var ClientFactory = function(urls, token, cache) {
 	
 	factory.get_company_types = function(handler, cache){
         //2
+        
 		var types_list = JSON.parse(window.localStorage.getItem(factory.id_company_types));
 		if (cache && types_list != null) {
 			return handler(types_list);
@@ -91,6 +94,9 @@ var ClientFactory = function(urls, token, cache) {
 				} else {
 					handler([]);
 				}
+			},
+			error: function(err){
+				
 			},
            complete: function(){
                 try{$.mobile.loading("hide");}catch(e){}

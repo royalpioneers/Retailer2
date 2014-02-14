@@ -21,7 +21,12 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
     	if (model.inventory_has_variants(inventory_id)) {
     		var product = buyerInventoryFactory.get_by_id(inventory_id);
     		model.render_variant_list(product);
-    		$.mobile.navigate("#pagina14");
+//    		$.mobile.navigate("#pagina14", {
+//                transition: "flow",
+//                reverse: true
+//            });
+            $('#group-data').show();
+            $('#group-data').fadeIn().children().addClass('effect_in_out');
     	} else {
     		model.render_variant_list();
     	}
@@ -51,7 +56,7 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
 	model.set_variant_to_list = function(variant, inventory, checked) {
 		var template = $('#'+model.id_template_variant).html();
 		var price = model.calculate_price_by_client_selected(inventory, variant.id);
-
+        
     	template = template.replace(/__id__/g, variant.id);
     	template = template.replace(/__parent__/g, inventory.id);
     	template = template.replace(/__name__/g, variant.name + ' ' + variant.value);
@@ -80,6 +85,7 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
 	};
     
     model.chose_variant = function(obj) {
+        localStorage.activeAnimation = true;
     	var variant_id = obj.data('id');
     	var inventory = buyerInventoryFactory.get_by_id(obj.data('parent'));
     	var updated = false;
@@ -111,6 +117,7 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
 	    	client.products = valids;
     	}
     	clientFactory.set_client_selected(client);
+        localStorage.activeAnimation = $('#'+model.id_variants_list).find(':checked').length > 0?true:false;
     };
     
     model.get_variant_from_product = function(product, variant_id) {
@@ -137,7 +144,7 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
             'price': model.calculate_price_by_client_selected(product, variant_id),
             'model_image': product.model_image,
             'discount': model.get_discount_id_by_client_selected(product),
-            'variant_id': variant_id,
+            'variant_id': variant_id
         };
     	return productSelected;
     };
@@ -225,6 +232,12 @@ var BuyerInventoryModel = function(categoryFactory, buyerInventoryFactory, clien
 	        }
 			try {field_select.selectmenu('refresh', true);}catch(e){}
 		}
+	};
+	
+	model.clear_stores = function(store_id){
+    	field_select = $('#'+model.id_stores);
+		field_select.html('');
+    	try {field_select.selectmenu('refresh', true);}catch(e){}
 	};
 	
     return model;

@@ -33,15 +33,13 @@ var InvoiceModel = function(buyerInventoryFactory) {
 				for (var z in stores_priorities) {
 					buyerInventoryFactory.current_store = stores_priorities[z].id;
 					sold_quantity = model.update_sold_quantities_current_list(stores_priorities[z], sold_quantity, product, product.quantity);
-					if (sold_quantity == 0) {
-						break;
-					}
 				}
 				buyerInventoryFactory.current_store = selected_store_id;
 			}
 		}
+		buyerInventoryFactory.update_quantity_all_for_all_products_in_stores();
 	};
-	
+
 	model.update_sold_quantities_current_list = function(store, sold_quantity, product, sold_quantity_all) {
 		var selected_store_id = buyerInventoryFactory.current_store;
 		buyerInventoryFactory.current_store = store.id;
@@ -53,11 +51,10 @@ var InvoiceModel = function(buyerInventoryFactory) {
 					for (var index2 in products[index].variants) {
 						if (product.variant_id == products[index].variants[index2].id) {
 							if (store.id == selected_store_id) {
-								if (products[index].variants[index2].quantity  >= sold_quantity) {
+								if (products[index].variants[index2].quantity >= sold_quantity) {
 									products[index].variants[index2].quantity-=sold_quantity;
 									sold_quantity = 0;
 								} else {
-									discounted_quantity = products[index].variants[index2].quantity;
 									sold_quantity-= products[index].variants[index2].quantity;
 									products[index].variants[index2].quantity = 0;
 								}
@@ -71,7 +68,6 @@ var InvoiceModel = function(buyerInventoryFactory) {
 							products[index].quantity-=sold_quantity;
 							sold_quantity = 0;
 						} else {
-							discounted_quantity = products[index].quantity;
 							sold_quantity-=products[index].quantity;
 							products[index].quantity = 0;
 						}
