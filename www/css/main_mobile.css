@@ -1007,7 +1007,7 @@ div[data-role='header']{
     border-top: 1px solid #DADADA /*{c-bup-border}*/; background: #eee /*{c-bup-background-color}*/; font-weight: bold; color: #222 /*{c-bup-color}*/; background-image: -webkit-gradient(linear, left top, left bottom, from( #fff /*{c-bup-background-start}), to( #fff /*{c-bup-background-end}*/)); background-image: -ms-linear-gradient( #fff /*{c-bup-background-start}*/, #fff /*{c-bup-background-end}*/); background-image: -o-linear-gradient( #fff /*{c-bup-background-start}*/, #fff /*{c-bup-background-end}*/); background-image: linear-gradient( #fff /*{c-bup-background-start}, #fff /*{c-bup-background-end}*/);
     border-bottom: 1px solid snow;
 }
-#values-features-list > li > a:hover,#features:hover,#features-list > li > a:hover,.active_option > a{
+#values-features-list > li > a:hover, #features:hover, #features-list > li > a:hover, .active_option > a:hover, #features:hover, #features-values:hover{
     border: none;
     background: #dfdfdf /*{c-bhover-background-color}*/;
     font-weight: bold;
