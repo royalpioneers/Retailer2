@@ -84,9 +84,9 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 			factory.list_all_products.push(item);
 		}
 	};
-	
+
 	factory.set_variant_to_item = function(item, variant) {
-		var not_exists = true, current_total = 0;
+		var not_exists = true, current_total = 0, current_total_all = 0;
 		for (var i in item.variants) {
 			if (item.variants[i].id == variant.id) {
 				not_exists = false;
@@ -97,10 +97,15 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 			item.variants.push(variant);
 		}
 		for (var i in item.variants) {
-			if (item.variants[i].id == variant.id) {
 			current_total+= item.variants[i].quantity;
+			current_total_all+= item.variants[i].quantity_all;
 		}
 		item.quantity = current_total;
+		item.quantity_all = current_total_all;
+	};
+	
+	factory.update_quantity_all_for_all_products_in_stores = function() {
+		/* TODO: complete this */
 	};
 	
 	factory.get_all = function(store, handler, cache) {
@@ -136,11 +141,7 @@ var BuyerInventoryFactory = function(urls, token, cache) {
            }
 	    });
 	};
-	
-	factory.update_quantity_all_for_all_products_in_stores = function() {
-		/* TODO: complete this*/
-	};
-	
+
 	factory.get_stores = function() {
 		/* call after "factory.get_all" method */
 		stores = JSON.parse(window.localStorage.getItem(factory.storage_id_inventory));
@@ -154,6 +155,9 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 	factory.get_items_from_store = function(store_id, stores) {
 		if (typeof(stores) == 'undefined') {
 			stores = factory.get_stores();
+		}
+		if (factory.show_all_products) {
+			return factory.list_all_products;
 		}
 		if ((typeof(store_id) == 'undefined' || store_id == null) && stores.length > 0)  {
 			return stores[0].items_list;
