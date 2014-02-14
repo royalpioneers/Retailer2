@@ -7,11 +7,14 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 	factory.storage_id_analyzer_information = 'StorageAnalizerInformation';
 	factory.storage_id_analyzer_information_time = 'StorageAnalizerInformationTime';
 	factory.current_store = 0;
+	factory.show_all_products = false;
+	factory.list_all_products = [];
 	
 	factory.set_current_store = function(store_id) {
 		factory.current_store = store_id;
 	};
-	
+
+	/* DEPRECATED */
 	factory.update_total_qty_for_items = function(all) {
 		store_list = window.localStorage.getItem(factory.storage_id_inventory);
 		if (!store_list) {
@@ -40,6 +43,64 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 			}
 		}
 		window.localStorage.setItem(factory.storage_id_inventory, JSON.stringify(store_list));
+	};
+	
+	factory.update_items_into_store = function(all) {
+		if (all) {
+			factory.show_all_products = true;
+			factory.update_list_all_products();
+		} else {
+			factory.show_all_products = false;
+		}
+	};
+	
+	factory.update_list_all_products = function() {
+		factory.list_all_products = [];
+		store_list = window.localStorage.getItem(factory.storage_id_inventory);
+		if (!store_list) {
+			return false;
+		}
+		store_list = JSON.parse(store_list);
+		for (var i in store_list) {
+			for (var j in store_list[i].items_list) {
+				var item = simple_clone(store_list[i].items_list[j]);
+				factory.set_item_to_list_all_products(item);
+			}
+		}
+	};
+	
+	factory.set_item_to_list_all_products = function(item) {
+		var not_exists = true;
+		for (var i in factory.list_all_products) {
+			var current = factory.list_all_products[i];
+			if (current.id == item.id) {
+				not_exists = false;
+				for (var j in current.variants) {
+					factory.set_variant_to_item(current, variant);
+				}
+			}
+		}
+		if (not_exists) {
+			factory.list_all_products.push(item);
+		}
+	};
+	
+	factory.set_variant_to_item = function(item, variant) {
+		var not_exists = true, current_total = 0;
+		for (var i in item.variants) {
+			if (item.variants[i].id == variant.id) {
+				not_exists = false;
+				item.variants[i].quantity+= variant.quantity;
+			}
+		}
+		if (not_exists) {
+			item.variants.push(variant);
+		}
+		for (var i in item.variants) {
+			if (item.variants[i].id == variant.id) {
+			current_total+= item.variants[i].quantity;
+		}
+		item.quantity = current_total;
 	};
 	
 	factory.get_all = function(store, handler, cache) {
@@ -76,6 +137,10 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 	    });
 	};
 	
+	factory.update_quantity_all_for_all_products_in_stores = function() {
+		/* TODO: complete this*/
+	};
+	
 	factory.get_stores = function() {
 		/* call after "factory.get_all" method */
 		stores = JSON.parse(window.localStorage.getItem(factory.storage_id_inventory));
@@ -84,7 +149,8 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 		}
 		return stores;
 	};
-	
+
+
 	factory.get_items_from_store = function(store_id, stores) {
 		if (typeof(stores) == 'undefined') {
 			stores = factory.get_stores();
@@ -104,18 +170,26 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 	};
 	
 	factory.get_current_list = function() {
-		return factory.get_items_from_store(factory.current_store);
+		if (factory.show_all_products) {
+			return factory.list_all_products;
+		} else {
+			return factory.get_items_from_store(factory.current_store);
+		}
 	};
 	
 	factory.set_current_list = function(items_list) {
-		if(window.localStorage.getItem(factory.storage_id_inventory)){
-			var store_list = JSON.parse(window.localStorage.getItem(factory.storage_id_inventory));
-			for (var index in store_list) {
-				if (factory.current_store == store_list[index].id) {
-					store_list[index].items_list = items_list;
+		if (factory.show_all_products) {
+			factory.update_list_all_products();
+		} else {
+			if(window.localStorage.getItem(factory.storage_id_inventory)){
+				var store_list = JSON.parse(window.localStorage.getItem(factory.storage_id_inventory));
+				for (var index in store_list) {
+					if (factory.current_store == store_list[index].id) {
+						store_list[index].items_list = items_list;
+					}
 				}
+				window.localStorage.setItem(factory.storage_id_inventory, JSON.stringify(store_list));
 			}
-			window.localStorage.setItem(factory.storage_id_inventory, JSON.stringify(store_list));
 		}
 	};
 
@@ -129,6 +203,9 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 			}
 			window.localStorage.setItem(factory.storage_id_inventory, JSON.stringify(store_list));
 		}
+		if (factory.show_all_products) {
+			factory.update_list_all_products();
+		}
 	};
 
     factory.set_token = function(token) {
@@ -137,27 +214,27 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 
 	factory.get_by_id = function(id) {
 		var product = false;
-		var store_list = JSON.parse(window.localStorage.getItem(factory.storage_id_inventory));
-		for (var index in store_list) {
-			if (factory.current_store != store_list[index].id) {
-				continue;
-			}
-			var list = store_list[index].items_list;
-			for (var index in list) {
-				if (list[index].id == id) {
-					product = list[index];
-				}
+		var list = factory.get_current_list();
+		for (var index in list) {
+			if (list[index].id == id) {
+				product = list[index];
 			}
 		}
 		return product;
 	};
 	
 	factory.get_analyzer_information = function(store, handler, cache) {
+		if (factory.show_all_products) {
+			store = 'All';
+		}
 		var data_key = factory.storage_id_analyzer_information;
 		var data_time_key = factory.storage_id_analyzer_information_time;
 		if (!isNaN(parseInt(store))) {
 			data_key = data_key + '_' + store;
 			data_time_key = data_time_key + '_' + store;
+		} else {
+			data_key = data_key + '_all';
+			data_time_key = data_time_key + '_all';
 		}
 		var info = JSON.parse(window.localStorage.getItem(data_key));
 		if (cache && info != null) {
@@ -192,9 +269,14 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 	};
 
 	factory.get_analyzer_information_time = function(store) {
+		if (factory.show_all_products) {
+			store = 'All';
+		}
 		var data_time_key = factory.storage_id_analyzer_information_time;
 		if (!isNaN(parseInt(store))) {
 			data_time_key = data_time_key + '_' + store;
+		} else {
+			data_time_key = data_time_key + '_all';
 		}
 		return JSON.parse(window.localStorage.getItem(data_time_key));
 	};

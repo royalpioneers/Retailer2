@@ -33,15 +33,54 @@ var InvoiceModel = function(buyerInventoryFactory) {
 				for (var z in stores_priorities) {
 					buyerInventoryFactory.current_store = stores_priorities[z].id;
 					sold_quantity = model.update_sold_quantities_current_list(stores_priorities[z], sold_quantity, product, product.quantity);
-					if (sold_quantity == 0) {
-						break;
-					}
 				}
 				buyerInventoryFactory.current_store = selected_store_id;
 			}
 		}
 	};
 	
+//	model.update_sold_quantities_current_list = function(store, sold_quantity, product, sold_quantity_all) {
+//		var selected_store_id = buyerInventoryFactory.current_store;
+//		buyerInventoryFactory.current_store = store.id;
+//		var products = store.items_list;
+//		var discounted_quantity = sold_quantity;
+//		for (var index in products) {
+//			if (products[index].id == parseInt(product.id)) {
+//				if (typeof(product.variant_id) != 'undefined' && parseInt(product.variant_id) > 0) {
+//					for (var index2 in products[index].variants) {
+//						if (product.variant_id == products[index].variants[index2].id) {
+//							if (store.id == selected_store_id) {
+//								if (products[index].variants[index2].quantity  >= sold_quantity) {
+//									products[index].variants[index2].quantity-=sold_quantity;
+//									sold_quantity = 0;
+//								} else {
+//									discounted_quantity = products[index].variants[index2].quantity;
+//									sold_quantity-= products[index].variants[index2].quantity;
+//									products[index].variants[index2].quantity = 0;
+//								}
+//							}
+//							products[index].variants[index2].quantity_all-=sold_quantity_all;
+//						}
+//					}
+//				} else {
+//					if (store.id == selected_store_id) {
+//						if (products[index].quantity >= sold_quantity) {
+//							products[index].quantity-=sold_quantity;
+//							sold_quantity = 0;
+//						} else {
+//							discounted_quantity = products[index].quantity;
+//							sold_quantity-=products[index].quantity;
+//							products[index].quantity = 0;
+//						}
+//					}
+//					products[index].quantity_all-=sold_quantity_all;
+//				}
+//			}
+//		}
+//		buyerInventoryFactory.set_current_list(products);
+//		buyerInventoryFactory.current_store = selected_store_id;
+//		return sold_quantity;
+//	};
 	model.update_sold_quantities_current_list = function(store, sold_quantity, product, sold_quantity_all) {
 		var selected_store_id = buyerInventoryFactory.current_store;
 		buyerInventoryFactory.current_store = store.id;
@@ -53,11 +92,10 @@ var InvoiceModel = function(buyerInventoryFactory) {
 					for (var index2 in products[index].variants) {
 						if (product.variant_id == products[index].variants[index2].id) {
 							if (store.id == selected_store_id) {
-								if (products[index].variants[index2].quantity  >= sold_quantity) {
+								if (products[index].variants[index2].quantity >= sold_quantity) {
 									products[index].variants[index2].quantity-=sold_quantity;
 									sold_quantity = 0;
 								} else {
-									discounted_quantity = products[index].variants[index2].quantity;
 									sold_quantity-= products[index].variants[index2].quantity;
 									products[index].variants[index2].quantity = 0;
 								}
@@ -71,7 +109,6 @@ var InvoiceModel = function(buyerInventoryFactory) {
 							products[index].quantity-=sold_quantity;
 							sold_quantity = 0;
 						} else {
-							discounted_quantity = products[index].quantity;
 							sold_quantity-=products[index].quantity;
 							products[index].quantity = 0;
 						}

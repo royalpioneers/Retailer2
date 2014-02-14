@@ -62,7 +62,7 @@ var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New
         'pagina11': 'New Invoice', /* lista de usuarios, con lo que no importaria los demas link spara invoice */
         'pagina9': 'New Invoice',  /* crear cliente */
         'pagina12': 'New Invoice', /* pantalla de invoice */
-        'SelectMyStores': 'Stores', /* selecte de tiendas */
+        'SelectMyStores': 'Stores', /* select de tiendas */
         'tabMyInventory': 'Inventory', /* datos de inventario */
         'search.html': 'Marketplace', /* busqueda de productos en general */
         'pagina6': 'Inventory', /* crear item */
@@ -164,7 +164,6 @@ function init(reconection) {
 
 
         $('#pagina2').live('pageshow', function(){
-            
             if(localStorage.rp-cache != false){
                 $('#select_buyer_store-listbox > ul > li').data('option-indextrigger', '0').eq(0).find('a').trigger('click');
             }
@@ -469,7 +468,10 @@ function init(reconection) {
         if ($('#store_total_qty').attr('checked') == 'checked') {
             all = true;
         }
-        buyerInventoryFactory.update_total_qty_for_items(all);
+        buyerInventoryFactory.update_items_into_store(all);
+        
+        var store = $('#select_buyer_store').val();
+        buyerInventoryFactory.get_all(store, showInventory, cache);
     }
 
     function changeSelectStore() {
@@ -483,68 +485,90 @@ function init(reconection) {
             cache = true;
         }
         var store = $('#select_buyer_store').val();
-        
         $('#store_total_qty').attr('checked', false);
         buyerInventoryFactory.get_all(store, showInventory, cache);
     }
 
+    
+    function canShowItemInventory(itemInventory) {
+    	for (var i in itemInventory.variants) {
+    		if ($('#store_total_qty').attr('checked') == 'checked') {
+    			if (itemInventory.variants[i].quantity_all > 0) {
+    				return true;
+    			}
+    		} else {
+    			if (itemInventory.variants[i].quantity > 0) {
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
+    }
+    
     function showInventory(list) {
         if(list != undefined && canAccessTo('tabMyInventory', true)) {
             var items_list = list;
             var ul_for_inserting = $('#pagina2').find('.tab1').find('ul'),
                         html_to_insert = '';
             $.each(items_list, function(i, model) {
-                var _offline='';
-                if(model.offline == true){
-                    var _offline='offline';
-                }
-                
-                if(model.variants){
-                    localStorage.dataVariants = JSON.stringify(model.variants);    
-                }                
-                if (Offline.state == 'down') {
-                        html_to_insert += '<li class="'+_offline+'">\
-                                     <a href="#pagina5" data-transition="flow"\
-                                         class="model-data"\
-                                         data-id="'+model.model_id+'"\
-                                         data-model-name="'+model.model_name+'"\
-                                         data-product-name="'+model.product_name+'"\
-                                         data-retail-price="'+model.retail_price+'"\
-                                         data-quantity="'+model.quantity+'"\
-                                         data-is-not-system="'+model.is_created_by_buyer+'"\
-                                         class="'+_offline+'"\
-                                         >\
-                                         <img src="images/default_product.png"/>\
-                                     </a>\
-                                 </li>';
-                } else {
-                    html_to_insert += '<li>\
-                                     <a href="#pagina5" data-transition="flow"\
-                                         class="model-data"\
-                                         data-id="'+model.model_id+'"\
-                                         data-model-name="'+model.model_name+'"\
-                                         data-product-name="'+model.product_name+'"\
-                                         data-retail-price="'+model.retail_price+'"\
-                                         data-quantity="'+model.quantity+'"\
-                                         data-is-not-system="'+model.is_created_by_buyer+'"\
-                                         >\
-                                         <img src="'+DOMAIN+model.model_image+'"/>\
-                                     </a>\
-                                 </li>';
-                }
+            	if (canShowItemInventory(model)) {
+	                var _offline='';
+	                if(model.offline == true){
+	                    var _offline='offline';
+	                }
+	                
+	                if(model.variants){
+	                    localStorage.dataVariants = JSON.stringify(model.variants);    
+	                }                
+	                if (Offline.state == 'down') {
+	                        html_to_insert += '<li class="'+_offline+'">\
+	                                     <a href="#pagina5" data-transition="flow"\
+	                                         class="model-data"\
+	                                         data-id="'+model.model_id+'"\
+	                                         data-model-name="'+model.model_name+'"\
+	                                         data-product-name="'+model.product_name+'"\
+	                                         data-retail-price="'+model.retail_price+'"\
+	                                         data-quantity="'+model.quantity+'"\
+	                                         data-is-not-system="'+model.is_created_by_buyer+'"\
+	                                         class="'+_offline+'"\
+	                                         >\
+	                                         <img src="images/default_product.png"/>\
+	                                     </a>\
+	                                 </li>';
+	                } else {
+	                    html_to_insert += '<li>\
+	                                     <a href="#pagina5" data-transition="flow"\
+	                                         class="model-data"\
+	                                         data-id="'+model.model_id+'"\
+	                                         data-model-name="'+model.model_name+'"\
+	                                         data-product-name="'+model.product_name+'"\
+	                                         data-retail-price="'+model.retail_price+'"\
+	                                         data-quantity="'+model.quantity+'"\
+	                                         data-is-not-system="'+model.is_created_by_buyer+'"\
+	                                         >\
+	                                         <img src="'+DOMAIN+model.model_image+'"/>\
+	                                     </a>\
+	                                 </li>';
+	                }
+            	}
             });
             ul_for_inserting.html('');
             ul_for_inserting.append(html_to_insert);
             $('.model-data').live('click', showDetail);
-
-            var store = $('#select_buyer_store').val();
             
-            if (canAccessTo('SelectMyStores', true)) {
-                buyerInventory.render_stores(store);
-            } else {
-                $('#select_buyer_store').val(0);
-                buyerInventory.clear_stores();
-            }
+            showStores();
+        }
+    }
+    
+    /* Stores */
+    function showStores() {
+    	var store = $('#select_buyer_store').val();
+        
+        if (canAccessTo('SelectMyStores', true)) {
+            buyerInventory.render_stores(store);
+        } else {
+            $('#select_buyer_store').val(0);
+            buyerInventory.clear_stores();
         }
     }
     
@@ -2072,7 +2096,6 @@ $( document ).on( "mobileinit", function() {
     }
 
     function setDataSearch (data) {
-        
         $('#result-search').html('');
         $.each(data.result, function(i, value) {
             $.each(value.models, function(ind, model) {
@@ -2185,7 +2208,6 @@ $( document ).on( "mobileinit", function() {
                 dataType: 'json',
                 beforeSend: function(){factorySearchAndGroup.loader();},
                 success: function(data) {
-                    
                     handler(data);                    
                 },
                complete: function(){factorySearchAndGroup.hideLoader();}
