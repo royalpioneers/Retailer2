@@ -17,9 +17,6 @@
  * under the License.
  */
 describe('app', function() {
-	function clone(obj) {
-		return jQuery.extend(true, [], obj);
-	}
 	
 	data = [
 		    {"id": 12,
@@ -87,7 +84,7 @@ describe('app', function() {
 				    "model_image": "/static/website/images/icon/default_product.png",
 				    "clients_discount": {},
 				    "quantity": 8,
-				    "quantity_all": 18,
+				    "quantity_all": 28,
 				    "id": 218,
 				    "wholesale_price": "123.00",
 				    "retail_price": "122.00",
@@ -100,81 +97,9 @@ describe('app', function() {
     ];
 	
     describe('create invoice', function() {
-    	
-        it('update items: only product without all', function() {
-        	var products = clone(data);
-        	window.localStorage.setItem('buyerInventory', JSON.stringify(products));
-        	var buyerInventoryFactory = new BuyerInventoryFactory([], '', false);
-        	buyerInventoryFactory.set_current_store(12);
-        	var invoice = new InvoiceModel(buyerInventoryFactory);
-        	var product_selected = products[0]['items_list'][0];
-        	var exists = 0;
-        	localStorage.setItem(invoice.id_products, JSON.stringify(products));
-        	product_selected.quantity = 15;
-        	
-        	/* ACTION */
-        	invoice.success_create([product_selected], 0);
-
-        	buyerInventoryFactory.update_total_qty_for_items(true);
-        	buyerInventoryFactory.update_total_qty_for_items(false);
-
-        	var stores = buyerInventoryFactory.get_stores();
-        	for (var z in stores) {
-        		var updated_products = stores[z]['items_list'];
-	        	for (index in updated_products) {
-	        		var product = updated_products[index];
-	        		if (product.id == product_selected.id) {
-	        			if (stores[z].id == 12) {
-	        				expect(product.quantity).toEqual(5);
-	        			} else {
-	        				expect(product.quantity).toEqual(15);
-	        			}
-	        			expect(product.quantity_all).toEqual(20);
-	        			exists+= 1;
-	        		}
-	        	}
-        	}
-        	expect(exists).toEqual(2);
-        });
-        
-        it('update items: only product with all', function() {
-        	var products = clone(data);
-        	window.localStorage.setItem('buyerInventory', JSON.stringify(products));
-        	var buyerInventoryFactory = new BuyerInventoryFactory([], '', false);
-        	buyerInventoryFactory.set_current_store(12);
-        	var invoice = new InvoiceModel(buyerInventoryFactory);
-        	var product_selected = products[0]['items_list'][0];
-        	var exists = 0;
-        	localStorage.setItem(invoice.id_products, JSON.stringify(products));
-        	product_selected.quantity = 20;
-        	
-        	/* ACTION */
-        	invoice.success_create([product_selected], 1);
-
-        	buyerInventoryFactory.update_total_qty_for_items(true);
-        	buyerInventoryFactory.update_total_qty_for_items(false);
-
-        	var stores = buyerInventoryFactory.get_stores();
-        	for (var z in stores) {
-        		var updated_products = stores[z]['items_list'];
-	        	for (index in updated_products) {
-	        		var product = updated_products[index];
-	        		if (product.id == product_selected.id) {
-	        			if (stores[z].id == 12) {
-	        				expect(product.quantity).toEqual(15);
-	        			} else {
-	        				expect(product.quantity).toEqual(0);
-	        			}
-	        			expect(product.quantity_all).toEqual(15);
-	        			exists+= 1;
-	        		}
-	        	}
-        	}
-        	expect(exists).toEqual(2);
-        });
-        
+    	        
         it('update items: with variant without all', function() {
-        	var products = clone(data);
+        	var products = simple_clone(data);
         	window.localStorage.setItem('buyerInventory', JSON.stringify(products));
         	var buyerInventoryFactory = new BuyerInventoryFactory([], '', false);
         	buyerInventoryFactory.set_current_store(12);
@@ -188,8 +113,8 @@ describe('app', function() {
         	/* ACTION */
         	invoice.success_create([product_selected], 0);
 
-        	buyerInventoryFactory.update_total_qty_for_items(true);
-        	buyerInventoryFactory.update_total_qty_for_items(false);
+        	buyerInventoryFactory.update_items_into_store(true);
+        	buyerInventoryFactory.update_items_into_store(false);
 
         	var stores = buyerInventoryFactory.get_stores();
         	for (var z in stores) {
@@ -208,6 +133,13 @@ describe('app', function() {
 	        					exists+= 1;
 	        				}
 	        			}
+	        			
+	        			if (stores[z].id == 12) {
+    						expect(parseInt(product.quantity)).toEqual(11);
+    					} else {
+    						expect(parseInt(product.quantity)).toEqual(8);
+    					}
+    					expect(product.quantity_all).toEqual(19);
 	        		}
 	        	}
         	}
@@ -215,7 +147,7 @@ describe('app', function() {
         });
         
         it('update items: with variant with all', function() {
-        	var products = clone(data);
+        	var products = simple_clone(data);
         	window.localStorage.setItem('buyerInventory', JSON.stringify(products));
         	var buyerInventoryFactory = new BuyerInventoryFactory([], '', false);
         	buyerInventoryFactory.set_current_store(12);
@@ -225,12 +157,12 @@ describe('app', function() {
         	var exists = 0;
         	localStorage.setItem(invoice.id_products, JSON.stringify(products));
         	product_selected.quantity = 12;
-        	
+        	buyerInventoryFactory.update_items_into_store(true);
+
         	/* ACTION */
         	invoice.success_create([product_selected], 1);
-
-        	buyerInventoryFactory.update_total_qty_for_items(true);
-        	buyerInventoryFactory.update_total_qty_for_items(false);
+        	
+        	buyerInventoryFactory.update_items_into_store(false);
 
         	var stores = buyerInventoryFactory.get_stores();
         	for (var z in stores) {
@@ -249,6 +181,12 @@ describe('app', function() {
 	        					exists+= 1;
 	        				}
 	        			}
+	        			if (stores[z].id == 12) {
+    						expect(parseInt(product.quantity)).toEqual(16);
+    					} else {
+    						expect(parseInt(product.quantity)).toEqual(0);
+    					}
+    					expect(product.quantity_all).toEqual(16);
 	        		}
 	        	}
         	}
@@ -256,22 +194,24 @@ describe('app', function() {
         });
         
         it('update items: with unique variant with all', function() {
-        	var products = clone(data);
+        	var products = simple_clone(data);
         	window.localStorage.setItem('buyerInventory', JSON.stringify(products));
         	var buyerInventoryFactory = new BuyerInventoryFactory([], '', false);
         	buyerInventoryFactory.set_current_store(12);
+        	
         	var invoice = new InvoiceModel(buyerInventoryFactory);
         	var product_selected = products[0]['items_list'][2];
         	product_selected.variant_id = 7;
         	var exists = 0;
         	localStorage.setItem(invoice.id_products, JSON.stringify(products));
         	product_selected.quantity = 5;
-
+        	buyerInventoryFactory.update_items_into_store(true);
+        	
         	/* ACTION */
         	invoice.success_create([product_selected], 1);
 
-        	buyerInventoryFactory.update_total_qty_for_items(true);
-        	buyerInventoryFactory.update_total_qty_for_items(false);
+        	
+        	buyerInventoryFactory.update_items_into_store(false);
 
         	var stores = buyerInventoryFactory.get_stores();
         	for (var z in stores) {
@@ -288,14 +228,20 @@ describe('app', function() {
 	        					exists+= 1;
 	        				}
 	        			}
+	        			if (stores[z].id == 12) {
+    						expect(parseInt(product.quantity)).toEqual(15);
+    					} else {
+    						expect(parseInt(product.quantity)).toEqual(8);
+    					}
+    					expect(product.quantity_all).toEqual(23);
 	        		}
 	        	}
         	}
         	expect(exists).toEqual(1);
         });
-        
+
         it('update variants quantity', function() {
-        	var products = clone(data);
+        	var products = simple_clone(data);
         	window.localStorage.setItem('buyerInventory', JSON.stringify(products));
         	var buyerInventoryFactory = new BuyerInventoryFactory([], '', false);
         	buyerInventoryFactory.set_current_store(12);
@@ -310,14 +256,15 @@ describe('app', function() {
         	/* ACTION */
         	invoice.success_create([product_selected], 0);
 
-        	buyerInventoryFactory.update_total_qty_for_items(true);
-        	buyerInventoryFactory.update_total_qty_for_items(false);
+        	buyerInventoryFactory.update_items_into_store(true);
+        	buyerInventoryFactory.update_items_into_store(false);
 
         	var updated_products = buyerInventoryFactory.get_current_list();
         	for (index in updated_products) {
         		var product = updated_products[index];
         		if (product.id == product_selected.id) {
-        			expect(product.quantity).toEqual(20);
+        			expect(product.quantity).toEqual(11);
+        			expect(product.quantity_all).toEqual(26);
         			exists = true;
         			for (var index2 in product.variants) {
 	    				var variant = product.variants[index2];
@@ -333,8 +280,63 @@ describe('app', function() {
         	expect(variant_exists).toEqual(true);
         });
         
+        it('update items: with unique variant in another store for all stores', function() {
+        	var products = simple_clone(data);
+        	window.localStorage.setItem('buyerInventory', JSON.stringify(products));
+        	var buyerInventoryFactory = new BuyerInventoryFactory([], '', false);
+        	buyerInventoryFactory.set_current_store(13);
+        	var invoice = new InvoiceModel(buyerInventoryFactory);
+        	var product_selected = products[0]['items_list'][2];
+        	product_selected.variant_id = 7;
+        	var exists = 0;
+        	localStorage.setItem(invoice.id_products, JSON.stringify(products));
+        	product_selected.quantity = 5;
+
+        	/* ACTION */
+        	invoice.success_create([product_selected], 1);
+
+        	buyerInventoryFactory.update_items_into_store(true);
+        	var items = buyerInventoryFactory.get_current_list();
+        	for (var p in items) {
+        		if (items[p].id == product_selected.id) {
+        			expect(parseInt(items[p].quantity)).toEqual(23);
+        			for (var q in items[p].variants) {
+        				if (items[p].variants[q].id == product_selected.variant_id) {
+        					expect(parseInt(items[p].variants[q].quantity)).toEqual(5);
+        				}
+        			}
+        		}
+        	}
+        	
+        	buyerInventoryFactory.update_items_into_store(false);
+
+        	var stores = buyerInventoryFactory.get_stores();
+        	for (var z in stores) {
+        		var updated_products = stores[z]['items_list'];
+	        	for (index in updated_products) {
+	        		var product = updated_products[index];
+	        		if (product.id == product_selected.id) {
+	        			for (var index2 in product.variants) {
+	        				if (product.variants[index2].id == product_selected.variant_id) {
+	        					expect(parseInt(product.variants[index2].quantity)).toEqual(5);
+	        					expect(product.variants[index2].quantity_all).toEqual(5);
+	        					exists+= 1;
+	        				}
+	        			}
+	        			if (stores[z].id == 12) {
+    						expect(parseInt(product.quantity)).toEqual(15);
+    					} else {
+    						expect(parseInt(product.quantity)).toEqual(8);
+    					}
+    					expect(product.quantity_all).toEqual(23);
+	        		}
+	        	}
+        	}
+        	expect(exists).toEqual(1);
+        });
+        
         it('invalid client products', function() {
-        	var products = clone(data);
+        	var products = simple_clone(data);
         	window.localStorage.setItem('buyerInventory', JSON.stringify(products));
         	var buyerInventoryFactory = new BuyerInventoryFactory([], '', false);
         	buyerInventoryFactory.set_current_store(12);
@@ -351,7 +353,7 @@ describe('app', function() {
         });
         
         it('valid client products: equal', function() {
-        	var products = clone(data);
+        	var products = simple_clone(data);
         	window.localStorage.setItem('buyerInventory', JSON.stringify(products));
         	var buyerInventoryFactory = new BuyerInventoryFactory([], '', false);
         	buyerInventoryFactory.set_current_store(12);
@@ -368,7 +370,7 @@ describe('app', function() {
         });
         
         it('valid client products: lower', function() {
-        	var products = clone(data);
+        	var products = simple_clone(data);
         	window.localStorage.setItem('buyerInventory', JSON.stringify(products));
         	var buyerInventoryFactory = new BuyerInventoryFactory([], '', false);
         	buyerInventoryFactory.set_current_store(12);
@@ -385,7 +387,7 @@ describe('app', function() {
         });
         
         it('valid client products: zero', function() {
-        	var products = clone(data);
+        	var products = simple_clone(data);
         	window.localStorage.setItem('buyerInventory', JSON.stringify(products));
         	var buyerInventoryFactory = new BuyerInventoryFactory([], '', false);
         	buyerInventoryFactory.set_current_store(12);
@@ -393,7 +395,7 @@ describe('app', function() {
         	var product_selected = products[0]['items_list'][0];
         	localStorage.setItem(invoice.id_products, JSON.stringify(products));
         	product_selected.quantity = 0;
-        	
+
         	/* ACTION */
         	result = invoice.are_valid_products([product_selected]);
         	console.log(invoice.get_message());

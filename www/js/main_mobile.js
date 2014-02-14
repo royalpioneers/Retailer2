@@ -75,7 +75,8 @@ function init(reconection) {
 
     var imageURL = undefined,
         cache=false,
-        token = window.localStorage.getItem("rp-token");
+        token = window.localStorage.getItem("rp-token"),
+        check_new_store_selected = false;
 
     //Events
 
@@ -159,17 +160,23 @@ function init(reconection) {
         $('#select_buyer_store').bind('change', changeSelectStore);
         $('#store_total_qty').bind('change', changeInventoryQuantities);
         $('#update_stock_by_status').parent().hide();
+        $('#pagina2').live('pageshow', automaticallySelectFirstStore);
+        $(document).live("pagebeforechange", checkPermissionsToPage);
+        
+        /* remove when resolve: automaticallySelectFirstStore */
+        $(document).live("pagebeforechange", enableUpdateStore);
+        $(document).live("pagechange", disableUpdateStore);
 
+        /* END BIND EVENTS */
+        
 
-
-
-        $('#pagina2').live('pageshow', function(){
+        function automaticallySelectFirstStore(){
             if(localStorage.rp-cache != false){
                 $('#select_buyer_store-listbox > ul > li').data('option-indextrigger', '0').eq(0).find('a').trigger('click');
             }
-
-        });
-        $(document).live("pagebeforechange", function(e,ob) {
+        }
+        
+        function checkPermissionsToPage(e, ob) {
             if(ob.toPage && (typeof ob.toPage==="string") && ob.toPage.indexOf('index.html') >= 0) {
                 hash_base =  ob.toPage.split('#');
                 if (hash_base.length > 0) {
@@ -184,9 +191,26 @@ function init(reconection) {
                         permissionFactory.get_all(function(){});
                         last_resource_message = '';
                     }
+                    
                 }
             }
-        });
+        }
+
+        function enableUpdateStore(e, ob) {
+        	/* control for select new store: only in page with "select" it work */
+        	var hash = '';
+        	try {
+        		var hash_base =  ob.toPage.split('#');
+        		hash = hash_base[1];
+        	}catch(e){}
+            if (hash == 'select_buyer_store-listbox') {
+            	check_new_store_selected = true;
+            }
+        }
+        function disableUpdateStore(e,ob) {
+        	/* control for select new store: in change of page use old value selected */
+        	check_new_store_selected = false;
+        }
 
         /*Client offline*/        
         $('.disabled').parents('.ui-radio').bind('click', function(){;
@@ -463,6 +487,14 @@ function init(reconection) {
 
     /* Buyer Inventory */
 
+    function getCurrentStore() {
+    	if (check_new_store_selected) {
+    		return $('#select_buyer_store').val();
+    	} else {
+    		return $('#select_buyer_store option[selected]').val();
+    	}
+    }
+
     function changeInventoryQuantities() {
         var all = false;
         if ($('#store_total_qty').attr('checked') == 'checked') {
@@ -470,7 +502,7 @@ function init(reconection) {
         }
         buyerInventoryFactory.update_items_into_store(all);
         
-        var store = $('#select_buyer_store').val();
+        var store = getCurrentStore();
         buyerInventoryFactory.get_all(store, showInventory, cache);
     }
 
@@ -484,7 +516,7 @@ function init(reconection) {
         if(Offline.state == 'down') {
             cache = true;
         }
-        var store = $('#select_buyer_store').val();
+        var store = getCurrentStore();
         $('#store_total_qty').attr('checked', false);
         buyerInventoryFactory.get_all(store, showInventory, cache);
     }
@@ -562,8 +594,7 @@ function init(reconection) {
     
     /* Stores */
     function showStores() {
-    	var store = $('#select_buyer_store').val();
-        
+    	var store = getCurrentStore();        
         if (canAccessTo('SelectMyStores', true)) {
             buyerInventory.render_stores(store);
         } else {
@@ -590,7 +621,7 @@ function init(reconection) {
         if (Offline.state == 'down') {
             analyzer_cache = true;
         }
-        var store = $('#select_buyer_store').val();
+        var store = getCurrentStore();
         analyzer.update(store, analyzer_cache, type);
     }
     
@@ -957,7 +988,7 @@ function init(reconection) {
         var self = $(this);
         event.preventDefault();
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
-        var store = $('#select_buyer_store').val();
+        var store = getCurrentStore();
         var type_update = getTypeUpdate();
         var data_client = [];
         var url = urls.send_invoice;
@@ -1172,6 +1203,11 @@ function init(reconection) {
             var html = "",
                 products = buyerInventoryFactory.get_current_list();
             for(var i in products) {
+            	
+            	if (!canShowItemInventory(products[i])) {
+            		continue;
+            	}
+            	
                 var _offline = "";
                 if(products[i].offline != undefined){
                     _offline = "offline";

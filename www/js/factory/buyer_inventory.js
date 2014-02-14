@@ -75,8 +75,8 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 			var current = factory.list_all_products[i];
 			if (current.id == item.id) {
 				not_exists = false;
-				for (var j in current.variants) {
-					factory.set_variant_to_item(current, variant);
+				for (var j in item.variants) {
+					factory.set_variant_to_item(current, item.variants[j]);
 				}
 			}
 		}
@@ -90,22 +90,56 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 		for (var i in item.variants) {
 			if (item.variants[i].id == variant.id) {
 				not_exists = false;
-				item.variants[i].quantity+= variant.quantity;
+				item.variants[i].quantity = parseInt(item.variants[i].quantity) + parseInt(variant.quantity);
 			}
 		}
 		if (not_exists) {
 			item.variants.push(variant);
 		}
 		for (var i in item.variants) {
-			current_total+= item.variants[i].quantity;
-			current_total_all+= item.variants[i].quantity_all;
+			current_total+= parseInt(item.variants[i].quantity);
+			current_total_all+= parseInt(item.variants[i].quantity_all);
 		}
 		item.quantity = current_total;
 		item.quantity_all = current_total_all;
 	};
 	
 	factory.update_quantity_all_for_all_products_in_stores = function() {
-		/* TODO: complete this */
+		var stores = factory.get_stores(), variants_totals = {}, product_totals = {};
+		for (var i in stores) {
+			for (var j in stores[i].items_list) {
+				var quantity = 0, item = stores[i].items_list[j];
+				for (var k in item.variants) {
+					var variant = item.variants[k];
+					quantity+= parseInt(variant.quantity);
+					
+					/* sum values all */
+					if (typeof(variants_totals[variant.id]) == 'undefined') {
+						variants_totals[variant.id] = 0;
+					}
+					variants_totals[variant.id]+= parseInt(variant.quantity);
+				}
+				item.quantity = quantity;
+
+				/* sum values all */
+				if (typeof(product_totals[item.id]) == 'undefined') {
+					product_totals[item.id] = 0;
+				}
+				product_totals[item.id]+= quantity;
+			}
+		}
+
+		/* set values all */
+		for (var i in stores) {
+			for (var j in stores[i].items_list) {
+				var quantity = 0, item = stores[i].items_list[j];
+				for (var k in item.variants) {
+					item.variants[k].quantity_all = variants_totals[item.variants[k].id];
+				}
+				item.quantity_all = product_totals[item.id]
+			}
+		}
+		window.localStorage.setItem(factory.storage_id_inventory, JSON.stringify(stores));
 	};
 	
 	factory.get_all = function(store, handler, cache) {
@@ -182,21 +216,20 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 	};
 	
 	factory.set_current_list = function(items_list) {
+		if(window.localStorage.getItem(factory.storage_id_inventory)){
+			var store_list = JSON.parse(window.localStorage.getItem(factory.storage_id_inventory));
+			for (var index in store_list) {
+				if (factory.current_store == store_list[index].id) {
+					store_list[index].items_list = items_list;
+				}
+			}
+			window.localStorage.setItem(factory.storage_id_inventory, JSON.stringify(store_list));
+		}
 		if (factory.show_all_products) {
 			factory.update_list_all_products();
-		} else {
-			if(window.localStorage.getItem(factory.storage_id_inventory)){
-				var store_list = JSON.parse(window.localStorage.getItem(factory.storage_id_inventory));
-				for (var index in store_list) {
-					if (factory.current_store == store_list[index].id) {
-						store_list[index].items_list = items_list;
-					}
-				}
-				window.localStorage.setItem(factory.storage_id_inventory, JSON.stringify(store_list));
-			}
 		}
 	};
-
+	
     factory.store_inventory = function(inventory) {
 		if(window.localStorage.getItem(factory.storage_id_inventory)){
 			store_list = JSON.parse(window.localStorage.getItem(factory.storage_id_inventory));

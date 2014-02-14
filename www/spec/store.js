@@ -82,7 +82,7 @@ describe('app', function() {
   		  "total": 0
   		};
 	
-    describe('chose variant', function() {
+    describe('change store', function() {
     	var products = simple_clone(data);
     	var product_selected = products[0]['items_list'][0];
 		var categoryFactory = new CategoryFactory();
