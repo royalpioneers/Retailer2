@@ -518,7 +518,6 @@ function init(reconection) {
         }
         var store = getCurrentStore();
         $('#store_total_qty').attr('checked', false);
-        debugger;
         buyerInventoryFactory.get_all(store, showInventory, cache);
     }
 
@@ -547,9 +546,8 @@ function init(reconection) {
                     if(model.offline == true){
                         var _offline='offline';
                     }
-                    debugger;
+
                     if(model.variants){
-                        debugger;
                         data.push({
                             id: model.model_id,
                             variants: model.variants
@@ -1477,7 +1475,7 @@ function init(reconection) {
             retailPrice = $('#retail-price').val(),
             name_product = '';
         var data;
-        debugger;
+
         if(localStorage.createdByProductSystem == 'true'){
             categoryId = 'tempCategoryName';
             name_product = localStorage.productIdToCreateItem;
@@ -1518,9 +1516,7 @@ function init(reconection) {
                     loading();
                 },
                 success: function(data){
-                    debugger;
                     if(data.status.status == true){
-                        debugger;
                         localStorage.productIdToCreateItem = '';
                         localStorage.productNameToCreateItem = '';
                         localStorage.createdByProductSystem = false;
@@ -1577,7 +1573,6 @@ function init(reconection) {
                     wholesale_price: retailPrice,
                     offline: true
                 };
-                debugger;
                 buyerInventoryFactory.store_inventory(newInventory);
                 win();
                 $.mobile.navigate("#pagina15", {
@@ -1654,7 +1649,6 @@ function init(reconection) {
     }
 
     function showDetail() {
-debugger;
         var content = $('#pagina5').find('.inventory_detail_product'),
             $this = $(this),
             html = '', variants_by_product_model='', pre_html='',
@@ -1687,7 +1681,6 @@ debugger;
         variants_by_product_model = $('.variants_by_product_model');
 
         var variants = JSON.parse(localStorage.dataVariants);
-        debugger;
         for(var i in variants){
             variant = variants[i];
             if(variant != undefined && productModelId != "undefined"){

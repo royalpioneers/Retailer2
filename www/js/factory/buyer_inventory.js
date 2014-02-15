@@ -132,7 +132,6 @@ var BuyerInventoryFactory = function(urls, token, cache) {
 		   },
 			success: function(data) {
 				if (data.status == true) {
-                    debugger;
                     window.localStorage.removeItem(factory.storage_id_inventory);
 					window.localStorage.setItem(factory.storage_id_inventory, JSON.stringify(data.stores));
 					handler(factory.get_items_from_store(store, data.stores));
@@ -203,18 +202,18 @@ var BuyerInventoryFactory = function(urls, token, cache) {
     factory.store_inventory = function(inventory) {
         factory.update_quantity_all_for_all_products_in_stores();
 		if(window.localStorage.getItem(factory.storage_id_inventory)){
-            debugger;
+
 			store_list = JSON.parse(window.localStorage.getItem(factory.storage_id_inventory));
 			for (var index in store_list) {
-                debugger;
-				if (factory.current_store == store_list[index].id) {
+
+				if (store_list[index].default) {
 					store_list[index].items_list.push(inventory);
+                    break;
 				}
 			}
 			window.localStorage.setItem(factory.storage_id_inventory, JSON.stringify(store_list));
 		}
 		if (factory.show_all_products) {
-            debugger;
 			factory.update_list_all_products();
 		}
 	};

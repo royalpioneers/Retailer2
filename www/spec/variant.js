@@ -27,7 +27,7 @@ describe('app', function() {
 				      "retail_price": "48.00",
 				      "model_name": "mivariante",
 				      "product_name": "miproducto",
-				      "variants": [],
+				      "variants": []
 				    },
 				    {
 				      "model_image": "/static/website/images/icon/default_product.png",
