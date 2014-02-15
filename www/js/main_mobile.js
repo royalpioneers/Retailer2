@@ -1620,7 +1620,7 @@ function init(reconection) {
         });
         list.append(html);
         list.trigger('create');
-        list.listview('create');
+        try {list.listview('create');} catch(e) {}
     }
 
     function showMainCategories(categories){
@@ -1659,8 +1659,19 @@ function init(reconection) {
             retailPrice = $this.data('retailPrice'),
             image = $this.find('img').attr('src'),
             variant = '',
-            isNotSystem = $this.data('is-not-system'),
-            html_to_insert = '<ul>\
+            isNotSystem = $this.data('is-not-system');
+            
+            var current_list_products = buyerInventoryFactory.get_current_list();
+            var variants = [];
+            var update_item = {};
+            for (var i in current_list_products) {
+            	if (current_list_products[i].model_id == productModelId) {
+            		update_item = current_list_products[i];
+            		variants = current_list_products[i].variants;
+            	}
+            }
+            
+            var html_to_insert = '<ul>\
                                   <li>\
                                       <img src="'+image+'"/>\
                                   </li>\
@@ -1668,7 +1679,7 @@ function init(reconection) {
                                      <ul>\
                                          <li><b>Product: </b><span>'+productName+'</span></li>\
                                          <li><b>Variant: </b><span>'+modelName+'</span></li>\
-                                         <li><b>Quantity: </b><span>'+quantity+' </span></li>\
+                                         <li><b>Quantity: </b><span>'+update_item.quantity+' </span></li>\
                                          <li><b>No System: </b><span>'+isNotSystem+' </span></li>\
                                       </ul>\
                                   </li>\
@@ -1680,25 +1691,15 @@ function init(reconection) {
         content.append(html_to_insert);
         variants_by_product_model = $('.variants_by_product_model');
 
-        var variants = JSON.parse(localStorage.dataVariants);
-        for(var i in variants){
-            variant = variants[i];
-            if(variant != undefined && productModelId != "undefined"){
-                if(variant.id == productModelId){
-                    variants = variant.variants;
-                    for(var j in variants){
-                        html += '<li class="data-variants" data-variant-id="'+variants[j].id+'">\
-                        <ul>\
-                            <li><b>Name: </b><span>"'+variants[j].name+'"</span></li>\
-                            <li><b>Quantity: </b><span>"'+variants[j].quantity+'"</span></li>\
-                            <li><b>Additional Cost: </b><span>"'+variants[j].additional_cost+'"</span></li>\
-                            <li><b>Value: </b><span>"'+variants[j].value+'"</span></li>\
-                        </ul>\
-                    </li>';
-                    }
-                }
-            }
-
+        for(var j in variants){
+            html += '<li class="data-variants" data-variant-id="'+variants[j].id+'">\
+	            <ul>\
+	                <li><b>Name: </b><span>"'+variants[j].name+'"</span></li>\
+	                <li><b>Quantity: </b><span>"'+variants[j].quantity+'"</span></li>\
+	                <li><b>Additional Cost: </b><span>"'+variants[j].additional_cost+'"</span></li>\
+	                <li><b>Value: </b><span>"'+variants[j].value+'"</span></li>\
+	            </ul>\
+	        </li>';
         }
         if(isNotSystem){
             pre_html = '<a href="#pagina15" class="go_to_variants" data-transition="flow">Create Variants</a>';
@@ -1706,8 +1707,6 @@ function init(reconection) {
             //set option to go create variants
             localStorage.setItem('productModelId', productModelId);
         }
-
-
 
         variants_by_product_model.empty();
         variants_by_product_model.append(html);
@@ -1793,7 +1792,29 @@ function init(reconection) {
         var idFeatureValue = JSON.parse(localStorage.getItem('idFeatureValue'));
         var additionalCost = $('#additionalCost').val();
         var variantQuantity = $('#variantQuantity').val();
-        featureFactory.create_sub_variant(idProductModel, idFeature, idFeatureValue, additionalCost, variantQuantity);
+        featureFactory.create_sub_variant(idProductModel,
+        								  idFeature,
+        								  idFeatureValue,
+        								  additionalCost,
+        								  variantQuantity,
+        								  function(data){
+        	var list = buyerInventoryFactory.get_current_list();
+        	new_variant = {id: data.id,
+        			quantity_all: variantQuantity,
+                    "name": data.name,
+                    "default": false,
+                    "value": data.value,
+                    "additional_cost": additionalCost,
+                    "quantity": variantQuantity
+                    };
+        	for (var i in list) {
+        		if (list[i].model_id == idProductModel) {
+        			list[i].variants.push(new_variant);
+        		}
+        	}
+        	buyerInventoryFactory.set_current_list(list);
+        	buyerInventoryFactory.update_quantity_all_for_all_products_in_stores();
+        });
     }
 
     /* Search */

@@ -63,7 +63,12 @@ var FeatureFactory = function(urls, token) {
 		factory.token = token;
 	};
 
-    factory.create_sub_variant = function(idProductModel, idFeature, idFeatureValue, additionalCost, variantQuantity){
+    factory.create_sub_variant = function(idProductModel,
+    									idFeature,
+    									idFeatureValue,
+    									additionalCost,
+    									variantQuantity,
+    									handler){
 
         $.ajax({
             url: factory.urls.saveProductModelVariant,
@@ -96,6 +101,7 @@ var FeatureFactory = function(urls, token) {
                     $('#featureValueName').text('');
                     $('#additionalCost').val('');
                     $('#variantQuantity').val('');
+                    handler(data);
                 }else{
                     alert('fail!');
                 }
