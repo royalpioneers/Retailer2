@@ -1215,3 +1215,18 @@ a:hover{
         background: white !important;
         color: black;
     }
+    #browsers > li {
+        cursor: pointer;
+        color: black;
+        background: rgb(255, 252, 252);
+        margin-bottom: 0;
+        padding: 5px 0;
+        border: 1px solid rgba(0, 0, 0, 0.19);
+    }
+    #browsers > li > a {
+        display: block;
+        padding: 5px 0;
+        font-weight: 500;
+        padding-left: 15px;
+        color: rgba(0, 0, 0, 0.7);
+    }
