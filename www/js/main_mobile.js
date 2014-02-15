@@ -1520,6 +1520,10 @@ function init(reconection) {
                         localStorage.productIdToCreateItem = '';
                         localStorage.productNameToCreateItem = '';
                         localStorage.createdByProductSystem = false;
+                        data.is_created_by_buyer = true;
+                        data.clients_discount = {};
+                        data.is_created_by_buyer = true;
+                        data.quantity_all = data.quantity;
                         data.variants.push({additional_cost: "0",
                             default: true,
                             id: data.variant_default.id,
@@ -1527,7 +1531,6 @@ function init(reconection) {
                             quantity: data.quantity,
                             quantity_all: data.quantity,
                             value: ""});
-
                         buyerInventoryFactory.store_inventory(data);
 
                         localStorage.setItem('productModelId', data.id);
