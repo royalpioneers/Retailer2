@@ -1535,9 +1535,8 @@ function init(reconection) {
                             quantity_all: data.quantity,
                             value: ""});
                         buyerInventoryFactory.store_inventory(data);
-
-                        localStorage.setItem('productModelId', data.id);
-                        uploadPhoto(data.id);
+                        localStorage.setItem('productModelId', data.model_id);
+                        uploadPhoto(data.model_id);
                         $('#featureName').text('');
                         $('#values-features-list').html('');
                         alert('success!');
@@ -1660,17 +1659,17 @@ function init(reconection) {
             $this = $(this),
             html = '', variants_by_product_model='', pre_html='',
             modelName = $this.data('modelName'),
-            productModelId = $this.data('id');
+            productModelId = $this.data('id'),
             productName = $this.data('productName'),
             quantity = $this.data('quantity'),
             retailPrice = $this.data('retailPrice'),
             image = $this.find('img').attr('src'),
             variant = '',
-            isNotSystem = $this.data('is-not-system');
-            
-            var current_list_products = buyerInventoryFactory.get_current_list();
-            var variants = [];
-            var update_item = {};
+            isNotSystem = $this.data('is-not-system'),
+            current_list_products = buyerInventoryFactory.get_current_list(),
+            variants = [],
+            update_item = {};
+
             for (var i in current_list_products) {
             	if (current_list_products[i].model_id == productModelId) {
             		update_item = current_list_products[i];
