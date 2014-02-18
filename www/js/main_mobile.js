@@ -464,6 +464,9 @@ function init(reconection) {
     }
 
     function eventsAfterLogin() {
+    	if (typeof(token) == 'undefined' || token == null) {
+        	return false;
+        }
         categoryFactory.set_token(token);
         featureFactory.set_token(token);
         buyerInventoryFactory.set_token(token);
@@ -1623,20 +1626,21 @@ function init(reconection) {
         });
         list.append(html);
         list.trigger('create');
-        try {list.listview('create');} catch(e) {}
+        try {list.listview('create');} catch(e) {console.log(e);};
     }
 
     function showMainCategories(categories){
         /*
          Show main categories in create product
          */
+    	$('#categories-list').html('');
         $.each(categories, function(i, value) {
             $('#categories-list').append('' +
                 '<div data-role="collapsible" class="option-expand" data-theme="c" data-id="'+value.id+'" data-content-theme="c">' +
                 '<h3>'+value.name+'</h3>' +
                 '</div>');
         });
-        $('#categories-list').listview('refresh');
+        try{$('#categories-list').listview('refresh');}catch(e) {console.log(e);};
     }
 
     function getCompleteInformation(event) {
