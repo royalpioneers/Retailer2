@@ -1508,7 +1508,8 @@ function init(reconection) {
             };
         }
 
-        if(name_product != '' && categoryId!='' && costPrice!=''){
+        var qty = parseInt(data.quantity);
+        if(name_product != '' && categoryId!='' && costPrice!='' && !isNaN(qty)){
             var url = urls.saveProduct;
             $.ajax({
                 url: url,
@@ -1624,22 +1625,21 @@ function init(reconection) {
             localStorage.productsSystem += ', '+value.name;
         });
         list.append(html);
-        list.trigger('create');
-        try {list.listview('create');} catch(e) {console.log(e);};
+        try{list.trigger('create');}catch(e){console.log(e);};
     }
 
     function showMainCategories(categories){
         /*
          Show main categories in create product
          */
-    	$('#categories-list').html('');
+    	var list = $('#categories-list'), html = '';
         $.each(categories, function(i, value) {
-            $('#categories-list').append('' +
-                '<div data-role="collapsible" class="option-expand" data-theme="c" data-id="'+value.id+'" data-content-theme="c">' +
+        	html+='<div data-role="collapsible" class="option-expand" data-theme="c" data-id="'+value.id+'" data-content-theme="c">' +
                 '<h3>'+value.name+'</h3>' +
-                '</div>');
+                '</div>';
         });
-        try{$('#categories-list').listview('refresh');}catch(e) {console.log(e);};
+        list.html(html);
+        try{list.trigger('create');}catch(e){console.log(e);};
     }
 
     function getCompleteInformation(event) {
@@ -2000,10 +2000,14 @@ function init(reconection) {
     }
 
     function uploadPhoto(id) {
+    	alert('CALL '+imageURL);
+    	alert('CALL TYPE '+typeof(imageURL));
         if(imageURL != undefined) {
             loading();
             var options = new FileUploadOptions();
             options.fileKey="file";
+            alert('URL: '+imageURL);
+            alert('NAME: '+imageURL.substr(imageURL.lastIndexOf('/')+1));
             options.fileName=imageURL.substr(imageURL.lastIndexOf('/')+1);
             options.mimeType="image/jpeg";
             options.chunkedMode = false;
@@ -2011,10 +2015,13 @@ function init(reconection) {
             var params = new Object();
             params.rp_token = token;
             params.id_product_model = id;
-
+            alert('TOKEN: '+token);
+            alert('PRODUCT MODEL ID: '+id);
             options.params = params;
 
             var ft = new FileTransfer();
+            alert('TRANSFER: '+imageURL);
+            alert('ENCODE: '+encodeURI(urls.upload));
             ft.upload(imageURL, encodeURI(urls.upload), win, fail, options);
         } else {
             eventsAfterLogin();
