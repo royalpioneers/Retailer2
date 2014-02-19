@@ -1545,6 +1545,7 @@ function init(reconection) {
                         $('.create_item_list input').val(''),
                         $('#name-variant').val(''),
                         $('#category-id').text(''),
+                        $('#category-name').text('');
                         $('#quantity').val(''),
                         $('#sku').val(''),
                         $('#cost-price').val(''),
@@ -1577,8 +1578,9 @@ function init(reconection) {
                     quantity: quantity,
                     retail_price: retailPrice,
                     wholesale_price: retailPrice,
-                    offline: true
-                };
+                    offline: true,
+                    variants = [],
+                };              
                 buyerInventoryFactory.store_inventory(newInventory);
                 win();
                 $.mobile.navigate("#pagina15", {
@@ -2000,14 +2002,10 @@ function init(reconection) {
     }
 
     function uploadPhoto(id) {
-    	alert('CALL '+imageURL);
-    	alert('CALL TYPE '+typeof(imageURL));
         if(imageURL != undefined) {
             loading();
             var options = new FileUploadOptions();
             options.fileKey="file";
-            alert('URL: '+imageURL);
-            alert('NAME: '+imageURL.substr(imageURL.lastIndexOf('/')+1));
             options.fileName=imageURL.substr(imageURL.lastIndexOf('/')+1);
             options.mimeType="image/jpeg";
             options.chunkedMode = false;
@@ -2015,13 +2013,9 @@ function init(reconection) {
             var params = new Object();
             params.rp_token = token;
             params.id_product_model = id;
-            alert('TOKEN: '+token);
-            alert('PRODUCT MODEL ID: '+id);
             options.params = params;
 
             var ft = new FileTransfer();
-            alert('TRANSFER: '+imageURL);
-            alert('ENCODE: '+encodeURI(urls.upload));
             ft.upload(imageURL, encodeURI(urls.upload), win, fail, options);
         } else {
             eventsAfterLogin();
