@@ -541,6 +541,7 @@ function init(reconection) {
     }
 
     function showInventory(list) {
+    	console.log('OK SHOW INVENTORY');
         if(list != undefined && canAccessTo('tabMyInventory', true)) {
             var items_list = list, data = [], ul_for_inserting = $('#pagina2').find('.tab1').find('ul'), html_to_insert = '';
             $.each(items_list, function(i, model) {
@@ -1579,7 +1580,7 @@ function init(reconection) {
                     retail_price: retailPrice,
                     wholesale_price: retailPrice,
                     offline: true,
-                    variants = [],
+                    variants: []
                 };              
                 buyerInventoryFactory.store_inventory(newInventory);
                 win();
@@ -1587,6 +1588,8 @@ function init(reconection) {
                     transition: "flow",
                     reverse: true
                 });
+            } else {
+            	console.log('**update inventory list!!!');
             }
         }
     }
