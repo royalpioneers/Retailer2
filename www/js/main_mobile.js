@@ -2023,14 +2023,12 @@ function init(reconection) {
     }
 
     function win(r) {
-        /* update inventory after create product */
-    	console.log('jajajajaja')
+        /* update inventory after create photo */
     	var store = getCurrentStore();
     	var old_value = buyerInventoryFactory.cache;
     	buyerInventoryFactory.cache = false;
         buyerInventoryFactory.get_all(store, showInventory, false);
         buyerInventoryFactory.cache = old_value;
-
         imageURL = undefined;
         $.mobile.loading("hide");
     }
