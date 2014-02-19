@@ -59,9 +59,8 @@ var urls = {
 var items_list = [], productsSelected = [], storageClients = [];
 var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New Invoice', 'Stores' */
     'tabMyAnalyzer': 'Sales Analyzer',
-    'pagina11': 'New Invoice', /* lista de usuarios, con lo que no importaria los demas link spara invoice */
-    'pagina9': 'New Invoice',  /* crear cliente */
-    'pagina12': 'New Invoice', /* pantalla de invoice */
+    'newClient.html': 'New Invoice',  /* crear cliente */
+    'pagina13': 'New Invoice', /* pantalla de invoice */
     'SelectMyStores': 'Stores', /* select de tiendas */
     'tabMyInventory': 'Inventory', /* datos de inventario */
     'search.html': 'Marketplace', /* busqueda de productos en general */
@@ -76,7 +75,8 @@ function init(reconection) {
     var imageURL = undefined,
         cache=false,
         token = window.localStorage.getItem("rp-token"),
-        check_new_store_selected = false;
+        check_new_store_selected = false,
+        show_access_messages = false;
 
     //Events
 
@@ -152,7 +152,6 @@ function init(reconection) {
     $('#sendProductsInvoice').live('click', sendProductsInvoice);
     $('.cancel_sendProductsInvoice').live('click', setClient);
     $('.cleanClientSelected').live('click', cleanClientSelected);
-    $('#search-redirect').live('click', changeSearch);
     $('#back_page').live('click', redirectToPage);
     $('#selectClient-menu').find('li').live('click', moveToOtherClient);
     $('.kill_storage').live('click', killStorage);
@@ -190,8 +189,16 @@ function init(reconection) {
                     permissionFactory.set_token(token);
                     permissionFactory.get_all(function(){});
                     last_resource_message = '';
+                    show_access_messages = true;
                 }
-
+            }
+        } else if (ob.toPage && (typeof ob.toPage==="string")){
+        	var toPage = ob.toPage;
+        	toPage = toPage.split('/');
+        	toPage = toPage[toPage.length - 1];
+        	if (!canAccessTo(toPage, true)) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
             }
         }
     }
@@ -1826,13 +1833,6 @@ function init(reconection) {
         });
     }
 
-    /* Search */
-    function changeSearch() {
-        // if (canAccessTo('../search/search.html', true)) {
-        //  window.location.replace("../search/search.html");
-        // }
-    }
-
     function pageMyProductsShow(){
         showMethodUpdate();
         saveClientStorage();
@@ -2052,8 +2052,9 @@ function init(reconection) {
         var access = permissionModel.can_access(resource);
         if (!access && show_default_message) {
             if (last_resource_message != resource) {
-                alert("You don't have permission for this option.");
-//              last_resource_message = resource;
+            	if (show_access_messages) {
+            		alert("You don't have permission for this option.");
+            	}
             }
         }
         return access;
