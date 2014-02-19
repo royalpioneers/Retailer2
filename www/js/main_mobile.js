@@ -2010,6 +2010,9 @@ function init(reconection) {
             options.fileName=imageURL.substr(imageURL.lastIndexOf('/')+1);
             options.mimeType="image/jpeg";
             options.chunkedMode = false;
+            options.headers = {
+            		Connection: "close"
+            };
 
             var params = new Object();
             params.rp_token = token;
