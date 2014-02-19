@@ -1556,7 +1556,7 @@ function init(reconection) {
                         $('#featureValueName').text(''),
                         $('#additionalCost').val(''),
                         $('#variantQuantity').val('');
-                        $('#image-camera').attr('src', '');
+                        $('#image-camera').attr('src', 'images/default_product.png');
 
                         $.mobile.navigate("#pagina15", {
                             transition: "flow",
