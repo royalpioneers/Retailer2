@@ -59,9 +59,8 @@ var urls = {
 var items_list = [], productsSelected = [], storageClients = [];
 var resourceControl = { /* system send keys: 'Inventory', 'Sales Analyzer', 'New Invoice', 'Stores' */
     'tabMyAnalyzer': 'Sales Analyzer',
-    'pagina11': 'New Invoice', /* lista de usuarios, con lo que no importaria los demas link spara invoice */
-    'pagina9': 'New Invoice',  /* crear cliente */
-    'pagina12': 'New Invoice', /* pantalla de invoice */
+    'newClient.html': 'New Invoice',  /* crear cliente */
+    'pagina13': 'New Invoice', /* pantalla de invoice */
     'SelectMyStores': 'Stores', /* select de tiendas */
     'tabMyInventory': 'Inventory', /* datos de inventario */
     'search.html': 'Marketplace', /* busqueda de productos en general */
@@ -76,7 +75,8 @@ function init(reconection) {
     var imageURL = undefined,
         cache=false,
         token = window.localStorage.getItem("rp-token"),
-        check_new_store_selected = false;
+        check_new_store_selected = false,
+        show_access_messages = false;
 
     //Events
 
@@ -97,7 +97,7 @@ function init(reconection) {
     $('.option-expand').live('expand', setCategory);
     $('#edit-image').live('click', takePicture);
     $('.id_product_name_autocomplete input.ui-input-text').live('keyup', showProductModelOptions);
-
+    
     //features
     $('#features').live( "click", getFeatures);
     $('.feature_option').live('click', getValuesFeatures);
@@ -126,7 +126,6 @@ function init(reconection) {
     $( "#pagina12" ).live( "pageshow", pageMyProductsShow);
     $( "#pagina13" ).live( "pageshow", pageClientShow);
 
-
     $( ".cleanProduct" ).live('click', function(){
         $('#browser').val(''),
             $('#name-variant').val(''),
@@ -152,7 +151,6 @@ function init(reconection) {
     $('#sendProductsInvoice').live('click', sendProductsInvoice);
     $('.cancel_sendProductsInvoice').live('click', setClient);
     $('.cleanClientSelected').live('click', cleanClientSelected);
-    $('#search-redirect').live('click', changeSearch);
     $('#back_page').live('click', redirectToPage);
     $('#selectClient-menu').find('li').live('click', moveToOtherClient);
     $('.kill_storage').live('click', killStorage);
@@ -190,8 +188,16 @@ function init(reconection) {
                     permissionFactory.set_token(token);
                     permissionFactory.get_all(function(){});
                     last_resource_message = '';
+                    show_access_messages = true;
                 }
-
+            }
+        } else if (ob.toPage && (typeof ob.toPage==="string")){
+        	var toPage = ob.toPage;
+        	toPage = toPage.split('/');
+        	toPage = toPage[toPage.length - 1];
+        	if (!canAccessTo(toPage, true)) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
             }
         }
     }
@@ -464,6 +470,9 @@ function init(reconection) {
     }
 
     function eventsAfterLogin() {
+    	if (typeof(token) == 'undefined' || token == null) {
+        	return false;
+        }
         categoryFactory.set_token(token);
         featureFactory.set_token(token);
         buyerInventoryFactory.set_token(token);
@@ -1194,7 +1203,7 @@ function init(reconection) {
     function cleanClientSelected(){
         //pageClientShow();
     }
-
+    
     function pageClientShow() {
         var cant = $('#list_clients > div').eq(0).find('input:radio').length;
         if(cant != 0){
@@ -1443,26 +1452,13 @@ function init(reconection) {
     }
 
     function showProductModelOptions(){
-
         if($(this).val().length > 0){
             $('#browsers').show();
-            //dont exists
-            if(localStorage.productsSystem.indexOf($(this).val()) == -1 || localStorage.productsSystem.toUpperCase().indexOf($(this).val()) == -1){
-                $('#categoryCreateItem').show();
-            }
-            //exists
-            if(localStorage.productsSystem.indexOf($(this).val()) != -1 || localStorage.productsSystem.toUpperCase().indexOf($(this).val()) != -1){
-                $('#categoryCreateItem').hide();
-            }
         } else if($(this).val().length == 0){
             $('#browsers').hide();
             $('#categoryCreateItem').show();
         }
-        if($('#browsers li:not(".ui-screen-hidden")').length > 0){
-            $('#categoryCreateItem').hide();
-        }else{
-            $('#categoryCreateItem').show();
-        }
+        cleanProductSelected();
     }
 
     function saveProduct() {
@@ -1505,7 +1501,8 @@ function init(reconection) {
             };
         }
 
-        if(name_product != '' && categoryId!='' && costPrice!=''){
+        var qty = parseInt(data.quantity);
+        if(name_product != '' && categoryId!='' && costPrice!='' && !isNaN(qty)){
             var url = urls.saveProduct;
             $.ajax({
                 url: url,
@@ -1517,9 +1514,6 @@ function init(reconection) {
                 },
                 success: function(data){
                     if(data.status.status == true){
-                        localStorage.productIdToCreateItem = '';
-                        localStorage.productNameToCreateItem = '';
-                        localStorage.createdByProductSystem = false;
                         data.is_created_by_buyer = true;
                         data.clients_discount = {};
                         data.is_created_by_buyer = true;
@@ -1532,26 +1526,12 @@ function init(reconection) {
                             quantity_all: data.quantity,
                             value: ""});
                         buyerInventoryFactory.store_inventory(data);
+                        localStorage.setItem('productModelId', data.model_id);
+                        uploadPhoto(data.model_id);
 
-                        localStorage.setItem('productModelId', data.id);
-                        uploadPhoto(data.id);
-                        $('#featureName').text('');
-                        $('#values-features-list').html('');
                         alert('success!');
 
-                        $('.create_item_list input').val(''),
-                        $('#name-variant').val(''),
-                        $('#category-id').text(''),
-                        $('#quantity').val(''),
-                        $('#sku').val(''),
-                        $('#cost-price').val(''),
-                        $('#wholesale-price').val(''),
-                        $('#retail-price').val(''),
-                        $('#values-features-list').html(''),
-                        $('#featureName').html(''),
-                        $('#featureValueName').text(''),
-                        $('#additionalCost').val(''),
-                        $('#variantQuantity').val('');
+                        cleanFormCreateProduct();
 
                         $.mobile.navigate("#pagina2", {
                             transition: "flow",
@@ -1574,8 +1554,9 @@ function init(reconection) {
                     quantity: quantity,
                     retail_price: retailPrice,
                     wholesale_price: retailPrice,
-                    offline: true
-                };
+                    offline: true,
+                    variants: []
+                };              
                 buyerInventoryFactory.store_inventory(newInventory);
                 win();
                 $.mobile.navigate("#pagina2", {
@@ -1586,6 +1567,34 @@ function init(reconection) {
         }
     }
 
+    function cleanFormCreateProduct() {
+    	cleanProductSelected();
+        $('#featureName').text('');
+        $('#values-features-list').html('');
+        $('.create_item_list input').val(''),
+        $('#name-variant').val(''),
+        $('#category-id').text(''),
+        $('#category-name').text('');
+        $('#quantity').val(''),
+        $('#sku').val(''),
+        $('#cost-price').val(''),
+        $('#wholesale-price').val(''),
+        $('#retail-price').val(''),
+        $('#values-features-list').html(''),
+        $('#featureName').html(''),
+        $('#featureValueName').text(''),
+        $('#additionalCost').val(''),
+        $('#variantQuantity').val('');
+        $('#image-camera').attr('src', 'images/default_product.png');
+    }
+    
+    function cleanProductSelected() {
+    	localStorage.productIdToCreateItem = '';
+        localStorage.productNameToCreateItem = '';
+        localStorage.createdByProductSystem = false;
+        $('#categoryCreateItem').show();
+    }
+    
     function getInformationProduct() {
         var cache = false;
         if(Offline.state == 'down') {
@@ -1622,21 +1631,21 @@ function init(reconection) {
             localStorage.productsSystem += ', '+value.name;
         });
         list.append(html);
-        list.trigger('create');
-        try {list.listview('create');} catch(e) {}
+        try{list.trigger('create');}catch(e){console.log(e);};
     }
 
     function showMainCategories(categories){
         /*
          Show main categories in create product
          */
+    	var list = $('#categories-list'), html = '';
         $.each(categories, function(i, value) {
-            $('#categories-list').append('' +
-                '<div data-role="collapsible" class="option-expand" data-theme="c" data-id="'+value.id+'" data-content-theme="c">' +
+        	html+='<div data-role="collapsible" class="option-expand" data-theme="c" data-id="'+value.id+'" data-content-theme="c">' +
                 '<h3>'+value.name+'</h3>' +
-                '</div>');
+                '</div>';
         });
-        $('#categories-list').listview('refresh');
+        list.html(html);
+        try{list.trigger('create');}catch(e){console.log(e);};
     }
 
     function getCompleteInformation(event) {
@@ -1656,17 +1665,17 @@ function init(reconection) {
             $this = $(this),
             html = '', variants_by_product_model='', pre_html='',
             modelName = $this.data('modelName'),
-            productModelId = $this.data('id');
+            productModelId = $this.data('id'),
             productName = $this.data('productName'),
             quantity = $this.data('quantity'),
             retailPrice = $this.data('retailPrice'),
             image = $this.find('img').attr('src'),
             variant = '',
-            isNotSystem = $this.data('is-not-system');
-            
-            var current_list_products = buyerInventoryFactory.get_current_list();
-            var variants = [];
-            var update_item = {};
+            isNotSystem = $this.data('is-not-system'),
+            current_list_products = buyerInventoryFactory.get_current_list(),
+            variants = [],
+            update_item = {};
+
             for (var i in current_list_products) {
             	if (current_list_products[i].model_id == productModelId) {
             		update_item = current_list_products[i];
@@ -1818,13 +1827,6 @@ function init(reconection) {
         	buyerInventoryFactory.set_current_list(list);
         	buyerInventoryFactory.update_quantity_all_for_all_products_in_stores();
         });
-    }
-
-    /* Search */
-    function changeSearch() {
-        // if (canAccessTo('../search/search.html', true)) {
-        //  window.location.replace("../search/search.html");
-        // }
     }
 
     function pageMyProductsShow(){
@@ -2004,11 +2006,13 @@ function init(reconection) {
             options.fileName=imageURL.substr(imageURL.lastIndexOf('/')+1);
             options.mimeType="image/jpeg";
             options.chunkedMode = false;
+            options.headers = {
+            		Connection: "close"
+            };
 
             var params = new Object();
             params.rp_token = token;
             params.id_product_model = id;
-
             options.params = params;
 
             var ft = new FileTransfer();
@@ -2019,7 +2023,12 @@ function init(reconection) {
     }
 
     function win(r) {
-        eventsAfterLogin();
+        /* update inventory after create photo */
+    	var store = getCurrentStore();
+    	var old_value = buyerInventoryFactory.cache;
+    	buyerInventoryFactory.cache = false;
+        buyerInventoryFactory.get_all(store, showInventory, false);
+        buyerInventoryFactory.cache = old_value;
         imageURL = undefined;
         $.mobile.loading("hide");
     }
@@ -2039,8 +2048,9 @@ function init(reconection) {
         var access = permissionModel.can_access(resource);
         if (!access && show_default_message) {
             if (last_resource_message != resource) {
-                alert("You don't have permission for this option.");
-//              last_resource_message = resource;
+            	if (show_access_messages) {
+            		alert("You don't have permission for this option.");
+            	}
             }
         }
         return access;
