@@ -968,7 +968,7 @@ function init(reconection) {
                 }
                 alert('Success Invoice!');
                 pageClientShow();
-                $.mobile.navigate("#pagina12", {
+                $.mobile.navigate("#pagina13", {
                     transition: "flow",
                     reverse: true
                 });
@@ -1553,7 +1553,7 @@ function init(reconection) {
                         $('#additionalCost').val(''),
                         $('#variantQuantity').val('');
 
-                        $.mobile.navigate("#pagina15", {
+                        $.mobile.navigate("#pagina2", {
                             transition: "flow",
                             reverse: true
                         });
@@ -1578,7 +1578,7 @@ function init(reconection) {
                 };
                 buyerInventoryFactory.store_inventory(newInventory);
                 win();
-                $.mobile.navigate("#pagina15", {
+                $.mobile.navigate("#pagina2", {
                     transition: "flow",
                     reverse: true
                 });
