@@ -602,6 +602,13 @@ function init(reconection) {
 
             showStores();
         }
+
+        if(Offline.state == 'down') {
+            $('#search-redirect').hide();            
+            $('.offline-ui-down').fadeIn();
+        }else{
+            $('#search-redirect').show();
+        }
     }
 
     /* Stores */
@@ -785,7 +792,7 @@ function init(reconection) {
                                              for="radio-choice-'+items_list[client].id+'"\
                                              data-corners="false" class="labelRadioButton"\
                                              >\
-                                             <img src="'+DOMAIN+items_list[client].image+'" class="image_client"/>'+items_list[client].name+'\
+                                             <img src="images/designer_default_photo.jpg" class="image_client"/>'+items_list[client].name+'\
                                          </label>';
             };
 
@@ -1212,7 +1219,7 @@ function init(reconection) {
             $('#list_clients > div').eq(0).find('input:radio').trigger('change');
 //            }
             $('.products_clients_add').html('');
-            var html = "",
+            var html = "", image = 'images/default_product.png',
                 products = buyerInventoryFactory.get_current_list();
             for(var i in products) {
 
@@ -1224,11 +1231,15 @@ function init(reconection) {
                 if(products[i].offline != undefined){
                     _offline = "offline";
                 }
-
+                if(Offline.state == 'up') {
+                    image = DOMAIN+products[i].model_image;
+                }else{
+                    image = image;
+                }
                 if(getArrayIndexProductsSelected().indexOf(products[i].id) !== -1 || buyerInventory.is_inventory_in_current_select_variant(products[i].id)) {
                     html += '<li class="myProductSelected">\
                     <a href="#" data-role="button" class="productSelected '+_offline+' " data-id="'+products[i].id+'" data-selected="true">\
-                        <img src="'+DOMAIN+products[i].model_image+'">\
+                        <img src="'+image+'">\
                         <span>'+products[i].product_name+'</span>\
                     </a>\
                 </li>';
@@ -1237,7 +1248,7 @@ function init(reconection) {
 
                     html += '<li>\
                     <a href="#" data-role="button" class="productSelected" data-id="'+products[i].id+'" data-selected="false">\
-                        <img src="'+DOMAIN+products[i].model_image+'">\
+                        <img src="'+image+'">\
                         <span>'+products[i].product_name+'</span>\
                     </a>\
                 </li>';
@@ -1833,18 +1844,24 @@ function init(reconection) {
         showMethodUpdate();
         saveClientStorage();
         $('#theDate').val(getDateMonthYear());
-        var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products,
+        var myProducts = JSON.parse(localStorage.getItem('clientSelected')).products;
             ul_for_my_products = $('#myProducts');
-        ul_for_my_products.html('');
-        var html = '';
+            ul_for_my_products.html('');
+        var html = '', image = 'images/default_product.png';
+
         for(var i in myProducts){
             var variant_id = '0';
             if (!isNaN(parseInt(myProducts[i].variant_id))) {
                 variant_id = myProducts[i].variant_id;
             }
+            if(Offline.state == 'up') {
+                image = DOMAIN+myProducts[i].model_image;
+            }else{
+                image = image;
+            }
             html += '<li class="without_radious" data-id="'+myProducts[i].id+'", data-variant="'+variant_id+'">\
                         <a href="" data-item-invoice="'+i+'" data-quantity="'+ myProducts[i].quantity+'">\
-                            <img src="'+DOMAIN+myProducts[i].model_image+'" class="ui-li-icon">\
+                            <img src="'+image+'" class="ui-li-icon">\
                             <div><span class="ui-li-aside">'+myProducts[i].model_name+'</span>\
                             <input type="text" class="hide-option-form-invoice qtyInvoice" placeholder="0" value="'+myProducts[i].quantity+'">\
                             <span class="ui-li-aside hide-option-form-invoice">'+myProducts[i].price+'</span>\

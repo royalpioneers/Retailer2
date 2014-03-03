@@ -49,7 +49,7 @@ var ClientFactory = function(urls, token, cache) {
 			success: function(data){
 				if (data.status == 'ok') {
 					data.client.name = params.name;
-					data.client.image = DOMAIN+'/static/img/designer_default_photo.jpg';
+					data.client.image = 'images/designer_default_photo.jpg';
 					data.client.type = params.company_type;
 					factory.store_client(data.client);
 					handler(true, data.client);

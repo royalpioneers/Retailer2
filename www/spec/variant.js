@@ -5,7 +5,7 @@ describe('app', function() {
 		     "name": 'store one',
 		     "items_list": [
 				    {
-				      "model_image": "/static/website/images/icon/default_product.png",
+				      "model_image": "images/designer_default_photo.jpg",
 				      "clients_discount": {},
 				      "quantity": 20,
 				      "max": 20,
@@ -18,7 +18,7 @@ describe('app', function() {
 			              {'id': 3, 'quantity': '18', 'name': 'feature2', 'value': 'VAL2', 'additional_cost': '5.8'}],
 				    },
 				    {
-				      "model_image": "/static/website/images/icon/default_product.png",
+				      "model_image": "images/designer_default_photo.jpg",
 				      "clients_discount": {},
 				      "quantity": 30,
 				      "max": 30,
@@ -30,7 +30,7 @@ describe('app', function() {
 				      "variants": []
 				    },
 				    {
-				      "model_image": "/static/website/images/icon/default_product.png",
+				      "model_image": "images/designer_default_photo.jpg",
 				      "clients_discount": {},
 				      "quantity": 6,
 				      "max": 6,
@@ -47,7 +47,7 @@ describe('app', function() {
 			     "name": 'store two',
 			     "items_list": [
 					    {
-					      "model_image": "/static/website/images/icon/default_product.png",
+					      "model_image": "images/designer_default_photo.jpg",
 					      "clients_discount": {},
 					      "quantity": 15,
 					      "id": 212,
@@ -59,7 +59,7 @@ describe('app', function() {
 				              {'id': 3, 'quantity': '30', 'name': 'feature2', 'value': 'VAL2', 'additional_cost': '5.8'}],
 					    },
 					    {
-					      "model_image": "/static/website/images/icon/default_product.png",
+					      "model_image": "images/designer_default_photo.jpg",
 					      "clients_discount": {},
 					      "quantity": 8,
 					      "id": 218,

@@ -1026,9 +1026,10 @@ a:hover{
 #createSubVariant > .ui-btn-inner {
     padding: 7%; font-size: 2em !important;
 }
-.offline-ui.offline-ui-down.offline-ui-waiting {position: fixed;
+.offline-ui.offline-ui-down{position: fixed;
     top: 95% !important;
     bottom: 0% !important;
+    display: none;
     width: 100%;}
 #pagina2 > div[data-role="header"],#pagina13 > div[data-role="header"]{
     position: fixed !important;
