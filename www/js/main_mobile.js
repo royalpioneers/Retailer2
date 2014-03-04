@@ -517,8 +517,7 @@ function init(reconection) {
     }
 
     function changeSelectStore() {
-        getInventoryItems();
-        debugger
+        getInventoryItems();        
         $('#id_tab_my_inventory').trigger('click');
     }
 
@@ -2219,8 +2218,7 @@ function loadSearch () {
     factorySearchAndGroup.methodAjax(url, data, setDataSearch, method);
 }
 
-function setDataSearch (data) {
-    debugger
+function setDataSearch (data) {    
     if(data.result.length <= 0){
         alert("Sorry your search did not match any products.\n Please Try Again.");
         $('.no-data').show();
