@@ -122,7 +122,8 @@ function init(reconection) {
     $('.operation-minus').live('tap', calculateByOperationMinus);
     $('.operation-plus').live('tap', calculateByOperationPlus);
 
-
+    
+    $(document).live('pagebeforeshow', '#pagina2', changeSelectStore);
     $( "#pagina12" ).live( "pageshow", pageMyProductsShow);
     $( "#pagina13" ).live( "pageshow", pageClientShow);
 
@@ -517,6 +518,7 @@ function init(reconection) {
 
     function changeSelectStore() {
         getInventoryItems();
+        debugger
         $('#id_tab_my_inventory').trigger('click');
     }
 
@@ -606,8 +608,10 @@ function init(reconection) {
         if(Offline.state == 'down') {
             $('#search-redirect').hide();            
             $('.offline-ui-down').fadeIn();
+            $('#edit-image').addClass('hideTakePhoto');
         }else{
             $('#search-redirect').show();
+            $('#edit-image').removeClass('hideTakePhoto');
         }
     }
 
@@ -780,7 +784,7 @@ function init(reconection) {
                 }
             });
         }
-        else{
+        else{            
             items_list = JSON.parse(localStorage.getItem('allClients'));
             $('#pagina11').find('#list_clients').html('');
             var ul_for_list_clients = $('#pagina11').find('#list_clients'),
@@ -2177,7 +2181,7 @@ $('.search').live('click', loadSearch);
 
 $(document).on('pageshow', '#pagina50', function() {
     var url = DOMAIN + '/mobile/search/';
-    var data =  {rp_token: window.localStorage.getItem("rp-token"), category: 1,text: ''};
+    var data =  {rp_token: window.localStorage.getItem("rp-token"), category: "4376", text: ''};
     var method = 'POST';
     factorySearchAndGroup.methodAjax(url, data, setDataSearch, method);
 });
@@ -2216,17 +2220,24 @@ function loadSearch () {
 }
 
 function setDataSearch (data) {
-    $('#result-search').html('');
-    $.each(data.result, function(i, value) {
-        $.each(value.models, function(ind, model) {
-            if(model.photo.length > 0){
-                $('#result-search').append('<li><a class="add-to-group-btn" data-id="'+model.id+'" href="#"><small>'+model.name+'</small><img src="'+DOMAIN+model.photo[0].thumb+'"></a></li>');
-            } else {
-                $('#result-search').append('<li><a class="add-to-group-btn" data-id="'+model.id+'" href="#"><small>'+model.name+'</small><img src="'+imageDefault+'"></a></li>');
-            }
+    debugger
+    if(data.result.length <= 0){
+        alert("Sorry your search did not match any products.\n Please Try Again.");
+        $('.no-data').show();
+    }else{
+        $('.no-data').hide();
+        $('#result-search').html('');
+        $.each(data.result, function(i, value) {
+            $.each(value.models, function(ind, model) {
+                if(model.photo.length > 0){
+                    $('#result-search').append('<li><a class="add-to-group-btn" data-id="'+model.id+'" href="#"><small>'+model.name+'</small><img src="'+DOMAIN+model.photo[0].thumb+'"></a></li>');
+                } else {
+                    $('#result-search').append('<li><a class="add-to-group-btn" data-id="'+model.id+'" href="#"><small>'+model.name+'</small><img src="'+imageDefault+'"></a></li>');
+                }
+            });
         });
-    });
-    $('#result-search').listview('refresh');
+        $('#result-search').listview('refresh');
+    }    
 }
 
 

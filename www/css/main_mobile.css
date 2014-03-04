@@ -1046,7 +1046,9 @@ a:hover{
     box-shadow: none !important;
     border: 2px solid #bdc3c7 !important;
 }
-
+.hideTakePhoto{
+    display: none !important;
+}
 /*search*/
 
 #result-search small{
