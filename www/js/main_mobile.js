@@ -160,7 +160,9 @@ function init(reconection) {
     $('#store_total_qty').bind('change', changeInventoryQuantities);
     $('#update_stock_by_status').parent().hide();
     $('#pagina2').live('pageshow', automaticallySelectFirstStore);
+
     $(document).live("pagebeforechange", checkPermissionsToPage);
+
 
     /* remove when resolve: automaticallySelectFirstStore */
     $(document).live("pagebeforechange", enableUpdateStore);
@@ -220,8 +222,9 @@ function init(reconection) {
     }
 
     /*Client offline*/
-    $('.disabled').parents('.ui-radio').bind('click', function(){;
-        alert('Check Your Connection!');
+    $('.disabled').parents('.ui-radio').bind('click', function(){
+        var str = 'Check Your Connection!';
+        showAlert(str);
     });
     $('#undefined-menu a').live('click', function(event){
         event.preventDefault();
@@ -351,7 +354,8 @@ function init(reconection) {
                 }
             });
         } else {
-            alert('Check your internet connection');
+            var str = 'Check your internet connection';
+            showAlert(str);
         }
     }
 
@@ -388,13 +392,15 @@ function init(reconection) {
                 }
             });
         } else {
-            alert('Check your internet connection');
+            var str = 'Check your internet connection';
+            showAlert(str);
         }
     }
 
     function msgOffline(event) {
         event.preventDefault();
-        alert('the action can not be processed');
+        var str = 'The action can not be processed';
+        showAlert(str);
     }
 
     function logOut(event) {
@@ -428,7 +434,8 @@ function init(reconection) {
                 token = window.localStorage.getItem("rp-token");
                 eventsAfterLogin();
             } else {
-                alert('Check your internet connection');
+                var str = 'Check your internet connection';
+                showAlert(str);
             }
         } else {
             var url = urls.loginToken;
@@ -465,7 +472,8 @@ function init(reconection) {
 
                 eventsAfterLogin();
             } else {
-                alert('Check your internet connection');
+                var str = 'Check your internet connection';
+                showAlert(str);
             }
         }
     }
@@ -882,13 +890,13 @@ function init(reconection) {
         localStorage.quantityInovice =  $(this).data('quantity');
         localStorage.position = $(this).data('item-invoice');
 
-        $('.form-input-quantity-invoice').text(localStorage.quantityInovice);
+        $('.form-input-quantity-invoice').val(localStorage.quantityInovice);
     }
 
     function calculateByType(){
 
         var position = localStorage.position;
-        var text = $('.form-input-quantity-invoice').text();
+        var text = $('.form-input-quantity-invoice').val();
         localStorage.quantityInovice = text;
         $('.without_radious a[data-item-invoice="'+position+'"] .qtyInvoice').val(text);
         $('.without_radious a[data-item-invoice="'+position+'"]').data('quantity',text);
@@ -908,12 +916,13 @@ function init(reconection) {
     function calculateByOperation(){
         var text = parseInt(localStorage.quantityInovice);
         var position = localStorage.position;
-        $('.form-input-quantity-invoice').text(text);
+        debugger
+        $('.form-input-quantity-invoice').val(text);
         if(localStorage.typeOperation == '+')text ++;
         else text--;
 
         localStorage.quantityInovice = text;
-        $('.form-input-quantity-invoice').text(text);
+        $('.form-input-quantity-invoice').val(text);
         $('.without_radious a[data-item-invoice="'+position+'"] .qtyInvoice').val(text);
         $('.without_radious a[data-item-invoice="'+position+'"]').data('quantity',text);
         $( ".qtyInvoice" ).trigger('keyup');
@@ -965,7 +974,8 @@ function init(reconection) {
 //            });
         }
         else{
-            alert('Chooce Someone!');
+            var str = 'Chooce Someone!';
+            showAlert(str);
         }
     }
 
@@ -985,7 +995,8 @@ function init(reconection) {
                     clientSelected.products = [];
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                 }
-                alert('Success Invoice!');
+                var str = 'Success Invoice!';
+                showAlert(str);
                 pageClientShow();
                 $.mobile.navigate("#pagina13", {
                     transition: "flow",
@@ -1032,8 +1043,8 @@ function init(reconection) {
             type_update: type_update
         };
 
-        if (data_client[0] != undefined && !invoice.are_valid_products(data_client[0].products)) {
-            alert(invoice.get_message());
+        if (data_client[0] != undefined && !invoice.are_valid_products(data_client[0].products)) {            
+            showAlert(invoice.get_message());
             return false;
         }
         if(self.data('status')=="true" || self.data('status') == true){
@@ -1051,7 +1062,8 @@ function init(reconection) {
                     if (data.status == true) {
                         updateAfterCreateInvoice(clientSelected, type_update);
                     } else {
-                        alert('an error occurred');
+                        var str = 'an error occurred';
+                        showAlert(str);
 //                        $.mobile.navigate("#pagina12", {
 //                            transition: "flow",
 //                            reverse: true
@@ -1263,7 +1275,8 @@ function init(reconection) {
 //            $(a).insertAfter('.myProductSelected');
             $('.see_more_products_clients').text(getCurrentTotal());
         }else if(cant ==0){
-            alert('You dont have Client! \n Create a Client!');
+            var str = 'You dont have Client! \n Create a Client!';
+            showAlert(str);
             try{$.mobile.navigate("./newClient.html", {
                 transition: "flow",
                 reverse: true
@@ -1334,6 +1347,7 @@ function init(reconection) {
     }
 
     function goProduct() {
+        
         if(localStorage.getItem('clientSelected')){
             var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
             //validar si esta repetido
@@ -1349,7 +1363,8 @@ function init(reconection) {
                 });
             }
             else{
-                alert('Chooce Someone!');
+                var str = 'Chooce Someone!';
+                showAlert(str);
             }
         }
         else{
@@ -1368,6 +1383,7 @@ function init(reconection) {
 
         for(var i in products){
             if(!$(this).data('selected')){
+                
                 //Add Products to LocalStorage
                 if(products[i].id === id){
                     if (buyerInventory.inventory_has_variants(id)) {
@@ -1392,6 +1408,7 @@ function init(reconection) {
             } else {
                 if (buyerInventory.inventory_has_variants(id)) {
                     buyerInventory.go_to_sub_variant_view(id);
+                    localStorage.currentProductSelected = $this.data('id');
                     break;
                 }
                 var remove = -1;
@@ -1405,6 +1422,7 @@ function init(reconection) {
                     localStorage.setItem("clientSelected", JSON.stringify(clientSelected));
                     $(this).data('selected',false);
                     $(li).removeClass("myProductSelected");
+                    
                     $('.see_more_products_clients').text(getCurrentTotal());
                     break;
                 }
@@ -1413,6 +1431,7 @@ function init(reconection) {
     }
 
     function getCurrentTotal(){
+        
         var totalPrice = 0;
         if(localStorage.getItem('clientSelected')){
             var products = JSON.parse(localStorage.getItem('clientSelected')).products;
@@ -1542,9 +1561,9 @@ function init(reconection) {
                         buyerInventoryFactory.store_inventory(data);
                         localStorage.setItem('productModelId', data.model_id);
                         uploadPhoto(data.model_id);
-
-                        alert('success!');
-
+                        
+                        var str = 'success!';
+                        showAlert(str);
                         cleanFormCreateProduct();
 
                         $.mobile.navigate("#pagina2", {
@@ -1552,7 +1571,8 @@ function init(reconection) {
                             reverse: true
                         });
                     } else{
-                        alert('an error occurred');
+                        var str = 'an error occurred';
+                        showAlert(str);
                     }
                 },
                 error: function(err){
@@ -2015,7 +2035,8 @@ function init(reconection) {
     }
 
     function onFail(message) {
-        alert('Failed because: ' + message);
+        var str = 'Failed because: ' + message;
+        showAlert(str);
     }
 
     function uploadPhoto(id) {
@@ -2055,7 +2076,8 @@ function init(reconection) {
 
     function fail(error) {
         eventsAfterLogin();
-        alert("An error has occurred image not upload");
+        var str = "An error has occurred image not upload";
+        showAlert(str);        
         imageURL = undefined;
         $.mobile.loading("hide");
     }
@@ -2069,7 +2091,8 @@ function init(reconection) {
         if (!access && show_default_message) {
             if (last_resource_message != resource) {
             	if (show_access_messages) {
-            		alert("You don't have permission for this option.");
+                    var str = "You don't have permission for this option.";
+                    showAlert(str); 
             	}
             }
         }
@@ -2077,6 +2100,7 @@ function init(reconection) {
     }
 
     $('.close_modal').live('click', function(){
+        
         $('#features-values-modal').fadeOut().children().removeClass('effect_in_out');
         $('#features-modal').fadeOut().children().removeClass('effect_in_out');
         $('#group-data').fadeOut().children().removeClass('effect_in_out');
@@ -2119,11 +2143,15 @@ function init(reconection) {
                 }, 8000);
                 //end animation
                 //show prices
+                                
 
-                $('.see_more_products_clients').text(getCurrentTotal());
                 localStorage.activeAnimation = false;
             }, 500);
+        }else{
+            
+            $this.parent('li:first').removeClass('myProductSelected');
         }
+        $('.see_more_products_clients').text(getCurrentTotal());
     });
 }
 
@@ -2220,7 +2248,8 @@ function loadSearch () {
 
 function setDataSearch (data) {    
     if(data.result.length <= 0){
-        alert("Sorry your search did not match any products.\n Please Try Again.");
+        var str = "Sorry your search did not match any products.\n Please Try Again.";
+        showAlert(str);         
         $('.no-data').show();
     }else{
         $('.no-data').hide();
@@ -2288,7 +2317,8 @@ function afterToChoose(data){
         console.log('Saved!');
 
     } else {
-        alert(data.status);
+        var str = data.status;
+        showAlert(str);  
     }
 }
 
@@ -2310,7 +2340,8 @@ function createGroup(e){
     if(text.val() != ''){
         factorySearchAndGroup.methodAjax(url, data, afterToCreate, method);
     }else{
-        alert('Write Something!');
+        var str = 'Write Something!';
+        showAlert(str);  
     }
     text.val('');
     text.focus();
@@ -2354,4 +2385,21 @@ var factorySearchAndGroup = {
 };
 $('.close_modal.ui-link, .btn.btn_accept_option.ui-link').live('click', function(){
     $('#group-data-search').fadeOut().children().removeClass('effect_in_out');
+    $('#login-error').fadeOut().children().removeClass('effect_in_out');
+    $('#sign-up-error').fadeOut().children().removeClass('effect_in_out');
 });
+
+
+//
+function showAlert (str) {
+    
+    $('.infoAlert').find('h3').text('');
+    $('.infoAlert').find('h3').text(str).end().fadeIn().children().addClass('effect_in_out');    
+}
+
+$('.infoAlert').live('click', btn_accept_option);
+
+function btn_accept_option(){
+    
+    $('.infoAlert').fadeOut().children().removeClass('effect_in_out');
+}

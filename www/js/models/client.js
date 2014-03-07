@@ -219,7 +219,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 		for (var message in messages) {
 			str += messages[message] + '\n';
 		}return false;
-		alert(str);
+        showAlert(str);
 	};
 		
 	/* LIST */
@@ -365,3 +365,16 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
  	
 	return model;
 };
+
+function showAlert (str) {
+    debugger
+    $('.infoAlert').find('h3').text('');
+    $('.infoAlert').find('h3').text(str).end().fadeIn().children().addClass('effect_in_out');
+}
+
+$('.infoAlert').live('click', btn_accept_option);
+
+function btn_accept_option(){
+    debugger
+    $('.infoAlert').fadeOut().children().removeClass('effect_in_out');
+}

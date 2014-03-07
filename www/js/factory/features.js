@@ -87,7 +87,8 @@ var FeatureFactory = function(urls, token) {
             },
             success: function(data){              
                 if (data.status){
-                    alert('Success!');
+                    var str = 'Success!';
+                    showAlert(str);
                     $('#browser').val(''),
                     $('#name-variant').val(''),
                     $('#category-id').text(''),
@@ -103,7 +104,8 @@ var FeatureFactory = function(urls, token) {
                     $('#variantQuantity').val('');
                     handler(data);
                 }else{
-                    alert('fail!');
+                    var str = 'fail!';
+                    showAlert(str);
                 }
             },
             complete: function(){
@@ -146,3 +148,16 @@ var FeatureFactory = function(urls, token) {
 
     return factory;
 };
+
+function showAlert (str) {
+    debugger
+    $('.infoAlert').find('h3').text('');
+    $('.infoAlert').find('h3').text(str).end().fadeIn().children().addClass('effect_in_out');
+}
+
+$('.infoAlert').live('click', btn_accept_option);
+
+function btn_accept_option(){
+    debugger
+    $('.infoAlert').fadeOut().children().removeClass('effect_in_out');
+}
