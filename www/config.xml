@@ -66,7 +66,7 @@
     -->
 
     <!-- Define app icon for each platform. -->
-    <icon src="icon.png" gap:role="default"/>
+    <icon src="icon.png" />
     <icon src="res/icon/android/icon-36-ldpi.png"   gap:platform="android"    gap:density="ldpi" />
     <icon src="res/icon/android/icon-48-mdpi.png"   gap:platform="android"    gap:density="mdpi" />
     <icon src="res/icon/android/icon-72-hdpi.png"   gap:platform="android"    gap:density="hdpi" />
@@ -81,12 +81,6 @@
     <icon src="res/icon/windows-phone/icon-48.png"  gap:platform="winphone" />
     <icon src="res/icon/windows-phone/icon-173.png" gap:platform="winphone"   gap:role="background" />
 
-    <icon src="icon.png" /><!-- default; don't change location! -->
-    <icon src="icons/ios/classic.png" gap:platform="ios" width="57" height="57" />
-    <icon src="icons/ios/ipad.png" gap:platform="ios" width="72" height="72" />
-    <icon src="icons/ios/retina.png" gap:platform="ios" width="114" height="114" />
-    <icon src="icons/ios/retina_ipad.png" gap:platform="ios" width="144" height="144" />
-
     <!-- Define app splash screen for each platform. -->
     <gap:splash src="splash.png" />
     <gap:splash src="res/screen/android/screen-ldpi-portrait.png"  gap:platform="android" gap:density="ldpi" />
@@ -99,7 +93,6 @@
         <gap:splash src="res/screen/ios/screen-ipad-portrait.png"      gap:platform="ios"     width="768" height="1004" />
     <gap:splash src="res/screen/ios/screen-ipad-landscape.png"     gap:platform="ios"     width="1024" height="768" />
     <gap:splash src="res/screen/windows-phone/screen-portrait.jpg" gap:platform="winphone" />
-
     <!--
         Define access to external domains.
 
@@ -107,8 +100,8 @@
         <access origin="*" /> - a wildcard access tag allows access to all external resource.
 
         Otherwise, you can specify specific domains:
-    
-        <access origin="*"/> <!-- allow local pages -->
+    -->
+    <access origin="*"/> <!-- allow local pages -->
     <!--
         <access origin="http://phonegap.com" />                    - allow any secure requests to http://phonegap.com/
         <access origin="http://phonegap.com" subdomains="true" />  - same as above, but including subdomains, such as http://build.phonegap.com/
