@@ -790,11 +790,6 @@
         float: right; margin-right: 14px; 
         margin-top: 1.5em;
     }
-    @media (min-width:320px) and (max-width:420px){
-        #pagina12 .ui-select {
-            width: 73% !important;
-        }
-    }
     @media (min-width:320px) and (max-width:480px){
         div[data-role='header'] h1{
             font-size: 1em !important;
@@ -803,6 +798,31 @@
             display: none !important; 
         }
     }
+    @media (min-width:320px) and (max-width:420px){
+        #pagina12 .ui-select {
+            width: 73% !important;
+        }
+        .operation-minus.ui-link, .operation-plus.ui-link{
+            width: 100%;
+        }
+        .operation-minus.ui-link{
+            border-bottom: 1px solid rgba(128, 128, 128, 0.5);
+        }
+        .operation-plus.ui-link{
+            border-top: 1px solid rgba(128, 128, 128, 0.5);
+        }
+    }
+    @media (max-width:280px){
+        .operation-minus.ui-link{
+            border-bottom: 1px solid rgba(128, 128, 128, 0.5);
+            width: 100% !important; 
+        }
+        .operation-plus.ui-link{
+            border-top: 1px solid rgba(128, 128, 128, 0.5);
+            width: 100% !important; 
+        }
+    }
+   
 .photo-product{
    width: 41%;
 height: auto;
@@ -1234,6 +1254,10 @@ a:hover{
 }
 .grid-group-option.group-operation > .ui-input-text {
     background: transparent;
+    height: 4em;
+}
+.grid-group-option.group-operation > .ui-input-text input{
+    border: none !important;
 }
     .ui-btn.ui-btn-icon-right.ui-li-has-arrow.ui-li.ui-btn-up-b{
         background: white !important;
