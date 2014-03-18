@@ -118,7 +118,7 @@ function init(reconection) {
     $('.offline').live('click', msgOffline);
     $('.new_invoice').live('click', listClients);
     $('.without_radious > a').live('click', calculateQuantity);
-    $('.form-input-quantity-invoice').live('input', calculateByType);
+    $('.form-input-quantity-invoice').live('keyup', calculateByType);
     $('.operation-minus').live('tap', calculateByOperationMinus);
     $('.operation-plus').live('tap', calculateByOperationPlus);
 
@@ -894,13 +894,21 @@ function init(reconection) {
     }
 
     function calculateByType(){
-
-        var position = localStorage.position;
-        var text = $('.form-input-quantity-invoice').val();
-        localStorage.quantityInovice = text;
-        $('.without_radious a[data-item-invoice="'+position+'"] .qtyInvoice').val(text);
-        $('.without_radious a[data-item-invoice="'+position+'"]').data('quantity',text);
-        $( ".qtyInvoice" ).trigger('keyup');
+        
+        var reg = new RegExp('^[0-9]+$');
+        
+        if (reg.test(this.value)) {
+            var position = localStorage.position;
+            var text = this.value;
+            localStorage.quantityInovice = text;
+            $('.without_radious a[data-item-invoice="'+position+'"] .qtyInvoice').val(text);
+            $('.without_radious a[data-item-invoice="'+position+'"]').data('quantity',text);
+            $( ".qtyInvoice" ).trigger('keyup');    
+        }else {
+            alert('Write numbers');
+            this.value = '';
+        }
+        
     }
 
     function calculateByOperationMinus(){
