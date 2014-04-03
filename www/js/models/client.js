@@ -366,15 +366,13 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	return model;
 };
 
-function showAlert (str) {
-    debugger
+function showAlert (str) {    
     $('.infoAlert').find('h3').text('');
     $('.infoAlert').find('h3').text(str).end().fadeIn().children().addClass('effect_in_out');
 }
 
 $('.infoAlert').live('click', btn_accept_option);
 
-function btn_accept_option(){
-    debugger
+function btn_accept_option(){    
     $('.infoAlert').fadeOut().children().removeClass('effect_in_out');
 }

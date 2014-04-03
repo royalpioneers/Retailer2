@@ -483,6 +483,13 @@
         padding: 8%;
     }
     /*pagina12*/
+    #pagina12 .myModal {
+        margin-top: 4em;
+    }
+    .first-group-operation {
+        margin-top: 1.5em !important;
+        display: block; 
+    }
     .close_client_product {
         right: 5%;
         position: absolute;
@@ -805,12 +812,6 @@
         .operation-minus.ui-link, .operation-plus.ui-link{
             width: 100%;
         }
-        .operation-minus.ui-link{
-            border-bottom: 1px solid rgba(128, 128, 128, 0.5);
-        }
-        .operation-plus.ui-link{
-            border-top: 1px solid rgba(128, 128, 128, 0.5);
-        }
     }
     @media (max-width:280px){
         .operation-minus.ui-link{
@@ -972,7 +973,6 @@ div[data-role='header']{
 }
 .label_sub_variant_name {
     display: inline-block;
-    width: 38%;
 }
 .label_sub_variant_price {
     width: 45%;
@@ -1101,11 +1101,6 @@ a:hover{
     right: 5%;
     display: block !important;
 }
-.grid-group-option{
-    width: 100%;
-    text-align: center;
-    margin: 2.3em 0 0 0;
-}
 .grid-group-option > div{
     display: inline-block;
 }
@@ -1173,11 +1168,13 @@ a:hover{
 /**invoice*/
     .grid-group-option.group-operation {
         border: 1px solid rgba(128, 128, 128, 0.5);
-        margin: 40px auto;
+        margin: 10px auto;
         border-radius: 5px;
         display: block;
         margin-bottom: 1em;
         width: 90%;
+        overflow: hidden;
+        height: 4em;
     }
     .removeProductInvoiceModal.ui-link {
         background: rgb(253, 253, 253);
@@ -1191,17 +1188,17 @@ a:hover{
         /* box-shadow: 1px 1px 4px rgba(119, 118, 118, 0.66); */
         color: rgb(61, 53, 53) !important;
     }
-    .operation-minus.ui-link, .operation-plus.ui-link {
+    .operation-minus.ui-link, .operation-plus.ui-link, .operation-minus-2.ui-link, .operation-plus-2.ui-link {
         display: inline-block;
-        padding: 0.7em 0;
         font-size: 60px !important;
         width: 28%;
-        line-height: 0;
+        line-height: 44px;
         color: black !important;
         font-weight: normal;
-        vertical-align: middle;
+        height: 100%;
+        vertical-align: top;
     }
-    .form-input-quantity-invoice {
+    .form-input-quantity-invoice, .form-input-price-invoice {
         display: inline-block;
         font-size: 25px;
         max-height: 1em;
@@ -1222,10 +1219,10 @@ a:hover{
     .without_radious > a > div > span:first-letter {
         text-transform: uppercase;
     }
-    .operation-minus.ui-link {
+    .operation-minus.ui-link, .operation-minus-2.ui-link {
         border-right: 1px solid rgba(128, 128, 128, 0.5);
     }
-    .operation-plus.ui-link {
+    .operation-plus.ui-link, .operation-plus-2.ui-link {
         border-left: 1px solid rgba(128, 128, 128, 0.5);
     }
     .see_total_from_invoice::before, .totalprice::before {
@@ -1245,6 +1242,7 @@ a:hover{
         border-radius: 50%;
         right: 8px;
         top: 5px;
+        z-index: 9;
     }
 #group-data .modal-body, #group-data-search .modal-body{
     max-height: 20em;
@@ -1254,10 +1252,12 @@ a:hover{
 }
 .grid-group-option.group-operation > .ui-input-text {
     background: transparent;
-    height: 4em;
+    padding: 0 !important;
 }
 .grid-group-option.group-operation > .ui-input-text input{
     border: none !important;
+    padding: .8em 0 !important;
+    text-align: center;
 }
     .ui-btn.ui-btn-icon-right.ui-li-has-arrow.ui-li.ui-btn-up-b{
         background: white !important;
@@ -1283,4 +1283,8 @@ a:hover{
         font-weight: 500;
         padding-left: 15px;
         color: rgba(0, 0, 0, 0.7);
+    }
+
+    .paint_red_the_input_by_excesive_quantity{
+        color: red !important;
     }

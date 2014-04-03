@@ -118,11 +118,17 @@ function init(reconection) {
     $('.offline').live('click', msgOffline);
     $('.new_invoice').live('click', listClients);
     $('.without_radious > a').live('click', calculateQuantity);
+    
+    //in the modal
     $('.form-input-quantity-invoice').live('keyup', calculateByType);
+    $('.form-input-price-invoice').live('keyup', calculateByPriceType);
+
     $('.operation-minus').live('tap', calculateByOperationMinus);
     $('.operation-plus').live('tap', calculateByOperationPlus);
 
-    
+    $('.operation-minus-2').live('tap', calculatePriceByOperationMinus);
+    $('.operation-plus-2').live('tap', calculatePriceByOperationPlus);
+
     $(document).live('pagebeforeshow', '#pagina2', changeSelectStore);
     $( "#pagina12" ).live( "pageshow", pageMyProductsShow);
     $( "#pagina13" ).live( "pageshow", pageClientShow);
@@ -149,6 +155,7 @@ function init(reconection) {
     $('.removeProduct').live('click', removeMyProduct);
     $('.removeProductInvoiceModal').live('tap', removeProductInvoiceModal);
     $( ".qtyInvoice" ).live('keyup', updateMyProduct);
+    $( ".priceInvoice" ).live('keyup', updateMyProduct);
     $('#sendProductsInvoice').live('click', sendProductsInvoice);
     $('.cancel_sendProductsInvoice').live('click', setClient);
     $('.cleanClientSelected').live('click', cleanClientSelected);
@@ -160,6 +167,8 @@ function init(reconection) {
     $('#store_total_qty').bind('change', changeInventoryQuantities);
     $('#update_stock_by_status').parent().hide();
     $('#pagina2').live('pageshow', automaticallySelectFirstStore);
+    $('#invoice-data .close_modal').live('click', updatePriceInProduct);
+
 
     $(document).live("pagebeforechange", checkPermissionsToPage);
 
@@ -887,20 +896,20 @@ function init(reconection) {
     function calculateQuantity(){
         $('#invoice-data').show();
         $('#invoice-data').fadeIn().children().addClass('effect_in_out');
-        localStorage.quantityInovice =  $(this).data('quantity');
+        localStorage.quantityInvoice =  $(this).data('quantity');
+        localStorage.priceInvoice =  $(this).data('price');
         localStorage.position = $(this).data('item-invoice');
-
-        $('.form-input-quantity-invoice').val(localStorage.quantityInovice);
+        $('.form-input-quantity-invoice').val(localStorage.quantityInvoice);
+        $('.form-input-price-invoice').val(localStorage.priceInvoice);
     }
 
-    function calculateByType(){
-        
+    function calculateByType(){        
         var reg = new RegExp('^[0-9]+$');
         
         if (reg.test(this.value)) {
             var position = localStorage.position;
             var text = this.value;
-            localStorage.quantityInovice = text;
+            localStorage.quantityInvoice = text;
             $('.without_radious a[data-item-invoice="'+position+'"] .qtyInvoice').val(text);
             $('.without_radious a[data-item-invoice="'+position+'"]').data('quantity',text);
             $( ".qtyInvoice" ).trigger('keyup');    
@@ -909,6 +918,22 @@ function init(reconection) {
             this.value = '';
         }
         
+    }
+
+    function calculateByPriceType () {
+        var reg = new RegExp('^[0-9]+$');
+        
+        if (reg.test(this.value)) {
+            var position = localStorage.position;
+            var text = this.value;
+            localStorage.priceInvoice = text;
+            $('.without_radious a[data-item-invoice="'+position+'"] .priceInvoice').val(text);
+            $('.without_radious a[data-item-invoice="'+position+'"]').data('price',text);
+            $( ".priceInvoice" ).trigger('keyup');    
+        }else {
+            alert('Write numbers');
+            this.value = '';
+        }
     }
 
     function calculateByOperationMinus(){
@@ -921,20 +946,51 @@ function init(reconection) {
         calculateByOperation();
     }
 
-    function calculateByOperation(){
-        var text = parseInt(localStorage.quantityInovice);
-        var position = localStorage.position;
-        debugger
+    function calculateByOperation(){        
+        var text = parseInt(localStorage.quantityInvoice),
+        position = localStorage.position;        
+        var max = $('.without_radious a[data-item-invoice="'+position+'"]').data('max');        
         $('.form-input-quantity-invoice').val(text);
         if(localStorage.typeOperation == '+')text ++;
         else text--;
-
-        localStorage.quantityInovice = text;
-        $('.form-input-quantity-invoice').val(text);
-        $('.without_radious a[data-item-invoice="'+position+'"] .qtyInvoice').val(text);
-        $('.without_radious a[data-item-invoice="'+position+'"]').data('quantity',text);
-        $( ".qtyInvoice" ).trigger('keyup');
+        if(text<=max){
+            $('.form-input-quantity-invoice').removeClass('paint_red_the_input_by_excesive_quantity');
+            localStorage.quantityInvoice = text;
+            $('.form-input-quantity-invoice').val(text);
+            $('.without_radious a[data-item-invoice="'+position+'"] .qtyInvoice').val(text);
+            $('.without_radious a[data-item-invoice="'+position+'"]').data('quantity',text);                    
+            $('.without_radious a[data-item-invoice="'+position+'"] .qtyInvoice').trigger('keyup');
+        }        
+        else {
+            $('.form-input-quantity-invoice').val(max);
+            $('.form-input-quantity-invoice').addClass('paint_red_the_input_by_excesive_quantity');
+        }
     }
+
+    function calculatePriceByOperationMinus(){
+        localStorage.typeOperation = '-';
+        calculatePriceByOperation();
+    }
+
+    function calculatePriceByOperationPlus(){
+        localStorage.typeOperation = '+';
+        calculatePriceByOperation();
+    }
+
+    function calculatePriceByOperation(){
+        var text = parseInt(localStorage.priceInvoice);
+        var position = localStorage.position;       
+        $('.form-input-price-invoice').val(text);
+        var text = parseInt($('.form-input-price-invoice').val());   
+        if(localStorage.typeOperation == '+')text ++;
+        else text--;     
+        localStorage.priceInvoice = text;
+        $('.form-input-price-invoice').val(text);
+        $('.without_radious a[data-item-invoice="'+position+'"] .priceInvoice').val(text);
+        $('.without_radious a[data-item-invoice="'+position+'"]').data('price',text);
+        $( ".priceInvoice" ).trigger('keyup');
+    }
+
 
     function removeProductInvoiceModal(){
 
@@ -1889,13 +1945,13 @@ function init(reconection) {
                 image = DOMAIN+myProducts[i].model_image;
             }else{
                 image = image;
-            }
+            }            
             html += '<li class="without_radious" data-id="'+myProducts[i].id+'", data-variant="'+variant_id+'">\
-                        <a href="" data-item-invoice="'+i+'" data-quantity="'+ myProducts[i].quantity+'">\
+                        <a href="" data-item-invoice="'+i+'" data-max="'+ myProducts[i].max +'" data-price="'+ myProducts[i].price +'" data-quantity="'+ myProducts[i].quantity+'">\
                             <img src="'+image+'" class="ui-li-icon">\
                             <div><span class="ui-li-aside">'+myProducts[i].model_name+'</span>\
                             <input type="text" class="hide-option-form-invoice qtyInvoice" placeholder="0" value="'+myProducts[i].quantity+'">\
-                            <span class="ui-li-aside hide-option-form-invoice">'+myProducts[i].price+'</span>\
+                            <input type="text" class="ui-li-aside hide-option-form-invoice priceInvoice" value="'+myProducts[i].price+'">\
                             <span class="ui-li-aside totalprice">'+(myProducts[i].price*myProducts[i].quantity)+'</span>\
                             <span class="removeProduct hide-option-form-invoice">X</span></div>\
                         </a>\
@@ -1906,6 +1962,7 @@ function init(reconection) {
         ul_for_my_products.append(html);
         ul_for_my_products.trigger('create');
         $( ".qtyInvoice" ).trigger('keyup');
+        $( ".priceInvoice" ).trigger('keyup');
     }
 
     function showMethodUpdate() {
@@ -1954,33 +2011,37 @@ function init(reconection) {
         pageMyProductsShow();
     }
 
-    function updateMyProduct(){
+    function updateMyProduct(){        
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var myProducts = clientSelected.products,
             idProduct = $(this).parents('.without_radious').data('id'),
             idVariant = $(this).parents('.without_radious').data('variant'),
-            quantity = $(this).val(),
-            self = $(this);
+            self = $(this),
+            quantity = self.parent().parent().find('.qtyInvoice').val(),
+            price = self.parent().parent().find('.priceInvoice').val();
+
 
         if (isNaN(parseInt(quantity))) {
             quantity = 0;
         } else {
             quantity = parseInt(quantity);
         }
-
+        if (isNaN(parseInt(price))) {
+            price = 0;
+        } else {
+            price = parseInt(price);
+        }
         $.each(myProducts, function(i, value){
             var value_variant = 0;
             if (!isNaN(parseInt(value.variant_id))) {
                 value_variant = parseInt(value.variant_id);
             }
             if(value.id == idProduct && value_variant == idVariant) {
-                if(quantity >=0){
+                if(quantity >=0 && price >=0 && quantity <=value.max){                    
                     value.quantity = quantity;
-                    value.totalprice = value.price * quantity;
+                    value.price = price;                    
+                    value.totalprice = value.price * value.quantity;
                     self.parent().siblings('.totalprice').text(value.totalprice);
-                }
-                else{
-                    self.val('');
                 }
             }
         });
@@ -2106,7 +2167,18 @@ function init(reconection) {
         }
         return access;
     }
-
+    function updatePriceInProduct () {
+        price = $('.form-input-price-invoice').val();
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: {price: price},
+        })
+        .success(function() {
+            console.log("success");
+        });
+        
+    }
     $('.close_modal').live('click', function(){
         
         $('#features-values-modal').fadeOut().children().removeClass('effect_in_out');
