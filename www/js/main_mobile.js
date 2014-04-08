@@ -413,7 +413,7 @@ function init(reconection) {
     }
 
     function logOut(event) {
-        event.preventDefault();
+        //event.preventDefault();
         window.localStorage.removeItem('buyerInventory');
         window.localStorage.removeItem('rp-token');
         window.localStorage.removeItem('rp-synchronization');
@@ -433,7 +433,8 @@ function init(reconection) {
         $('#password').val('');
         $('#username').val('');
         $('#username').focus();
-        localStorage.clear();
+        debugger
+        window.localStorage.clear();
     }
 
     function authToken() {
