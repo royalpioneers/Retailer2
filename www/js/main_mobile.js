@@ -371,7 +371,7 @@ function init(reconection) {
     function signUp(e){
         e.preventDefault();
         if(Offline.state == 'up') {
-            var url = urls.signup;
+            var url = urls.signup;            
             $.ajax({
                 url: url,
                 data: {
@@ -1043,7 +1043,7 @@ function init(reconection) {
         }
     }
 
-    function updateAfterCreateInvoice(clientSelected, type_update) {
+    function updateAfterCreateInvoice(clientSelected, type_update) {        
         for(var i in storageClients){
             var index = getArrayIndexClientsSelected().indexOf(clientSelected.id);
             if(index !== -1){
@@ -1112,7 +1112,7 @@ function init(reconection) {
             return false;
         }
         if(self.data('status')=="true" || self.data('status') == true){
-            self.data('status','false');
+            self.data('status','false');            
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -1123,7 +1123,7 @@ function init(reconection) {
                 },
                 success: function(data) {
                     self.data('status','true');
-                    if (data.status == true) {
+                    if (data.status == true) {                        
                         updateAfterCreateInvoice(clientSelected, type_update);
                     } else {
                         var str = 'an error occurred';
