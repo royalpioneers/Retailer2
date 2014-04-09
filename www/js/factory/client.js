@@ -46,8 +46,8 @@ var ClientFactory = function(urls, token, cache) {
 			beforeSend: function(){
                 factory.loader();
             },
-			success: function(data){
-				if (data.status == 'ok') {
+			success: function(data){				
+				if (data.status == 'ok') {					
 					data.client.name = params.name;
 					data.client.image = 'images/designer_default_photo.jpg';
 					data.client.type = params.company_type;

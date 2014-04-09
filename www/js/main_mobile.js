@@ -432,8 +432,7 @@ function init(reconection) {
         $('#form_login_app').css('display','block');
         $('#password').val('');
         $('#username').val('');
-        $('#username').focus();
-        debugger
+        $('#username').focus();        
         window.localStorage.clear();
     }
 

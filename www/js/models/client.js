@@ -28,7 +28,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
             e.preventDefault();
             model.messages = [];
             var form = $('#'+model.id_page_new_client).find('form')[0];
-            var params = model.get_form_params(form);
+            var params = model.get_form_params(form);            
             if (!params) {
                 model.show(model.messages);
             } else {
@@ -135,7 +135,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 	};
 
 
-    function afterClientVerified (data, msm){
+    function afterClientVerified (data, msm){    	
         if (data === false) {
             model.messages[model.messages.length] = msm;
             model.show(model.messages);
@@ -174,7 +174,7 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
         }
     }
 
-	model.get_form_params = function(form) {
+	model.get_form_params = function(form) {		
 		params = {};
 		params.company_type = form.company_type.value;
 		if (params.company_type < 1) {
@@ -186,11 +186,11 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 			model.messages[model.messages.length] = 'Invalid name';
 			return false;
 		}
-		params.address = form.address.value;
-		if (params.address.length < 1) {
-			model.messages[model.messages.length] = 'Invalid address';
-			return false;
-		}
+		// params.address = form.address.value;
+		// if (params.address.length < 1) {
+		// 	model.messages[model.messages.length] = 'Invalid address';
+		// 	return false;
+		// }
 		params.email = form.email.value;
 		if(params.email != ''){
 			if (params.email.length < 7 || params.email.indexOf('@') == -1 || params.email.indexOf('.') == -1) {
@@ -198,11 +198,11 @@ var ClientModel = function(countryFactory, stateFactory, cityFactory, clientFact
 				return false;
 			}
 		}
-		params.city = localStorage.city_selected;
-		if (params.city < 1) {
-			model.messages[model.messages.length] = 'Invalid city';
-			return false;
-		}
+		// params.city = localStorage.city_selected;
+		// if (params.city < 1) {
+		// 	model.messages[model.messages.length] = 'Invalid city';
+		// 	return false;
+		// }
 		
 		return params;
 	};
