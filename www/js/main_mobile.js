@@ -425,15 +425,18 @@ function init(reconection) {
         window.localStorage.removeItem("rp-token");
         window.localStorage.removeItem("clientSelected");
         $('#container-login').css('display','inline');
-        $.mobile.navigate("#pagina1", {
-            transition: "flow",
-            reverse: true
-        });
+        
         $('#form_login_app').css('display','block');
         $('#password').val('');
         $('#username').val('');
         $('#username').focus();        
         window.localStorage.clear();
+        token = '';
+        $('#pagina2').find('.tab1').find('ul').html('');
+        $.mobile.navigate("#pagina1", {
+            transition: "flow",
+            reverse: true
+        });
     }
 
     function authToken() {
@@ -500,7 +503,7 @@ function init(reconection) {
         clientFactory.set_token(token);
         permissionFactory.set_token(token);
         permissionFactory.get_all(function(){});
-        getInventoryItems();
+        //getInventoryItems();
         listClients();
         startAnalyzerInformation();
         getInformationProduct();
@@ -522,7 +525,7 @@ function init(reconection) {
         }
     }
 
-    function changeInventoryQuantities() {
+    function changeInventoryQuantities() {        
         var all = false;
         if ($('#store_total_qty').attr('checked') == 'checked') {
             all = true;
@@ -534,11 +537,24 @@ function init(reconection) {
     }
 
     function changeSelectStore() {
-        getInventoryItems();        
-        $('#id_tab_my_inventory').trigger('click');
+        debugger
+        if(window.localStorage.getItem("rp-token"))  {
+            getInventoryItems();        
+            $('#id_tab_my_inventory').trigger('click');
+            $('#store_total_qty').trigger('change');
+            debugger
+            $('#store_total_qty').attr('checked', false);
+            $('#store_total_qty').prop("checked", true).checkboxradio("refresh");
+            setTimeout(function(){
+                $('.ui-icon-checkbox-on').addClass('ui-icon-checkbox-off').removeClass('ui-checkbox-on');
+                debugger
+                $('#check_store_label').addClass('ui-icon-checkbox-off').removeClass('ui-checkbox-on');
+            }, 500);
+        }             
     }
 
-    function getInventoryItems() {
+    function getInventoryItems() {  
+    debugger      
         var cache = false;
         if(Offline.state == 'down') {
             cache = true;
@@ -564,7 +580,9 @@ function init(reconection) {
         return false;
     }
 
-    function showInventory(list) {
+    function showInventory(list) {        
+        debugger
+        $('#pagina2').find('.tab1').find('ul').html('');
         if(list != undefined && canAccessTo('tabMyInventory', true)) {
             var items_list = list, data = [], ul_for_inserting = $('#pagina2').find('.tab1').find('ul'), html_to_insert = '';
             $.each(items_list, function(i, model) {
@@ -2132,7 +2150,7 @@ function init(reconection) {
         }
     }
 
-    function win(r) {
+    function win(r) {        
         /* update inventory after create photo */
     	var store = getCurrentStore();
     	var old_value = buyerInventoryFactory.cache;
