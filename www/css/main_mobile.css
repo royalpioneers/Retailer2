@@ -280,6 +280,10 @@
         padding-right: 3%;
         font-family: metapro, Helvetica, Arial, sans-serif !important;
     }
+    #check_store_label {
+        background: white;
+        color: black;
+    }
 /*page4*/
     .content-social{
         width: 70% !important;

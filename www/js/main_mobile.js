@@ -537,24 +537,23 @@ function init(reconection) {
     }
 
     function changeSelectStore() {
-        debugger
+        
         if(window.localStorage.getItem("rp-token"))  {
             getInventoryItems();        
             $('#id_tab_my_inventory').trigger('click');
-            $('#store_total_qty').trigger('change');
-            debugger
-            $('#store_total_qty').attr('checked', false);
-            $('#store_total_qty').prop("checked", true).checkboxradio("refresh");
+            $('#store_total_qty').trigger('change');            
+            //$('#store_total_qty').attr('checked', false);
+            //$('#store_total_qty').prop("checked", true).checkboxradio("refresh");
             setTimeout(function(){
                 $('.ui-icon-checkbox-on').addClass('ui-icon-checkbox-off').removeClass('ui-checkbox-on');
-                debugger
+                
                 $('#check_store_label').addClass('ui-icon-checkbox-off').removeClass('ui-checkbox-on');
             }, 500);
         }             
     }
 
     function getInventoryItems() {  
-    debugger      
+          
         var cache = false;
         if(Offline.state == 'down') {
             cache = true;
@@ -581,7 +580,7 @@ function init(reconection) {
     }
 
     function showInventory(list) {        
-        debugger
+        
         $('#pagina2').find('.tab1').find('ul').html('');
         if(list != undefined && canAccessTo('tabMyInventory', true)) {
             var items_list = list, data = [], ul_for_inserting = $('#pagina2').find('.tab1').find('ul'), html_to_insert = '';
@@ -939,19 +938,18 @@ function init(reconection) {
     }
 
     function calculateByPriceType () {
-        var reg = new RegExp('^[0-9]+$');
-        
-        if (reg.test(this.value)) {
+        if(isNaN(this.value)) {
+            alert('Write numbers');
+            this.value = '';
+        }else{
             var position = localStorage.position;
             var text = this.value;
             localStorage.priceInvoice = text;
             $('.without_radious a[data-item-invoice="'+position+'"] .priceInvoice').val(text);
             $('.without_radious a[data-item-invoice="'+position+'"]').data('price',text);
             $( ".priceInvoice" ).trigger('keyup');    
-        }else {
-            alert('Write numbers');
-            this.value = '';
         }
+
     }
 
     function calculateByOperationMinus(){
@@ -996,10 +994,10 @@ function init(reconection) {
     }
 
     function calculatePriceByOperation(){
-        var text = parseInt(localStorage.priceInvoice);
+        var text = parseFloat(localStorage.priceInvoice);
         var position = localStorage.position;       
         $('.form-input-price-invoice').val(text);
-        var text = parseInt($('.form-input-price-invoice').val());   
+        var text = parseFloat($('.form-input-price-invoice').val());   
         if(localStorage.typeOperation == '+')text ++;
         else text--;     
         localStorage.priceInvoice = text;
