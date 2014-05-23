@@ -33,7 +33,7 @@ var PermissionFactory = function(urls, token, cache) {
 				} else {
 					return handler([]);
 				}
-			},
+			}
 	    });
 	};
 	
@@ -46,7 +46,7 @@ var PermissionFactory = function(urls, token, cache) {
 			return list;
 		}
 		return [];
-	}
+	};
 	
 	factory.set_token = function(token) {
 		factory.token = token;
