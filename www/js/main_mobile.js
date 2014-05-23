@@ -535,6 +535,10 @@ function init(reconection) {
         }
     }
 
+    function getSelectedCurrency(){
+        return $('#currencies-choice option[selected]').val();
+    }
+
     function changeInventoryQuantities() {        
         var all = false;
         if ($('#store_total_qty').attr('checked') == 'checked') {
@@ -1113,6 +1117,7 @@ function init(reconection) {
         var clientSelected = JSON.parse(localStorage.getItem('clientSelected'));
         var store = getCurrentStore();
         var type_update = getTypeUpdate();
+        var selectedCurrency = getSelectedCurrency();
         var data_client = [];
         var url = urls.send_invoice;
         for (var index in storageClients) {
@@ -1130,7 +1135,8 @@ function init(reconection) {
             client: JSON.stringify(data_client),
             dateOfSale: today,
             store: store,
-            type_update: type_update
+            type_update: type_update,
+            currency_id: selectedCurrency
         };
 
         if (data_client[0] != undefined && !invoice.are_valid_products(data_client[0].products)) {            
