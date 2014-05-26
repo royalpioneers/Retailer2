@@ -1,7 +1,8 @@
 
 var app = {
     getDomain: function() {
-        return "http://royalpioneers.com/";
+//        return "http://royalpioneers.com/";
+        return "http://127.0.0.1:8000";
         //return "http://192.168.0.26:8000";
         //return "http://roypi.com/";
     },
