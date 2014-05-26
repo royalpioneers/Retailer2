@@ -537,7 +537,7 @@ function init(reconection) {
     }
 
     function getSelectedCurrency(){
-        return $('#currencies-choice option[selected]').val();
+        return $('#currencies-choice').val();
     }
 
     function changeInventoryQuantities() {        
@@ -2037,9 +2037,12 @@ function init(reconection) {
                         productPrice = productData.data('price'),
                         quantity = productData.data('quantity'),
                         new_val = parseFloat((productPrice / exchange_val).toFixed(2)),
-                        total = new_val * quantity;
+                        total = parseFloat((new_val * quantity).toFixed(2));
+                    product.find('.priceInvoice').text(new_val);
                     product.find('.totalprice').text(total);
                 }
+                $( ".qtyInvoice" ).trigger('keyup');
+                $( ".priceInvoice" ).trigger('keyup');
             }
         });
     }
@@ -2119,7 +2122,7 @@ function init(reconection) {
                 if(quantity >=0 && price >=0 && quantity <=value.max){                    
                     value.quantity = quantity;
                     value.price = price;                    
-                    value.totalprice = value.price * value.quantity;
+                    value.totalprice = (value.price * value.quantity).toFixed(2);
                     self.parent().siblings('.totalprice').text(value.totalprice);
                 }
             }
