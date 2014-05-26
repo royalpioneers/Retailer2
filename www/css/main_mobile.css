@@ -1170,6 +1170,17 @@ a:hover{
     }
 
 /**invoice*/
+    #currency-choice-container{
+        width: 43%;
+        list-style: none;
+        position: relative;
+        left: 111px;
+        bottom: -7px;
+    }
+    .invoice_header_item{
+        position: relative;
+        left: 196px;
+    }
     .grid-group-option.group-operation {
         border: 1px solid rgba(128, 128, 128, 0.5);
         margin: 10px auto;
