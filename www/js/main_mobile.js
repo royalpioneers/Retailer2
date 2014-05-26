@@ -53,7 +53,8 @@ var urls = {
     'valuesFeatures': DOMAIN+'/mobile/__idModel__/feature-values/__idFeature__/',
     'saveProductModelVariant': DOMAIN+'/mobile/create/product-model-variant/',
     'permissions': DOMAIN+'/mobile/permissions/',
-    'currencies': DOMAIN + '/mobile/currencies/'
+    'currencies': DOMAIN + '/mobile/currencies/',
+    'currencyExchangeRate': DOMAIN + '/mobile/currencies/exchange-rate/'
     //'getAllTheFeaturesByBuyer' : DOMAIN+'/mobile/features-by-buyer/'
 };
 
@@ -748,7 +749,7 @@ function init(reconection) {
                                              >\
                                              <img src="'+DOMAIN+items_list[client].image+'" class="image_client"/>'+items_list[client].name+'\
                                          </label>';
-                    };
+                    }
 
                     ul_for_list_clients.append(html_to_insert);
                     $('#list_clients').trigger('create');
@@ -845,7 +846,7 @@ function init(reconection) {
                                              >\
                                              <img src="images/designer_default_photo.jpg" class="image_client"/>'+items_list[client].name+'\
                                          </label>';
-            };
+            }
 
             ul_for_list_clients.append(html_to_insert);
             $('#list_clients').trigger('create');
@@ -2013,6 +2014,34 @@ function init(reconection) {
             currencySelect.append(tmpHtml);
         }
         currencySelect.selectmenu('refresh');
+        currencySelect.on('change', convertToSelectedCurrency);
+    }
+
+    function convertToSelectedCurrency(){
+        var value = $(this).val();
+        $.ajax({
+            url: urls.currencyExchangeRate,
+            type: 'POST',
+            data: {rp_token: window.localStorage.getItem('rp-token'),
+                   currency_to_id: value},
+            dataType: 'json',
+            success: function(data){
+                var exchange_val = 1;
+                if (data.status == 'ok') {
+                    exchange_val = data.exchange_rate_value;
+                }
+                var products = $('#myProducts').find('li');
+                for (var i=0; i < products.length; i++){
+                    var product = $(products[i]),
+                        productData = product.find('a'),
+                        productPrice = productData.data('price'),
+                        quantity = productData.data('quantity'),
+                        new_val = parseFloat((productPrice / exchange_val).toFixed(2)),
+                        total = new_val * quantity;
+                    product.find('.totalprice').text(total);
+                }
+            }
+        });
     }
 
     function showMethodUpdate() {
