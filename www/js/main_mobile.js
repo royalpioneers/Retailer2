@@ -30,6 +30,7 @@ $(window).load(function() {
  */
 
 var DOMAIN = app.getDomain();
+var MEDIA_DOMAIN = app.getMediaDomain();
 
 var urls = {
     'signup': DOMAIN + '/mobile/signup/',
@@ -640,7 +641,7 @@ function init(reconection) {
 	                                         data-quantity="'+model.quantity+'"\
 	                                         data-is-not-system="'+model.is_created_by_buyer+'"\
 	                                         >\
-	                                         <img src="'+DOMAIN+model.model_image+'"/>\
+	                                         <img src="'+MEDIA_DOMAIN+model.model_image+'"/>\
 	                                     </a>\
 	                                 </li>';
                     }
@@ -747,7 +748,7 @@ function init(reconection) {
                                              for="radio-choice-'+items_list[client].id+'"\
                                              data-corners="false" class="labelRadioButton"\
                                              >\
-                                             <img src="'+DOMAIN+items_list[client].image+'" class="image_client"/>'+items_list[client].name+'\
+                                             <img src="'+MEDIA_DOMAIN+items_list[client].image+'" class="image_client"/>'+items_list[client].name+'\
                                          </label>';
                     }
 
@@ -1344,7 +1345,7 @@ function init(reconection) {
                     _offline = "offline";
                 }
                 if(Offline.state == 'up') {
-                    image = DOMAIN+products[i].model_image;
+                    image = MEDIA_DOMAIN+products[i].model_image;
                 }else{
                     image = image;
                 }
@@ -1976,7 +1977,7 @@ function init(reconection) {
                 variant_id = myProducts[i].variant_id;
             }
             if(Offline.state == 'up') {
-                image = DOMAIN+myProducts[i].model_image;
+                image = MEDIA_DOMAIN+myProducts[i].model_image;
             }else{
                 image = image;
             }            
@@ -2419,7 +2420,7 @@ function setDataSearch (data) {
         $.each(data.result, function(i, value) {
             $.each(value.models, function(ind, model) {
                 if(model.photo.length > 0){
-                    $('#result-search').append('<li><a class="add-to-group-btn" data-id="'+model.id+'" href="#"><small>'+model.name+'</small><img src="'+DOMAIN+model.photo[0].thumb+'"></a></li>');
+                    $('#result-search').append('<li><a class="add-to-group-btn" data-id="'+model.id+'" href="#"><small>'+model.name+'</small><img src="'+MEDIA_DOMAIN+model.photo[0].thumb+'"></a></li>');
                 } else {
                     $('#result-search').append('<li><a class="add-to-group-btn" data-id="'+model.id+'" href="#"><small>'+model.name+'</small><img src="'+imageDefault+'"></a></li>');
                 }

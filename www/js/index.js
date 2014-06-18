@@ -1,9 +1,10 @@
 
 var app = {
     getDomain: function() {
-        return "http://royalpioneers.com/";
-        //return "http://192.168.0.26:8000";
-        //return "http://roypi.com/";
+        return "http://royalpioneers.com";
+    },
+    getMediaDomain: function() {
+    	return '';
     },
     initialize: function() {
         this.bindEvents();
